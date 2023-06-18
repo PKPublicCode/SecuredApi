@@ -1,0 +1,12 @@
+@gatewayHost = app-apigateway-<your-ending>.azurewebsites.net
+//@gatewayHost = localhost:5001
+@echoHost = app-echosrv-<your-ending>.azurewebsites.net
+//@echoHost = localhost:5001
+
+###
+GET https://{{gatewayHost}}/private/redirect/wildcard/blabla
+X-SUBSCRIPTION-KEY: 304fab5e-89a1-472a-9c19-437aa8571eb5
+
+###
+
+GET https://{{echoHost}}/echo/bla
