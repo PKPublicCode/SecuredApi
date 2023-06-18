@@ -1,0 +1,16 @@
+{
+  "variables": [
+    {
+      "key": "WebhookBaseUrl",
+      "value": "https://webhook.site/5ab9c6a0-2ea5-48f8-b497-04b4b81987ad"
+    },
+    {
+      "key": "Environment",
+      "value": "development"
+    },
+    {
+      "key": "EchoPath",
+      "value": "https://localhost:9001/echo"
+    }
+  ]
+}

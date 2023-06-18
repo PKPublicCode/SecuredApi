@@ -1,0 +1,371 @@
+{
+  "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
+  "title": "Global",
+  "preRequestActions": [
+    {
+      "name": "SetRequestHeader",
+      "settings": {
+        "key": "X-ADDITIONAL-HEADER",
+        "value": "AdditionalHeader-1"
+      }
+    },
+    {
+      "name": "SuppressRequestHeaders",
+      "settings": {
+        "headers": [
+          "user-agent"
+        ]
+      }
+    }
+  ],
+  "onRequestErrorActions": [
+  ],
+  "onRequestSuccessActions": [
+    {
+      "name": "SetResponseHeader",
+      "settings": {
+        "key": "X-GATEWAY-NAME",
+        "value": "Develpment gateway"
+      }
+    },
+    {
+      "name": "SuppressResponseHeaders",
+      "settings": {
+        "headers": [
+          "set-cookie",
+          "server"
+        ]
+      }
+    }
+  ],
+  "routesGroups": [
+    {
+      "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
+      "title": "Echo responses",
+      "routes": [
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/echo/success"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "This is /echo/success route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/echo/fail"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 501,
+                "body": "This is /echo/fail route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "8c3c4d8d-69bb-43e7-8ad7-bb0613a1780d",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/redirect/success_local"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "https://localhost:5001/echo/success",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        {
+          "id": "8c3c4d8d-69bb-43e7-8ad7-bb0613a1780d",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/redirect/fail_local"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "https://localhost:5001/echo/fail",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        {
+          "id": "8c3c4d8d-69bb-43e7-8ad7-bb0613a1780d",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/redirect/echo_server"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "https://google.com",
+                "method": "get",
+                "_timeout": 100
+              }
+            }
+          ]
+        },
+        {
+          "id": "8c3c4d8d-69bb-43e7-8ad7-bb0613a1780d",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/redirect/google"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "https://google.com",
+                "method": "get",
+                "enableRedirect": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "780da1b9-5bae-4a62-b4d7-7f9602dc00d3",
+      "title": "Redirect routes",
+      "routesGroups": [
+        {
+          "id": "94c13594-0e44-44b3-b0a4-bbaa08c0001f",
+          "title": "Redirect private routes",
+          "preRequestActions": [
+            {
+              "name": "CheckSubscription",
+              "settings": {
+                "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
+                "suppressHeader": false
+              }
+            },
+            {
+              "name": "RunConsumerActions",
+              "settings": {
+              }
+            }
+          ],
+          "routes": [
+            {
+              "id": "0cbf1ad4-5bf1-498f-9b6f-7d31fcb86e85",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect/webhook/"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/private",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "9b0cee5d-908e-4947-9a1b-62796a605ea5",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect/webhook/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/private/wildcard",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "8960e73e-9686-4bd3-8a0b-d17288fe947b",
+              "routeKey": {
+                "method": "post",
+                "path": "/private/redirect/webhook/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/private/wildcard",
+                    "method": "patch"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "90f98bce-6db0-45ba-9dae-10e0c9dd45e6",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect/webhook/success"
+              },
+              "actions": [
+                {
+                  "name": "CheckSubscription",
+                  "settings": {
+                    "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY1"
+                  }
+                },
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/private/success",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "9e56773f-4067-45c6-a494-b3c7cabb8ee4",
+          "title": "Redirect public routes",
+          "routes": [
+            {
+              "id": "9d3d6001-ac46-4a70-a59c-724be9792ddb",
+              "routeKey": {
+                "method": "get",
+                "path": "/public/redirect/webhook"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/public",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "d3229194-16c8-4fcf-abca-23f85445f872",
+              "routeKey": {
+                "method": "get",
+                "path": "/public/redirect/webhook/success"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/public/success",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "9db12bff-b1b5-4ab5-bf24-16e43563102a",
+          "title": "Redirect private routes, requires extra rights",
+          "preRequestActions": [
+            {
+              "name": "CheckSubscription",
+              "settings": {
+                "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY"
+              }
+            },
+            {
+              "name": "RunConsumerActions",
+              "settings": {
+              }
+            }
+          ],
+          "routes": [
+            {
+              "id": "9db12bff-b1b5-4ab5-bf24-16e43563102a",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/super/redirect/webhook/"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(WebhookBaseUrl)/$(Environment)/private/super",
+                    "method": "post"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5fa029da-6000-45e7-a67a-8065bba3a40c",
+      "title": "website",
+      "routes": [
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/web/*"
+          },
+          "actions": [
+            {
+              "name": "ReturnStaticFile",
+              "settings": {
+                "Path": "StaticFiles"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "HttpCode": 301
+              }
+            },
+            {
+              "name": "SetResponseHeader",
+              "settings": {
+                "Key": "Location",
+                "Value": "/web/index.html"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notFoundRoute": {
+    "id": "159e5999-e200-43a6-a377-d248c524c688",
+    "actions": [
+      {
+        "name": "SetRequestInfoToResponse",
+        "settings": {
+          "httpCode": 404,
+          "HeadLine": "Route not found"
+        }
+      }
+    ]
+  }
+}

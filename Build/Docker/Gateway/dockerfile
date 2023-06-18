@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /app
+
+# Copy csproj and restore as distinct layers
+# COPY ../../SecuredApi/*/*.csproj ./
+# RUN dotnet restore ./SecuredApi/WebApps/Gateway/WebApps.Gateway.csproj
+# COPY ./*/*.csproj ./
+# RUN echo $(ls ./)
+# RUN dotnet restore WebApps.Gateway.csproj
+
+# Copy everything else and build
+COPY ./ ./
+RUN dotnet publish ./WebApps/Gateway/WebApps.Gateway.csproj -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "SecuredApi.WebApps.Gateway.dll"]

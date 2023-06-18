@@ -1,0 +1,2 @@
+PartitionKey,RowKey,Timestamp,SubscriptionId,SubscriptionId@type,ConsumerId,ConsumerId@type
+24941237-89cd-403e-8d4b-cb3cc81f74d6,24941237-89cd-403e-8d4b-cb3cc81f74d6,2021-09-12T15:04:03.930Z,73d5e31c-e8eb-4338-848e-228e53391ea0,Edm.Guid,546c4541-d977-4aef-bae8-8c83609a2814,Edm.Guid

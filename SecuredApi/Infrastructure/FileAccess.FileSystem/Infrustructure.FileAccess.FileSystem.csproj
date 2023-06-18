@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>SecuredApi.Infrastructure.FileAccess.FileSystem</RootNamespace>
+	<AssemblyName>SecuredApi.Infrastructure.FileAccess.FileSystem</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logic\FileAccess.Abstractions\Logic.FileAccess.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

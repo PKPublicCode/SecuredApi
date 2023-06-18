@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>SecuredApi.Logic.Routing.Actions</RootNamespace>
+	<AssemblyName>SecuredApi.Logic.Routing.Actions</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+	<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\FileAccess.Abstractions\Logic.FileAccess.Abstractions.csproj" />
+	<ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
+	<ProjectReference Include="..\Subscriptions\Logic.Subscriptions.csproj" />
+	<ProjectReference Include="..\Routing.Utils\Logic.Routing.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

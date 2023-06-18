@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>SecuredApi.Logic.Subscriptions</RootNamespace>
+	<AssemblyName>SecuredApi.Logic.Subscriptions</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

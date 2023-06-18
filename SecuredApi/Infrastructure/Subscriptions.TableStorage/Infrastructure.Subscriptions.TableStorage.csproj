@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>SecuredApi.Infrastructure.Subscriptions.TableStorage</RootNamespace>
+	<AssemblyName>SecuredApi.Infrastructure.Subscriptions.TableStorage</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.1.0" />
+    <PackageReference Include="Azure.Identity" Version="1.4.1" />
+	<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logic\Subscriptions\Logic.Subscriptions.csproj" />
+  </ItemGroup>
+
+</Project>

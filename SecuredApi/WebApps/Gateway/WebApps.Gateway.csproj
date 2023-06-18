@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<Nullable>enable</Nullable>
+    <RootNamespace>SecuredApi.WebApps.Gateway</RootNamespace>
+    <AssemblyName>SecuredApi.WebApps.Gateway</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SecuredApi' " />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.Profiler.AspNetCore" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="StaticFiles\welcome.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

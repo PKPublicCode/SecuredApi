@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<RootNamespace>SecuredApi.Logic.FileAccess</RootNamespace>
+	<AssemblyName>SecuredApi.Logic.FileAccess.Abstractions</AssemblyName>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Logic.Common.csproj" />
+  </ItemGroup>
+
+</Project>

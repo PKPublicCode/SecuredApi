@@ -1,0 +1,20 @@
+﻿extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+﻿// ************************************************************************
+// Copyright (c) 2021 Pavlo Kruglov. All Rights Reserved.
+//
+// This code is posted "as-is". The author makes no assertions as to its 
+// performance or possible effects, provides no warranties of any kind,
+// and disclaims any implied warranties.
+// ************************************************************************
+
+extensions:  .xml .config .xsd
+<!--
+﻿﻿// ************************************************************************
+// Copyright (c) 2021 Pavlo Kruglov. All Rights Reserved.
+//
+// This code is posted "as-is". The author makes no assertions as to its 
+// performance or possible effects, provides no warranties of any kind,
+// and disclaims any implied warranties.
+// ************************************************************************
+-->
