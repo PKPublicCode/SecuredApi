@@ -5,7 +5,7 @@
 	<Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
 	<RootNamespace>SecuredApi.Logic.Routing</RootNamespace>
-	<AssemblyName>SecuredApi.Logic.Routing.Unit.Tests</AssemblyName>
+	<AssemblyName>SecuredApi.Logic.Routing.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Logic\Routing\Logic.Routing.csproj" />
+    <ProjectReference Include="..\Routing\Logic.Routing.csproj" />
   </ItemGroup>
-
 </Project>
