@@ -13,16 +13,21 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using SecuredApi.Logic.FileAccess;
+using SecuredApi.Infrastructure.FileAccess.FileSystem;
 
-namespace SecuredApi.Apps.Gateway
+namespace SecuredApi.Infrastructure.Configuration;
+
+public class FileAccessConfigurator : IInfrastructureConfigurator
 {
-    public static class ConfigurationExtensions
-    {
-        public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
+    public string SectionName => "FileAccess";
+
+    public virtual Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
+        => name switch
         {
-            return config.GetSection(name)
-                ?? throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
-        }
-    }
+            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>(),
+            _ => null
+        };
 }

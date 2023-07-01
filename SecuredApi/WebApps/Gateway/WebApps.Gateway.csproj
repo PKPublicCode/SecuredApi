@@ -14,6 +14,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\AzureConfiguration\Infrastructure.AzureConfiguration.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

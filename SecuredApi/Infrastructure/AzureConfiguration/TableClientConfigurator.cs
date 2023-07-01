@@ -15,12 +15,18 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using SecuredApi.Infrastructure.Subscriptions.TableStorage;
+using SecuredApi.Infrastructure.Configuration;
 
-namespace SecuredApi.Apps.Gateway.Infrastructure
+namespace SecuredApi.Infrastructure.AzureConfiguration;
+
+public static class TableClientConfigurator
 {
-    public interface IInfrastructureConfigurator
+    public static IServiceCollection ConfigureTableClientRepository<TInterface, TImplementation>(this IServiceCollection srv, IConfigurationSection cfg)
+        where TInterface : class
+        where TImplementation : class, TInterface
     {
-        public string SectionName { get; }
-        Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name);
+        return srv.AddSingleton<TInterface, TImplementation>()
+                .Configure<TableClientConfig<TInterface>>(cfg.GetRequiredSection("Repository"));
     }
 }

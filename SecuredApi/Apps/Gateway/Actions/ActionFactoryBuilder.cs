@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing;
 using System.Collections.Generic;
 using SecuredApi.Logic.Routing.Actions;
+using SecuredApi.Infrastructure.Configuration;
 
 namespace SecuredApi.Apps.Gateway.Actions
 {

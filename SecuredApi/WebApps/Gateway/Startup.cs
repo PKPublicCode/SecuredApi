@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using SecuredApi.Apps.Gateway;
+using SecuredApi.Infrastructure.AzureConfiguration;
 
 namespace SecuredApi.WebApps.Gateway
 {
@@ -36,7 +37,8 @@ namespace SecuredApi.WebApps.Gateway
             // Code-less instrumentation is not available for .net5 for linux. Will be available for .net6.
             // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
             services.AddApplicationInsightsTelemetry();
-            services.ConfigureRoutingServices(_configuration);
+            services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
+            services.ConfigureAzureSubscccriptionManagement(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
