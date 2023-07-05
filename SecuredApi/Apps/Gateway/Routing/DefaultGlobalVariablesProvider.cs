@@ -35,7 +35,11 @@ public class DefaultGlobalVariablesProvider: IDefaultGlobalVariablesProvider
     {
         return Task.FromResult(
                     _config.AsEnumerable()
-                    .   Select(x => new KeyValuePair<string, string>(x.Key.Split(":").Last(), x.Value))
+                    .   Select(x => new KeyValuePair<string, string>
+                                    (
+                                        x.Key.Split(":").Last(),
+                                        x.Value ?? string.Empty
+                                    ))
                     );
     }
 }

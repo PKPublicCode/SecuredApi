@@ -23,7 +23,7 @@ namespace SecuredApi.Infrastructure.AzureConfiguration;
 
 public static class RoutingConfigurationExtensions
 {
-    public static IServiceCollection ConfigureAzureSubscccriptionManagement(this IServiceCollection srv, IConfiguration config)
+    public static IServiceCollection ConfigureAzureSubscriptionManagement(this IServiceCollection srv, IConfiguration config)
     {
         return srv.ConfigureConsumers(config)
                 .ConfigureSubscriptionKeys(config)
