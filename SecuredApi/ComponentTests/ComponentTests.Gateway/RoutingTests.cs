@@ -17,9 +17,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
-public class BasicTests: GatewayTestsBase
+public class RouitingTests: GatewayTestsBase
 {
-    public BasicTests()
+    public RouitingTests()
     {
     }
 
@@ -32,8 +32,29 @@ public class BasicTests: GatewayTestsBase
         await ExecuteAsync();
        
         Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        Response.Headers.Should().Contain(NotFoundResponseHeader);
-        Response.Headers.Should().NotContain(CommonResponseHeader);
+        Response.Headers.Should().BeEquivalentTo(ToArray(NotFoundResponseHeader));
+    }
+
+    [Fact]
+    public async Task RouteWithExtraPath_NotFound()
+    {
+        Request.SetupGet("/echo/success/extrapath");
+
+        await ExecuteAsync();
+
+        Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        Response.Headers.Should().BeEquivalentTo(ToArray(NotFoundResponseHeader));
+    }
+
+    [Fact]
+    public async Task EchoRoute_Found()
+    {
+        Request.SetupGet("/echo/success");
+
+        await ExecuteAsync();
+
+        Response.StatusCode.Should().Be(StatusCodes.Status200OK);
+        Response.Headers.Should().BeEquivalentTo(ToArray(CommonResponseHeader));
     }
 }
 
