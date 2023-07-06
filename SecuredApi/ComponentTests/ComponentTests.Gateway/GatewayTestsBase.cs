@@ -20,19 +20,19 @@ using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 
-namespace Tests.Component.Gateway;
+namespace SecuredApi.ComponentTests.Gateway;
 
 public class GatewayTestsBase
 {
     private const string _defaultFileName = "appsettings.json";
     private readonly IServiceProvider _serviceProvider;
 
-    protected readonly HttpContext HttpContext = new DefaultHttpContext();
+    protected readonly HttpContext Context = new DefaultHttpContext();
 
-    protected HttpRequest Request => HttpContext.Request;
-    public HttpResponse Response => HttpContext.Response;
+    protected HttpRequest Request => Context.Request;
+    public HttpResponse Response => Context.Response;
 
-    public GatewayTestsBase()
+    protected GatewayTestsBase()
         :this(_defaultFileName, (x, y) => { })
     {
     }
@@ -50,30 +50,25 @@ public class GatewayTestsBase
         _serviceProvider = srv.BuildServiceProvider();
     }
 
-    protected async Task ArrangeAsync()
+    protected async Task ArrangeAsync(CancellationToken ct)
     {
         using var scope = _serviceProvider.CreateAsyncScope();
         await scope.ServiceProvider.GetRequiredService<IRoutingEngineManager>()
-                        .InitializeRoutingEngineAsync(HttpContext.RequestAborted);
+                        .InitializeRoutingEngineAsync(ct);
     }
 
     protected async Task ActAsync()
     {
         using var scope = _serviceProvider.CreateAsyncScope();
         await scope.ServiceProvider.GetRequiredService<IRouter>()
-                                    .ProcessAsync(HttpContext);
+                                    .ProcessAsync(Context);
     }
 
-    [Fact]
-    public async Task Test1()
+    protected async Task ExecuteAsync()
     {
-        await ArrangeAsync();
-        Request.Path = "/echo/success";
-        Request.Method = HttpMethods.Get;
-
+        // Intentionally run in different ServiceProvider Scopes
+        await ArrangeAsync(Context.RequestAborted);
         await ActAsync();
-
-        Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
 }
 

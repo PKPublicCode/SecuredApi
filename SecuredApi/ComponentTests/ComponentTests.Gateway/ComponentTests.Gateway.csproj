@@ -7,6 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <RootNamespace>SecuredApi.ComponentTests.Gateway</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,10 +31,12 @@
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Routing\" />
+    <None Remove="Utils\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Routing\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
@@ -43,6 +46,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Routing\globals.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\globals.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\routing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

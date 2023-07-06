@@ -5,14 +5,21 @@
     {
       "name": "SetRequestHeader",
       "settings": {
-        "key": "X-ADDITIONAL-HEADER",
-        "value": "AdditionalHeader-1"
+        "key": "X-COMMON-REQUEST-HEADER",
+        "value": "CommonRequestHeaderValue"
       }
     }
   ],
   "onRequestErrorActions": [
   ],
   "onRequestSuccessActions": [
+    {
+      "name": "SetResponseHeader",
+      "settings": {
+        "key": "X-COMMON-RESPONSE-HEADER",
+        "value": "CommonResponseHeaderValue"
+      }
+    }
   ],
   "routesGroups": [
     {
@@ -130,6 +137,13 @@
   "notFoundRoute": {
     "id": "159e5999-e200-43a6-a377-d248c524c688",
     "actions": [
+      {
+        "name": "SetResponseHeader",
+        "settings": {
+          "key": "X-NOTFOUND-RESPONSE-HEADER",
+          "value": "NotFoundResponseHeaderValue"
+        }
+      },
       {
         "name": "SetResponse",
         "settings": {
