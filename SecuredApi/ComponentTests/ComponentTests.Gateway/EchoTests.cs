@@ -17,12 +17,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
-public class RouitingTests: GatewayTestsBase
+public class EchoTests: GatewayTestsBase
 {
-    public RouitingTests()
+    public EchoTests()
     {
     }
-
 
     [Fact]
     public async Task RootRoute_NotFound()
@@ -50,7 +49,7 @@ public class RouitingTests: GatewayTestsBase
     public async Task EchoRoute_Found()
     {
         Request.SetupGet("/echo/success");
-
+        
         await ExecuteAsync();
 
         Response.StatusCode.Should().Be(StatusCodes.Status200OK);

@@ -12,8 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+using Microsoft.Extensions.Primitives;
 namespace SecuredApi.ComponentTests.Gateway.Utils;
+
 
 public static class KeyValuePairExtensions
 {
@@ -22,5 +23,7 @@ public static class KeyValuePairExtensions
 
     public static KeyValuePair<TKey, TValue>[] NewPairs<TKey, TValue>(params (TKey Key, TValue Value)[] vals)
         => vals.Select(v => NewPair(v.Key, v.Value)).ToArray();
+
+    public static StringValues ToStringValues(this string s) => new StringValues(s);
 }
 

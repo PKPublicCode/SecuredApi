@@ -12,10 +12,6 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using Microsoft.AspNetCore.Http;
-using System.Collections;
-using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 
 namespace SecuredApi.ComponentTests.Gateway.Utils;
@@ -36,5 +32,15 @@ public static class AppSettingsConstants
     public const string NotFoundResponseHeaderValue = "NotFoundResponseHeaderValue";
     public static readonly KeyValuePair<string, StringValues> NotFoundResponseHeader
                                     = new(NotFoundResponseHeaderName, NotFoundResponseHeaderValue);
+
+    public const string PublicRedirectCallPath = "https://mock_path/public/redirect";
+    public const string PublicRedirectPath = "/public/redirect";
+
+    public const string PublicRedirectSuppressedHeaderName = "X-SUPPRESSED-HEADER";
+
+    public const string PublicRedirectResponseHeaderName = "X-PUBLIC-REDIRECT-RESPONSE-HEADER";
+    public const string PublicRedirectResponseHeaderValue = "PublicRedirectResponseHeaderValue";
+    public static readonly KeyValuePair<string, StringValues> PublicRedirectResponseHeader
+                                    = new(PublicRedirectResponseHeaderName, PublicRedirectResponseHeaderValue);
 }
 

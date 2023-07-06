@@ -38,6 +38,7 @@ namespace SecuredApi.WebApps.Gateway
             // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
             services.AddApplicationInsightsTelemetry();
             services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
+            services.ConfigureRoutingHttpClients();
             services.ConfigureAzureSubscriptionManagement(_configuration);
         }
 

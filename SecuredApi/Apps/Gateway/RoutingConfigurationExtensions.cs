@@ -35,11 +35,9 @@ namespace SecuredApi.Apps.Gateway
         public static IServiceCollection ConfigureRoutingServices<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
             where FileAccessConfigurator: IInfrastructureConfigurator, new()
         {
-            return srv.ConfigureHttpClients()
-                .ConfigureRouter<FileAccessConfigurator>(config)
+            return srv.ConfigureRouter<FileAccessConfigurator>(config)
                 .ConfigureVariables()
-                .ConfigureStaticFilesAction<FileAccessConfigurator>(config)
-                ;
+                .ConfigureStaticFilesAction<FileAccessConfigurator>(config);
         }
 
         public static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
@@ -51,7 +49,7 @@ namespace SecuredApi.Apps.Gateway
             );
         }
 
-        public static IServiceCollection ConfigureHttpClients(this IServiceCollection srv)
+        public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
         {
             srv.AddHttpClient(); //Default http client
             srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled);

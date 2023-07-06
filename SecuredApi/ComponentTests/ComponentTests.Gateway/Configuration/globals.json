@@ -3,6 +3,10 @@
     {
       "key": "EchoPath",
       "value": "https://mock_path/echo"
+    },
+    {
+      "key": "PublicRedirectPath",
+      "value":  "https://mock_path/public/redirect"
     }
   ]
 }

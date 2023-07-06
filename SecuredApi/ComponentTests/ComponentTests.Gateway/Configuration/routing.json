@@ -24,7 +24,7 @@
   "routesGroups": [
     {
       "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
-      "title": "Echo responses",
+      "title": "Public responses",
       "routes": [
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
@@ -38,6 +38,35 @@
               "settings": {
                 "httpCode": 200,
                 "body": "This is /success route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/redirect"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "$(PublicRedirectPath)",
+                "method": "get"
+              }
+            },
+            {
+              "name": "SetResponseHeader",
+              "settings": {
+                "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
+                "value": "PublicRedirectResponseHeaderValue"
+              }
+            },
+            {
+              "name": "SuppressResponseHeaders",
+              "settings": {
+                "Headers": ["X-SUPPRESSED-HEADER"]
               }
             }
           ]
