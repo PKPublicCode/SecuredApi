@@ -66,7 +66,7 @@
             {
               "name": "SuppressResponseHeaders",
               "settings": {
-                "Headers": ["X-SUPPRESSED-HEADER"]
+                "Headers": [ "Content-Type" ]
               }
             }
           ]

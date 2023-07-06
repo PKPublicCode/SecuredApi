@@ -36,8 +36,6 @@ public static class AppSettingsConstants
     public const string PublicRedirectCallPath = "https://mock_path/public/redirect";
     public const string PublicRedirectPath = "/public/redirect";
 
-    public const string PublicRedirectSuppressedHeaderName = "X-SUPPRESSED-HEADER";
-
     public const string PublicRedirectResponseHeaderName = "X-PUBLIC-REDIRECT-RESPONSE-HEADER";
     public const string PublicRedirectResponseHeaderValue = "PublicRedirectResponseHeaderValue";
     public static readonly KeyValuePair<string, StringValues> PublicRedirectResponseHeader

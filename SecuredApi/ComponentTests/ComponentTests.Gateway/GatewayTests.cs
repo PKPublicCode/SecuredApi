@@ -35,14 +35,10 @@ public class GatewayTests: GatewayTestsBase
         Request.SetupGet(PublicRedirectPath);
 
 
-        MainHttpHandler.When(PublicRedirectCallPath)
+        MainHttpHandler.When(HttpMethod.Get, PublicRedirectCallPath)
             .Respond(
                         HttpStatusCode.PaymentRequired,
-                        NewPairs
-                        (
-                            (PublicRedirectSuppressedHeaderName, "BlaBla"),
-                            (TestHeaderName, TestHeaderValue[0])
-                        ),
+                        NewPairs((TestHeaderName, TestHeaderValue[0])),
                         MediaTypeNames.Text.Plain,
                         body
                     );
@@ -56,8 +52,7 @@ public class GatewayTests: GatewayTestsBase
                                     (
                                        CommonResponseHeader,
                                        PublicRedirectResponseHeader,
-                                       NewPair(TestHeaderName, TestHeaderValue),
-                                       NewPair(HeaderNames.ContentType,$"{MediaTypeNames.Text.Plain}; charset=utf-8".ToStringValues())
+                                       NewPair(TestHeaderName, TestHeaderValue)
                                     )
                                  );
         Response.Body.ToString().Should().NotBeSameAs(body);
