@@ -1,0 +1,142 @@
+﻿{
+  "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
+  "title": "Global",
+  "preRequestActions": [
+    {
+      "name": "SetRequestHeader",
+      "settings": {
+        "key": "X-ADDITIONAL-HEADER",
+        "value": "AdditionalHeader-1"
+      }
+    }
+  ],
+  "onRequestErrorActions": [
+  ],
+  "onRequestSuccessActions": [
+  ],
+  "routesGroups": [
+    {
+      "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
+      "title": "Echo responses",
+      "routes": [
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/echo/success"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "This is /success route"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "780da1b9-5bae-4a62-b4d7-7f9602dc00d3",
+      "title": "Redirect routes",
+      "routesGroups": [
+        {
+          "id": "94c13594-0e44-44b3-b0a4-bbaa08c0001f",
+          "title": "Redirect private routes",
+          "preRequestActions": [
+            {
+              "name": "CheckSubscription",
+              "settings": {
+                "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY"
+              }
+            },
+            {
+              "name": "RunConsumerActions",
+              "settings": {
+              }
+            }
+          ],
+          "routes": [
+            {
+              "id": "0cbf1ad4-5bf1-498f-9b6f-7d31fcb86e85",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "8960e73e-9686-4bd3-8a0b-d17288fe947b",
+              "routeKey": {
+                "method": "post",
+                "path": "/private/redirect/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "9b0cee5d-908e-4947-9a1b-62796a605ea5",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect2/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "90f98bce-6db0-45ba-9dae-10e0c9dd45e6",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect3/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notFoundRoute": {
+    "id": "159e5999-e200-43a6-a377-d248c524c688",
+    "actions": [
+      {
+        "name": "SetResponse",
+        "settings": {
+          "httpCode": 404,
+          "body": "Route not found"
+        }
+      }
+    ]
+  }
+}
