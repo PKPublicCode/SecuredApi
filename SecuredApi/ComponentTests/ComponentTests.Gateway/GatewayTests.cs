@@ -30,8 +30,8 @@ public class GatewayTests: GatewayTestsBase
         const string body = "TestBody";
         HttpHeader testHeader = new("TestHeaderName", "TestHeaderValue");
 
-        Request.SetupGet($"{PublicRedirectPath}/{path}");
-        MainHttpHandler.When(HttpMethod.Get, $"{PublicRedirectCallPath}{path}")
+        Request.SetupGet($"{RoutingPublicRedirectWildcardPath}/{path}");
+        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicEndpointPath}{path}")
             .WithHeaders(MakeArray(Headers.RequestCommon.AsMock()))
             .Respond(
                         HttpStatusCode.Accepted,

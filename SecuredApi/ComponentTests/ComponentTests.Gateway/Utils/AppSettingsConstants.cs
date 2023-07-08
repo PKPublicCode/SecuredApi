@@ -28,7 +28,7 @@ public static class AppSettingsConstants
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
     }
 
-    public const string PublicRedirectCallPath = "https://mock_path/api";
-    public const string PublicRedirectPath = "/public/redirect";
+    public const string GlobalsPublicEndpointPath = "https://mock_endpoint/api";
+    public const string RoutingPublicRedirectWildcardPath = "/public/wildcard/redirect/";
 }
 
