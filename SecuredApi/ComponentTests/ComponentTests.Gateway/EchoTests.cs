@@ -36,28 +36,6 @@ public class EchoTests: GatewayTestsBase
         Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
     }
 
-    //[Fact]
-    //public async Task RootRoute_NotFound()
-    //{
-    //    Request.SetupGet("/");
-
-    //    await ExecuteAsync();
-
-    //    Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-    //    Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
-    //}
-
-    //[Fact]
-    //public async Task RouteWithExtraPath_NotFound()
-    //{
-    //    Request.SetupGet("/echo/success/extrapath");
-
-    //    await ExecuteAsync();
-
-    //    Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-    //    Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
-    //}
-
     [Theory]
     [InlineData(RoutingPublicEchoExactPath)]
     [InlineData($"{RoutingPublicEchoWildcardPath}")]
