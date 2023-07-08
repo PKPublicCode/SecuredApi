@@ -5,8 +5,8 @@
       "value": "https://mock_path/echo"
     },
     {
-      "key": "PublicRedirectEndpoint",
-      "value": "https://mock_endpoint/api"
+      "key": "PublicRemoteEndpoint",
+      "value": "https://remote.endpoint/api"
     }
   ]
 }

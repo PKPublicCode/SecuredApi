@@ -25,13 +25,14 @@ public class GatewayTests: GatewayTestsBase
     [Theory]
     [InlineData("")]
     [InlineData("/internal/path")]
-    public async Task RemoteCall_Found(string path)
+    public async Task RemoteCall_Found(string urlPath)
     {
         const string body = "TestBody";
         HttpHeader testHeader = new("TestHeaderName", "TestHeaderValue");
 
-        Request.SetupGet($"{RoutingPublicRedirectWildcardPath}/{path}");
-        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicEndpointPath}{path}")
+        Request.SetupGet($"{RoutingPublicRemoteWildcardPath}/{urlPath}");
+
+        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}{urlPath}")
             .WithHeaders(MakeArray(Headers.RequestCommon.AsMock()))
             .Respond(
                         HttpStatusCode.Accepted,

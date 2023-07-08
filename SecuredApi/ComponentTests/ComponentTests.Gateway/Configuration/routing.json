@@ -46,13 +46,13 @@
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
           "routeKey": {
             "method": "get",
-            "path": "/public/wildcard/redirect/*"
+            "path": "/public/remote/wildcard/*"
           },
           "actions": [
             {
               "name": "RemoteCall",
               "settings": {
-                "path": "$(PublicRedirectEndpoint)",
+                "path": "$(PublicRemoteEndpoint)",
                 "method": "get"
               }
             },
