@@ -16,11 +16,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using System.Net.Mime;
-using Microsoft.Extensions.DependencyInjection;
-using SecuredApi.Logic.Routing.Utils;
 using System.Net;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -30,15 +26,15 @@ public class GatewayTests: GatewayTestsBase
     public async Task RemoteCall()
     {
         const string body = "Hello";
-        const string TestHeaderName = "TestHeaderName";
-        StringValues TestHeaderValue = "TestHeaderValue";
+        HttpHeader testHeader = new("TestHeaderName", "TestHeaderValue");
         Request.SetupGet(PublicRedirectPath);
 
 
         MainHttpHandler.When(HttpMethod.Get, PublicRedirectCallPath)
+            .WithHeaders(MakeArray(Headers.RequestCommon.AsMock()))
             .Respond(
                         HttpStatusCode.PaymentRequired,
-                        NewPairs((TestHeaderName, TestHeaderValue[0])),
+                        MakeArray(testHeader.AsMock()),
                         MediaTypeNames.Text.Plain,
                         body
                     );
@@ -48,11 +44,11 @@ public class GatewayTests: GatewayTestsBase
         Response.StatusCode.Should().Be(StatusCodes.Status402PaymentRequired);
         Response.Headers.Should().BeEquivalentTo
                                  (
-                                    ToArray
+                                    MakeArray
                                     (
-                                       CommonResponseHeader,
-                                       PublicRedirectResponseHeader,
-                                       NewPair(TestHeaderName, TestHeaderValue)
+                                       Headers.ResponseCommon,
+                                       Headers.ResponsePublicRedirect,
+                                       testHeader
                                     )
                                  );
         Response.Body.ToString().Should().NotBeSameAs(body);

@@ -13,32 +13,22 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.Extensions.Primitives;
-
 namespace SecuredApi.ComponentTests.Gateway.Utils;
 
 public static class AppSettingsConstants
 {
-    public const string CommonRequestHeaderName = "X-COMMON-REQUEST-HEADER";
-    public const string CommonRequestHeaderValue = "CommonRequestHeaderValue";
-    public static readonly KeyValuePair<string, StringValues> CommonRequestHeader
-                                    = new (CommonRequestHeaderName, CommonRequestHeaderValue);
+    public static class Headers
+    {
+        public static HttpHeader RequestCommon { get; } = new("X-COMMON-REQUEST-HEADER", "CommonRequestHeaderValue");
 
-    public const string CommonResponseHeaderName = "X-COMMON-RESPONSE-HEADER";
-    public const string CommonResponseHeaderValue = "CommonResponseHeaderValue";
-    public static readonly KeyValuePair<string, StringValues> CommonResponseHeader
-                                    = new(CommonResponseHeaderName, CommonResponseHeaderValue);
+        public static HttpHeader ResponseCommon { get; } = new("X-COMMON-RESPONSE-HEADER", "CommonResponseHeaderValue");
 
-    public const string NotFoundResponseHeaderName = "X-NOTFOUND-RESPONSE-HEADER";
-    public const string NotFoundResponseHeaderValue = "NotFoundResponseHeaderValue";
-    public static readonly KeyValuePair<string, StringValues> NotFoundResponseHeader
-                                    = new(NotFoundResponseHeaderName, NotFoundResponseHeaderValue);
+        public static HttpHeader ResponseNotFound { get; } = new("X-NOTFOUND-RESPONSE-HEADER", "NotFoundResponseHeaderValue");
+
+        public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
+    }
 
     public const string PublicRedirectCallPath = "https://mock_path/public/redirect";
     public const string PublicRedirectPath = "/public/redirect";
-
-    public const string PublicRedirectResponseHeaderName = "X-PUBLIC-REDIRECT-RESPONSE-HEADER";
-    public const string PublicRedirectResponseHeaderValue = "PublicRedirectResponseHeaderValue";
-    public static readonly KeyValuePair<string, StringValues> PublicRedirectResponseHeader
-                                    = new(PublicRedirectResponseHeaderName, PublicRedirectResponseHeaderValue);
 }
 

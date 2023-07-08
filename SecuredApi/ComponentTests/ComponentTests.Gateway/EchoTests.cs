@@ -31,7 +31,7 @@ public class EchoTests: GatewayTestsBase
         await ExecuteAsync();
        
         Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        Response.Headers.Should().BeEquivalentTo(ToArray(NotFoundResponseHeader));
+        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class EchoTests: GatewayTestsBase
         await ExecuteAsync();
 
         Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        Response.Headers.Should().BeEquivalentTo(ToArray(NotFoundResponseHeader));
+        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class EchoTests: GatewayTestsBase
         await ExecuteAsync();
 
         Response.StatusCode.Should().Be(StatusCodes.Status200OK);
-        Response.Headers.Should().BeEquivalentTo(ToArray(CommonResponseHeader));
+        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseCommon));
     }
 }
 

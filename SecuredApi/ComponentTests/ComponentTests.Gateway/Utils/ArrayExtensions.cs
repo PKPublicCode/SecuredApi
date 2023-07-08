@@ -12,11 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 namespace SecuredApi.ComponentTests.Gateway.Utils;
 
 public static class ArrayExtensions
 {
-    public static T[] ToArray<T>(params T[] p) => p;
+    public static T[] MakeArray<T>(params T[] p) => p;
 }
 

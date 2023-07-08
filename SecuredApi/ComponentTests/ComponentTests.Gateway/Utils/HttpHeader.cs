@@ -13,12 +13,6 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 
-namespace SecuredApi.ComponentTests.Gateway.Utils;
-
-public static class KeyValuePairExtensions
-{
-    // MockHttpMessageHandler uses <string, string> pair, but asp.net (e.g. HttpContext) uses <string, StringValues>
-    // That's why need some shortcuts to use unified instanses (constants) in both cases
-    public static KeyValuePair<string, string> AsMock(this HttpHeader pair) => new(pair.Key, pair.Value[0] ?? string.Empty);
-}
+global using HttpHeader
+    = System.Collections.Generic.KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>;
 
