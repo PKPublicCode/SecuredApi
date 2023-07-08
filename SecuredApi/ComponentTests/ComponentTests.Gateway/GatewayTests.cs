@@ -22,26 +22,27 @@ namespace SecuredApi.ComponentTests.Gateway;
 
 public class GatewayTests: GatewayTestsBase
 {
-    [Fact]
-    public async Task RemoteCall()
+    [Theory]
+    [InlineData("")]
+    [InlineData("/internal/path")]
+    public async Task RemoteCall_Found(string path)
     {
-        const string body = "Hello";
+        const string body = "TestBody";
         HttpHeader testHeader = new("TestHeaderName", "TestHeaderValue");
-        Request.SetupGet(PublicRedirectPath);
 
-
-        MainHttpHandler.When(HttpMethod.Get, PublicRedirectCallPath)
+        Request.SetupGet($"{PublicRedirectPath}/{path}");
+        MainHttpHandler.When(HttpMethod.Get, $"{PublicRedirectCallPath}{path}")
             .WithHeaders(MakeArray(Headers.RequestCommon.AsMock()))
             .Respond(
-                        HttpStatusCode.PaymentRequired,
+                        HttpStatusCode.Accepted,
                         MakeArray(testHeader.AsMock()),
                         MediaTypeNames.Text.Plain,
                         body
                     );
-
+        
         await ExecuteAsync();
 
-        Response.StatusCode.Should().Be(StatusCodes.Status402PaymentRequired);
+        Response.StatusCode.Should().Be(StatusCodes.Status202Accepted);
         Response.Headers.Should().BeEquivalentTo
                                  (
                                     MakeArray
@@ -51,7 +52,7 @@ public class GatewayTests: GatewayTestsBase
                                        testHeader
                                     )
                                  );
-        Response.Body.ToString().Should().NotBeSameAs(body);
+        ResponseBody.Should().Be(body);
     }
 }
 

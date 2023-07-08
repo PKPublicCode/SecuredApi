@@ -18,7 +18,6 @@ using SecuredApi.Infrastructure.Configuration;
 using SecuredApi.Apps.Gateway;
 using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using RichardSzalay.MockHttp;
 using SecuredApi.Logic.Routing.Utils;
 
@@ -27,16 +26,15 @@ namespace SecuredApi.ComponentTests.Gateway;
 public abstract class GatewayTestsBase
 {
     private const string _defaultFileName = "appsettings.json";
+
     protected readonly IServiceProvider _serviceProvider;
-
     protected readonly HttpContext Context = new DefaultHttpContext();
-
     protected HttpRequest Request => Context.Request;
     protected HttpResponse Response => Context.Response;
+    protected string ResponseBody => ReadStream(Response.Body);
     protected MockHttpMessageHandler CommonHttpHandler { get; } = new ();
     protected MockHttpMessageHandler MainHttpHandler { get; } = new ();
     protected MockHttpMessageHandler NonRedirectHttpHandler { get; } = new ();
-
 
     protected GatewayTestsBase()
         :this(_defaultFileName, (x, y) => { })
@@ -53,7 +51,7 @@ public abstract class GatewayTestsBase
                    .AddScoped(_ => cfg)
                    .ConfigureRoutingServices<FileAccessConfigurator>(cfg);
 
-        srv.AddHttpClient(String.Empty)
+        srv.AddHttpClient(string.Empty)
             .ConfigurePrimaryHttpMessageHandler(() => CommonHttpHandler); //Default http client
 
         srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled)
@@ -62,11 +60,15 @@ public abstract class GatewayTestsBase
         srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
             .ConfigurePrimaryHttpMessageHandler(() => NonRedirectHttpHandler);
 
+        // Fallback returns status code 0, that indicates that url not expected
+        MainHttpHandler.Fallback.Respond(() => Task.FromResult(new HttpResponseMessage(0)));
+
         configurator(srv, cfg);
 
         _serviceProvider = srv.BuildServiceProvider();
 
         Context.RequestServices = _serviceProvider;
+        Context.Response.Body = new MemoryStream();
     }
 
     protected virtual async Task ArrangeAsync(CancellationToken ct)
@@ -90,15 +92,16 @@ public abstract class GatewayTestsBase
 
     protected virtual async Task ExecuteAsync()
     {
-        // Intentionally run in different ServiceProvider Scopes
+        // Intentionally run in different ServiceProvider scopes
         await ArrangeAsync(Context.RequestAborted);
         await ActAsync();
     }
 
-    public class ExpectedResult
+    private static string ReadStream(Stream s)
     {
-        public int StatusCode { get; set; }
-        public List<KeyValuePair<string, StringValues>> Headers { get; } = new();
+        s.Position = 0;
+        using var reader = new StreamReader(s);
+        return reader.ReadToEnd();
     }
 }
 

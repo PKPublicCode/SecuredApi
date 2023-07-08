@@ -46,7 +46,7 @@
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
           "routeKey": {
             "method": "get",
-            "path": "/public/redirect"
+            "path": "/public/redirect/*"
           },
           "actions": [
             {

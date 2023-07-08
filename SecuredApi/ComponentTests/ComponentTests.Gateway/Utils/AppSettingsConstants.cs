@@ -12,9 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.Extensions.Primitives;
 namespace SecuredApi.ComponentTests.Gateway.Utils;
 
+// Represents strings used in routing.json and globals.json
 public static class AppSettingsConstants
 {
     public static class Headers
@@ -28,7 +28,7 @@ public static class AppSettingsConstants
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
     }
 
-    public const string PublicRedirectCallPath = "https://mock_path/public/redirect";
+    public const string PublicRedirectCallPath = "https://mock_path/api";
     public const string PublicRedirectPath = "/public/redirect";
 }
 
