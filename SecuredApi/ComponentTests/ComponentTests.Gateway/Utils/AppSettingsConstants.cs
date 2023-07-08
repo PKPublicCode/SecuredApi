@@ -29,6 +29,8 @@ public static class AppSettingsConstants
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
-    public const string RoutingPublicRemoteWildcardPath = "/public/remote/wildcard/";
+    public const string RoutingPublicRemoteWildcardPath = "/public/remote/wildcard";
+    public const string RoutingPublicEchoWildcardPath = "/public/echo/wildcard";
+    public const string RoutingPublicEchoExactPath = "/public/echo/exact";
 }
 

@@ -23,21 +23,12 @@ public class EchoTests: GatewayTestsBase
     {
     }
 
-    [Fact]
-    public async Task RootRoute_NotFound()
+    [Theory]
+    [InlineData("/")]
+    [InlineData($"{RoutingPublicEchoExactPath}/path")]
+    public async Task Echo_NotFound(string urlPath)
     {
-        Request.SetupGet("/");
-
-        await ExecuteAsync();
-       
-        Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
-    }
-
-    [Fact]
-    public async Task RouteWithExtraPath_NotFound()
-    {
-        Request.SetupGet("/echo/success/extrapath");
+        Request.SetupGet(urlPath);
 
         await ExecuteAsync();
 
@@ -45,10 +36,36 @@ public class EchoTests: GatewayTestsBase
         Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
     }
 
-    [Fact]
-    public async Task EchoRoute_Found()
+    //[Fact]
+    //public async Task RootRoute_NotFound()
+    //{
+    //    Request.SetupGet("/");
+
+    //    await ExecuteAsync();
+
+    //    Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    //    Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
+    //}
+
+    //[Fact]
+    //public async Task RouteWithExtraPath_NotFound()
+    //{
+    //    Request.SetupGet("/echo/success/extrapath");
+
+    //    await ExecuteAsync();
+
+    //    Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    //    Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
+    //}
+
+    [Theory]
+    [InlineData(RoutingPublicEchoExactPath)]
+    [InlineData($"{RoutingPublicEchoWildcardPath}")]
+    [InlineData($"{RoutingPublicEchoWildcardPath}/")]
+    [InlineData($"{RoutingPublicEchoWildcardPath}/path")]
+    public async Task EchoRoute_Found(string urlPath)
     {
-        Request.SetupGet("/echo/success");
+        Request.SetupGet(urlPath);
         
         await ExecuteAsync();
 

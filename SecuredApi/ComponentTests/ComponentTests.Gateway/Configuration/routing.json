@@ -30,7 +30,23 @@
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
-            "path": "/echo/success"
+            "path": "/public/echo/exact"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "This is /public/echo/exact route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/echo/wildcard/*"
           },
           "actions": [
             {
