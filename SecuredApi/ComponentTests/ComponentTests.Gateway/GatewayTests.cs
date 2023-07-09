@@ -40,20 +40,12 @@ public class GatewayTests: GatewayTestsBase
                         MediaTypeNames.Text.Plain,
                         body
                     );
-        
-        await ExecuteAsync();
 
-        Response.StatusCode.Should().Be(StatusCodes.Status202Accepted);
-        Response.Headers.Should().BeEquivalentTo
-                                 (
-                                    MakeArray
-                                    (
-                                       Headers.ResponseCommon,
-                                       Headers.ResponsePublicRedirect,
-                                       testHeader
-                                    )
-                                 );
-        ResponseBody.Should().Be(body);
+        ExpectedResult.StatusCode = StatusCodes.Status202Accepted;
+        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.ResponsePublicRedirect, testHeader);
+        ExpectedResult.Body = body;
+
+        await ExecuteAsync();
     }
 }
 

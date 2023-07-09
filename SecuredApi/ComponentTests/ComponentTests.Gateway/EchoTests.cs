@@ -30,25 +30,40 @@ public class EchoTests: GatewayTestsBase
     {
         Request.SetupGet(urlPath);
 
-        await ExecuteAsync();
+        ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
+        ExpectedResult.AddHeaders(Headers.ResponseNotFound);
+        ExpectedResult.Body = ResponseNotFoundBody;
 
-        Response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseNotFound));
+        await ExecuteAsync();
     }
 
     [Theory]
-    [InlineData(RoutingPublicEchoExactPath)]
-    [InlineData($"{RoutingPublicEchoWildcardPath}")]
-    [InlineData($"{RoutingPublicEchoWildcardPath}/")]
-    [InlineData($"{RoutingPublicEchoWildcardPath}/path")]
-    public async Task EchoRoute_Found(string urlPath)
+    [InlineData(RoutingPublicEchoExactPath, ResponseEchoExactBody)]
+    [InlineData($"{RoutingPublicEchoWildcardPath}", ResponseEchoWildcardBody)]
+    [InlineData($"{RoutingPublicEchoWildcardPath}/", ResponseEchoWildcardBody)]
+    [InlineData($"{RoutingPublicEchoWildcardPath}/path", ResponseEchoWildcardBody)]
+    public async Task EchoRoute_Found(string urlPath, string expectedContent)
     {
         Request.SetupGet(urlPath);
-        
-        await ExecuteAsync();
 
-        Response.StatusCode.Should().Be(StatusCodes.Status200OK);
-        Response.Headers.Should().BeEquivalentTo(MakeArray(Headers.ResponseCommon));
+        ExpectedResult.StatusCode = StatusCodes.Status200OK;
+        ExpectedResult.AddHeaders(Headers.ResponseCommon);
+        ExpectedResult.Body = expectedContent;
+
+        await ExecuteAsync();
+    }
+
+    [Theory]
+    [InlineData(PublicContent.Exact.Path, PublicContent.Exact.Content)]
+    public async Task StaticFile_Found(string urlPath, string expectedContent)
+    {
+        Request.SetupGet($"{RoutingPublicContentPath}{urlPath}");
+
+        ExpectedResult.StatusCode = StatusCodes.Status200OK;
+        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.TextHtmlContentType);
+        ExpectedResult.Body = expectedContent;
+
+        await ExecuteAsync();
     }
 }
 

@@ -12,6 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using System.Net.Http;
+using Microsoft.Net.Http.Headers;
+using System.Net.Mime;
+
 namespace SecuredApi.ComponentTests.Gateway.Utils;
 
 // Represents strings used in routing.json and globals.json
@@ -26,11 +30,44 @@ public static class AppSettingsConstants
         public static HttpHeader ResponseNotFound { get; } = new("X-NOTFOUND-RESPONSE-HEADER", "NotFoundResponseHeaderValue");
 
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
+
+        public static HttpHeader TextHtmlContentType { get; } = new(HeaderNames.ContentType, MediaTypeNames.Text.Html);
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
     public const string RoutingPublicRemoteWildcardPath = "/public/remote/wildcard";
     public const string RoutingPublicEchoWildcardPath = "/public/echo/wildcard";
     public const string RoutingPublicEchoExactPath = "/public/echo/exact";
+    public const string RoutingPublicContentPath = "/public/content";
+
+    public const string ResponseEchoExactBody = "Echo exact route";
+    public const string ResponseEchoWildcardBody = "Echo wildcard route";
+    public const string ResponseNotFoundBody = "Route not found";
+
+    public static class PublicContent
+    {
+        public static class Exact 
+        {
+            public const string Path = "/Exact";
+            public const string Content =
+@"<html>
+<head>
+    <meta charset=""utf-8"" />
+    <title>Secured API</title>
+</head>
+<body>
+    <h1>Welcome to Secured API</h1>
+    This is default configuration.<br>
+    Enjoy!!!
+</body>
+</html>";
+        }
+    }
+
+    //public struct StaticFile
+    //{
+    //    public string Path { get; init; }
+    //    public string Content { get; init; }
+    //}
 }
 

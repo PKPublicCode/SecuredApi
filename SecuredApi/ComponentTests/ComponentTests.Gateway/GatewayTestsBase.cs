@@ -20,6 +20,7 @@ using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using SecuredApi.Logic.Routing.Utils;
+using FluentAssertions;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -35,6 +36,7 @@ public abstract class GatewayTestsBase
     protected MockHttpMessageHandler CommonHttpHandler { get; } = new ();
     protected MockHttpMessageHandler MainHttpHandler { get; } = new ();
     protected MockHttpMessageHandler NonRedirectHttpHandler { get; } = new ();
+    protected ExpectedResult ExpectedResult { get; } = new();
 
     protected GatewayTestsBase()
         :this(_defaultFileName, (x, y) => { })
@@ -71,11 +73,11 @@ public abstract class GatewayTestsBase
         Context.Response.Body = new MemoryStream();
     }
 
-    protected virtual async Task ArrangeAsync(CancellationToken ct)
+    protected virtual async Task ArrangeAsync()
     {
         using var scope = _serviceProvider.CreateAsyncScope();
         await scope.ServiceProvider.GetRequiredService<IRoutingEngineManager>()
-                        .InitializeRoutingEngineAsync(ct);
+                        .InitializeRoutingEngineAsync(Context.RequestAborted);
     }
 
     protected virtual async Task ActAsync()
@@ -87,14 +89,18 @@ public abstract class GatewayTestsBase
 
     protected virtual Task AssertAsync()
     {
+        Response.StatusCode.Should().Be(ExpectedResult.StatusCode);
+        Response.Headers.Should().BeEquivalentTo(ExpectedResult.Headers);
+        ResponseBody.Should().Be(ExpectedResult.Body);
         return Task.CompletedTask;
     }
 
     protected virtual async Task ExecuteAsync()
     {
         // Intentionally run in different ServiceProvider scopes
-        await ArrangeAsync(Context.RequestAborted);
+        await ArrangeAsync();
         await ActAsync();
+        await AssertAsync();
     }
 
     private static string ReadStream(Stream s)
