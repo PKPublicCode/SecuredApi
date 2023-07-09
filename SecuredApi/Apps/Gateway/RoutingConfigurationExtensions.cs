@@ -44,7 +44,7 @@ namespace SecuredApi.Apps.Gateway
             where FileAccessConfigurator : IInfrastructureConfigurator, new()
         {
             return srv.ConfigureOptionalFeature(config, "StaticFilesProvider", (srv, config) =>
-                        srv.ConfigureInfrastructure<IStaticFileProvider, FileAccessConfigurator>(config)
+                        srv.ConfigureInfrastructure<ReturnStaticFileAction, FileAccessConfigurator>(config)
                             .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
             );
         }

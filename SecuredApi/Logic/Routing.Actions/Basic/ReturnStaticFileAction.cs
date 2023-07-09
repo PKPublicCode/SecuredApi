@@ -25,11 +25,6 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic
 {
-    public interface IStaticFileProvider
-    {
-
-    }
-
     public class ReturnStaticFileAction : IAction
     {
         private readonly string _fullPath;
@@ -61,7 +56,7 @@ namespace SecuredApi.Logic.Routing.Actions.Basic
                 }
                 path = Path.Combine(path, context.RemainingPath);
             }
-            var fileProvider = context.GetRequiredService<IFileProvider<IStaticFileProvider>>();
+            var fileProvider = context.GetRequiredService<IFileProvider<ReturnStaticFileAction>>();
             StreamResult result;
             try
             {
