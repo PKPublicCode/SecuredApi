@@ -31,7 +31,11 @@ public static class AppSettingsConstants
 
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
 
+        public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
+
         public static HttpHeader TextHtmlContentType { get; } = new(HeaderNames.ContentType, MediaTypeNames.Text.Html);
+
+        public static HttpHeader TextPlainUtf8ContentType { get; } = new(HeaderNames.ContentType, $"{MediaTypeNames.Text.Plain}; charset=utf-8");
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";

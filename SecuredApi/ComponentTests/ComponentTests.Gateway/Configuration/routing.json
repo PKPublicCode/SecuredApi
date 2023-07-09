@@ -60,6 +60,7 @@
         },
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
+          "title" : "Call to remote endpoint",
           "routeKey": {
             "method": "get",
             "path": "/public/remote/wildcard/*"
@@ -82,7 +83,7 @@
             {
               "name": "SuppressResponseHeaders",
               "settings": {
-                "Headers": [ "Content-Type" ]
+                "Headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
               }
             }
           ]
