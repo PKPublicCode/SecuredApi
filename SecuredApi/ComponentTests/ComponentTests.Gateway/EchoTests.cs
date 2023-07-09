@@ -25,23 +25,23 @@ public class EchoTests: GatewayTestsBase
 
     [Theory]
     [InlineData("/")]
-    [InlineData($"{RoutingPublicEchoExactPath}/path")]
+    [InlineData($"{RoutePaths.PublicEchoExact}/path")]
     public async Task Echo_NotFound(string urlPath)
     {
         Request.SetupGet(urlPath);
 
         ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
         ExpectedResult.AddHeaders(Headers.ResponseNotFound);
-        ExpectedResult.Body = ResponseNotFoundBody;
+        ExpectedResult.Body = InlineContent.ResponseNotFound;
 
         await ExecuteAsync();
     }
 
     [Theory]
-    [InlineData(RoutingPublicEchoExactPath, ResponseEchoExactBody)]
-    [InlineData($"{RoutingPublicEchoWildcardPath}", ResponseEchoWildcardBody)]
-    [InlineData($"{RoutingPublicEchoWildcardPath}/", ResponseEchoWildcardBody)]
-    [InlineData($"{RoutingPublicEchoWildcardPath}/path", ResponseEchoWildcardBody)]
+    [InlineData(RoutePaths.PublicEchoExact, InlineContent.ResponseEchoExact)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}", InlineContent.ResponseEchoWildcard)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}/", InlineContent.ResponseEchoWildcard)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}/path", InlineContent.ResponseEchoWildcard)]
     public async Task EchoRoute_Found(string urlPath, string expectedContent)
     {
         Request.SetupGet(urlPath);
@@ -57,7 +57,7 @@ public class EchoTests: GatewayTestsBase
     [InlineData(PublicContent.Exact.Path, PublicContent.Exact.Content)]
     public async Task StaticFile_Found(string urlPath, string expectedContent)
     {
-        Request.SetupGet($"{RoutingPublicContentPath}{urlPath}");
+        Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.TextHtmlContentType);

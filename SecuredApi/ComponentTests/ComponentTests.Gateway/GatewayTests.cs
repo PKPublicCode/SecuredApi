@@ -53,15 +53,15 @@ public class GatewayTests: GatewayTestsBase
         HttpHeader TestResponseHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
 
         // Simulate received http call by gateway
-        Request.SetupGet($"{RoutingPublicRemoteWildcardPath}/{urlPath}");
+        Request.SetupGet($"{RoutePaths.PublicRemoteWildcard}/{urlPath}");
         Request.Headers.Add(TestRequestHeader);
 
         // setup RemouteCall response
         MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}{urlPath}")
-            .WithHeaders(MakeArray(Headers.RequestCommon.AsMock(), TestRequestHeader.AsMock()))
+            .WithHeaders(new[] { Headers.RequestCommon.AsMock(), TestRequestHeader.AsMock() })
             .Respond(
                         HttpStatusCode.Accepted,
-                        MakeArray(TestResponseHeader.AsMock(), Headers.ResponseSuppressPublicRedirect.AsMock()),
+                        new[] { TestResponseHeader.AsMock(), Headers.ResponseSuppressPublicRedirect.AsMock() },
                         MediaTypeNames.Text.Plain,
                         body
                     );

@@ -39,14 +39,21 @@ public static class AppSettingsConstants
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
-    public const string RoutingPublicRemoteWildcardPath = "/public/remote/wildcard";
-    public const string RoutingPublicEchoWildcardPath = "/public/echo/wildcard";
-    public const string RoutingPublicEchoExactPath = "/public/echo/exact";
-    public const string RoutingPublicContentPath = "/public/content";
 
-    public const string ResponseEchoExactBody = "Echo exact route";
-    public const string ResponseEchoWildcardBody = "Echo wildcard route";
-    public const string ResponseNotFoundBody = "Route not found";
+    public static class RoutePaths
+    {
+        public const string PublicRemoteWildcard = "/public/remote/wildcard";
+        public const string PublicEchoWildcard = "/public/echo/wildcard";
+        public const string PublicEchoExact = "/public/echo/exact";
+        public const string PublicContentBase = "/public/content";
+    }
+
+    public static class InlineContent
+    {
+        public const string ResponseEchoExact = "Echo exact route";
+        public const string ResponseEchoWildcard = "Echo wildcard route";
+        public const string ResponseNotFound = "Route not found";
+    }
 
     public static class PublicContent
     {
@@ -67,11 +74,5 @@ public static class AppSettingsConstants
 </html>";
         }
     }
-
-    //public struct StaticFile
-    //{
-    //    public string Path { get; init; }
-    //    public string Content { get; init; }
-    //}
 }
 
