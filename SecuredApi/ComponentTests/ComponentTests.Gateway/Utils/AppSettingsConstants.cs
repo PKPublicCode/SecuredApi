@@ -53,6 +53,7 @@ public static class AppSettingsConstants
         public const string ResponseEchoExact = "Echo exact route";
         public const string ResponseEchoWildcard = "Echo wildcard route";
         public const string ResponseNotFound = "Route not found";
+        public const string ResponseStaticFileWildcardNotFound = "This is wrong file url";
     }
 
     public static class PublicContent
@@ -72,6 +73,12 @@ public static class AppSettingsConstants
     Enjoy!!!
 </body>
 </html>";
+        }
+
+        public static class WildcardHelloTxt
+        {
+            public const string Path = "/wildcard/Hello.txt";
+            public const string Content = "This is content of hello.txt";
         }
     }
 }

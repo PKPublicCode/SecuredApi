@@ -113,7 +113,8 @@
             {
               "name": "ReturnStaticFile",
               "settings": {
-                "Path": "StaticFiles/WildcardContent"
+                "Path": "StaticFiles/WildcardContent",
+                "NotFoundMessage": "This is wrong file url"
               }
             }
           ]

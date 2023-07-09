@@ -14,6 +14,8 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+using System.Net.Mime;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -54,14 +56,28 @@ public class EchoTests: GatewayTestsBase
     }
 
     [Theory]
-    [InlineData(PublicContent.Exact.Path, PublicContent.Exact.Content)]
-    public async Task StaticFile_Found(string urlPath, string expectedContent)
+    [InlineData(PublicContent.Exact.Path, PublicContent.Exact.Content, MediaTypeNames.Text.Html)]
+    [InlineData(PublicContent.WildcardHelloTxt.Path, PublicContent.WildcardHelloTxt.Content, MediaTypeNames.Text.Plain)]
+    public async Task StaticFile_Found(string urlPath, string expectedContent, string expectedContentType)
     {
         Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
-        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.TextHtmlContentType);
+        ExpectedResult.AddHeaders(Headers.ResponseCommon, new HttpHeader(HeaderNames.ContentType, expectedContentType));
         ExpectedResult.Body = expectedContent;
+
+        await ExecuteAsync();
+    }
+
+    [Theory]
+    [InlineData("/wildcard/")]
+    [InlineData("/wildcard/blabla.html")]
+    public async Task StaticFile_NotFound(string urlPath)
+    {
+        Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
+
+        ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
+        ExpectedResult.Body = InlineContent.ResponseStaticFileWildcardNotFound;
 
         await ExecuteAsync();
     }

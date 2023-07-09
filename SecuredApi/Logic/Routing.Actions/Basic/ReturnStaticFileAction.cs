@@ -50,6 +50,15 @@ namespace SecuredApi.Logic.Routing.Actions.Basic
             string path = _fullPath;
             if (!_singleFile)
             {
+                // Need to add this check because empty remaining path means trying to open folder as file.
+                // This can cause some side effects. E.g. on MacOs (at least) it will cause AccessDenied (UnauthorizedAccessException) exception
+                // (meaning that attempting to open folder as file causes UnauthorizedAccessException)
+                // So, just returning 404 in this case on this level, since it's kind of logical edge case, whatewer concret file provider is implemented
+                if (context.RemainingPath.IsNullOrEmpty())
+                {
+                    await context.SetResponseAsync(StatusCodes.Status404NotFound, _notFoundBody);
+                    return false;
+                }
                 path = Path.Combine(path, context.RemainingPath);
             }
             var fileProvider = context.GetRequiredService<IFileProvider<IStaticFileProvider>>();
