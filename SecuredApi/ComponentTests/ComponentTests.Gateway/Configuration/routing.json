@@ -11,13 +11,6 @@
     }
   ],
   "onRequestErrorActions": [
-    {
-      "name": "SetRequestHeader",
-      "settings": {
-        "key": "X-COMMON-REQUEST-HEADER",
-        "value": "CommonRequestHeaderValue"
-      }
-    }
   ],
   "onRequestSuccessActions": [
     {
