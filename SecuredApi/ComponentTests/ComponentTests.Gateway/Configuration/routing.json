@@ -11,6 +11,13 @@
     }
   ],
   "onRequestErrorActions": [
+    {
+      "name": "SetRequestHeader",
+      "settings": {
+        "key": "X-COMMON-REQUEST-HEADER",
+        "value": "CommonRequestHeaderValue"
+      }
+    }
   ],
   "onRequestSuccessActions": [
     {
@@ -49,6 +56,12 @@
             "path": "/public/echo/wildcard/*"
           },
           "actions": [
+            {
+              "name": "CheckIPs",
+              "settings": {
+                "whiteList": [ "20.20.20.21" ]
+              }
+            },
             {
               "name": "SetResponse",
               "settings": {

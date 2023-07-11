@@ -12,7 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Net.Http;
+using System.Net;
 using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
 
@@ -55,6 +55,8 @@ public static class AppSettingsConstants
         public const string ResponseNotFound = "Route not found";
         public const string ResponseStaticFileWildcardNotFound = "This is wrong file url";
     }
+
+    public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
 
     public static class PublicContent
     {

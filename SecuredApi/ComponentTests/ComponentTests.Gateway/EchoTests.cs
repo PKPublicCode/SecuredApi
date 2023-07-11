@@ -12,10 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
+using System.Net;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -47,10 +47,23 @@ public class EchoTests: GatewayTestsBase
     public async Task EchoRoute_Found(string urlPath, string expectedContent)
     {
         Request.SetupGet(urlPath);
+        Context.Connection.RemoteIpAddress = EchoWildcardAllowedIp;
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.AddHeaders(Headers.ResponseCommon);
         ExpectedResult.Body = expectedContent;
+
+        await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task EchoRoute_IpIsNotAllowed()
+    {
+        Request.SetupGet(RoutePaths.PublicEchoWildcard);
+        Context.Connection.RemoteIpAddress = IPAddress.Parse("20.20.20.22"); ;
+
+        ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
+        ExpectedResult.Body = string.Empty;
 
         await ExecuteAsync();
     }
