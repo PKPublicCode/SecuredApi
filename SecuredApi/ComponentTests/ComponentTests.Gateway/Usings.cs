@@ -16,4 +16,4 @@ global using Xunit;
 global using SecuredApi.ComponentTests.Gateway.Utils;
 global using static SecuredApi.ComponentTests.Gateway.Utils.KeyValuePairExtensions;
 global using static SecuredApi.ComponentTests.Gateway.Utils.AppSettingsConstants;
-global using static SecuredApi.ComponentTests.Gateway.Utils.ArrayExtensions;
+global using FluentAssertions;

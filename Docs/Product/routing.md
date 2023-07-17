@@ -13,3 +13,6 @@ RouteKey contains method and path and has to be unique, ignoring wildcard. That 
     "path": "/mypath/"
 }
 ```
+
+ToDo.1 Describe when it happens
+onRequestErrorActions

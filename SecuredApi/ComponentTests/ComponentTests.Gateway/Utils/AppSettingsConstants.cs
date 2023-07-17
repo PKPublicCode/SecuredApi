@@ -45,6 +45,7 @@ public static class AppSettingsConstants
         public const string PublicRemoteWildcard = "/public/remote/wildcard";
         public const string PublicEchoWildcard = "/public/echo/wildcard";
         public const string PublicEchoExact = "/public/echo/exact";
+        public const string PublicEchoDelay = "/public/echo/delay";
         public const string PublicContentBase = "/public/content";
     }
 
@@ -54,9 +55,11 @@ public static class AppSettingsConstants
         public const string ResponseEchoWildcard = "Echo wildcard route";
         public const string ResponseNotFound = "Route not found";
         public const string ResponseStaticFileWildcardNotFound = "This is wrong file url";
+        public const string ResponseEchoDelay = "Public delay route";
     }
 
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
+    public const int PublicEchoDelayMilliseconds = 300;
 
     public static class PublicContent
     {

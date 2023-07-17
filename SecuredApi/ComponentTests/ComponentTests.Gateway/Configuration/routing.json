@@ -46,6 +46,28 @@
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
+            "path": "/public/echo/delay"
+          },
+          "actions": [
+            {
+              "name": "Delay",
+              "settings": {
+                "Milliseconds": 300
+              }
+            },
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "Public delay route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
             "path": "/public/echo/wildcard/*"
           },
           "actions": [
@@ -66,7 +88,7 @@
         },
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
-          "title" : "Call to remote endpoint",
+          "title": "Call to remote endpoint",
           "routeKey": {
             "method": "get",
             "path": "/public/remote/wildcard/*"

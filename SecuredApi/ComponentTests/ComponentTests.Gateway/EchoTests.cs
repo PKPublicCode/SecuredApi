@@ -60,7 +60,7 @@ public class EchoTests: GatewayTestsBase
     public async Task EchoRoute_IpIsNotAllowed()
     {
         Request.SetupGet(RoutePaths.PublicEchoWildcard);
-        Context.Connection.RemoteIpAddress = IPAddress.Parse("20.20.20.22"); ;
+        Context.Connection.RemoteIpAddress = IPAddress.Parse("20.20.20.22"); //Not Allowed IP Address
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
         ExpectedResult.Body = string.Empty;
