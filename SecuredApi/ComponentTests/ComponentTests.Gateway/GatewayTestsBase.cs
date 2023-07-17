@@ -20,7 +20,6 @@ using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using SecuredApi.Logic.Routing.Utils;
-using FluentAssertions;
 
 namespace SecuredApi.ComponentTests.Gateway;
 

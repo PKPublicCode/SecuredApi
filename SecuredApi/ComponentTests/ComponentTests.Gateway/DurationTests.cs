@@ -27,7 +27,7 @@ public class DurationTests : GatewayTestsBase
         Request.SetupGet(RoutePaths.PublicEchoDelay);
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.AddHeaders(Headers.ResponseCommon);
-        ExpectedResult.Body = InlineContent.ResponseEchoDelay;
+        ExpectedResult.Body = InlineContent.EchoDelay;
 
         await ExecuteAsync();
 

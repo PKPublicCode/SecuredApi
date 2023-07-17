@@ -51,11 +51,11 @@ public static class AppSettingsConstants
 
     public static class InlineContent
     {
-        public const string ResponseEchoExact = "Echo exact route";
-        public const string ResponseEchoWildcard = "Echo wildcard route";
-        public const string ResponseNotFound = "Route not found";
-        public const string ResponseStaticFileWildcardNotFound = "This is wrong file url";
-        public const string ResponseEchoDelay = "Public delay route";
+        public const string EchoExact = "Echo exact route";
+        public const string EchoWildcard = "Echo wildcard route";
+        public const string NotFound = "Route not found";
+        public const string StaticFileWildcardNotFound = "This is wrong file url";
+        public const string EchoDelay = "Public delay route";
     }
 
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");

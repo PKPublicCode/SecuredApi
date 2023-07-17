@@ -34,16 +34,16 @@ public class EchoTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
         ExpectedResult.AddHeaders(Headers.ResponseNotFound);
-        ExpectedResult.Body = InlineContent.ResponseNotFound;
+        ExpectedResult.Body = InlineContent.NotFound;
 
         await ExecuteAsync();
     }
 
     [Theory]
-    [InlineData(RoutePaths.PublicEchoExact, InlineContent.ResponseEchoExact)]
-    [InlineData($"{RoutePaths.PublicEchoWildcard}", InlineContent.ResponseEchoWildcard)]
-    [InlineData($"{RoutePaths.PublicEchoWildcard}/", InlineContent.ResponseEchoWildcard)]
-    [InlineData($"{RoutePaths.PublicEchoWildcard}/path", InlineContent.ResponseEchoWildcard)]
+    [InlineData(RoutePaths.PublicEchoExact, InlineContent.EchoExact)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}", InlineContent.EchoWildcard)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}/", InlineContent.EchoWildcard)]
+    [InlineData($"{RoutePaths.PublicEchoWildcard}/path", InlineContent.EchoWildcard)]
     public async Task EchoRoute_Found(string urlPath, string expectedContent)
     {
         Request.SetupGet(urlPath);
@@ -90,7 +90,7 @@ public class EchoTests: GatewayTestsBase
         Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
 
         ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
-        ExpectedResult.Body = InlineContent.ResponseStaticFileWildcardNotFound;
+        ExpectedResult.Body = InlineContent.StaticFileWildcardNotFound;
 
         await ExecuteAsync();
     }
