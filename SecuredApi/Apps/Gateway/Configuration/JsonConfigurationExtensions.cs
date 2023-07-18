@@ -12,13 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Infrastructure.Configuration;
+namespace SecuredApi.Apps.Gateway.Configuration;
 
 public static class JsonConfigurationExtensions
 {

@@ -15,19 +15,11 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using SecuredApi.Logic.FileAccess;
-using SecuredApi.Infrastructure.FileAccess.FileSystem;
 
-namespace SecuredApi.Infrastructure.Configuration;
+namespace SecuredApi.Apps.Gateway.Configuration;
 
-public class FileAccessConfigurator : IInfrastructureConfigurator
+public interface IInfrastructureConfigurator
 {
-    public string SectionName => "FileAccess";
-
-    public virtual Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
-        => name switch
-        {
-            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>(),
-            _ => null
-        };
+    public string SectionName { get; }
+    Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name);
 }

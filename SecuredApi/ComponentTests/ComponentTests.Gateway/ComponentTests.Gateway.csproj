@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Configuration\Infrastructure.Configuration.csproj" />
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
   </ItemGroup>
   <ItemGroup>

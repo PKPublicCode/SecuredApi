@@ -14,13 +14,13 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Base = SecuredApi.Infrastructure.Configuration;
+using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Logic.FileAccess;
 using SecuredApi.Infrastructure.FileAccess.AzureStorage;
 
-namespace SecuredApi.Infrastructure.AzureConfiguration;
+namespace SecuredApi.Apps.Gateway.Azure.Configuration;
 
-public class AzureFileAccessConfigurator : Base.FileAccessConfigurator
+public class AzureFileAccessConfigurator : FileAccessConfigurator
 {
     public override Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
         => name switch

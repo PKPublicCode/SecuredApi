@@ -12,13 +12,14 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Infrastructure.Configuration;
-public class ConfigurationException : Exception
+namespace SecuredApi.Apps.Gateway.Configuration;
+public static class ConfigurationExtensions
 {
-    public ConfigurationException(string message)
-        : base(message)
+    public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
     {
+        return config.GetSection(name)
+            ?? throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
     }
 }

@@ -26,7 +26,7 @@ using SecuredApi.Logic.Routing.Actions.Basic;
 using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Apps.Gateway.Actions;
 using SecuredApi.Apps.Gateway.Routing;
-using SecuredApi.Infrastructure.Configuration;
+using SecuredApi.Apps.Gateway.Configuration;
 
 namespace SecuredApi.Apps.Gateway
 {

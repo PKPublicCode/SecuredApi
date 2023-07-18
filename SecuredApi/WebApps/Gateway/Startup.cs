@@ -12,14 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using SecuredApi.Apps.Gateway;
-using SecuredApi.Infrastructure.AzureConfiguration;
+using SecuredApi.Apps.Gateway.Azure.Configuration;
 
 namespace SecuredApi.WebApps.Gateway
 {

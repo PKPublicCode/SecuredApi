@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SecuredApi.Infrastructure.Configuration;
+using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Apps.Gateway;
 using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;

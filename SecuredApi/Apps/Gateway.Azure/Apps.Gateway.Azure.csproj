@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SecuredApi.Apps.Gateway.Azure</RootNamespace>
+	<AssemblyName>SecuredApi.Apps.Gateway.Azure</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gateway\Apps.Gateway.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FileAccess.AzureStorage\Infrastructure.FileAccess.AzureStorage.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Subscriptions.TableStorage\Infrastructure.Subscriptions.TableStorage.csproj" />
+  </ItemGroup>
+</Project>

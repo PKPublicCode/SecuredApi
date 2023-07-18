@@ -14,12 +14,12 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SecuredApi.Infrastructure.Configuration;
+using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 using SecuredApi.Infrastructure.Subscriptions.TableStorage;
 using SecuredApi.Logic.Subscriptions;
 
-namespace SecuredApi.Infrastructure.AzureConfiguration;
+namespace SecuredApi.Apps.Gateway.Azure.Configuration;
 
 public static class RoutingConfigurationExtensions
 {

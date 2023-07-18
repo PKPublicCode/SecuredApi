@@ -16,7 +16,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Infrastructure.Configuration;
+namespace SecuredApi.Apps.Gateway.Configuration;
 
 public static class ServiceCollectionExtensions
 {

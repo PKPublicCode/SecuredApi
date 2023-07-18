@@ -15,18 +15,19 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using SecuredApi.Infrastructure.Subscriptions.TableStorage;
-using SecuredApi.Infrastructure.Configuration;
+using SecuredApi.Logic.FileAccess;
+using SecuredApi.Infrastructure.FileAccess.FileSystem;
 
-namespace SecuredApi.Infrastructure.AzureConfiguration;
+namespace SecuredApi.Apps.Gateway.Configuration;
 
-public static class TableClientConfigurator
+public class FileAccessConfigurator : IInfrastructureConfigurator
 {
-    public static IServiceCollection ConfigureTableClientRepository<TInterface, TImplementation>(this IServiceCollection srv, IConfigurationSection cfg)
-        where TInterface : class
-        where TImplementation : class, TInterface
-    {
-        return srv.AddSingleton<TInterface, TImplementation>()
-                .Configure<TableClientConfig<TInterface>>(cfg.GetRequiredSection("Repository"));
-    }
+    public string SectionName => "FileAccess";
+
+    public virtual Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
+        => name switch
+        {
+            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>(),
+            _ => null
+        };
 }

@@ -12,11 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Infrastructure.Configuration;
+namespace SecuredApi.Apps.Gateway.Configuration;
+
 public static class InfrastructureConfigurationExtensions
 {
     public static IServiceCollection ConfigureInfrastructure<TClient, TConfigurator>(this IServiceCollection srv, IConfiguration config, string cfgPath, bool required = true)

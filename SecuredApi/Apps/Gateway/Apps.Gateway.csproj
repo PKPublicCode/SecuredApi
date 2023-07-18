@@ -14,13 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Logic\Routing.Actions\Logic.Routing.Actions.csproj" />
     <ProjectReference Include="..\..\Logic\Routing\Logic.Routing.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Configuration\Infrastructure.Configuration.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Infrastructure\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
 </Project>

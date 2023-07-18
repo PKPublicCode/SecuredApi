@@ -12,14 +12,20 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using SecuredApi.Infrastructure.Subscriptions.TableStorage;
+using SecuredApi.Apps.Gateway.Configuration;
 
-namespace SecuredApi.Infrastructure.Configuration;
+namespace SecuredApi.Apps.Gateway.Azure.Configuration;
 
-public interface IInfrastructureConfigurator
+public static class TableClientConfigurator
 {
-    public string SectionName { get; }
-    Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name);
+    public static IServiceCollection ConfigureTableClientRepository<TInterface, TImplementation>(this IServiceCollection srv, IConfigurationSection cfg)
+        where TInterface : class
+        where TImplementation : class, TInterface
+    {
+        return srv.AddSingleton<TInterface, TImplementation>()
+                .Configure<TableClientConfig<TInterface>>(cfg.GetRequiredSection("Repository"));
+    }
 }
