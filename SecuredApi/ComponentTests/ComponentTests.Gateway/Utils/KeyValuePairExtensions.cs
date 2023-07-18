@@ -18,7 +18,7 @@ namespace SecuredApi.ComponentTests.Gateway.Utils;
 public static class KeyValuePairExtensions
 {
     // MockHttpMessageHandler uses <string, string> pair, but asp.net (e.g. HttpContext) uses <string, StringValues>
-    // That's why need some shortcuts to use unified instanses (constants) in both cases
+    // This shortcut lets using unified instanses (constants) for both classes
     public static KeyValuePair<string, string> AsMock(this HttpHeader pair) => new(pair.Key, pair.Value[0] ?? string.Empty);
 }
 
