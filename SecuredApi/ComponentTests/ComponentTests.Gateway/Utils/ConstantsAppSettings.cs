@@ -13,15 +13,13 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Net;
-using Microsoft.Net.Http.Headers;
-using System.Net.Mime;
 
 namespace SecuredApi.ComponentTests.Gateway.Utils;
 
 // Represents strings used in routing.json and globals.json
-public static class AppSettingsConstants
+public static partial class Constants
 {
-    public static class Headers
+    public static partial class Headers
     {
         public static HttpHeader RequestCommon { get; } = new("X-COMMON-REQUEST-HEADER", "CommonRequestHeaderValue");
 
@@ -32,13 +30,7 @@ public static class AppSettingsConstants
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
 
         public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
-
-        public static HttpHeader TextHtmlContentType { get; } = new(HeaderNames.ContentType, MediaTypeNames.Text.Html);
-
-        public static HttpHeader TextPlainUtf8ContentType { get; } = new(HeaderNames.ContentType, $"{MediaTypeNames.Text.Plain}; charset=utf-8");
     }
-
-    public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
 
     public static class RoutePaths
     {
@@ -58,6 +50,7 @@ public static class AppSettingsConstants
         public const string EchoDelay = "Public delay route";
     }
 
+    public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
     public const int PublicEchoDelayMilliseconds = 300;
 
