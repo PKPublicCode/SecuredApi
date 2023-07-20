@@ -14,11 +14,10 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Logic.Routing.Actions.Basic;
+
+public class SuppressResponseHeadersAction : SuppressHeadersActionBase
 {
-    public class SuppressResponseHeadersAction : SuppressHeadersActionBase
-    {
-        public SuppressResponseHeadersAction(SuppressHeadersActionSettings settings) : base(settings) { }
-        protected override IHeaderDictionary GetContextHeaders(IRequestContext context) => context.Response.Headers;
-    }
+    public SuppressResponseHeadersAction(SuppressHeadersActionSettings settings) : base(settings) { }
+    protected override IHeaderDictionary GetContextHeaders(IRequestContext context) => context.Response.Headers;
 }

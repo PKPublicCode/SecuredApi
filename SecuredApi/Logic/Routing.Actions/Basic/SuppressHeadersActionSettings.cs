@@ -12,13 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
+namespace SecuredApi.Logic.Routing.Actions.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+public class SuppressHeadersActionSettings
 {
-    public class SuppressHeadersActionSettings
-    {
-        public List<string> Headers { get; init; } = null!;
-    }
+    public List<string> Headers { get; init; } = null!;
 }

@@ -44,7 +44,7 @@ namespace SecuredApi.Infrastructure.Subscriptions.TableStorage
                 ConsumerId = entity.ConsumerId,
                 Routes = JsonSerializer.Deserialize<Guid[]>(entity.Routes ?? _emptyJsonArray)
                             ?? Array.Empty<Guid>(),
-                SubscriptionKeys = JsonSerializer.Deserialize<Guid[]>(entity.SubscriptionKeys ?? _emptyJsonArray)
+                HashedKeys = JsonSerializer.Deserialize<Guid[]>(entity.SubscriptionKeys ?? _emptyJsonArray)
                             ?? Array.Empty<Guid>()
             };
         }

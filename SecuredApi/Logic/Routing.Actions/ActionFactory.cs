@@ -12,41 +12,37 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
+namespace SecuredApi.Logic.Routing.Actions;
 
-namespace SecuredApi.Logic.Routing.Actions
+public class ActionFactory : IActionFactory
 {
-    public class ActionFactory : IActionFactory
+    private readonly Dictionary<string, ActionInfo> _actions;
+
+    public ActionFactory(Dictionary<string, ActionInfo> actions)
     {
-        private readonly Dictionary<string, ActionInfo> _actions;
+        _actions = actions;
+    }
 
-        public ActionFactory(Dictionary<string, ActionInfo> actions)
+    public IAction CreateAction(string name, object settings)
+    {
+        if (_actions.TryGetValue(name, out var info))
         {
-            _actions = actions;
+            return (IAction)info.ActionCtor.Invoke(new[] { settings });
         }
+        throw MakeActionNotFoundException(name);
+    }
 
-        public IAction CreateAction(string name, object settings)
+    public Type GetSettingsType(string name)
+    {
+        if (_actions.TryGetValue(name, out var info))
         {
-            if (_actions.TryGetValue(name, out var info))
-            {
-                return (IAction)info.ActionCtor.Invoke(new[] { settings });
-            }
-            throw MakeActionNotFoundException(name);
+            return info.SettingsType;
         }
+        throw MakeActionNotFoundException(name);
+    }
 
-        public Type GetSettingsType(string name)
-        {
-            if (_actions.TryGetValue(name, out var info))
-            {
-                return info.SettingsType;
-            }
-            throw MakeActionNotFoundException(name);
-        }
-
-        private static InvalidOperationException MakeActionNotFoundException(string name)
-        {
-            return new InvalidOperationException($"Action '{name} not found");
-        }
+    private static InvalidOperationException MakeActionNotFoundException(string name)
+    {
+        return new InvalidOperationException($"Action '{name} not found");
     }
 }

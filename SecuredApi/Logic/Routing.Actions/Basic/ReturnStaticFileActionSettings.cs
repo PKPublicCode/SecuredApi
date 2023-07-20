@@ -13,13 +13,12 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Logic.Routing.Actions.Basic;
+
+public class ReturnStaticFileActionSettings
 {
-    public class ReturnStaticFileActionSettings
-    {
-        public string? Path { get; init; }
-        public string? FileName { get; init; }
-        public string? NotFoundMessage { get; init; }
-        public bool AutoDiscoverMimeType { get; init; } = true;
-    }
+    public string? Path { get; init; }
+    public string? FileName { get; init; }
+    public string? NotFoundMessage { get; init; }
+    public bool AutoDiscoverMimeType { get; init; } = true;
 }

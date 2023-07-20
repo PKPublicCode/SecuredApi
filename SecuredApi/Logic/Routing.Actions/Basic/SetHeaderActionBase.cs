@@ -12,30 +12,26 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Logic.Routing.Actions.Basic;
+
+public abstract class SetHeaderActionBase : IAction
 {
-    public abstract class SetHeaderActionBase : IAction
+    private readonly string _key;
+    private readonly string _value;
+
+    protected SetHeaderActionBase(SetHeaderActionSettings settings)
     {
-        private readonly string _key;
-        private readonly string _value;
+        _key = settings.Key;
+        _value = settings.Value;
+    }
 
-        protected SetHeaderActionBase(SetHeaderActionSettings settings)
-        {
-            _key = settings.Key;
-            _value = settings.Value;
-        }
+    protected abstract IHeaderDictionary GetHeaders(IRequestContext context);
 
-        protected abstract IHeaderDictionary GetHeaders(IRequestContext context);
-
-        public Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            GetHeaders(context).Append(_key, _value);
-            return Task.FromResult(true);
-        }
+    public Task<bool> ExecuteAsync(IRequestContext context)
+    {
+        GetHeaders(context).Append(_key, _value);
+        return Task.FromResult(true);
     }
 }

@@ -12,25 +12,23 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SecuredApi.Logic.Routing.Actions
+namespace SecuredApi.Logic.Routing.Actions;
+
+public class ScopedActionAdapter<TAction, TActionSettings> : IAction
+    where TAction : class, IScopedAction<TActionSettings>
 {
-    public class ScopedActionAdapter<TAction, TActionSettings> : IAction
-        where TAction : class, IScopedAction<TActionSettings>
+    private readonly TActionSettings _settings;
+
+    public ScopedActionAdapter(TActionSettings settings)
     {
-        private readonly TActionSettings _settings;
+        _settings = settings;
+    }
 
-        public ScopedActionAdapter(TActionSettings settings)
-        {
-            _settings = settings;
-        }
-
-        public Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            var action = context.ServiceProvider.GetRequiredService<TAction>();
-            return action.ExecuteAsync(context, _settings);
-        }
+    public Task<bool> ExecuteAsync(IRequestContext context)
+    {
+        var action = context.ServiceProvider.GetRequiredService<TAction>();
+        return action.ExecuteAsync(context, _settings);
     }
 }

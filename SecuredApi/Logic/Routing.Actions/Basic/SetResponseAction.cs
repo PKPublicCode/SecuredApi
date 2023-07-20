@@ -12,30 +12,27 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading.Tasks;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Logic.Routing.Actions.Basic;
+
+public class SetResponseAction : IAction
 {
-    public class SetResponseAction : IAction
+    private readonly int _code;
+    private readonly StringResponseStream _body;
+
+    public SetResponseAction(SetResponseActionSettings settings)
     {
-        private readonly int _code;
-        private readonly StringResponseStream _body;
+        _code = settings.HttpCode;
+        //Dispite StringResponseStream is IDisposable, for the sake of efficiancy making it a singleton.
+        //StringResponseStream.Dispose does nothing
+        _body = settings.Body ?? StringResponseStream.Empty;
+    }
 
-        public SetResponseAction(SetResponseActionSettings settings)
-        {
-            _code = settings.HttpCode;
-            //Dispite StringResponseStream is IDisposable, for the sake of efficiancy making it a singleton.
-            //StringResponseStream.Dispose does nothing
-            _body = settings.Body ?? StringResponseStream.Empty;
-        }
-
-        public Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            context.Response.StatusCode = _code;
-            context.Response.Body = _body;
-            return Task.FromResult(true);
-        }
+    public Task<bool> ExecuteAsync(IRequestContext context)
+    {
+        context.Response.StatusCode = _code;
+        context.Response.Body = _body;
+        return Task.FromResult(true);
     }
 }
