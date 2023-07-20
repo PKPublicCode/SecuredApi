@@ -9,11 +9,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SecuredApi' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.Profiler.AspNetCore" Version="2.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Profiler.AspNetCore" Version="2.5.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,4 +18,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Apps\Gateway.Azure\Apps.Gateway.Azure.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

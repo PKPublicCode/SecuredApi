@@ -13,14 +13,21 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using SecuredApi.Logic.FileAccess;
+using SecuredApi.Infrastructure.FileAccess.FileSystem;
 
-namespace SecuredApi.Apps.Gateway
+namespace SecuredApi.Apps.Gateway.Configuration;
+
+public class FileAccessConfigurator : IInfrastructureConfigurator
 {
-    public class ConfigurationException : Exception
-    {
-        public ConfigurationException(string message)
-            : base(message)
+    public string SectionName => "FileAccess";
+
+    public virtual Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
+        => name switch
         {
-        }
-    }
+            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>(),
+            _ => null
+        };
 }

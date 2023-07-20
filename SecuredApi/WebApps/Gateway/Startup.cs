@@ -12,13 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using SecuredApi.Apps.Gateway;
+using SecuredApi.Apps.Gateway.Azure.Configuration;
 
 namespace SecuredApi.WebApps.Gateway
 {
@@ -36,7 +36,9 @@ namespace SecuredApi.WebApps.Gateway
             // Code-less instrumentation is not available for .net5 for linux. Will be available for .net6.
             // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
             services.AddApplicationInsightsTelemetry();
-            services.ConfigureRoutingServices(_configuration);
+            services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
+            services.ConfigureRoutingHttpClients();
+            services.ConfigureAzureSubscriptionManagement(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -12,15 +12,14 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Apps.Gateway.Configuration;
+public static class ConfigurationExtensions
 {
-    public class CheckIPsActionSettings
+    public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
     {
-        public HashSet<string> WhiteList { get; init; } = null!;
-        public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
-        public string NoAccessResponseBody { get; init; } = string.Empty;
+        return config.GetSection(name)
+            ?? throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
     }
 }

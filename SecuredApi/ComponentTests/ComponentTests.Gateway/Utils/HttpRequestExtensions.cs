@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -13,14 +13,16 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.ComponentTests.Gateway.Utils;
+
+public static class HttpRequestExtensions
 {
-    public class CheckIPsActionSettings
+    public static HttpRequest SetupGet(this HttpRequest r, string path)
     {
-        public HashSet<string> WhiteList { get; init; } = null!;
-        public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
-        public string NoAccessResponseBody { get; init; } = string.Empty;
+        r.Path = path;
+        r.Method = HttpMethods.Get;
+        return r;
     }
 }
+

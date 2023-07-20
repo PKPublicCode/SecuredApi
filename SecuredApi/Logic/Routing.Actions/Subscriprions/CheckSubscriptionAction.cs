@@ -35,12 +35,14 @@ namespace SecuredApi.Logic.Routing.Actions.Subscriptions
         public async Task<bool> ExecuteAsync(IRequestContext context)
         {
             if (!context.Request.Headers.TryGetValue(_subscriptionKeyHeaderName, out var value)
-                || value.Count == 0)
+                || value.Count == 0
+                || string.IsNullOrEmpty(value[0]))
             {
                 return await context.SetAccessDeniedErrorAsync(_subscriptionKeyHeaderNotSetError);
             }
 
-            var subscriptionKey = await context.GetRequiredService<ISubscriptionKeysRepository>().GetSubscriptionKeyAsync(value[0], context.CancellationToken);
+            var subscriptionKey = await context.GetRequiredService<ISubscriptionKeysRepository>()
+                                            .GetSubscriptionKeyAsync(value[0]!, context.CancellationToken);
             if (subscriptionKey == null)
             {
                 return await context.SetAccessDeniedErrorAsync(_subscriptionKeyNotFoundError);

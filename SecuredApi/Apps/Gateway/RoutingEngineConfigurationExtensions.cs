@@ -31,7 +31,7 @@ namespace SecuredApi.Apps.Gateway
         {
             return builder.ConfigureServices(services =>
             {
-                services.AddHostedService<RoutingInitializer>();
+                services.AddRoutingInitializer();
             });
         }
 

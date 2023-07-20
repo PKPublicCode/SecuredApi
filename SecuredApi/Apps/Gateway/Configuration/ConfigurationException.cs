@@ -13,14 +13,13 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Apps.Gateway.Infrastructure
+namespace SecuredApi.Apps.Gateway.Configuration;
+
+public class ConfigurationException : Exception
 {
-    public interface IInfrastructureConfigurator
+    public ConfigurationException(string message)
+        : base(message)
     {
-        public string SectionName { get; }
-        Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name);
     }
 }

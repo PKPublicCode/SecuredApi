@@ -1,6 +1,7 @@
 WIP!!!!
 
 # Tools and Depencies
+Below tools user for development and build
 #### Powershell
 ``` 
 brew install --cask powershell 

@@ -8,19 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\FileAccess.AzureStorage\Infrastructure.FileAccess.AzureStorage.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Subscriptions.TableStorage\Infrastructure.Subscriptions.TableStorage.csproj" />
     <ProjectReference Include="..\..\Logic\Routing.Actions\Logic.Routing.Actions.csproj" />
     <ProjectReference Include="..\..\Logic\Routing\Logic.Routing.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj" />
   </ItemGroup>
 
 </Project>

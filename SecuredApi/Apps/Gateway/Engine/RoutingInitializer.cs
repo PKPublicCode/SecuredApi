@@ -25,7 +25,7 @@ namespace SecuredApi.Apps.Gateway.Engine
     {
         private IServiceScopeFactory _serviceScopeFactory;
 
-        //IHostedService is singleton, so unable to inject transied services dirrectly
+        //IHostedService is singleton, so unable to inject transient services dirrectly
         //That's why scope service factory is injected. Then services registered with any scope can be used
         public RoutingInitializer(IServiceScopeFactory serviceScopedFactory)
         {

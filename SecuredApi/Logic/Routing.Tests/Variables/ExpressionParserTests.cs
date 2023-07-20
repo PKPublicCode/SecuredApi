@@ -13,12 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using NSubstitute;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SecuredApi.Logic.Routing.Variables

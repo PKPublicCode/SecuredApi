@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,15 +12,14 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+namespace SecuredApi.ComponentTests.Gateway.Utils;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+public class ExpectedResult
 {
-    public class CheckIPsActionSettings
-    {
-        public HashSet<string> WhiteList { get; init; } = null!;
-        public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
-        public string NoAccessResponseBody { get; init; } = string.Empty;
-    }
+    public int StatusCode { get; set; } = -1;
+    public List<HttpHeader> Headers { get; } = new();
+    public string Body { get; set; } = string.Empty;
+
+    public void AddHeaders(params HttpHeader[] headers) => Headers.AddRange(headers);
 }
+

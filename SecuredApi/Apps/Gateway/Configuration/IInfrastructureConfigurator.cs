@@ -13,16 +13,13 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace SecuredApi.Apps.Gateway
+namespace SecuredApi.Apps.Gateway.Configuration;
+
+public interface IInfrastructureConfigurator
 {
-    public static class ConfigurationExtensions
-    {
-        public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
-        {
-            return config.GetSection(name)
-                ?? throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
-        }
-    }
+    public string SectionName { get; }
+    Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name);
 }
