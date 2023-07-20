@@ -12,32 +12,28 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.IO;
+namespace SecuredApi.Logic.Common;
 
-namespace SecuredApi.Logic.Common
+public struct StreamResult: IDisposable, IStreamResult
 {
-    public struct StreamResult: IDisposable, IStreamResult
+    public Stream  Content { get; init; }
+    private readonly IDisposable? _parent;
+
+    public StreamResult(Stream content, IDisposable? parent = null)
     {
-        public Stream  Content { get; init; }
-        private readonly IDisposable? _parent;
+        Content = content;
+        _parent = parent;
+    }
 
-        public StreamResult(Stream content, IDisposable? parent = null)
+    public void Dispose()
+    {
+        if (_parent != null)
         {
-            Content = content;
-            _parent = parent;
+            _parent.Dispose();
         }
-
-        public void Dispose()
+        else
         {
-            if (_parent != null)
-            {
-                _parent.Dispose();
-            }
-            else
-            {
-                Content.Dispose();
-            }
+            Content.Dispose();
         }
     }
 }

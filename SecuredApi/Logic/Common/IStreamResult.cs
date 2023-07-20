@@ -12,13 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.IO;
+namespace SecuredApi.Logic.Common;
 
-namespace SecuredApi.Logic.Common
+public interface IStreamResult: IDisposable
 {
-    public interface IStreamResult: IDisposable
-    {
-        Stream Content { get; }
-    }
+    Stream Content { get; }
 }

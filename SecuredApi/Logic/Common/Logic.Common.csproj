@@ -5,6 +5,7 @@
 	<RootNamespace>SecuredApi.Logic.Common</RootNamespace>
 	<AssemblyName>SecuredApi.Logic.Common</AssemblyName>
 	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
 </Project>
