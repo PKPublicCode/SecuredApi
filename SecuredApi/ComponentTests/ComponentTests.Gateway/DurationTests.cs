@@ -19,7 +19,7 @@ namespace SecuredApi.ComponentTests.Gateway;
 
 public class DurationTests : GatewayTestsBase
 {
-    private long? _lengthDuration = null;
+    private long? _testRunDuration = null;
 
     [Fact]
     public async Task Route_Delay()
@@ -31,7 +31,7 @@ public class DurationTests : GatewayTestsBase
 
         await ExecuteAsync();
 
-        _lengthDuration.Should().BeGreaterThanOrEqualTo(PublicEchoDelayMilliseconds);
+        _testRunDuration.Should().BeGreaterThanOrEqualTo(PublicEchoDelayMilliseconds);
     }
 
     protected override async Task ActAsync()
@@ -41,7 +41,7 @@ public class DurationTests : GatewayTestsBase
         await base.ActAsync();
 
         watch.Stop();
-        _lengthDuration = watch.ElapsedMilliseconds;
+        _testRunDuration = watch.ElapsedMilliseconds;
     }
 }
 
