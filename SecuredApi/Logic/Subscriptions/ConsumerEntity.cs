@@ -12,14 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Subscriptions;
 
-namespace SecuredApi.Logic.Subscriptions
+public class ConsumerEntity
 {
-    public class ConsumerEntity
-    {
-        public Guid Id { get; init; }
-        public Guid[] Subscriptions { get; init; } = null!;
-        public string PreRequestActions { get; init; } = null!;
-    }
+    public Guid Id { get; init; }
+    public Guid[] Subscriptions { get; init; } = null!;
+    public string PreRequestActions { get; init; } = null!;
 }

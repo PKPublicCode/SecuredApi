@@ -12,10 +12,6 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading.Tasks;
-using System.Threading;
-
 namespace SecuredApi.Logic.Subscriptions
 {
     public interface IConsumersRepository
