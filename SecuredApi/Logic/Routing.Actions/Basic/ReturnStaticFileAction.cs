@@ -14,8 +14,6 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.Extensions.Logging;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
-using FileAccess = SecuredApi.Logic.FileAccess;
-//using Path = System.IO.Path;
 using SecuredApi.Logic.Common;
 using SecuredApi.Logic.Routing.Utils;
 using Microsoft.AspNetCore.Http;
@@ -60,17 +58,18 @@ public class ReturnStaticFileAction : IAction
         {
             result = await fileProvider.LoadFileAsync(path, context.CancellationToken);
         }
-        catch(FileNotFoundException)
+        catch(FileAccess.FileNotFoundException)
         {
             await context.SetResponseAsync(StatusCodes.Status404NotFound, _notFoundBody);
             return false;
         }
         catch(Exception e)
-            when (!(e is TaskCanceledException))
+            when (e is not TaskCanceledException)
         {
             context.GetLogger<ReturnStaticFileAction>().LogError("Unexpected exception e", e);
             throw;
         }
+
         if (_autoMimeType 
             && context.GetRequiredService<IContentTypeProvider>().TryGetContentType(path, out var type))
         {

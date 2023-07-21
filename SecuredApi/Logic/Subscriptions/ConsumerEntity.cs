@@ -17,6 +17,7 @@ namespace SecuredApi.Logic.Subscriptions;
 public class ConsumerEntity
 {
     public Guid Id { get; init; }
+    public string Name { get; init; } = null!;
     public Guid[] Subscriptions { get; init; } = null!;
     public string PreRequestActions { get; init; } = null!;
 }
