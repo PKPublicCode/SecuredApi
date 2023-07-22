@@ -18,31 +18,18 @@ using System.Text.Json.Serialization;
 
 namespace SecuredApi.Logic.Subscriptions;
 
-public class ConsumerRepository: IConsumersRepository
+public class ConsumerRepository: RepositoryBase, IConsumersRepository
 {
-    private readonly IFileProvider _fileProvider;
-
     public ConsumerRepository(IFileProvider<IConsumersRepository> fileProvider)
+        : base (fileProvider)
     {
-        _fileProvider = fileProvider;
     }
 
     public async Task<ConsumerEntity?> GetConsumerAsync(Guid id, CancellationToken cancellationToken)
     {
-        StreamResult c;
-        try
+        var e = await GetEntityAsync<Entity>(id.ToString(), cancellationToken);
+        if (e != null)
         {
-            c = await _fileProvider.LoadFileAsync(id.ToString(), cancellationToken);
-        }
-        catch(FileAccess.FileNotFoundException)
-        {
-            return null;
-        }
-
-        using (c)
-        {
-            var e = c.Content.DeserializeJson<Entity>();
-
             if (e.Subscriptions == null)
             {
                 throw new DataCorruptedException("Consumer.Subscriptions can't be null");
@@ -61,9 +48,12 @@ public class ConsumerRepository: IConsumersRepository
                 PreRequestActions = e.PreRequestActions
             };
         }
+        return null;
     }
 
-    private class Entity
+    // Note: making Entity struct (to reduce load to GC) shouldn't make a big difference,
+    // since System.Text.Json anyway operates with type as with object, and so does boxing\unboxing
+    protected class Entity
     {
         public string Name { get; init; } = null!;
 
