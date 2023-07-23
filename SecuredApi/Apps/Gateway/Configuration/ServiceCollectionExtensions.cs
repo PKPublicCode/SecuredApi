@@ -43,8 +43,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigureOptionalFeature(this IServiceCollection srv, IConfiguration config,
                                                                 string name, Action<IServiceCollection, IConfigurationSection> configurator)
     {
+        
         var featureCfg = config.GetSection(name);
-        if (featureCfg != null)
+        if (featureCfg.Exists())
         {
             configurator(srv, featureCfg);
         }

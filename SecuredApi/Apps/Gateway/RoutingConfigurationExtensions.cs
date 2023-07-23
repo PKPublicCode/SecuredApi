@@ -12,7 +12,6 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using SecuredApi.Logic.Routing;
@@ -27,61 +26,79 @@ using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Apps.Gateway.Actions;
 using SecuredApi.Apps.Gateway.Routing;
 using SecuredApi.Apps.Gateway.Configuration;
+using SecuredApi.Logic.Subscriptions;
+using SecuredApi.Logic.Routing.Actions.Subscriptions;
 
-namespace SecuredApi.Apps.Gateway
+namespace SecuredApi.Apps.Gateway;
+
+public static class RoutingConfigurationExtensions
 {
-    public static class RoutingConfigurationExtensions
+    public static IServiceCollection ConfigureRoutingServices<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        where FileAccessConfigurator: IInfrastructureConfigurator, new()
     {
-        public static IServiceCollection ConfigureRoutingServices<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
-            where FileAccessConfigurator: IInfrastructureConfigurator, new()
-        {
-            return srv.ConfigureRouter<FileAccessConfigurator>(config)
-                .ConfigureVariables()
-                .ConfigureStaticFilesAction<FileAccessConfigurator>(config);
-        }
+        return srv.ConfigureRouter<FileAccessConfigurator>(config)
+            .ConfigureVariables()
+            .ConfigureStaticFilesAction<FileAccessConfigurator>(config)
+            .ConfigureSubscriptions<FileAccessConfigurator>(config);
+    }
 
-        public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
-        {
-            srv.AddHttpClient(); //Default http client
-            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled);
-            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
-                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { AllowAutoRedirect = false });
-            return srv;
-        }
+    public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
+    {
+        srv.AddHttpClient(); //Default http client
+        srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled);
+        srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { AllowAutoRedirect = false });
+        return srv;
+    }
 
-        private static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
-            where FileAccessConfigurator : IInfrastructureConfigurator, new()
-        {
-            return srv.ConfigureOptionalFeature(config, "StaticFilesProvider", (srv, config) =>
-                        srv.ConfigureInfrastructure<ReturnStaticFileAction, FileAccessConfigurator>(config)
-                            .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
-            );
-        }
+    private static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        where FileAccessConfigurator : IInfrastructureConfigurator, new()
+    {
+        return srv.ConfigureOptionalFeature(config, "StaticFilesProvider", (srv, config) =>
+                    srv.ConfigureInfrastructure<ReturnStaticFileAction, FileAccessConfigurator>(config)
+                        .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
+        );
+    }
 
-        private static IServiceCollection ConfigureVariables(this IServiceCollection srv)
-        {
-            return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
-                .AddSingleton<IExpressionProcessor, ExpressionProcessor>()
-                .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
-                .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
-                            new DefaultGlobalVariablesProvider(
-                                    srvs.GetRequiredService<IConfiguration>().GetSection("GlobalVariables")
-                                ));
-        }
+    private static IServiceCollection ConfigureVariables(this IServiceCollection srv)
+    {
+        return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
+            .AddSingleton<IExpressionProcessor, ExpressionProcessor>()
+            .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
+            .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
+                        new DefaultGlobalVariablesProvider(
+                                srvs.GetRequiredService<IConfiguration>().GetSection("GlobalVariables")
+                            ));
+    }
 
-        private static IServiceCollection ConfigureRouter<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
-            where FileAccessConfigurator : IInfrastructureConfigurator, new()
-        {
-            return srv.AddSingleton<IRouter, IRouterUpdater, Router>()
-                    
-                    .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
-                        srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
-                            .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
-                            .Configure<RoutingEngineManagerCfg>(config.GetRequiredSection("Files"))
-                            .AddSingleton<IRoutingTableBuilderFactory, RoutingTableBuilderFactory<RoutingTableBuilder>>()
-                            .ConfigureRoutingConfigurationJsonParser()
-                            .AddActionFactory()
-                        );
-        }
+    private static IServiceCollection ConfigureRouter<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        where FileAccessConfigurator : IInfrastructureConfigurator, new()
+    {
+        return srv.AddSingleton<IRouter, IRouterUpdater, Router>()
+                
+                .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
+                    srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
+                        .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
+                        .Configure<RoutingEngineManagerCfg>(config.GetRequiredSection("Files"))
+                        .AddSingleton<IRoutingTableBuilderFactory, RoutingTableBuilderFactory<RoutingTableBuilder>>()
+                        .ConfigureRoutingConfigurationJsonParser()
+                        .AddActionFactory()
+                    );
+    }
+
+    private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        where FileAccessConfigurator : IInfrastructureConfigurator, new()
+    {
+        return srv.ConfigureOptionalFeature(config, "Consumers", (srv, config) =>
+                    srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
+                        .AddSingleton<IConsumersRepository, ConsumersRepository>()
+                        .ConfigureOnTheFlyJsonParser()
+                        .AddSingleton<RunConsumerActionsAction>()
+                )
+               .ConfigureOptionalFeature(config, "SubscriptionKeys", (srv, config) =>
+                    srv.ConfigureInfrastructure<ISubscriptionKeysRepository, FileAccessConfigurator>(config)
+                        .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
+                )
+               ;
     }
 }
