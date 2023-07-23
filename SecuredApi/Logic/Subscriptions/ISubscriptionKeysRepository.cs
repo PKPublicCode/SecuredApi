@@ -16,5 +16,5 @@ namespace SecuredApi.Logic.Subscriptions;
 
 public interface ISubscriptionKeysRepository
 {
-    Task<SubscriptionKeyEntity?> GetSubscriptionKeyAsync(string key, CancellationToken cancellationToken);
+    Task<SubscriptionKeyEntity?> GetSubscriptionKeyAsync(string hash, CancellationToken ct);
 }

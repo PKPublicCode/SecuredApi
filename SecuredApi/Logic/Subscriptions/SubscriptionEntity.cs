@@ -19,5 +19,5 @@ public class SubscriptionEntity
     public Guid Id { get; set; }
     public Guid ConsumerId { get; set; }
     public Guid[] Routes { get; set; } = Array.Empty<Guid>();
-    public Guid[] HashedKeys { get; set; } = Array.Empty<Guid>();
+    public string[] HashedKeys { get; set; } = Array.Empty<string>();
 }

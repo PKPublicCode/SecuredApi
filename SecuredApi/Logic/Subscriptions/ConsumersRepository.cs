@@ -18,9 +18,9 @@ using System.Text.Json.Serialization;
 
 namespace SecuredApi.Logic.Subscriptions;
 
-public class ConsumerRepository: RepositoryBase, IConsumersRepository
+public class ConsumersRepository: RepositoryBase, IConsumersRepository
 {
-    public ConsumerRepository(IFileProvider<IConsumersRepository> fileProvider)
+    public ConsumersRepository(IFileProvider<IConsumersRepository> fileProvider)
         : base (fileProvider)
     {
     }

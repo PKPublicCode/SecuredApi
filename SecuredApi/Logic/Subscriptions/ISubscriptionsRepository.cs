@@ -16,5 +16,13 @@ namespace SecuredApi.Logic.Subscriptions;
 
 public interface ISubscriptionsRepository
 {
-    Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, Guid consumerId, CancellationToken cancellationToken);
+    Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, Guid consumerId, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
 }

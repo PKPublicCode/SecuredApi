@@ -16,16 +16,17 @@ using SecuredApi.Logic.FileAccess;
 
 namespace SecuredApi.Logic.Subscriptions;
 
-public class SubscriptionRepository: RepositoryBase, ISubscriptionsRepository
+public class SubscriptionsRepository: RepositoryBase, ISubscriptionsRepository
 {
-    public SubscriptionRepository(IFileProvider<ISubscriptionsRepository> fileProvider)
+    public SubscriptionsRepository(IFileProvider<ISubscriptionsRepository> fileProvider)
         : base(fileProvider)
     {
     }
 
-    public async Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, Guid consumerId, CancellationToken cancellationToken)
+    public async Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, CancellationToken ct)
     {
-        var e = await GetEntityAsync<Entity>(id.ToString(), cancellationToken);
+        var e = await GetEntityAsync<Entity>(id.ToString(), ct);
+
         if (e != null)
         {
             if (e.ConsumerId == Guid.Empty)
@@ -47,7 +48,7 @@ public class SubscriptionRepository: RepositoryBase, ISubscriptionsRepository
     {
         public Guid ConsumerId { get; set; }
         public Guid[] Routes { get; set; } = Array.Empty<Guid>();
-        public Guid[] HashedKeys { get; set; } = Array.Empty<Guid>();
+        public string[] HashedKeys { get; set; } = Array.Empty<string>();
     }
 }
 

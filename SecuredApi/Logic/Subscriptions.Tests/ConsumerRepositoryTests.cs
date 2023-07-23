@@ -12,22 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.Logic.FileAccess;
-using System.Text;
-using SecuredApi.Logic.Common;
-
 namespace SecuredApi.Logic.Subscriptions;
 
-public class ConsumerRepositoryTests
+public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
 {
-    private readonly IFileProvider<IConsumersRepository> _fileProvider;
-    private readonly ConsumerRepository _sut;
-
-    public ConsumerRepositoryTests()
-    {
-        _fileProvider = Substitute.For<IFileProvider<IConsumersRepository>>();
-        _sut = new(_fileProvider);
-    }
+    protected override ConsumersRepository MakeSut() => new(_fileProvider);
 
     [Fact]
     public async Task GetConsumer_EmptyMainFields_Exists()
@@ -81,21 +70,11 @@ public class ConsumerRepositoryTests
     public async Task GetConsumer_NoFile_ReturnsNull()
     {
         Guid fileId = Guid.Parse("2437C599-801E-4AFB-AF99-BA9165A9EA53");
-
-        _fileProvider
-            .LoadFileAsync(fileId.ToString(), Arg.Any<CancellationToken>())
-            .Returns<StreamResult>((x) => throw new FileAccess.FileNotFoundException("Not Found"));
+        // No content setup to return from file provider
 
         var result = await _sut.GetConsumerAsync(fileId, CancellationToken.None);
 
         result.Should().BeNull();
-    }
-
-    private void SetupReturn(string fileId, string content)
-    {
-        _fileProvider
-            .LoadFileAsync(fileId, Arg.Any<CancellationToken>())
-            .Returns(new StreamResult(new MemoryStream(Encoding.UTF8.GetBytes(content))));
     }
 }
 

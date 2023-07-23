@@ -40,7 +40,16 @@ namespace SecuredApi.Apps.Gateway
                 .ConfigureStaticFilesAction<FileAccessConfigurator>(config);
         }
 
-        public static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
+        {
+            srv.AddHttpClient(); //Default http client
+            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled);
+            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { AllowAutoRedirect = false });
+            return srv;
+        }
+
+        private static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
             where FileAccessConfigurator : IInfrastructureConfigurator, new()
         {
             return srv.ConfigureOptionalFeature(config, "StaticFilesProvider", (srv, config) =>
@@ -49,16 +58,7 @@ namespace SecuredApi.Apps.Gateway
             );
         }
 
-        public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
-        {
-            srv.AddHttpClient(); //Default http client
-            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectEnabled);
-            srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
-                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { AllowAutoRedirect = false } );
-            return srv;
-        }
-
-        public static IServiceCollection ConfigureVariables(this IServiceCollection srv)
+        private static IServiceCollection ConfigureVariables(this IServiceCollection srv)
         {
             return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
                 .AddSingleton<IExpressionProcessor, ExpressionProcessor>()
@@ -69,7 +69,7 @@ namespace SecuredApi.Apps.Gateway
                                 ));
         }
 
-        public static IServiceCollection ConfigureRouter<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+        private static IServiceCollection ConfigureRouter<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
             where FileAccessConfigurator : IInfrastructureConfigurator, new()
         {
             return srv.AddSingleton<IRouter, IRouterUpdater, Router>()

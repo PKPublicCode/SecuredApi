@@ -16,7 +16,7 @@ namespace SecuredApi.Logic.Subscriptions;
 
 public class SubscriptionKeyEntity
 {
-    public string SubsctiprionKey { get; init; } = null!;
+    public string HashedKey { get; init; } = null!;
     public Guid SubscriptionId { get; init; }
     public Guid ConsumerId { get; init; }
     public Guid[] Routes { get; init; } = Array.Empty<Guid>();

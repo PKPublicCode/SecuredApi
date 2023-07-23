@@ -47,7 +47,7 @@ namespace SecuredApi.Infrastructure.Subscriptions.TableStorage
 
             return new SubscriptionKeyEntity()
             {
-                SubsctiprionKey = entity.RowKey,
+                HashedKey = entity.RowKey,
                 SubscriptionId = entity.SubscriptionId,
                 ConsumerId = entity.ConsumerId,
                 Routes = JsonSerializer.Deserialize<Guid[]>(entity.Routes ?? _emptyJsonArray)

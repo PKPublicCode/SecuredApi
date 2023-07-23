@@ -32,6 +32,7 @@ namespace SecuredApi.Infrastructure.Subscriptions.TableStorage
 
         public async Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, Guid consumerId, CancellationToken cancellationToken)
         {
+            throw new NotImplementedException("Under refactoring");
             var entity = await GetEntityAsync<Entity>(consumerId.ToString(), id.ToString(), cancellationToken);
             if (entity == null)
             {
@@ -43,9 +44,9 @@ namespace SecuredApi.Infrastructure.Subscriptions.TableStorage
                 Id = id,
                 ConsumerId = entity.ConsumerId,
                 Routes = JsonSerializer.Deserialize<Guid[]>(entity.Routes ?? _emptyJsonArray)
-                            ?? Array.Empty<Guid>(),
-                HashedKeys = JsonSerializer.Deserialize<Guid[]>(entity.SubscriptionKeys ?? _emptyJsonArray)
-                            ?? Array.Empty<Guid>()
+                            ?? Array.Empty<Guid>() //,
+                //HashedKeys = JsonSerializer.Deserialize<Guid[]>(entity.SubscriptionKeys ?? _emptyJsonArray)
+                //            ?? Array.Empty<Guid>()
             };
         }
 

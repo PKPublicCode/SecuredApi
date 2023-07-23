@@ -25,32 +25,33 @@ public static class RoutingConfigurationExtensions
 {
     public static IServiceCollection ConfigureAzureSubscriptionManagement(this IServiceCollection srv, IConfiguration config)
     {
-        return srv.ConfigureConsumers(config)
-                .ConfigureSubscriptionKeys(config)
-                .ConfigureSubscriptions(config);
+        //return srv.ConfigureConsumers(config)
+        //        .ConfigureSubscriptionKeys(config)
+        //        .ConfigureSubscriptions(config);
+        return srv;
     }
 
-    public static IServiceCollection ConfigureConsumers(this IServiceCollection srv, IConfiguration config)
-    {
-        return srv.ConfigureOptionalFeature(config, "Consumers", (srv, config) =>
-                    srv.ConfigureTableClientRepository<IConsumersRepository, ConsumersRepository>(config)
-                        .AddSingleton<RunConsumerActionsAction>()
-                        .ConfigureOnTheFlyJsonParser()
-                );
-    }
+    //public static IServiceCollection ConfigureConsumers(this IServiceCollection srv, IConfiguration config)
+    //{
+    //    return srv.ConfigureOptionalFeature(config, "Consumers", (srv, config) =>
+    //                srv.ConfigureTableClientRepository<IConsumersRepository, ConsumersRepository>(config)
+    //                    .AddSingleton<RunConsumerActionsAction>()
+    //                    .ConfigureOnTheFlyJsonParser()
+    //            );
+    //}
 
-    public static IServiceCollection ConfigureSubscriptionKeys(this IServiceCollection srv, IConfiguration config)
-    {
-        return srv.ConfigureOptionalFeature(config, "SubscriptionKeys", (srv, config) =>
-            srv.ConfigureTableClientRepository<ISubscriptionKeysRepository, SubscriptionKeysRepository>(config)
-        );
-    }
+    //public static IServiceCollection ConfigureSubscriptionKeys(this IServiceCollection srv, IConfiguration config)
+    //{
+    //    return srv.ConfigureOptionalFeature(config, "SubscriptionKeys", (srv, config) =>
+    //        srv.ConfigureTableClientRepository<ISubscriptionKeysRepository, SubscriptionKeysRepository>(config)
+    //    );
+    //}
 
-    public static IServiceCollection ConfigureSubscriptions(this IServiceCollection srv, IConfiguration config)
-    {
-        return srv.ConfigureOptionalFeature(config, "Subscriptions", (srv, config) =>
-            srv.ConfigureTableClientRepository<ISubscriptionsRepository, SubscriptionsRepository>(config)
-        );
-    }
+    //public static IServiceCollection ConfigureSubscriptions(this IServiceCollection srv, IConfiguration config)
+    //{
+    //    return srv.ConfigureOptionalFeature(config, "Subscriptions", (srv, config) =>
+    //        srv.ConfigureTableClientRepository<ISubscriptionsRepository, Infrastructure.Subscriptions.TableStorage.SubscriptionsRepository>(config)
+    //    );
+    //}
 }
 
