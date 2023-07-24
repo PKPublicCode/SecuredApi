@@ -30,6 +30,10 @@ public static partial class Constants
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
 
         public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
+
+        public static HttpHeader ResponseCommonOnError { get; } = new("X-COMMON-ON-ERROR-HEADER", "Gateway Rejected Your Call");
+
+        public const string SubscriptionKeyHeaderName = "X-SUBSCRIPTION-KEY";
     }
 
     public static class RoutePaths
@@ -52,6 +56,7 @@ public static partial class Constants
         public const string EchoDelay = "Public delay route";
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string CallNotAllowed = "Call Not Allowed";
+        public const string PrivateWildcardApi1 = "Private echo wildcard route, api 1";
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";

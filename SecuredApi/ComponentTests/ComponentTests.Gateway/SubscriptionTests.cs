@@ -29,8 +29,40 @@ public class SubscriptionTests : GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
         ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
 
         await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task PrivateRote_SubscriptionKeyNotExists()
+    {
+        Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
+        SetSubscriptionKey("KeyKeyKey");
+
+        ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
+        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
+
+        await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task PrivateRote_SubscriptionKeyAllowed()
+    {
+        Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
+        SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
+
+        ExpectedResult.StatusCode = StatusCodes.Status200OK;
+        ExpectedResult.Body = InlineContent.PrivateWildcardApi1;
+        ExpectedResult.AddHeaders(Headers.ResponseCommon);
+
+        await ExecuteAsync();
+    }
+
+    private void SetSubscriptionKey(string key)
+    {
+        Request.Headers.Add(new(Headers.SubscriptionKeyHeaderName, key));
     }
 }
 

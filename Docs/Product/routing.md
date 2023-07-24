@@ -26,7 +26,7 @@ Sections:
 Actions executed before proceeding to nested route or route group. If any of conditional actions failed (returned false), execution is stopped and execution fallbacks to onRequestErrorActions
 
 ### onRequestErrorActions
-Executed if one of the conditional actions interrupted execution (action returned false), e.g. IP is not whitelisted. All actions should be non-conditional actions to avoid side-effects
+Executed if one of the conditional actions interrupted execution (action returned false), e.g. IP is not whitelisted. If conditional action returns false during processing of onRequestErrorActions actions, then behaviour is the same and execution is interrupted.
 
 ### onRequestSuccessActions
 Executed if all actions proceeded succesfully (actions returnned true)

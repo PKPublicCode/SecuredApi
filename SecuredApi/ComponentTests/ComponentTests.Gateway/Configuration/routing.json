@@ -11,6 +11,13 @@
     }
   ],
   "onRequestErrorActions": [
+    {
+      "name": "SetResponseHeader",
+      "settings": {
+        "key": "X-COMMON-ON-ERROR-HEADER",
+        "value": "Gateway Rejected Your Call"
+      }
+    }
   ],
   "onRequestSuccessActions": [
     {

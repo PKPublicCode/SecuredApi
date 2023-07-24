@@ -34,7 +34,7 @@ namespace SecuredApi.Apps.Gateway;
 public static class RoutingConfigurationExtensions
 {
     public static IServiceCollection ConfigureRoutingServices<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
-        where FileAccessConfigurator: IInfrastructureConfigurator, new()
+        where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
         return srv.ConfigureRouter<FileAccessConfigurator>(config)
             .ConfigureVariables()
@@ -75,7 +75,7 @@ public static class RoutingConfigurationExtensions
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
         return srv.AddSingleton<IRouter, IRouterUpdater, Router>()
-                
+
                 .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
                     srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
                         .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
@@ -89,15 +89,16 @@ public static class RoutingConfigurationExtensions
     private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
-        return srv.ConfigureOptionalFeature(config, "Subscriptions::Consumers", (srv, config) =>
+        return srv
+            .ConfigureOptionalFeature(config, "Subscriptions:Keys", (srv, config) =>
+                    srv.ConfigureInfrastructure<ISubscriptionKeysRepository, FileAccessConfigurator>(config)
+                        .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
+                )
+            .ConfigureOptionalFeature(config, "Subscriptions:Consumers", (srv, config) =>
                     srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
                         .AddSingleton<IConsumersRepository, ConsumersRepository>()
                         .ConfigureOnTheFlyJsonParser()
                         .AddSingleton<RunConsumerActionsAction>()
-                )
-               .ConfigureOptionalFeature(config, "Subscriptions::Keys", (srv, config) =>
-                    srv.ConfigureInfrastructure<ISubscriptionKeysRepository, FileAccessConfigurator>(config)
-                        .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
                 )
                ;
     }
