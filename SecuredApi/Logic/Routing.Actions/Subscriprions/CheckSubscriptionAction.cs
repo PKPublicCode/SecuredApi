@@ -22,11 +22,15 @@ public class CheckSubscriptionAction : IAction
 {
     private readonly string _subscriptionKeyHeaderName;
     private readonly bool _suppressHeader;
+    private readonly StringResponseStream _subscriptionKeyNotSetOrInvalid;
+    private readonly StringResponseStream _callNotAllowed;
 
     public CheckSubscriptionAction(CheckSubscriptionActionSettings settings)
     {
         _subscriptionKeyHeaderName = settings.SubscriptionKeyHeaderName;
         _suppressHeader = settings.SuppressHeader;
+        _subscriptionKeyNotSetOrInvalid = new(settings.ErrorNotAuthorizedBody);
+        _callNotAllowed = new(settings.ErrorAccessDeniedBody);
     }
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
@@ -35,19 +39,19 @@ public class CheckSubscriptionAction : IAction
             || value.Count == 0
             || string.IsNullOrEmpty(value[0]))
         {
-            return await context.SetAccessDeniedErrorAsync(_subscriptionKeyHeaderNotSetError);
+            return await context.SetNotAuthorizedErrorAsync(_subscriptionKeyNotSetOrInvalid);
         }
 
         var subscriptionKey = await context.GetRequiredService<ISubscriptionKeysRepository>()
                                         .GetSubscriptionKeyAsync(value[0]!, context.CancellationToken);
         if (subscriptionKey == null)
         {
-            return await context.SetAccessDeniedErrorAsync(_subscriptionKeyNotFoundError);
+            return await context.SetNotAuthorizedErrorAsync(_subscriptionKeyNotSetOrInvalid);
         }
 
         if (!CheckSubscription(subscriptionKey, context))
         {
-            return await context.SetAccessDeniedErrorAsync(_callNotAllowedForYourSubscriptionError);
+            return await context.SetAccessDeniedErrorAsync(_callNotAllowed);
         }
 
         if(_suppressHeader)
@@ -74,8 +78,4 @@ public class CheckSubscriptionAction : IAction
         }
         return false;
     }
-
-    private static readonly StringResponseStream _subscriptionKeyHeaderNotSetError = new("Subscription key header is not set");
-    private static readonly StringResponseStream _subscriptionKeyNotFoundError = new("Subscription key not found");
-    private static readonly StringResponseStream _callNotAllowedForYourSubscriptionError = new("Call not allowed for your subscription");
 }

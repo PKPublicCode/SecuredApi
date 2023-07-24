@@ -29,18 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Utils\" />
-    <None Remove="Configuration\" />
-    <None Remove="StaticFiles\" />
-    <None Remove="StaticFiles\WildcardContent\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-    <Folder Include="Configuration\" />
-    <Folder Include="StaticFiles\" />
-    <Folder Include="StaticFiles\WildcardContent\" />
-  </ItemGroup>
+
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -61,6 +50,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="StaticFiles\WildcardContent\Hello.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Subscriptions\Keys\5F39D492-A141-498A-AE04-76C6B77F246A">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

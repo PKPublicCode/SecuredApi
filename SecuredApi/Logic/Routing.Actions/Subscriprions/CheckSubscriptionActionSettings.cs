@@ -17,5 +17,7 @@ namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
 public record CheckSubscriptionActionSettings
 (
     string SubscriptionKeyHeaderName,
-    bool SuppressHeader = true
+    bool SuppressHeader = true,
+    string ErrorNotAuthorizedBody = "",
+    string ErrorAccessDeniedBody = ""
 );

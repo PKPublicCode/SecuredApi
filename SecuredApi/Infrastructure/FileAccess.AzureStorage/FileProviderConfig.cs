@@ -12,20 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace SecuredApi.Infrastructure.FileAccess.AzureStorage;
 
-namespace SecuredApi.Infrastructure.FileAccess.AzureStorage
+public class FileProviderConfig
 {
-    public class FileProviderConfig<T>: FileProviderConfig
-    {
-    }
+    public RbacConfig? Rbac { get; init; } = null!;
+}
 
-    public class FileProviderConfig
-    {
-        public RbacConfig? Rbac { get; init; } = null!;
-    }
+public class FileProviderConfig<T> : FileProviderConfig
+{
 }

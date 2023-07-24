@@ -89,13 +89,13 @@ public static class RoutingConfigurationExtensions
     private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
-        return srv.ConfigureOptionalFeature(config, "Consumers", (srv, config) =>
+        return srv.ConfigureOptionalFeature(config, "Subscriptions::Consumers", (srv, config) =>
                     srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
                         .AddSingleton<IConsumersRepository, ConsumersRepository>()
                         .ConfigureOnTheFlyJsonParser()
                         .AddSingleton<RunConsumerActionsAction>()
                 )
-               .ConfigureOptionalFeature(config, "SubscriptionKeys", (srv, config) =>
+               .ConfigureOptionalFeature(config, "Subscriptions::Keys", (srv, config) =>
                     srv.ConfigureInfrastructure<ISubscriptionKeysRepository, FileAccessConfigurator>(config)
                         .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
                 )

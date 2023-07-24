@@ -27,7 +27,8 @@ public class FileAccessConfigurator : IInfrastructureConfigurator
     public virtual Action<IServiceCollection, IConfiguration>? GetConfigurator<TClient>(string name)
         => name switch
         {
-            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>(),
+            "FileSystem" => (srv, cfg) => srv.AddSingleton<IFileProvider<TClient>, FileProvider<TClient>>()
+                                            .Configure<FileProviderConfig<TClient>>(cfg),
             _ => null
         };
 }

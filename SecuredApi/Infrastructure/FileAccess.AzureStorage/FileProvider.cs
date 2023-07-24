@@ -12,42 +12,38 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using SecuredApi.Logic.FileAccess;
 using Microsoft.Extensions.Options;
 using Azure.Storage.Blobs;
 using Azure.Identity;
 using SecuredApi.Logic.Common;
 
-namespace SecuredApi.Infrastructure.FileAccess.AzureStorage
+namespace SecuredApi.Infrastructure.FileAccess.AzureStorage;
+
+public class FileProvider<T> : IFileProvider<T>
 {
-    public class FileProvider<T> : IFileProvider<T>
+    private readonly BlobContainerClient _client;
+
+    public FileProvider(IOptions<FileProviderConfig<T>> config)
     {
-        private readonly BlobContainerClient _client;
+        var rbac = config.Value.Rbac
+            ?? throw new InvalidOperationException("Azure Storage File Access not configured");
+        _client = new BlobContainerClient(new Uri(rbac.Uri), new DefaultAzureCredential());
+    }
 
-        public FileProvider(IOptions<FileProviderConfig<T>> config)
+    public async Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+    {
+        try
         {
-            var rbac = config.Value.Rbac
-                ?? throw new InvalidOperationException("Azure Storage File Access not configured");
-            _client = new BlobContainerClient(new Uri(rbac.Uri), new DefaultAzureCredential());
+            var blob = await _client.GetBlobClient(fileId).DownloadStreamingAsync(cancellationToken: cancellationToken);
+            //Need to dispose blob.Value (BlobDownloadStreamingResult: IDisposable), however it will dispose Content (Stream)
+            //As a workaround return StreamResult, that keep reference to 'parent disposable'
+            return new StreamResult(blob.Value.Content, blob.Value);
         }
-
-        public async Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+        catch(Exception e)
         {
-            try
-            {
-                var blob = await _client.GetBlobClient(fileId).DownloadStreamingAsync(cancellationToken: cancellationToken);
-                //Need to dispose blob.Value (BlobDownloadStreamingResult: IDisposable), however it will dispose Content (Stream)
-                //As a workaround return StreamResult, that keep reference to 'parent disposable'
-                return new StreamResult(blob.Value.Content, blob.Value);
-            }
-            catch(Exception e)
-            {
-                //Cutting corner. Need to differentiate exceptions for FileNotFound, AccessDenied, etc.
-                throw new FileNotFoundException("Unable to access file", e);
-            }
+            //Cutting corner. Need to differentiate exceptions for FileNotFound, AccessDenied, etc.
+            throw new Logic.FileAccess.FileNotFoundException("Unable to access file", e);
         }
     }
 }
