@@ -48,14 +48,27 @@ public class SubscriptionTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRote_SubscriptionKeyAllowed()
+    public async Task PrivateRote_CallAlowedConsumerWithActions()
     {
         Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.Body = InlineContent.PrivateWildcardApi1;
-        ExpectedResult.AddHeaders(Headers.ResponseCommon);
+        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.ResponseConsumerSpecificActions);
+
+        await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task PrivateRote_CallNotAlowedConsumerWithActions()
+    {
+        Request.SetupGet(RoutePaths.PrivateApi2EchoWildcard);
+        SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
+
+        ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
+        ExpectedResult.Body = InlineContent.CallNotAllowed;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
 
         await ExecuteAsync();
     }

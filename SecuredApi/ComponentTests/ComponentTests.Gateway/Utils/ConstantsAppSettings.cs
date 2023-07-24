@@ -33,6 +33,8 @@ public static partial class Constants
 
         public static HttpHeader ResponseCommonOnError { get; } = new("X-COMMON-ON-ERROR-HEADER", "Gateway Rejected Your Call");
 
+        public static HttpHeader ResponseConsumerSpecificActions { get; } = new("X-CONSUMER-SPECIFIC-HEADER", "This is test client 1");
+
         public const string SubscriptionKeyHeaderName = "X-SUBSCRIPTION-KEY";
     }
 
