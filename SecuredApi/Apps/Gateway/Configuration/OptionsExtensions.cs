@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,19 +12,17 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
 namespace SecuredApi.Apps.Gateway.Configuration;
-public static class ConfigurationExtensions
-{
-    public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
-    {
-        var result = config.GetSection(name);
 
-        if (!result.Exists())
-        {
-            throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
-        }
-        return result;
+public static class OptionsExtensions
+{
+    public static IServiceCollection ConfigureRequiredOption<T>(this IServiceCollection srv, IConfigurationSection cfg, string path)
+        where T: class
+    {
+        return srv.Configure<T>(cfg.GetRequiredSection(path));
     }
 }
+
