@@ -86,15 +86,18 @@ public static class RoutingConfigurationExtensions
                     );
     }
 
-    private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
+    private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration rootConfig)
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
+        //ToDo.0: Move security confnig into Keys section
         return srv
-            .ConfigureOptionalFeature(config, "Subscriptions:Keys", (srv, config) =>
+            .ConfigureOptionalFeature(rootConfig, "Subscriptions:Keys", (srv, config) =>
                     srv.ConfigureInfrastructure<ISubscriptionKeysRepository, FileAccessConfigurator>(config)
                         .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
+                        .AddSingleton<IHashCalculator, Sha256HashCalculator>()
+                        .Configure<SubscriptionsSecurityCfg>(rootConfig.GetRequiredSection("Subscriptions:Security"))
                 )
-            .ConfigureOptionalFeature(config, "Subscriptions:Consumers", (srv, config) =>
+            .ConfigureOptionalFeature(rootConfig, "Subscriptions:Consumers", (srv, config) =>
                     srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
                         .AddSingleton<IConsumersRepository, ConsumersRepository>()
                         .ConfigureOnTheFlyJsonParser()

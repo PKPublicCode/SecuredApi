@@ -14,8 +14,8 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 namespace SecuredApi.Logic.Subscriptions;
 
-public record SubscriptionsSecurityCfg
-(
-    string Salt
-);
+public class SubscriptionsSecurityCfg
+{
+    public string Salt { get; init; } = string.Empty;
+}
 

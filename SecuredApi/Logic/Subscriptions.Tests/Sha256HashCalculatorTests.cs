@@ -18,7 +18,10 @@ namespace SecuredApi.Logic.Subscriptions;
 public class Sha256HashCalculatorTests
 {
     private Sha256HashCalculator _sut
-        = new(Options.Create<SubscriptionsSecurityCfg>(new("5b951d0869cc4d2da993b6d188197c71")));
+        = new(Options.Create<SubscriptionsSecurityCfg>(new()
+            {
+                Salt = "5b951d0869cc4d2da993b6d188197c71"
+            }));
 
     [Fact]
     public void CalculateHash_ValidInput_HashCalculated()

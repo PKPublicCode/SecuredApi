@@ -42,8 +42,11 @@ public class CheckSubscriptionAction : IAction
             return await context.SetNotAuthorizedErrorAsync(_subscriptionKeyNotSetOrInvalid);
         }
 
+        var hash = context.GetRequiredService<IHashCalculator>()
+                            .CalculateHash(value[0]!);
+
         var subscriptionKey = await context.GetRequiredService<ISubscriptionKeysRepository>()
-                                        .GetSubscriptionKeyAsync(value[0]!, context.CancellationToken);
+                                        .GetSubscriptionKeyAsync(hash, context.CancellationToken);
         if (subscriptionKey == null)
         {
             return await context.SetNotAuthorizedErrorAsync(_subscriptionKeyNotSetOrInvalid);
