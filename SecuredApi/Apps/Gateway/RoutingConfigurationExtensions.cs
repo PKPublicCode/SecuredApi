@@ -79,7 +79,7 @@ public static class RoutingConfigurationExtensions
                 .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
                     srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
                         .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
-                        .Configure<RoutingEngineManagerCfg>(config.GetRequiredSection("Files"))
+                        .ConfigureRequiredOption<RoutingEngineManagerCfg>(config, "Files")
                         .AddSingleton<IRoutingTableBuilderFactory, RoutingTableBuilderFactory<RoutingTableBuilder>>()
                         .ConfigureRoutingConfigurationJsonParser()
                         .AddActionFactory()
