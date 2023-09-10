@@ -34,28 +34,22 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Routing\routing.json">
+    <None Update="TestEnvironment\Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Routing\globals.json">
+    <None Update="TestEnvironment\Subscriptions\Keys\5F39D492-A141-498A-AE04-76C6B77F246A">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configuration\globals.json">
+    <None Update="TestEnvironment\StaticFiles\welcome.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Configuration\routing.json">
+    <None Update="TestEnvironment\StaticFiles\WildcardContent\Hello.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="StaticFiles\welcome.html">
+    <None Update="TestEnvironment\Configuration\globals.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="StaticFiles\WildcardContent\Hello.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Subscriptions\Keys\5F39D492-A141-498A-AE04-76C6B77F246A">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
+    <None Update="TestEnvironment\Configuration\routing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
