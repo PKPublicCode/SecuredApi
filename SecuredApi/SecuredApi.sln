@@ -20,13 +20,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.FileAccess.Abstractio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3ED80D83-B7B1-43C0-B1F4-2B6682B4DA87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrustructure.FileAccess.FileSystem", "Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj", "{8B72E81C-BA54-47FF-9E15-EADE53E37885}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrustructure.FileAccess.FileSystem", "Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj", "{8B72E81C-BA54-47FF-9E15-EADE53E37885}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing.Actions", "Logic\Routing.Actions\Logic.Routing.Actions.csproj", "{B9BDD718-45FE-4545-9A9D-AB2C335E812B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Subscriptions", "Logic\Subscriptions\Logic.Subscriptions.csproj", "{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Subscriptions.TableStorage", "Infrastructure\Subscriptions.TableStorage\Infrastructure.Subscriptions.TableStorage.csproj", "{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentTests", "ComponentTests", "{DE8C2D00-5013-4976-9365-896D624CD532}"
 EndProject
@@ -38,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApps.Gateway.Performance
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApps.Gateway.Presentation", "WebApps\Gateway.Presentation\WebApps.Gateway.Presentation.csproj", "{ABE37F2C-8784-4B05-873B-19C32F724EFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.FileAccess.AzureStorage", "Infrastructure\FileAccess.AzureStorage\Infrastructure.FileAccess.AzureStorage.csproj", "{996AF2E6-65D5-40F8-B77C-32D4E7D041EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.FileAccess.AzureStorage", "Infrastructure\FileAccess.AzureStorage\Infrastructure.FileAccess.AzureStorage.csproj", "{996AF2E6-65D5-40F8-B77C-32D4E7D041EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42F3768F-89B4-4E84-B790-13581CEC954B}"
 	ProjectSection(SolutionItems) = preProject
@@ -153,18 +151,6 @@ Global
 		{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}.Release|x64.Build.0 = Release|Any CPU
 		{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}.Release|x86.ActiveCfg = Release|Any CPU
 		{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}.Release|x86.Build.0 = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|x64.Build.0 = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Debug|x86.Build.0 = Debug|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|x64.ActiveCfg = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|x64.Build.0 = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|x86.ActiveCfg = Release|Any CPU
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC}.Release|x86.Build.0 = Release|Any CPU
 		{7EC82795-C2B7-4BD0-BA45-3AFF9E4BEF07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EC82795-C2B7-4BD0-BA45-3AFF9E4BEF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EC82795-C2B7-4BD0-BA45-3AFF9E4BEF07}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -309,7 +295,6 @@ Global
 		{8B72E81C-BA54-47FF-9E15-EADE53E37885} = {3ED80D83-B7B1-43C0-B1F4-2B6682B4DA87}
 		{B9BDD718-45FE-4545-9A9D-AB2C335E812B} = {74648731-0487-44A2-86E4-5F375B9B1B67}
 		{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46} = {74648731-0487-44A2-86E4-5F375B9B1B67}
-		{BB08DBF3-21A0-4EA1-9D46-75F1DA509DBC} = {3ED80D83-B7B1-43C0-B1F4-2B6682B4DA87}
 		{7EC82795-C2B7-4BD0-BA45-3AFF9E4BEF07} = {74648731-0487-44A2-86E4-5F375B9B1B67}
 		{95ABB1CF-0BBC-411D-9B69-3DE3C2949CE8} = {07E9CACF-B4D2-4A5D-9920-38B9CA9EC3A2}
 		{523EADD3-C8F5-4245-AD77-BCC003854CDC} = {07E9CACF-B4D2-4A5D-9920-38B9CA9EC3A2}
