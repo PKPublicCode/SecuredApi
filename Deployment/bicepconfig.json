@@ -12,5 +12,9 @@
         }
       }
     }
+  },
+  "experimentalFeaturesEnabled": {
+    "userDefinedTypes": true,
+    "userDefinedFunctions": true
   }
 }
