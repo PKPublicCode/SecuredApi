@@ -176,19 +176,19 @@ output appServiceName string = appService.name
 output hostEndpoint string = appService.properties.hostNames[0]
 
 output blobs object = {
-  configContainer: {
+  configuration: {
     name: configContainer
     url: storageContent.outputs.blobUrls[configContainer]
   }
-  subscriptionsContainer: !configureSubscriptions ? null : {
+  subscriptions: !configureSubscriptions ? null : {
     name: subscriptionsContainer
     url: storageContent.outputs.blobUrls[subscriptionsContainer]
   }
-  subscriptionKeysContainer: !configureSubscriptions ? null : {
+  subscriptionKeys: !configureSubscriptions ? null : {
     name: subscriptionKeysContainer
     url: storageContent.outputs.blobUrls[subscriptionKeysContainer]
   }
-  consumersContainer: !configureConsumers ? null : {
+  consumers: !configureConsumers ? null : {
     name: consumersContainer
     url: storageContent.outputs.blobUrls[consumersContainer]
   }
