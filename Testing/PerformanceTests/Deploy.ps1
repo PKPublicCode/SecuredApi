@@ -34,28 +34,18 @@ $result = New-AzSubscriptionDeployment -Location westeurope `
     -deployLatestFromDocker $deployFromDocker `
     -appPlanSku $AppPlanSku
 
-$output = $result.Outputs | ConvertTo-Json | ConvertFrom-Json
+$global:debugDeploymentResult = $result
 
-$env:PERFORMANCETEST_RG_NAME = $output.performanceTestRgName.Value
-$env:PERFORMANCETEST_SHARED_RG_NAME = $output.sharedRgName.Value
-$env:PERFORMANCETEST_CONFIGSTORAGE_NAME = $output.configStorageName.Value
+if ($result.Outputs -ne $null) {
+    # convert ugly presentation of outputs to the object
+    $output = @{}
+    foreach ($h in $result.Outputs.GetEnumerator()) {
+        $output.Add($h.Key, $h.Value.Value)
+    }
+    $output = $output | ConvertTo-Json | ConvertFrom-Json
+    $global:deploymentResults = $output
 
-$env:PERFORMANCETEST_GATEWAY_APPSERVICE_NAME = $output.gateway.Value.appServiceName
-$env:PERFORMANCETEST_ECHOSRV_APPSERVICE_NAME = $output.echo.Value.appServiceName
+    Write-Host("Api Gateway: $($output.gateway | ConvertTo-Json)")
+    Write-Host("Echo service: $($output.echo | ConvertTo-Json)")
+}
 
-$env:PERFORMANCETEST_GATEWAY_CONFIGBLOBCONTAINENR_NAME = $output.gateway.Value.blobs.configContainer.name
-$env:PERFORMANCETEST_ECHOSRV_CONFIGBLOBCONTAINENR_NAME = $output.echo.Value.blobs.configContainer.name
-
-Write-Host("Api Gateway: $($output.gateway.Value | ConvertTo-Json)")
-# Write-Host("Host: $($result.Outputs.gateway.Value.hostEndpoint.Value)")
-# Write-Host("Configuration Contnainer Url: $($output.gateway.Value.configContainer.url)")
-# Write-Host("Configuration Blob Contnainer Name: $($output.gateway.Value | ConvertTo-Json)")
-# Write-Host("Table Endpoint: $($result.Outputs.gateway.Value.tableEndpoint.Value)")
-# Write-Host("Tables: $($result.Outputs.gateway.Value.consumersTable.Value), `
-#             $($result.Outputs.gateway.Value.subscriptionsTable.Value), `
-#             $($result.Outputs.gateway.Value.subscriptionKeysTable.Value)")
-
-Write-Host("Echo service: $($output.echo.Value | ConvertTo-Json)")
-# Write-Host("Host: $($result.Outputs.echo.Value.hostEndpoint.Value)")
-# Write-Host("Configuration Contnainer Url: $($result.Outputs.echo.Value.configBlobContainerUrl.Value)")
-# Write-Host("Configuration Blob Contnainer Name: $($result.Outputs.echo.Value.configBlobContainerName.Value)")

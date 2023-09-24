@@ -174,13 +174,6 @@ func makeResourceName(prefix string, bundleName string, nameEnding string) strin
 
 output appServiceName string = appService.name
 output hostEndpoint string = appService.properties.hostNames[0]
-//output configBlobContainerUrl string = storageContent.outputs.blobUrls[configContainer]
-//output configBlobContainernName string = configContainer
-
-// var _emptyContainer = {
-//   name: 'n/a'
-//   url: 'n/a'
-// }
 
 output blobs object = {
   configContainer: {
@@ -200,7 +193,3 @@ output blobs object = {
     url: storageContent.outputs.blobUrls[consumersContainer]
   }
 }
-//output tableEndpoint string = configureSubscriptionManagement ? storageConfiguration.outputs.tableEndpoint : 'N/A'
-//output consumersTable string = configureSubscriptionManagement ? consumersTable : 'N/A'
-//output subscriptionsTable string = configureSubscriptionManagement ? subscriptionsTable : 'N/A'
-//output subscriptionKeysTable string = configureSubscriptionManagement ? subscriptionKeysTable : 'N/A'

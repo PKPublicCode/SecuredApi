@@ -1,8 +1,8 @@
+$AccountName = $deploymentResults.configStorageName
+$GatewayContainerName = $deploymentResults.gateway.blobs.configContainer.name
+$EchoContainerName = $deploymentResults.echo.blobs.configContainer.name
+$rgName = $deploymentResults.sharedRgName
 
-$AccountName = $env:PERFORMANCETEST_CONFIGSTORAGE_NAME
-$GatewayContainerName = $env:PERFORMANCETEST_GATEWAY_CONFIGBLOBCONTAINENR_NAME
-$EchoContainerName = $env:PERFORMANCETEST_ECHOSRV_CONFIGBLOBCONTAINENR_NAME
-$rgName = $env:PERFORMANCETEST_SHARED_RG_NAME
 $StorageScope = (Get-AzStorageAccount -ResourceGroupName $rgName -Name $AccountName).Id
 $objId = (Get-AzADUser).Id 
 
@@ -29,7 +29,7 @@ $echoConfig = @{
     StandardBlobTier = 'Hot'
   }
 
-Set-AzStorageBlobContent @echoConfig
+Set-AzStorageBlobContent @echoConfig -Force
 
   # upload a file to the default account (inferred) access tier
 $gatewayConfig = @{
@@ -40,4 +40,4 @@ $gatewayConfig = @{
   StandardBlobTier = 'Hot'
 }
 
-Set-AzStorageBlobContent @gatewayConfig
+Set-AzStorageBlobContent @gatewayConfig -Force
