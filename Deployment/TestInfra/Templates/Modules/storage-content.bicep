@@ -20,7 +20,4 @@ resource table 'Microsoft.Storage/storageAccounts/tableServices/tables@2022-09-0
   name: '${storagePrefix}/${table}'
 }]
 
-//ToDo. will not work, fix
-// https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-functions-lambda
-// https://github.com/Azure/bicep/issues/8601
-output blobUrls array = [for c in containers: '${storage.properties.primaryEndpoints.blob}${c}' ]
+output blobUrls object = reduce(containers, {}, (res, curr) => union(res, { '${curr}' : '${storage.properties.primaryEndpoints.blob}${curr}'}))

@@ -64,19 +64,22 @@ module echoService './Modules/gateway-service.bicep' = {
 output gateway object = {
   appServiceName: gatewayService.outputs.appServiceName
   hostEndpoint: gatewayService.outputs.hostEndpoint
-  configBlobContainerUrl: gatewayService.outputs.configBlobContainerUrl
-  configBlobContainerName: gatewayService.outputs.configBlobContainernName
-  tableEndpoint: gatewayService.outputs.tableEndpoint
-  consumersTable: gatewayService.outputs.consumersTable
-  subscriptionsTable: gatewayService.outputs.subscriptionsTable
-  subscriptionKeysTable: gatewayService.outputs.subscriptionKeysTable
+  blobs: gatewayService.outputs.blobs
+  // configBlobContainerUrl: gatewayService.outputs.blobs.configContainer.Url
+  // configBlobContainerName: gatewayService.outputs.blobs.configContainer.Name
+  // tableEndpoint: gatewayService.outputs.tableEndpoint
+  // consumersTable: gatewayService.outputs.consumersTable
+  // subscriptionsTable: gatewayService.outputs.subscriptionsTable
+  // subscriptionKeysTable: gatewayService.outputs.subscriptionKeysTable
 }
 
 output echo object = {
   appServiceName: echoService.outputs.appServiceName
   hostEndpoint: echoService.outputs.hostEndpoint
-  configBlobContainerUrl: echoService.outputs.configBlobContainerUrl
-  configBlobContainerName: echoService.outputs.configBlobContainernName
+  //configContainer: gatewayService.outputs.blobs.configContainer
+  // configBlobContainerUrl: echoService.outputs.blobs.configContainer.Url
+  // configBlobContainerName: echoService.outputs.blobs.configContainer.Name
+  blobs: echoService.outputs.blobs
 }
 
 output sharedRgName string = sharedRG.name

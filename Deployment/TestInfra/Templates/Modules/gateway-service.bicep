@@ -61,21 +61,21 @@ var _dockerRegistrySettings = !deployLatestFromDocker ? _emptySettings : {
 // 2) Fix blobs
 var _subscriptionSettings = !configureSubscriptions ? _emptySettings : {
   Subscriptions__Keys__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Keys__Rbac__Uri: storageContent.outputs.blobUrls[1]
+  Subscriptions__Keys__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionKeysContainer]
   Subscriptions__Keys__Security__Salt: subscriptionKeysSalt
   Subscriptions__Subscriptions__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Subscriptions__Rbac__Uri: storageContent.outputs.blobUrls[2]
+  Subscriptions__Subscriptions__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionsContainer]
 }
 
 var _consumersSettings = !configureConsumers ? _emptySettings : {
   Subscriptions__Consumers__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Consumers__Rbac__Uri: storageContent.outputs.blobUrls[3]
+  Subscriptions__Consumers__Rbac__Uri: storageContent.outputs.blobUrls[consumersContainer]
 }
 
 var _routingSettings = {
   RoutingEngineManager__Files__RoutingCfgFileId: 'routing-config.json'
   RoutingEngineManager__FileAccess__Type: 'AzureStorage'
-  RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[0]
+  RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
 }
 
 resource appService 'Microsoft.Web/sites@2020-06-01' = {
@@ -102,17 +102,17 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
       _routingSettings,
       appServiceConfiguration,
       { // Required settings
-      APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
-      APPINSIGHTS_PROFILERFEATURE_VERSION: '1.0.0'
-      APPINSIGHTS_SNAPSHOTFEATURE_VERSION: 'disabled'
-      APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
-      ApplicationInsightsAgent_EXTENSION_VERSION: '~2'
-      DiagnosticServices_EXTENSION_VERSION: '~3'
-      InstrumentationEngine_EXTENSION_VERSION: 'disabled'
-      SnapshotDebugger_EXTENSION_VERSION: 'disabled'
-      XDT_MicrosoftApplicationInsights_BaseExtensions: 'disabled'
-      XDT_MicrosoftApplicationInsights_Mode: 'recommended'
-      XDT_MicrosoftApplicationInsights_PreemptSdk: '1'
+        APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
+        APPINSIGHTS_PROFILERFEATURE_VERSION: '1.0.0'
+        APPINSIGHTS_SNAPSHOTFEATURE_VERSION: 'disabled'
+        APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
+        ApplicationInsightsAgent_EXTENSION_VERSION: '~2'
+        DiagnosticServices_EXTENSION_VERSION: '~3'
+        InstrumentationEngine_EXTENSION_VERSION: 'disabled'
+        SnapshotDebugger_EXTENSION_VERSION: 'disabled'
+        XDT_MicrosoftApplicationInsights_BaseExtensions: 'disabled'
+        XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+        XDT_MicrosoftApplicationInsights_PreemptSdk: '1'
     })
   }
 
@@ -144,7 +144,7 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
 //If storage account is in another RG, it needs be specified it as scope and bicep compiler
 //doesn't let to do it and asks to create separate module. That's why module is used
 module storageAccess 'storage-access.bicep' = {
-  name: '${bundleName}-config-container'
+  name: '${bundleName}-config-container-access'
   scope: resourceGroup(configStorageRG)
   params: {
     storageName: configStorageName
@@ -154,7 +154,7 @@ module storageAccess 'storage-access.bicep' = {
 }
 
 module storageContent 'storage-content.bicep' = {
-  name: '${bundleName}-config-container'
+  name: '${bundleName}-config-container-content'
   scope: resourceGroup(configStorageRG)
   params: {
     storageName: configStorageName
@@ -166,7 +166,7 @@ module storageContent 'storage-content.bicep' = {
   }
 }
 
-func makeContainerName(bundleName string, suffix string) string /*
+func makeContainerName(suffix string, bundleName string) string /*
 */  => toLower('${bundleName}-${suffix}')
 
 func makeResourceName(prefix string, bundleName string, nameEnding string) string /*
@@ -174,8 +174,32 @@ func makeResourceName(prefix string, bundleName string, nameEnding string) strin
 
 output appServiceName string = appService.name
 output hostEndpoint string = appService.properties.hostNames[0]
-output configBlobContainerUrl string = storageContent.outputs.blobUrls[0]
-output configBlobContainernName string = configContainer
+//output configBlobContainerUrl string = storageContent.outputs.blobUrls[configContainer]
+//output configBlobContainernName string = configContainer
+
+// var _emptyContainer = {
+//   name: 'n/a'
+//   url: 'n/a'
+// }
+
+output blobs object = {
+  configContainer: {
+    name: configContainer
+    url: storageContent.outputs.blobUrls[configContainer]
+  }
+  subscriptionsContainer: !configureSubscriptions ? null : {
+    name: subscriptionsContainer
+    url: storageContent.outputs.blobUrls[subscriptionsContainer]
+  }
+  subscriptionKeysContainer: !configureSubscriptions ? null : {
+    name: subscriptionKeysContainer
+    url: storageContent.outputs.blobUrls[subscriptionKeysContainer]
+  }
+  consumersContainer: !configureConsumers ? null : {
+    name: consumersContainer
+    url: storageContent.outputs.blobUrls[consumersContainer]
+  }
+}
 //output tableEndpoint string = configureSubscriptionManagement ? storageConfiguration.outputs.tableEndpoint : 'N/A'
 //output consumersTable string = configureSubscriptionManagement ? consumersTable : 'N/A'
 //output subscriptionsTable string = configureSubscriptionManagement ? subscriptionsTable : 'N/A'

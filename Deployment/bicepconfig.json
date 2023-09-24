@@ -15,6 +15,7 @@
   },
   "experimentalFeaturesEnabled": {
     "userDefinedTypes": true,
-    "userDefinedFunctions": true
+    "userDefinedFunctions": true,
+    "compileTimeImports": true
   }
 }
