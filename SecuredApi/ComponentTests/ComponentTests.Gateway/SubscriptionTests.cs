@@ -13,6 +13,8 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
+using RichardSzalay.MockHttp;
+using System.Net;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -25,7 +27,7 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_SubscriptionKeyNotSet()
     {
-        Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
+        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
         ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
@@ -37,7 +39,7 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_SubscriptionKeyNotExists()
     {
-        Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
+        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
         SetSubscriptionKey("KeyKeyKey");
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
@@ -50,20 +52,30 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_CallAlowedConsumerWithActions()
     {
-        Request.SetupGet(RoutePaths.PrivateApi1EchoWildcard);
+        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
+        // setup RemouteCall response
+        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}")
+            .Respond(
+                        HttpStatusCode.OK,
+                        new StringContent(InlineContent.PrivateRedirectWildcard)
+                    );
+
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
-        ExpectedResult.Body = InlineContent.PrivateWildcardApi1;
+        ExpectedResult.Body = InlineContent.PrivateRedirectWildcard;
         ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.ResponseConsumerSpecificActions);
 
-        await ExecuteAsync();
+        //await ExecuteAsync();
+
+        await ArrangeAsync();
+        await ActAsync();
     }
 
     [Fact]
     public async Task PrivateRote_CallNotAlowedConsumerWithActions()
     {
-        Request.SetupGet(RoutePaths.PrivateApi2EchoWildcard);
+        Request.SetupGet(RoutePaths.PrivateNotAllowedWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;

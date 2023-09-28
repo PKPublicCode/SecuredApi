@@ -2,10 +2,6 @@
   "variables": [
     {
       "key": "EchoPath",
-      "value": "https://mock_path/echo"
-    },
-    {
-      "key": "PublicRemoteEndpoint",
       "value": "https://remote.endpoint/api"
     }
   ]

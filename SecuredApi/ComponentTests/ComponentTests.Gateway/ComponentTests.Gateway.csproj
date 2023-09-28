@@ -46,10 +46,10 @@
     <None Update="TestEnvironment\StaticFiles\WildcardContent\Hello.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestEnvironment\Configuration\globals.json">
+    <None Update="TestEnvironment\Configuration\globals-config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestEnvironment\Configuration\routing.json">
+    <None Update="TestEnvironment\Configuration\routing-config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

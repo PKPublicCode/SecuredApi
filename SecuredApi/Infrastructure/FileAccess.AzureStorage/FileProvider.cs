@@ -27,7 +27,7 @@ public class FileProvider<T> : IFileProvider<T>
     public FileProvider(IOptions<FileProviderConfig<T>> config)
     {
         var rbac = config.Value.Rbac
-            ?? throw new InvalidOperationException("Azure Storage File Access not configured");
+            ?? throw new InvalidOperationException("Azure Storage File Access (Rbac) is not configured");
         _client = new BlobContainerClient(new Uri(rbac.Uri), new DefaultAzureCredential());
     }
 

@@ -104,7 +104,7 @@
             {
               "name": "RemoteCall",
               "settings": {
-                "path": "$(PublicRemoteEndpoint)",
+                "path": "$(EchoPath)",
                 "method": "get"
               }
             },
@@ -177,20 +177,20 @@
       "routesGroups": [
         {
           "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
-          "title": "Secured api 1",
+          "title": "API with redirect. Used in Integration Test",
           "routes": [
             {
               "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
               "routeKey": {
                 "method": "get",
-                "path": "/private/api1/wildcard/*"
+                "path": "/private/redirect/wildcard/*"
               },
               "actions": [
                 {
-                  "name": "SetResponse",
+                  "name": "RemoteCall",
                   "settings": {
-                    "httpCode": 200,
-                    "body": "Private echo wildcard route, api 1"
+                    "path": "$(EchoPath)",
+                    "method": "get"
                   }
                 }
               ]
@@ -205,14 +205,14 @@
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
               "routeKey": {
                 "method": "get",
-                "path": "/private/api2/wildcard/*"
+                "path": "/private/notallowed/wildcard/*"
               },
               "actions": [
                 {
-                  "name": "SetResponse",
+                  "name": "RemoteCall",
                   "settings": {
-                    "httpCode": 200,
-                    "body": "Private echo wildcard route, api 2"
+                    "path": "$(EchoPath)",
+                    "method": "get"
                   }
                 }
               ]

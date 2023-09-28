@@ -61,15 +61,15 @@ var _dockerRegistrySettings = !deployLatestFromDocker ? _emptySettings : {
 // 2) Fix blobs
 var _subscriptionSettings = !configureSubscriptions ? _emptySettings : {
   Subscriptions__Keys__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Keys__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionKeysContainer]
+  Subscriptions__Keys__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionKeysContainer]
   Subscriptions__Keys__Security__Salt: subscriptionKeysSalt
   Subscriptions__Subscriptions__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Subscriptions__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionsContainer]
+  Subscriptions__Subscriptions__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionsContainer]
 }
 
 var _consumersSettings = !configureConsumers ? _emptySettings : {
   Subscriptions__Consumers__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Consumers__Rbac__Uri: storageContent.outputs.blobUrls[consumersContainer]
+  Subscriptions__Consumers__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[consumersContainer]
 }
 
 var _routingSettings = {

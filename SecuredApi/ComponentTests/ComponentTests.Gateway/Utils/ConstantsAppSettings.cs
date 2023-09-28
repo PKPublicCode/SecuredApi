@@ -45,8 +45,8 @@ public static partial class Constants
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/public/echo/delay";
         public const string PublicContentBase = "/public/content";
-        public const string PrivateApi1EchoWildcard = "/private/api1/wildcard";
-        public const string PrivateApi2EchoWildcard = "/private/api2/wildcard";
+        public const string PrivateRedirectWildcard = "/private/redirect/wildcard";
+        public const string PrivateNotAllowedWildcard = "/private/notallowed/wildcard";
     }
 
     public static class InlineContent
@@ -58,7 +58,7 @@ public static partial class Constants
         public const string EchoDelay = "Public delay route";
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string CallNotAllowed = "Call Not Allowed";
-        public const string PrivateWildcardApi1 = "Private echo wildcard route, api 1";
+        public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";

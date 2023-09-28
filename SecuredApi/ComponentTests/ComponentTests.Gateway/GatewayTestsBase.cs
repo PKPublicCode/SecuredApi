@@ -60,9 +60,8 @@ public abstract class GatewayTestsBase
 
         srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
             .ConfigurePrimaryHttpMessageHandler(() => NonRedirectHttpHandler);
-
-        // Fallback returns status code 0, that indicates that url not expected
-        MainHttpHandler.Fallback.Respond(() => Task.FromResult(new HttpResponseMessage(0)));
+        
+        MainHttpHandler.Fallback.Throw(new InvalidOperationException("No matching mock handler"));
 
         configurator(srv, cfg);
 

@@ -19,7 +19,7 @@ function Upload-Blob([string]$filePath, [string]$containerName) {
 function Upload-Folder ([string]$folder, [string]$container) {
   $files = Get-ChildItem $folder -File 
   foreach($file in $files) {
-    Write-Host $file.FullName
+    Upload-Blob $file.FullName $container
   }
 }
 
@@ -34,6 +34,6 @@ Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
 Upload-Blob './RoutingConfigs/EchoRouting/routing-config.json' `
                 $deploymentResults.echo.blobs.configuration.name
 
-Upload-Blob './RoutingConfigs/GatewayRouting/routing-config.json' `
+Upload-Blob "$($componentTestFolder)/Configuration/routing-config.json" `
                 $deploymentResults.gateway.blobs.configuration.name
 

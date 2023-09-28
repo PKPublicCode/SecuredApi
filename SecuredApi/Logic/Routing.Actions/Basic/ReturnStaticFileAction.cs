@@ -66,7 +66,7 @@ public class ReturnStaticFileAction : IAction
         catch(Exception e)
             when (e is not TaskCanceledException)
         {
-            context.GetLogger<ReturnStaticFileAction>().LogError("Unexpected exception e", e);
+            context.GetLogger<ReturnStaticFileAction>().LogError(e, "Unexpected exception e");
             throw;
         }
 

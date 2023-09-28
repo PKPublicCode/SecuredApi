@@ -39,6 +39,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     configStorageRG: sharedRG.name
     deployLatestFromDocker: deployLatestFromDocker
     configureSubscriptions: true
+    subscriptionKeysSalt: '5b951d0869cc4d2da993b6d188197c71'
     configureConsumers: true
     appServiceConfiguration: {
       GlobalVariables__EchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
