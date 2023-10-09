@@ -1,26 +1,27 @@
 #Product performance
 Below experiments intendent to proof technology choice and justificate possibility to use application on production environment. Tests on cheapest environments will come later. Experimennts explan latency difference between calling app directly and calling via Gateway, but not real performannce\load of the solution.
 ## Experiment 1
+Measure production-like configuration
 ### Environment
 Azure region: West Europe
 
 Azure Storage Account, Kind: V2
 
-App service plans: SKU P1V3
+App service plans: Gateway: SKU P0V3, 3 instances, Echo: SKU P0V3, 1 instance
 
 Api Gateway and Echo Service deployed to own app service plans.
 
-Api Gateway accepts Https only, configured to forward calls to Echo Server by http (tls termination), calls protected by Api Key. Subscription management based on Azure Storage Tables.
+Api Gateway accepts Https only, configured to forward calls to Echo Server by http (tls termination), calls protected by Api Key. Gateway url protected by api key.
 
 Echo Service configured to respond pre-configured string after 300 ms delay (mimic some load)
 
 Apps deployed with ```az webapp deploy ...```
 
-JMeter client executed from local box, located in east europe, 200 threads, Loop count: 100 
+JMeter client executed from Azure Load Test in west europe region, 200 threads, Loop count: 200 
 
 Both Api Gateway and Echo Server are called with random suffix in url, to minimize caching impact. Request body ~1 kb
 
-Only one subscription key is used during the experiments. So, querying table storage by api gateway potentially can be cached.
+Only one subscription key (and so only one Consumer entity) is used during the experiments. Blobs configured with cache-control=no-store.
 
 ### Results
 

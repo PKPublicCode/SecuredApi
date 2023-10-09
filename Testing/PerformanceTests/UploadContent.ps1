@@ -13,7 +13,8 @@ function Upload-Blob([string]$filePath, [string]$containerName) {
                         -Container $containerName `
                         -Blob $blobName `
                         -Context $context `
-                        -Force
+                        -Properties @{"CacheControl" = "no-store"}  `
+                        -Force                     
 }
 
 function Upload-Folder ([string]$folder, [string]$container) {

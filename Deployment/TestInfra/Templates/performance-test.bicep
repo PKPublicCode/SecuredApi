@@ -5,6 +5,7 @@ param servicesRgName string = 'secureapi'
 param sharedRgName string = 'secureapi-shared'
 param commonNameEnding string
 param appPlanSku string = 'S1'
+param gatewayInstanceNum int = 1
 param deployLatestFromDocker bool = true
 
 
@@ -41,6 +42,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     configureSubscriptions: true
     subscriptionKeysSalt: '5b951d0869cc4d2da993b6d188197c71'
     configureConsumers: true
+    instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
       GlobalVariables__EchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
     }

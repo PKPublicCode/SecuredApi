@@ -16,9 +16,9 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">10</stringProp>
+          <stringProp name="LoopController.loops">200</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.num_threads">200</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -62,7 +62,7 @@ blablabla just to make it 1 kb. a;jksdf;ajksd;kfja;skdjf;askdjf;akjsdf;akjsdf;la
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">X-SUBSCRIPTION-KEY</stringProp>
-              <stringProp name="Header.value">304fab5e-89a1-472a-9c19-437aa8571eb5</stringProp>
+              <stringProp name="Header.value">5F39D492-A141-498A-AE04-76C6B77F246A</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -204,7 +204,7 @@ blablabla just to make it 1 kb. a;jksdf;ajksd;kfja;skdjf;askdjf;akjsdf;akjsdf;la
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">100</stringProp>
+          <stringProp name="LoopController.loops">200</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">200</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
@@ -372,7 +372,7 @@ blablabla just to make it 1 kb. a;jksdf;ajksd;kfja;skdjf;askdjf;akjsdf;akjsdf;la
           <collectionProp name="Arguments.arguments">
             <elementProp name="PerformanceTestSrvUrl" elementType="Argument">
               <stringProp name="Argument.name">PerformanceTestSrvUrl</stringProp>
-              <stringProp name="Argument.value">app-echosrv-ptst-weeu.azurewebsites.net</stringProp>
+              <stringProp name="Argument.value">app-echosrv-tst-weeu.azurewebsites.net</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="PerformanceTestSrvPort" elementType="Argument">

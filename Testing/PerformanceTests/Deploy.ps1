@@ -3,6 +3,7 @@ param (
     [switch] $Force = $false
     , [switch] $DoNotDeployDocker= $false
     , $AppPlanSku="S1"
+    , $GatewayInstanceNum=1
 )
 
 $infraCommonNameEnding = $env:SECURED_API_NAME_ENDING
@@ -32,7 +33,8 @@ $result = New-AzSubscriptionDeployment -Location westeurope `
     -TemplateParameterFile "./../../Deployment/TestInfra/Parameters/performance-test-westeurope.json" `
     -commonNameEnding $infraCommonNameEnding `
     -deployLatestFromDocker $deployFromDocker `
-    -appPlanSku $AppPlanSku
+    -appPlanSku $AppPlanSku `
+    -gatewayInstanceNum $GatewayInstanceNum
 
 $global:debugDeploymentResult = $result
 

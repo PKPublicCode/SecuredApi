@@ -6,7 +6,7 @@ param webSiteName string = makeResourceName('app', bundleName, nameEnding)
 param appInsightName string = makeResourceName('appi', bundleName, nameEnding)
 param logAnalyticsResourceId string
 param skuName string
-param skuCapacity int = 1
+param instanceNum int = 1
 param httpsOnly bool = true
 param deployLatestFromDocker bool
 param dockerRegistyUrl string = 'https://index.docker.io/v1/'
@@ -39,7 +39,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   location: location
   sku: {
     name: skuName
-    capacity: skuCapacity
+    capacity: instanceNum
   }
   properties:{
     reserved: true
@@ -87,9 +87,11 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     httpsOnly: httpsOnly
+    clientAffinityEnabled: false
     siteConfig: {
       minTlsVersion: '1.2'
       linuxFxVersion: _linuxFxVersion
+      alwaysOn: true
     }
   }
 
