@@ -28,13 +28,15 @@ Write-Host("Creating environment with ending $infraCommonNameEnding")
 
 [bool] $deployFromDocker = !$doNotDeployDocker
 
-$result = New-AzSubscriptionDeployment -Location westeurope `
+$result = New-AzSubscriptionDeployment `
+    -Location westeurope `
     -TemplateFile "./../../Deployment/TestInfra/Templates/performance-test.bicep" `
     -TemplateParameterFile "./../../Deployment/TestInfra/Parameters/performance-test-westeurope.json" `
     -commonNameEnding $infraCommonNameEnding `
     -deployLatestFromDocker $deployFromDocker `
     -appPlanSku $AppPlanSku `
     -gatewayInstanceNum $GatewayInstanceNum
+    #-Whatif
 
 $global:debugDeploymentResult = $result
 
@@ -47,7 +49,6 @@ if ($result.Outputs -ne $null) {
     $output = $output | ConvertTo-Json | ConvertFrom-Json
     $global:deploymentResults = $output
 
-    Write-Host("Api Gateway: $($output.gateway | ConvertTo-Json)")
-    Write-Host("Echo service: $($output.echo | ConvertTo-Json)")
+    $global:deploymentResults | ConvertTo-Json -Depth 10
 }
 

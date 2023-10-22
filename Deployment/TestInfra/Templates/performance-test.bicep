@@ -64,6 +64,16 @@ module echoService './Modules/gateway-service.bicep' = {
   }
 }
 
+//Can't create resource directly in this bicep because current scope is subscription. Have to use module
+module loadTesting './Modules/load-tests.bicep' = {
+  name: 'LoadTesting'
+  scope: performanceTestsRG
+  params: {
+    bundleName: 'shared'
+    nameEnding: commonNameEnding
+  }
+}
+
 output gateway object = {
   appServiceName: gatewayService.outputs.appServiceName
   hostEndpoint: gatewayService.outputs.hostEndpoint
@@ -74,6 +84,10 @@ output echo object = {
   appServiceName: echoService.outputs.appServiceName
   hostEndpoint: echoService.outputs.hostEndpoint
   blobs: echoService.outputs.blobs
+}
+
+output loadTesting object = {
+  name: loadTesting.outputs.resourceName
 }
 
 output sharedRgName string = sharedRG.name
