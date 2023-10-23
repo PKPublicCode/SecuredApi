@@ -1,8 +1,0 @@
-{
-  "variables": [
-    {
-      "key": "EchoPath",
-      "value": "https://app-securedapi-simple-weeu.azurewebsites.net/echo"
-    }
-  ]
-}

@@ -3,7 +3,7 @@ Below experiments intendent to proof technology choice and justificate possibili
 ## Experiment 1
 Measure cheap pre-production and production-grade configuration. Key parts:
 
-**Gateway service**: Protects HTTPs calls to endpoint with API key. Once API key is checked, call passed with http (TLS Termination) to protected endpoint (Echo Service). No Consumer-specific actions are defined
+**Gateway service**: Protects HTTPs calls to endpoint with API key. Once API key is checked, call passed with http (TLS Termination) to protected endpoint (Echo Service). As a "Consumer action" gateway adds custom header into response.
 
 **Echo service**: Service under Gateway protection. Configured to respond predefined message ~3kb with 300 ms delay (mimics some workload) 
 
