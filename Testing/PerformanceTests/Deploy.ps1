@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
     [switch] $Force = $false
-    , [switch] $DoNotDeployDocker= $false
+    , $dockerTag="latest"
     , $AppPlanSku="S1"
     , $GatewayInstanceNum=1
 )
@@ -26,14 +26,12 @@ if (!(Get-AzContext)) {
 
 Write-Host("Creating environment with ending $infraCommonNameEnding")
 
-[bool] $deployFromDocker = !$doNotDeployDocker
-
 $result = New-AzSubscriptionDeployment `
     -Location westeurope `
     -TemplateFile "./../../Deployment/TestInfra/Templates/performance-test.bicep" `
     -TemplateParameterFile "./../../Deployment/TestInfra/Parameters/performance-test-westeurope.json" `
     -commonNameEnding $infraCommonNameEnding `
-    -deployLatestFromDocker $deployFromDocker `
+    -dockerTag "$($dockerTag)" `
     -appPlanSku $AppPlanSku `
     -gatewayInstanceNum $GatewayInstanceNum
     #-Whatif

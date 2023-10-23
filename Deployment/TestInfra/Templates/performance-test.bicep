@@ -6,7 +6,7 @@ param sharedRgName string = 'secureapi-shared'
 param commonNameEnding string
 param appPlanSku string = 'S1'
 param gatewayInstanceNum int = 1
-param deployLatestFromDocker bool = true
+param dockerTag string = 'latest'
 
 
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-01-01' = {
@@ -38,7 +38,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     logAnalyticsResourceId: sharedResources.outputs.logAnalyticsWorkspaceId
     configStorageName: sharedResources.outputs.configStorageName
     configStorageRG: sharedRG.name
-    deployLatestFromDocker: deployLatestFromDocker
+    dockerTag: dockerTag
     configureSubscriptions: true
     subscriptionKeysSalt: '5b951d0869cc4d2da993b6d188197c71'
     configureConsumers: true
@@ -60,7 +60,7 @@ module echoService './Modules/gateway-service.bicep' = {
     logAnalyticsResourceId: sharedResources.outputs.logAnalyticsWorkspaceId
     configStorageName: sharedResources.outputs.configStorageName
     configStorageRG: sharedRG.name
-    deployLatestFromDocker: deployLatestFromDocker
+    dockerTag: dockerTag
   }
 }
 

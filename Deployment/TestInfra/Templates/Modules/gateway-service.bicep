@@ -8,7 +8,7 @@ param logAnalyticsResourceId string
 param skuName string
 param instanceNum int = 1
 param httpsOnly bool = true
-param deployLatestFromDocker bool
+param dockerTag string = 'latest'
 param dockerRegistyUrl string = 'https://index.docker.io/v1/'
 param appServiceConfiguration object = {
 }
@@ -46,19 +46,19 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
 }
 
+var _deployFromDocker = !empty(dockerTag)
 //see possible runtimes with "az webapp list-runtimes --os-type linux"
-var _linuxFxVersion = deployLatestFromDocker ? 'DOCKER|pkruglov/securedapi.gateway:latest' : 'DOTNETCORE|7.0'
+var _linuxFxVersion = _deployFromDocker ? 'DOCKER|pkruglov/securedapi.gateway:${dockerTag}' : 'DOTNETCORE|7.0'
 
 // ########## Make app service settings
 var _emptySettings = {}
 
-var _dockerRegistrySettings = !deployLatestFromDocker ? _emptySettings : {
+var _dockerRegistrySettings = !_deployFromDocker ? _emptySettings : {
   DOCKER_REGISTRY_SERVER_URL: dockerRegistyUrl
 }
 
 //ToDo: 
-// 1) Revise all containers needed; 
-// 2) Fix blobs
+// 1) Revise if all containers needed; 
 var _subscriptionSettings = !configureSubscriptions ? _emptySettings : {
   Subscriptions__Keys__FileAccess__Type: 'AzureStorage'
   Subscriptions__Keys__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[subscriptionKeysContainer]
