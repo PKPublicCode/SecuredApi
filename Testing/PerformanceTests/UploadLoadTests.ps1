@@ -16,7 +16,7 @@ function Upload-Test ([string]$name, [string]$srvName, [string]$url, [string]$ur
     $testId = "$($name)$($idEnding)".ToLower()
     Write-Host("Deloying $($testId) ...")
         
-        #No powershell wrapper at the moment of writing this script, so using native az
+    #No powershell wrapper at the moment of writing this script, so using native az
     az load test create `
         --test-id $testId `
         --load-test-resource $deploymentResults.loadTesting.Name `
@@ -27,5 +27,5 @@ function Upload-Test ([string]$name, [string]$srvName, [string]$url, [string]$ur
         --engine-instances 1 `
         --env SRV_URL=$url `
             SRV_URL_PATH=$urlPath `
-    #--no-wait
+        #--no-wait
 }
