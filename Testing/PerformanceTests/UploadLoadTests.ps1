@@ -2,16 +2,6 @@ Write-Host "If script hands, then probably jmx file is incorrect. az doesn't han
 
 $idEnding = Get-Date -Format "_ddMMyyyy_HHmmss"
 
-Upload-Test "Echo" `
-            $deploymentResults.echo.appServiceName `
-            $deploymentResults.echo.hostEndpoint `
-            "/echo/" `
-
-Upload-Test "Gateway" `
-    $deploymentResults.gateway.appServiceName `
-    $deploymentResults.gateway.hostEndpoint `
-    "/private/redirect/wildcard/" ` 
-
 function Upload-Test ([string]$name, [string]$srvName, [string]$url, [string]$urlPath) {
     $testId = "$($name)$($idEnding)".ToLower()
     Write-Host("Deloying $($testId) ...")
@@ -29,3 +19,13 @@ function Upload-Test ([string]$name, [string]$srvName, [string]$url, [string]$ur
             SRV_URL_PATH=$urlPath `
         #--no-wait
 }
+
+Upload-Test "Echo" `
+            $deploymentResults.echo.appServiceName `
+            $deploymentResults.echo.hostEndpoint `
+            "/echo/" `
+
+Upload-Test "Gateway" `
+            $deploymentResults.gateway.appServiceName `
+            $deploymentResults.gateway.hostEndpoint `
+            "/private/redirect/wildcard/" ` 
