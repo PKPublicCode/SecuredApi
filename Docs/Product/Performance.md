@@ -19,8 +19,9 @@ Scenario C: Same as scenario B, but Gateway hosted on 1 instance. Kind of PPE en
 
 | Scenario | Duration(s) | Median(ms) | P90(ms) | P95(ms) | P99(ms) | Throughput(req/s) |
 |--------------|-----|------|---------|--------|----------|----------|
-| Scenario A | 64 | 306 | 310 | 313 | 325 | 625 |
-| Scenario B | 71 | 328 | 343 | 352 | 414 | 563 |
+| Scenario A | 64 | 306 | 310 | 312 | 324 | 625 |
+| Scenario B | 69 | 330 | 342 | 349 | 368 | 579 |
+| Scenario C | 77 | 359 | 412 | 436 | 511 | 519 |
 
 ### Environment
 
@@ -30,6 +31,6 @@ Azure Storage Account, Kind: V2
 
 App service plans: SKU P0V3, Linux. 
 
-Api Gateway and Echo Service deployed to own app service plans.
+Api Gateway and Echo Service deployed to own app service plans, deployed with docker image
 
 Apps deployed with ```az webapp deploy ...```

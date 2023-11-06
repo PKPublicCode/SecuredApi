@@ -2,7 +2,7 @@
 param (
     [switch] $Force = $false
     , $dockerTag="latest"
-    , $AppPlanSku="S1"
+    , $AppPlanSku="S1" #use P0V3 for better performance
     , $GatewayInstanceNum=1
 )
 

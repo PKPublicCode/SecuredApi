@@ -2,21 +2,25 @@
 
 [CmdletBinding()]
 param (
-    [switch]$Prod = $false,
+    [switch]$Prod = $false
 )
 
+$majorVer = "0.1"
 $verFile = "$($PSScriptRoot)/ver.txt"
 $strVer = Get-Content $verfile 
-$ver = [System.Decimal]::Parse($strVer)
+$build = [System.Decimal]::Parse($strVer)
 
-$latest = "candidate"
+$latestTag = "candidate"
+$majorVerTag = "$($majorVer).candidate"
+$minorVerTag = "$($majorVer).$($build).candidate"
 if ($Prod) {
+    $latestTag = "latest"
+    $majorVerTag = "$($majorVer)"
+    $minorVerTag = "$($majorVer).$($build)"
+
     #bump new ver
-    $ver++
-    Set-Content $verFile $ver
-    
-    #set latest tag
-    $latest = "latest"
+    # $build++
+    # Set-Content $verFile $ver
 
     Write-Host("Building Prod")
 }
@@ -28,8 +32,9 @@ Push-Location
 Set-Location "$($PSScriptRoot)/../../SecuredApi"
 
 docker build `
-    -t pkruglov/securedapi.gateway:0.1.$($ver) `
-    -t pkruglov/securedapi.gateway:$($latest) `
+    -t pkruglov/securedapi.gateway:$($majorVerTag) `
+    -t pkruglov/securedapi.gateway:$($minorVerTag) `
+    -t pkruglov/securedapi.gateway:$($latestTag) `
     -f ../Build/Docker/dockerfile `
     .
 
