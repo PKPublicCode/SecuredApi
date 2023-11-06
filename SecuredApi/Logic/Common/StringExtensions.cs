@@ -12,13 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Common;
 
-namespace SecuredApi.Logic.Common
+public static class StringExtensions
 {
-    public static class StringExtensions
-    {
-        public static string Safe(this string? str) => str ?? string.Empty;
-        public static bool IsNullOrEmpty(this string? str) => string.IsNullOrEmpty(str);
-    }
+    public static string Safe(this string? str) => str ?? string.Empty;
+    public static bool IsNullOrEmpty(this string? str) => string.IsNullOrEmpty(str);
 }

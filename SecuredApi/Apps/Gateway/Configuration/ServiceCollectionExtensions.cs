@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
                                                                 string name, Action<IServiceCollection, IConfigurationSection> configurator)
     {
         var featureCfg = config.GetSection(name);
-        if (featureCfg != null)
+        if (featureCfg.Exists())
         {
             configurator(srv, featureCfg);
         }

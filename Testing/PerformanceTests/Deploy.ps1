@@ -1,8 +1,9 @@
 [CmdletBinding()]
 param (
     [switch] $Force = $false
-    , [switch] $DoNotDeployDocker= $false
-    , $AppPlanSku="S1"
+    , $dockerTag="latest"
+    , $AppPlanSku="S1" #use P0V3 for better performance
+    , $GatewayInstanceNum=1
 )
 
 $infraCommonNameEnding = $env:SECURED_API_NAME_ENDING
@@ -25,35 +26,27 @@ if (!(Get-AzContext)) {
 
 Write-Host("Creating environment with ending $infraCommonNameEnding")
 
-[bool] $deployFromDocker = !$doNotDeployDocker
-
-$result = New-AzSubscriptionDeployment -Location westeurope `
+$result = New-AzSubscriptionDeployment `
+    -Location westeurope `
     -TemplateFile "./../../Deployment/TestInfra/Templates/performance-test.bicep" `
     -TemplateParameterFile "./../../Deployment/TestInfra/Parameters/performance-test-westeurope.json" `
     -commonNameEnding $infraCommonNameEnding `
-    -deployLatestFromDocker $deployFromDocker `
-    -appPlanSku $AppPlanSku
+    -dockerTag "$($dockerTag)" `
+    -appPlanSku $AppPlanSku `
+    -gatewayInstanceNum $GatewayInstanceNum
+    #-Whatif
 
-$env:PERFORMANCETEST_RG_NAME = $result.Outputs.performanceTestRgName.Value
-$env:PERFORMANCETEST_SHARED_RG_NAME = $result.Outputs.sharedRgName.Value
-$env:PERFORMANCETEST_CONFIGSTORAGE_NAME = $result.Outputs.configStorageName.Value
+$global:debugDeploymentResult = $result
 
-$env:PERFORMANCETEST_GATEWAY_APPSERVICE_NAME = $result.Outputs.gateway.Value.appServiceName.Value
-$env:PERFORMANCETEST_ECHOSRV_APPSERVICE_NAME = $result.Outputs.echo.Value.appServiceName.Value
+if ($result.Outputs -ne $null) {
+    # convert ugly presentation of outputs to the object
+    $output = @{}
+    foreach ($h in $result.Outputs.GetEnumerator()) {
+        $output.Add($h.Key, $h.Value.Value)
+    }
+    $output = $output | ConvertTo-Json | ConvertFrom-Json
+    $global:deploymentResults = $output
 
-$env:PERFORMANCETEST_GATEWAY_CONFIGBLOBCONTAINENR_NAME = $result.Outputs.gateway.Value.configBlobContainerName.Value
-$env:PERFORMANCETEST_ECHOSRV_CONFIGBLOBCONTAINENR_NAME = $result.Outputs.echo.Value.configBlobContainerName.Value
+    $global:deploymentResults | ConvertTo-Json -Depth 10
+}
 
-Write-Host("Api Gateway:")
-Write-Host("Host: $($result.Outputs.gateway.Value.hostEndpoint.Value)")
-Write-Host("Configuration Contnainer Url: $($result.Outputs.gateway.Value.configBlobContainerUrl.Value)")
-Write-Host("Configuration Blob Contnainer Name: $($result.Outputs.gateway.Value.configBlobContainerName.Value)")
-Write-Host("Table Endpoint: $($result.Outputs.gateway.Value.tableEndpoint.Value)")
-Write-Host("Tables: $($result.Outputs.gateway.Value.consumersTable.Value), `
-            $($result.Outputs.gateway.Value.subscriptionsTable.Value), `
-            $($result.Outputs.gateway.Value.subscriptionKeysTable.Value)")
-
-Write-Host("Echo service:")
-Write-Host("Host: $($result.Outputs.echo.Value.hostEndpoint.Value)")
-Write-Host("Configuration Contnainer Url: $($result.Outputs.echo.Value.configBlobContainerUrl.Value)")
-Write-Host("Configuration Blob Contnainer Name: $($result.Outputs.echo.Value.configBlobContainerName.Value)")

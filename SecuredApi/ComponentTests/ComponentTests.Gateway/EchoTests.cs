@@ -63,6 +63,7 @@ public class EchoTests: GatewayTestsBase
         Context.Connection.RemoteIpAddress = IPAddress.Parse("20.20.20.22"); //Not Allowed IP Address
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
         ExpectedResult.Body = string.Empty;
 
         await ExecuteAsync();
@@ -91,6 +92,7 @@ public class EchoTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status404NotFound;
         ExpectedResult.Body = InlineContent.StaticFileWildcardNotFound;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
 
         await ExecuteAsync();
     }

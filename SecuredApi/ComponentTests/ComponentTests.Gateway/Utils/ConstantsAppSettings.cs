@@ -30,6 +30,12 @@ public static partial class Constants
         public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
 
         public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
+
+        public static HttpHeader ResponseCommonOnError { get; } = new("X-COMMON-ON-ERROR-HEADER", "Gateway Rejected Your Call");
+
+        public static HttpHeader ResponseConsumerSpecificActions { get; } = new("X-CONSUMER-SPECIFIC-HEADER", "This is test client 1");
+
+        public const string SubscriptionKeyHeaderName = "X-SUBSCRIPTION-KEY";
     }
 
     public static class RoutePaths
@@ -39,6 +45,8 @@ public static partial class Constants
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/public/echo/delay";
         public const string PublicContentBase = "/public/content";
+        public const string PrivateRedirectWildcard = "/private/redirect/wildcard";
+        public const string PrivateNotAllowedWildcard = "/private/notallowed/wildcard";
     }
 
     public static class InlineContent
@@ -48,6 +56,9 @@ public static partial class Constants
         public const string NotFound = "Route not found";
         public const string StaticFileWildcardNotFound = "This is wrong file url";
         public const string EchoDelay = "Public delay route";
+        public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
+        public const string CallNotAllowed = "Call Not Allowed";
+        public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";

@@ -1,0 +1,8 @@
+﻿{
+  "variables": [
+    {
+      "key": "EchoPath",
+      "value": "https://remote.endpoint/api"
+    }
+  ]
+}

@@ -93,7 +93,7 @@ namespace SecuredApi.Logic.Routing.Engine
             }
             catch(Exception e)
             {
-                _logger.LogError("Unable to load configuration file", e);
+                _logger.LogError(e, "Unable to load configuration file");
                 throw;
             }
         }

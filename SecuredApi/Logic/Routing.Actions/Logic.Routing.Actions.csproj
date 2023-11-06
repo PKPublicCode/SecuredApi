@@ -5,6 +5,7 @@
 	<RootNamespace>SecuredApi.Logic.Routing.Actions</RootNamespace>
 	<AssemblyName>SecuredApi.Logic.Routing.Actions</AssemblyName>
 	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

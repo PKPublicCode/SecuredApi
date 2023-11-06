@@ -12,5 +12,10 @@
         }
       }
     }
+  },
+  "experimentalFeaturesEnabled": {
+    "userDefinedTypes": true,
+    "userDefinedFunctions": true,
+    "compileTimeImports": true
   }
 }

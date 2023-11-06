@@ -40,6 +40,16 @@ namespace SecuredApi.Logic.Routing.Utils.ResponseStreaming
             return httpContext.SetResponseAsync(StatusCodes.Status403Forbidden, message);
         }
 
+        public static Task<bool> SetNotAuthorizedErrorAsync(this IRequestContext httpContext, string message)
+        {
+            return httpContext.SetResponseAsync(StatusCodes.Status401Unauthorized, message);
+        }
+
+        public static Task<bool> SetNotAuthorizedErrorAsync(this IRequestContext httpContext, IResponseStream message)
+        {
+            return httpContext.SetResponseAsync(StatusCodes.Status401Unauthorized, message);
+        }
+
         public static Task<bool> SetAccessDeniedErrorAsync(this IRequestContext httpContext, IResponseStream message)
         {
             return httpContext.SetResponseAsync(StatusCodes.Status403Forbidden, message);

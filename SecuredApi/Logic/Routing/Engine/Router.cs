@@ -30,16 +30,14 @@ namespace SecuredApi.Logic.Routing.Engine
             var routingRecord = routeInfo.RouteRecord;
             using var processingContext = new RequestContext(routingRecord.Groups, routeInfo.RemainingPath, httpContext);
 
-            if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest))
+            if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
+                && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))
             {
-                if (await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))
-                {
-                    await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnSuccess);
-                }
-                else
-                {
-                    await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnError);
-                }
+                await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnSuccess);
+            }
+            else
+            {
+                await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnError);
             }
             await SendResponseAsync(processingContext);
         }

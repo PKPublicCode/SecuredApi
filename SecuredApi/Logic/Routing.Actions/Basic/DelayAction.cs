@@ -12,23 +12,20 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Threading.Tasks;
+namespace SecuredApi.Logic.Routing.Actions.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+public class DelayAction : IAction
 {
-    public class DelayAction : IAction
+    private readonly int _milliseconds;
+
+    public DelayAction(DelayActionSettings settings)
     {
-        private readonly int _milliseconds;
+        _milliseconds = settings.Milliseconds;
+    }
 
-        public DelayAction(DelayActionSettings settings)
-        {
-            _milliseconds = settings.Milliseconds;
-        }
-
-        public async Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            await Task.Delay(_milliseconds);
-            return true;
-        }
+    public async Task<bool> ExecuteAsync(IRequestContext context)
+    {
+        await Task.Delay(_milliseconds);
+        return true;
     }
 }

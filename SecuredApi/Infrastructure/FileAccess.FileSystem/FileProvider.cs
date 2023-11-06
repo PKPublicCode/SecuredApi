@@ -12,31 +12,35 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using SecuredApi.Logic.FileAccess;
 using SecuredApi.Logic.Common;
+using Microsoft.Extensions.Options;
 
-namespace SecuredApi.Infrastructure.FileAccess.FileSystem
+namespace SecuredApi.Infrastructure.FileAccess.FileSystem;
+
+public class FileProvider<T> : IFileProvider<T>
 {
-    public class FileProvider<T> : IFileProvider<T>
+    public readonly FileProviderConfig _config;
+
+    public FileProvider(IOptions<FileProviderConfig<T>> config)
     {
-        public Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+        _config = config.Value;
+    }
+
+    public Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+    {
+        try
         {
-            try
-            {
-                return Task.FromResult(new StreamResult(File.OpenRead(fileId)));
-            }
-            catch(Exception e) 
-                when (e is DirectoryNotFoundException 
-                      || e is PathTooLongException
-                      || e is NotSupportedException
-                      || e is System.IO.FileNotFoundException)
-            {
-                throw new SecuredApi.Logic.FileAccess.FileNotFoundException("Invalid file id", e);
-            }
+            fileId = Path.Combine(_config.BasePath, fileId);
+            return Task.FromResult(new StreamResult(File.OpenRead(fileId)));
+        }
+        catch(Exception e) 
+            when (e is DirectoryNotFoundException 
+                  || e is PathTooLongException
+                  || e is NotSupportedException
+                  || e is System.IO.FileNotFoundException)
+        {
+            throw new Logic.FileAccess.FileNotFoundException("Invalid file id", e);
         }
     }
 }

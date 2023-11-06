@@ -49,12 +49,12 @@ namespace SecuredApi.Logic.Routing.Json
             }
             catch(RouteConfigurationException e)
             {
-                _logger.LogError("Error during parsing route configuration file", e);
+                _logger.LogError(e, "Error during parsing route configuration file");
                 throw;
             }
             catch(Exception e)
             {
-                _logger.LogError("Unknown error during loading or parsing rote", e);
+                _logger.LogError(e, "Unknown error during loading or parsing rote");
                 throw new RouteConfigurationException("Error during loading or parsing route configuration", e);
             }
         }

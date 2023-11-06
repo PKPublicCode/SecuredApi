@@ -12,26 +12,23 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Common;
 
-namespace SecuredApi.Logic.Common
+public ref struct DisposeGuard<T>
+    where T: class, IDisposable
 {
-    public ref struct DisposeGuard<T>
+    private T? _value;
+    public T Value => _value ?? throw new InvalidOperationException("Object reset");
+    public void Reset() => _value = null;
+    public void Dispose() => _value?.Dispose();
+    public DisposeGuard(T value) => _value = value;
+}
+
+public static class DisposableGuard
+{
+    public static DisposeGuard<T> MakeGuard<T>(this T value)
         where T: class, IDisposable
     {
-        private T? _value;
-        public T Value => _value ?? throw new InvalidOperationException("Object reset");
-        public void Reset() => _value = null;
-        public void Dispose() => _value?.Dispose();
-        public DisposeGuard(T value) => _value = value;
-    }
-
-    public static class DisposableGuard
-    {
-        public static DisposeGuard<T> MakeGuard<T>(this T value)
-            where T: class, IDisposable
-        {
-            return new DisposeGuard<T>(value);
-        }
+        return new DisposeGuard<T>(value);
     }
 }

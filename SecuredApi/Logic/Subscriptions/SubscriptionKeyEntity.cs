@@ -12,15 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Subscriptions;
 
-namespace SecuredApi.Logic.Subscriptions
+public class SubscriptionKeyEntity
 {
-    public class SubscriptionKeyEntity
-    {
-        public string SubsctiprionKey { get; init; } = null!;
-        public Guid SubscriptionId { get; init; }
-        public Guid ConsumerId { get; init; }
-        public Guid[] Routes { get; init; } = Array.Empty<Guid>();
-    }
+    public string HashedKey { get; init; } = null!;
+    public Guid SubscriptionId { get; init; }
+    public Guid ConsumerId { get; init; }
+    public Guid[] Routes { get; init; } = Array.Empty<Guid>();
 }

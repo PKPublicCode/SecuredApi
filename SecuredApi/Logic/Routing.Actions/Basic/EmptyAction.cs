@@ -12,15 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Threading.Tasks;
+namespace SecuredApi.Logic.Routing.Actions.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+public class EmptyAction : IAction
 {
-    public class EmptyAction : IAction
+    public Task<bool> ExecuteAsync(IRequestContext context)
     {
-        public Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            return Task.FromResult(true);
-        }
+        return Task.FromResult(true);
     }
 }

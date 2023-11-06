@@ -12,36 +12,31 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic
+namespace SecuredApi.Logic.Routing.Actions.Basic;
+
+public class CheckIPsAction : IAction
 {
-    public class CheckIPsAction : IAction
+    private readonly HashSet<string> _whiteList;
+    private readonly int _noAccessStatusCode;
+    private readonly string _noAccessResponseBody;
+
+    public CheckIPsAction(CheckIPsActionSettings settings)
     {
-        private readonly HashSet<string> _whiteList;
-        private readonly int _noAccessStatusCode;
-        private readonly string _noAccessResponseBody;
+        _whiteList = settings.WhiteList;
+        _noAccessStatusCode = settings.NoAccessStatusCode;
+        _noAccessResponseBody = settings.NoAccessResponseBody;
+    }
 
-        public CheckIPsAction(CheckIPsActionSettings settings)
+    public Task<bool> ExecuteAsync(IRequestContext context)
+    {
+        var current = context.ConnectionInfo.RemoteIpAddress?.ToString()
+            ?? string.Empty;
+        if(_whiteList.Contains(current))
         {
-            _whiteList = settings.WhiteList;
-            _noAccessStatusCode = settings.NoAccessStatusCode;
-            _noAccessResponseBody = settings.NoAccessResponseBody;
+            return Task.FromResult(true);
         }
-
-        public Task<bool> ExecuteAsync(IRequestContext context)
-        {
-            var current = context.ConnectionInfo.RemoteIpAddress?.ToString()
-                ?? string.Empty;
-            if(_whiteList.Contains(current))
-            {
-                return Task.FromResult(true);
-            }
-            return context.SetResponseAsync(_noAccessStatusCode, _noAccessResponseBody);
-        }
+        return context.SetResponseAsync(_noAccessStatusCode, _noAccessResponseBody);
     }
 }

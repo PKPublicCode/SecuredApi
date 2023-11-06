@@ -1,0 +1,244 @@
+﻿{
+  "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
+  "title": "Global",
+  "preRequestActions": [
+    {
+      "name": "SetRequestHeader",
+      "settings": {
+        "key": "X-COMMON-REQUEST-HEADER",
+        "value": "CommonRequestHeaderValue"
+      }
+    }
+  ],
+  "onRequestErrorActions": [
+    {
+      "name": "SetResponseHeader",
+      "settings": {
+        "key": "X-COMMON-ON-ERROR-HEADER",
+        "value": "Gateway Rejected Your Call"
+      }
+    }
+  ],
+  "onRequestSuccessActions": [
+    {
+      "name": "SetResponseHeader",
+      "settings": {
+        "key": "X-COMMON-RESPONSE-HEADER",
+        "value": "CommonResponseHeaderValue"
+      }
+    }
+  ],
+  "routesGroups": [
+    {
+      "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
+      "title": "Public responses",
+      "routes": [
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/echo/exact"
+          },
+          "actions": [
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "Echo exact route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/echo/delay"
+          },
+          "actions": [
+            {
+              "name": "Delay",
+              "settings": {
+                "Milliseconds": 300
+              }
+            },
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "Public delay route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/echo/wildcard/*"
+          },
+          "actions": [
+            {
+              "name": "CheckIPs",
+              "settings": {
+                "whiteList": [ "20.20.20.21" ]
+              }
+            },
+            {
+              "name": "SetResponse",
+              "settings": {
+                "httpCode": 200,
+                "body": "Echo wildcard route"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
+          "title": "Call to remote endpoint",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/remote/wildcard/*"
+          },
+          "actions": [
+            {
+              "name": "RemoteCall",
+              "settings": {
+                "path": "$(EchoPath)",
+                "method": "get"
+              }
+            },
+            {
+              "name": "SetResponseHeader",
+              "settings": {
+                "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
+                "value": "PublicRedirectResponseHeaderValue"
+              }
+            },
+            {
+              "name": "SuppressResponseHeaders",
+              "settings": {
+                "Headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f4-4a39-87a1-b5853e37faf2",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/content/exact"
+          },
+          "actions": [
+            {
+              "name": "ReturnStaticFile",
+              "settings": {
+                "FileName": "StaticFiles/welcome.html"
+              }
+            }
+          ]
+        },
+        {
+          "id": "d6a3e9e8-a6f4-4a39-87a1-b5853e37faf3",
+          "routeKey": {
+            "method": "get",
+            "path": "/public/content/wildcard/*"
+          },
+          "actions": [
+            {
+              "name": "ReturnStaticFile",
+              "settings": {
+                "Path": "StaticFiles/WildcardContent",
+                "NotFoundMessage": "This is wrong file url"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "602352d4-56e8-4269-965f-1290a92df903",
+      "title": "Private routes",
+      "preRequestActions": [
+        {
+          "name": "CheckSubscription",
+          "settings": {
+            "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
+            "ErrorNotAuthorizedBody": "Subscription key not set or invalid",
+            "ErrorAccessDeniedBody": "Call Not Allowed"
+          }
+        },
+        {
+          "name": "RunConsumerActions",
+          "settings": {
+          }
+        }
+      ],
+      "routesGroups": [
+        {
+          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
+          "title": "API with redirect. Used in Integration Test",
+          "routes": [
+            {
+              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/redirect/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "777b8aea-5d39-4070-88e9-1caa87d516a2",
+          "title": "Secured api 2",
+          "routes": [
+            {
+              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/notallowed/wildcard/*"
+              },
+              "actions": [
+                {
+                  "name": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notFoundRoute": {
+    "id": "159e5999-e200-43a6-a377-d248c524c688",
+    "actions": [
+      {
+        "name": "SetResponseHeader",
+        "settings": {
+          "key": "X-NOTFOUND-RESPONSE-HEADER",
+          "value": "NotFoundResponseHeaderValue"
+        }
+      },
+      {
+        "name": "SetResponse",
+        "settings": {
+          "httpCode": 404,
+          "body": "Route not found"
+        }
+      }
+    ]
+  }
+}

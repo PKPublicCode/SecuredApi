@@ -38,7 +38,6 @@ namespace SecuredApi.WebApps.Gateway
             services.AddApplicationInsightsTelemetry();
             services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
             services.ConfigureRoutingHttpClients();
-            services.ConfigureAzureSubscriptionManagement(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

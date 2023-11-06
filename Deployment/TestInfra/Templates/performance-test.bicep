@@ -5,7 +5,8 @@ param servicesRgName string = 'secureapi'
 param sharedRgName string = 'secureapi-shared'
 param commonNameEnding string
 param appPlanSku string = 'S1'
-param deployLatestFromDocker bool = true
+param gatewayInstanceNum int = 1
+param dockerTag string = 'latest'
 
 
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-01-01' = {
@@ -37,8 +38,11 @@ module gatewayService './Modules/gateway-service.bicep' = {
     logAnalyticsResourceId: sharedResources.outputs.logAnalyticsWorkspaceId
     configStorageName: sharedResources.outputs.configStorageName
     configStorageRG: sharedRG.name
-    deployLatestFromDocker: deployLatestFromDocker
-    configureSubscriptionManagement: true
+    dockerTag: dockerTag
+    configureSubscriptions: true
+    subscriptionKeysSalt: '5b951d0869cc4d2da993b6d188197c71'
+    configureConsumers: true
+    instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
       GlobalVariables__EchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
     }
@@ -56,26 +60,34 @@ module echoService './Modules/gateway-service.bicep' = {
     logAnalyticsResourceId: sharedResources.outputs.logAnalyticsWorkspaceId
     configStorageName: sharedResources.outputs.configStorageName
     configStorageRG: sharedRG.name
-    deployLatestFromDocker: deployLatestFromDocker
+    dockerTag: dockerTag
+  }
+}
+
+//Can't create resource directly in this bicep because current scope is subscription. Have to use module
+module loadTesting './Modules/load-tests.bicep' = {
+  name: 'LoadTesting'
+  scope: performanceTestsRG
+  params: {
+    bundleName: 'shared'
+    nameEnding: commonNameEnding
   }
 }
 
 output gateway object = {
   appServiceName: gatewayService.outputs.appServiceName
   hostEndpoint: gatewayService.outputs.hostEndpoint
-  configBlobContainerUrl: gatewayService.outputs.configBlobContainerUrl
-  configBlobContainerName: gatewayService.outputs.configBlobContainernName
-  tableEndpoint: gatewayService.outputs.tableEndpoint
-  consumersTable: gatewayService.outputs.consumersTable
-  subscriptionsTable: gatewayService.outputs.subscriptionsTable
-  subscriptionKeysTable: gatewayService.outputs.subscriptionKeysTable
+  blobs: gatewayService.outputs.blobs
 }
 
 output echo object = {
   appServiceName: echoService.outputs.appServiceName
   hostEndpoint: echoService.outputs.hostEndpoint
-  configBlobContainerUrl: echoService.outputs.configBlobContainerUrl
-  configBlobContainerName: echoService.outputs.configBlobContainernName
+  blobs: echoService.outputs.blobs
+}
+
+output loadTesting object = {
+  name: loadTesting.outputs.resourceName
 }
 
 output sharedRgName string = sharedRG.name

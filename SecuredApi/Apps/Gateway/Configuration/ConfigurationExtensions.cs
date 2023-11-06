@@ -19,7 +19,12 @@ public static class ConfigurationExtensions
 {
     public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
     {
-        return config.GetSection(name)
-            ?? throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
+        var result = config.GetSection(name);
+
+        if (!result.Exists())
+        {
+            throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
+        }
+        return result;
     }
 }

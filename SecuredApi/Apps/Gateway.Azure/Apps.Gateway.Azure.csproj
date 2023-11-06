@@ -11,6 +11,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Gateway\Apps.Gateway.csproj" />
     <ProjectReference Include="..\..\Infrastructure\FileAccess.AzureStorage\Infrastructure.FileAccess.AzureStorage.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Subscriptions.TableStorage\Infrastructure.Subscriptions.TableStorage.csproj" />
   </ItemGroup>
 </Project>

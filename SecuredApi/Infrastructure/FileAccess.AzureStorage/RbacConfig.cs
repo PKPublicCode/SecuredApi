@@ -12,12 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Infrastructure.FileAccess.AzureStorage;
 
-namespace SecuredApi.Infrastructure.FileAccess.AzureStorage
+public class RbacConfig
 {
-    public class RbacConfig
-    {
-        public string Uri { get; init; } = null!;
-    }
+    public string Uri { get; init; } = null!;
 }

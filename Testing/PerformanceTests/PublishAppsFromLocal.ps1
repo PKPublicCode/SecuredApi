@@ -3,9 +3,9 @@ param (
     [switch] $Rebuild = $false
 )
 
-$gwApp = $env:PERFORMANCETEST_GATEWAY_APPSERVICE_NAME
-$echoApp = $env:PERFORMANCETEST_ECHOSRV_APPSERVICE_NAME
-$mainRg = $env:PERFORMANCETEST_RG_NAME 
+$gwApp = $deploymentResults.gateway.appServiceName
+$echoApp = $deploymentResults.echo.appServiceName
+$mainRg = $deploymentResults.performanceTestRgName
 
 if (-not $gwApp) { 
     Write-Host("`$env:PERFORMANCETEST_GATEWAY_APPSERVICE_NAME is not set")
@@ -24,7 +24,7 @@ if ($Rebuild -or !$fileExists) {
     if ($fileExists) {
         Remove-Item $zipPath
     }
-    # re-using (copy-paste) old scrips...
+    # re-using (copy-paste of) old scrips...
     #build
     dotnet publish ./../../SecuredApi/WebApps/Gateway/WebApps.Gateway.csproj -c Release -o ./../../Build/Output/Gateway/bin
 
