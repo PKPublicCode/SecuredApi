@@ -7,13 +7,13 @@ Measure cheap pre-production and production-grade configuration. Key parts:
 
 **Echo service**: Service under Gateway protection. Configured to respond predefined message ~3kb with 300 ms delay (mimics some workload) 
 
-**Jmeter script**: plays role of client. It calls endpoint with ~1kb payload. URL path ending is auto generated, to reduce possible caching side effects. Only one api key is used, so potentially it could be subject for caching on Azure Storage Account side. 200 threads, Loop count: 200 
+**Jmeter script**: plays role of client. It calls endpoint with ~1kb payload. URL path ending is auto generated to reduce possible caching side effects. Only one api key is used, so potentially it could be subject for caching on Azure Storage Account side. 200 threads, Loop count: 200 
 
 ### Results:
 
 Scenario A: Jmeter calls via HTTPs Echo Service directly. Numbers are used as a performance base line, and overal measure of whole infrastructure overhead.
 
-Scenario B: Jmeter execute HTTPs calls via Gateway. Gateway is hosted on 3 instances (smaller and cheaper production grade infra)
+Scenario B: Jmeter execute HTTPs calls via Gateway. Gateway is hosted on 3 instances
 
 Scenario C: Same as scenario B, but Gateway hosted on 1 instance. Kind of PPE environment
 
@@ -29,7 +29,7 @@ Azure region: West Europe
 
 Azure Storage Account, Kind: V2
 
-App service plans: SKU P0V3, Linux. 
+App service plans: SKU P0V3, Linux. Chosen as mallest and cheapest production grade sku
 
 Api Gateway and Echo Service deployed to own app service plans, deployed with docker image
 
