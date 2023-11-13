@@ -12,28 +12,25 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text.Json;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+internal struct ActionsEnumerable: IEnumerable<IAction>
 {
-    internal struct ActionsEnumerable: IEnumerable<IAction>
+    private JsonElement _json;
+    private readonly ActionsEnumeratorConfig _config;
+
+    public ActionsEnumerable(JsonElement json, ActionsEnumeratorConfig config)
     {
-        private JsonElement _json;
-        private readonly ActionsEnumeratorConfig _config;
-
-        public ActionsEnumerable(JsonElement json, ActionsEnumeratorConfig config)
-        {
-            _json = json;
-            _config = config;
-        }
-
-        public ActionsEnumerator GetEnumerator() => new ActionsEnumerator(_json, _config);
-
-        IEnumerator<IAction> IEnumerable<IAction>.GetEnumerator() => GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        _json = json;
+        _config = config;
     }
+
+    public ActionsEnumerator GetEnumerator() => new ActionsEnumerator(_json, _config);
+
+    IEnumerator<IAction> IEnumerable<IAction>.GetEnumerator() => GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

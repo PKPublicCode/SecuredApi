@@ -49,20 +49,20 @@ internal struct ActionsEnumerator : IEnumerator<IAction>
         if (_enumerator.MoveNext())
         {
             var actionJson = _enumerator.Current;
-            if (!actionJson.TryGetProperty(ActionTypePropertyName, out var prop))
+            if (!actionJson.TryGetProperty(ActionTypePropertyName, out var nameJson))
             {
-                throw new RouteConfigurationException("Action name not set");
+                throw new RouteConfigurationException("Action type is not set");
             }
-            string type = prop.GetString() 
-                ?? throw new RouteConfigurationException("Action name is null");
+
+            string type = nameJson.GetString() 
+                ?? throw new RouteConfigurationException("Action type is null");
+
             var settingsType = _config.ActionFactory.GetSettingsType(type);
-            if (!actionJson.TryGetProperty(ActionSettingsPropertyName, out prop))
-            {
-                throw new RouteConfigurationException("Settings not configured");
-            }
-            var settings = JsonSerializer.Deserialize(prop.GetRawText(), settingsType, _config.SerializerOptions)
+            var settings = JsonSerializer.Deserialize(actionJson.GetRawText(), settingsType, _config.SerializerOptions)
                 ?? throw new RouteConfigurationException("Invalid action settings");
+
             _current = _config.ActionFactory.CreateAction(type, settings);
+
             return true;
         }
         return false;

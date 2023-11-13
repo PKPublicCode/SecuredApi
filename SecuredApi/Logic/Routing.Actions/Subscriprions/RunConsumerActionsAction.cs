@@ -56,6 +56,7 @@ public class RunConsumerActionsAction : IScopedAction<EmptySettings>
         }
         catch(Exception e)
         {
+            //ToDo Consider don't hide and re-throw exception
             _logger.LogError(e, "Error parsing consumer actions");
             return await context.ReturnDataInconsistencyError();
         }

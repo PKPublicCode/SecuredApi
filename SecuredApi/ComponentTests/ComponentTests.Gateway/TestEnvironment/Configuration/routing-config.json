@@ -2,28 +2,22 @@
   "preRequestActions": [
     {
       "type": "SetRequestHeader",
-      "settings": {
-        "key": "X-COMMON-REQUEST-HEADER",
-        "value": "CommonRequestHeaderValue"
-      }
+      "key": "X-COMMON-REQUEST-HEADER",
+      "value": "CommonRequestHeaderValue"
     }
   ],
   "onRequestErrorActions": [
     {
       "type": "SetResponseHeader",
-      "settings": {
-        "key": "X-COMMON-ON-ERROR-HEADER",
-        "value": "Gateway Rejected Your Call"
-      }
+      "key": "X-COMMON-ON-ERROR-HEADER",
+      "value": "Gateway Rejected Your Call"
     }
   ],
   "onRequestSuccessActions": [
     {
       "type": "SetResponseHeader",
-      "settings": {
-        "key": "X-COMMON-RESPONSE-HEADER",
-        "value": "CommonResponseHeaderValue"
-      }
+      "key": "X-COMMON-RESPONSE-HEADER",
+      "value": "CommonResponseHeaderValue"
     }
   ],
   "routesGroups": [
@@ -33,16 +27,12 @@
       "preRequestActions": [
         {
           "type": "CheckSubscription",
-          "settings": {
-            "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
-            "ErrorNotAuthorizedBody": "Subscription key not set or invalid",
-            "ErrorAccessDeniedBody": "Call Not Allowed"
-          }
+          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
+          "errorNotAuthorizedBody": "Subscription key not set or invalid",
+          "errorAccessDeniedBody": "Call Not Allowed"
         },
         {
-          "type": "RunConsumerActions",
-          "settings": {
-          }
+          "type": "RunConsumerActions"
         }
       ],
       "routesGroups": [
@@ -62,10 +52,8 @@
                   "actions": [
                     {
                       "type": "RemoteCall",
-                      "settings": {
-                        "path": "$(EchoPath)",
-                        "method": "get"
-                      }
+                      "path": "$(EchoPath)",
+                      "method": "get"
                     }
                   ]
                 }
@@ -74,7 +62,7 @@
           ]
         },
         {
-          "description": "Rote group to api that not allowed by existing subscriptions",
+          "description": "Rote group that is not allowed by existing subscriptions",
           "routes": [
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
@@ -85,10 +73,8 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "settings": {
-                    "path": "$(EchoPath)",
-                    "method": "get"
-                  }
+                  "path": "$(EchoPath)",
+                  "method": "get"
                 }
               ]
             }
@@ -107,10 +93,8 @@
           "actions": [
             {
               "type": "SetResponse",
-              "settings": {
-                "httpCode": 200,
-                "body": "Echo exact route"
-              }
+              "httpCode": 200,
+              "body": "Echo exact route"
             }
           ]
         },
@@ -122,16 +106,12 @@
           "actions": [
             {
               "type": "Delay",
-              "settings": {
-                "Milliseconds": 300
-              }
+              "milliseconds": 300
             },
             {
               "type": "SetResponse",
-              "settings": {
-                "httpCode": 200,
-                "body": "Public delay route"
-              }
+              "httpCode": 200,
+              "body": "Public delay route"
             }
           ]
         },
@@ -143,16 +123,12 @@
           "actions": [
             {
               "type": "CheckIPs",
-              "settings": {
-                "whiteList": [ "20.20.20.21" ]
-              }
+              "whiteList": [ "20.20.20.21" ]
             },
             {
               "type": "SetResponse",
-              "settings": {
-                "httpCode": 200,
-                "body": "Echo wildcard route"
-              }
+              "httpCode": 200,
+              "body": "Echo wildcard route"
             }
           ]
         },
@@ -165,23 +141,17 @@
           "actions": [
             {
               "type": "RemoteCall",
-              "settings": {
-                "path": "$(EchoPath)",
-                "method": "get"
-              }
+              "path": "$(EchoPath)",
+              "method": "get"
             },
             {
               "type": "SetResponseHeader",
-              "settings": {
-                "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
-                "value": "PublicRedirectResponseHeaderValue"
-              }
+              "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
+              "value": "PublicRedirectResponseHeaderValue"
             },
             {
               "type": "SuppressResponseHeaders",
-              "settings": {
-                "Headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
-              }
+              "headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
             }
           ]
         },
@@ -193,9 +163,7 @@
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "settings": {
-                "FileName": "StaticFiles/welcome.html"
-              }
+              "fileName": "StaticFiles/welcome.html"
             }
           ]
         },
@@ -207,10 +175,8 @@
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "settings": {
-                "Path": "StaticFiles/WildcardContent",
-                "NotFoundMessage": "This is wrong file url"
-              }
+              "path": "StaticFiles/WildcardContent",
+              "notFoundMessage": "This is wrong file url"
             }
           ]
         }
@@ -220,17 +186,13 @@
   "routeNotFoundActions": [
     {
       "type": "SetResponseHeader",
-      "settings": {
-        "key": "X-NOTFOUND-RESPONSE-HEADER",
-        "value": "NotFoundResponseHeaderValue"
-      }
+      "key": "X-NOTFOUND-RESPONSE-HEADER",
+      "value": "NotFoundResponseHeaderValue"
     },
     {
       "type": "SetResponse",
-      "settings": {
-        "httpCode": 404,
-        "body": "Route not found"
-      }
+      "httpCode": 404,
+      "body": "Route not found"
     }
   ]
 }

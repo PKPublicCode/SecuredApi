@@ -17,9 +17,7 @@
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "settings": {
-                "FileName": "StaticFiles/welcome.html"
-              }
+              "fileName": "StaticFiles/welcome.html"
             }
           ]
         }
@@ -29,10 +27,8 @@
   "routeNotFoundActions": [
     {
       "type": "SetResponse",
-      "settings": {
-        "httpCode": 501,
-        "Body": "Route not configured"
-      }
+      "httpCode": 501,
+      "body": "Route not configured"
     }
   ]
 }
