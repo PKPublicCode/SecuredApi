@@ -12,22 +12,18 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using System.Threading;
 
-namespace SecuredApi.Logic.Routing
+namespace SecuredApi.Logic.Routing;
+
+public interface IRequestContext
 {
-    public interface IRequestContext
-    {
-        public HttpRequest Request { get; }
-        public  IResponse Response { get; }
-        public IReadOnlyList<RoutesGroup> RoutesGroups { get; }
-        public IServiceProvider ServiceProvider { get; }
-        public string RemainingPath { get; }
-        public IDictionary<string, object> Variables { get; }
-        public CancellationToken CancellationToken { get; }
-        public ConnectionInfo ConnectionInfo { get; }
-    }
+    public HttpRequest Request { get; }
+    public IResponse Response { get; }
+    public IReadOnlyList<RoutesGroup> RoutesGroups { get; }
+    public IServiceProvider ServiceProvider { get; }
+    public string RemainingPath { get; }
+    public IDictionary<string, object> Variables { get; }
+    public CancellationToken CancellationToken { get; }
+    public ConnectionInfo ConnectionInfo { get; }
 }

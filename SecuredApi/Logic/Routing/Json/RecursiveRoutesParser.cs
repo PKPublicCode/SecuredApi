@@ -78,6 +78,7 @@ internal class RecursiveRoutesParser
             {
                 throw MakeException("Route group can't have both 'routes' and 'routeGroups' properties");
             }
+
             foreach (var innerRouteGroupJson in innerRouteGroupsJson.EnumerateArray())
             {
                 ParseRouteGroup(innerRouteGroupJson);
@@ -157,7 +158,7 @@ internal class RecursiveRoutesParser
     {
         if (!GetProperty(json, propertyName).TryGetGuid(out var result))
         {
-            throw MakeException($"Required property is invalid {0}", propertyName);
+            throw MakeException("Required property is invalid {0}", propertyName);
         }
         return result;
     }
@@ -167,7 +168,7 @@ internal class RecursiveRoutesParser
         var result = GetProperty(json, propertyName).GetString();
         if (result == null)
         {
-            throw MakeException($"Required property is invalid {0}", propertyName);
+            throw MakeException("Required property is invalid {0}", propertyName);
         }
         return result;
     }
@@ -176,7 +177,7 @@ internal class RecursiveRoutesParser
     {
         if (!json.TryGetProperty(name, out var result))
         {
-            throw MakeException($"Required property not set: {0}", name);
+            throw MakeException("Required property not set: {0}", name);
         }
         return result;
     }

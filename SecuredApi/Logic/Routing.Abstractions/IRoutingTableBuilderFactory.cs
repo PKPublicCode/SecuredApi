@@ -12,12 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Logic.Routing
+public interface IRoutingTableBuilderFactory
 {
-    public interface IRoutingTableBuilderFactory
-    {
-        IRoutingTableBuilder Create();
-    }
+    IRoutingTableBuilder Create();
 }
