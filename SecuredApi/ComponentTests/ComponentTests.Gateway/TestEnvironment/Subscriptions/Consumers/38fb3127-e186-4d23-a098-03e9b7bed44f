@@ -3,7 +3,7 @@
   "Subscriptions": [ "894d26a2-f5e8-40b5-b739-316217157c1c" ],
   "PreRequestActions": [
     {
-      "name": "SetResponseHeader",
+      "type": "SetResponseHeader",
       "settings": {
         "key": "X-CONSUMER-SPECIFIC-HEADER",
         "value": "This is test client 1"

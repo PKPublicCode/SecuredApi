@@ -3,7 +3,7 @@
   "title": "Global",
   "preRequestActions": [
     {
-      "name": "SetRequestHeader",
+      "type": "SetRequestHeader",
       "settings": {
         "key": "X-COMMON-REQUEST-HEADER",
         "value": "CommonRequestHeaderValue"
@@ -12,7 +12,7 @@
   ],
   "onRequestErrorActions": [
     {
-      "name": "SetResponseHeader",
+      "type": "SetResponseHeader",
       "settings": {
         "key": "X-COMMON-ON-ERROR-HEADER",
         "value": "Gateway Rejected Your Call"
@@ -21,7 +21,7 @@
   ],
   "onRequestSuccessActions": [
     {
-      "name": "SetResponseHeader",
+      "type": "SetResponseHeader",
       "settings": {
         "key": "X-COMMON-RESPONSE-HEADER",
         "value": "CommonResponseHeaderValue"
@@ -41,7 +41,7 @@
           },
           "actions": [
             {
-              "name": "SetResponse",
+              "type": "SetResponse",
               "settings": {
                 "httpCode": 200,
                 "body": "Echo exact route"
@@ -57,13 +57,13 @@
           },
           "actions": [
             {
-              "name": "Delay",
+              "type": "Delay",
               "settings": {
                 "Milliseconds": 300
               }
             },
             {
-              "name": "SetResponse",
+              "type": "SetResponse",
               "settings": {
                 "httpCode": 200,
                 "body": "Public delay route"
@@ -79,13 +79,13 @@
           },
           "actions": [
             {
-              "name": "CheckIPs",
+              "type": "CheckIPs",
               "settings": {
                 "whiteList": [ "20.20.20.21" ]
               }
             },
             {
-              "name": "SetResponse",
+              "type": "SetResponse",
               "settings": {
                 "httpCode": 200,
                 "body": "Echo wildcard route"
@@ -102,21 +102,21 @@
           },
           "actions": [
             {
-              "name": "RemoteCall",
+              "type": "RemoteCall",
               "settings": {
                 "path": "$(EchoPath)",
                 "method": "get"
               }
             },
             {
-              "name": "SetResponseHeader",
+              "type": "SetResponseHeader",
               "settings": {
                 "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
                 "value": "PublicRedirectResponseHeaderValue"
               }
             },
             {
-              "name": "SuppressResponseHeaders",
+              "type": "SuppressResponseHeaders",
               "settings": {
                 "Headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
               }
@@ -131,7 +131,7 @@
           },
           "actions": [
             {
-              "name": "ReturnStaticFile",
+              "type": "ReturnStaticFile",
               "settings": {
                 "FileName": "StaticFiles/welcome.html"
               }
@@ -146,7 +146,7 @@
           },
           "actions": [
             {
-              "name": "ReturnStaticFile",
+              "type": "ReturnStaticFile",
               "settings": {
                 "Path": "StaticFiles/WildcardContent",
                 "NotFoundMessage": "This is wrong file url"
@@ -161,7 +161,7 @@
       "title": "Private routes",
       "preRequestActions": [
         {
-          "name": "CheckSubscription",
+          "type": "CheckSubscription",
           "settings": {
             "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
             "ErrorNotAuthorizedBody": "Subscription key not set or invalid",
@@ -169,7 +169,7 @@
           }
         },
         {
-          "name": "RunConsumerActions",
+          "type": "RunConsumerActions",
           "settings": {
           }
         }
@@ -187,7 +187,7 @@
               },
               "actions": [
                 {
-                  "name": "RemoteCall",
+                  "type": "RemoteCall",
                   "settings": {
                     "path": "$(EchoPath)",
                     "method": "get"
@@ -209,7 +209,7 @@
               },
               "actions": [
                 {
-                  "name": "RemoteCall",
+                  "type": "RemoteCall",
                   "settings": {
                     "path": "$(EchoPath)",
                     "method": "get"
@@ -226,14 +226,14 @@
     "id": "159e5999-e200-43a6-a377-d248c524c688",
     "actions": [
       {
-        "name": "SetResponseHeader",
+        "type": "SetResponseHeader",
         "settings": {
           "key": "X-NOTFOUND-RESPONSE-HEADER",
           "value": "NotFoundResponseHeaderValue"
         }
       },
       {
-        "name": "SetResponse",
+        "type": "SetResponse",
         "settings": {
           "httpCode": 404,
           "body": "Route not found"

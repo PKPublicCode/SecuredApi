@@ -20,7 +20,7 @@
           },
           "actions": [
             {
-              "name": "ReturnStaticFile",
+              "type": "ReturnStaticFile",
               "settings": {
                 "FileName": "StaticFiles/welcome.html"
               }
@@ -34,7 +34,7 @@
     "id": "159e5999-e200-43a6-a377-d248c524c688",
     "actions": [
       {
-        "name": "SetResponse",
+        "type": "SetResponse",
         "settings": {
           "httpCode": 501,
           "Body": "Route not configured"
