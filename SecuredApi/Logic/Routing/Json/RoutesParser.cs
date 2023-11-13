@@ -19,44 +19,43 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+public class RoutesParser : IRoutesParser
 {
-    public class RoutesParser : IRoutesParser
+    private readonly IActionFactory _actionFactory;
+    private readonly ILogger _logger;
+    private readonly IRoutingTableBuilderFactory _routingBuilderFactory;
+    private readonly RoutesParserConfig _jsonConfig;
+
+    public RoutesParser(IActionFactory actionFactory,
+                            RoutesParserConfig jsonConfig,
+                            ILogger<RoutesParser> logger,
+                            IRoutingTableBuilderFactory routingBuilderFactory
+        )
     {
-        private readonly IActionFactory _actionFactory;
-        private readonly ILogger _logger;
-        private readonly IRoutingTableBuilderFactory _routingBuilderFactory;
-        private readonly RoutesParserConfig _jsonConfig;
+        _actionFactory = actionFactory;
+        _logger = logger;
+        _routingBuilderFactory = routingBuilderFactory;
+        _jsonConfig = jsonConfig;
+    }
 
-        public RoutesParser(IActionFactory actionFactory,
-                                RoutesParserConfig jsonConfig,
-                                ILogger<RoutesParser> logger,
-                                IRoutingTableBuilderFactory routingBuilderFactory
-            )
+    public async Task<IRoutingTable> ParseAsync(Stream routeCfg, CancellationToken cancellationToken)
+    {
+        try
         {
-            _actionFactory = actionFactory;
-            _logger = logger;
-            _routingBuilderFactory = routingBuilderFactory;
-            _jsonConfig = jsonConfig;
+            using var document = await JsonDocument.ParseAsync(routeCfg, default, cancellationToken);
+            return RecursiveRoutesParser.Parse(document.RootElement, _actionFactory, _jsonConfig, _routingBuilderFactory.Create());
         }
-
-        public async Task<IRoutingTable> ParseAsync(Stream routeCfg, CancellationToken cancellationToken)
+        catch(RouteConfigurationException e)
         {
-            try
-            {
-                using var document = await JsonDocument.ParseAsync(routeCfg, default, cancellationToken);
-                return RecursiveRoutesParser.Parse(document.RootElement, _actionFactory, _jsonConfig, _routingBuilderFactory.Create());
-            }
-            catch(RouteConfigurationException e)
-            {
-                _logger.LogError(e, "Error during parsing route configuration file");
-                throw;
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, "Unknown error during loading or parsing rote");
-                throw new RouteConfigurationException("Error during loading or parsing route configuration", e);
-            }
+            _logger.LogError(e, "Error during parsing route configuration file");
+            throw;
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, "Unknown error during loading or parsing rote");
+            throw new RouteConfigurationException("Error during loading or parsing route configuration", e);
         }
     }
 }

@@ -12,41 +12,37 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 
-namespace SecuredApi.Apps.Gateway.Actions
+namespace SecuredApi.Apps.Gateway.Actions;
+
+public static class ActionFactoryBuilderExtensions
 {
-    public static class ActionFactoryBuilderExtensions
+    public static ActionFactoryBuilder CreateActionFactoryBuilder(this IServiceCollection srv) => new(srv);
+
+    public static IServiceCollection AddActionFactory(this IServiceCollection srv)
     {
-        public static ActionFactoryBuilder CreateActionFactoryBuilder(this IServiceCollection srv) => new(srv);
-
-        public static IServiceCollection AddActionFactory(this IServiceCollection srv)
-        {
-            return srv.CreateDefaultActionsFactory()
-                    .ConfigureActionFactory();
-        }
-
-        public static ActionFactoryBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
-        {
-            return srv.CreateActionFactoryBuilder()
-                .AddAction<RemoteCallAction, RemoteCallActionSettings>("RemoteCall")
-                .AddAction<SetResponseAction, SetResponseActionSettings>("SetResponse")
-                .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
-                .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
-                .AddAction<SetRequestHeaderAction, SetHeaderActionSettings>("SetRequestHeader")
-                .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions")
-                .AddAction<DelayAction, DelayActionSettings>("Delay")
-                .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponseActionSettings>("SetRequestInfoToResponse")
-                .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
-                .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
-                .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
-                .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
-                ;
-        }
-
-        
+        return srv.CreateDefaultActionsFactory()
+                .ConfigureActionFactory();
     }
+
+    public static ActionFactoryBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
+    {
+        return srv.CreateActionFactoryBuilder()
+            .AddAction<RemoteCallAction, RemoteCallActionSettings>("RemoteCall")
+            .AddAction<SetResponseAction, SetResponseActionSettings>("SetResponse")
+            .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
+            .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
+            .AddAction<SetRequestHeaderAction, SetHeaderActionSettings>("SetRequestHeader")
+            .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions")
+            .AddAction<DelayAction, DelayActionSettings>("Delay")
+            .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponseActionSettings>("SetRequestInfoToResponse")
+            .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
+            .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
+            .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
+            .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
+            ;
+    } 
 }
