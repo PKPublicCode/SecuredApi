@@ -24,7 +24,7 @@ public static class Properties
     public const string RoutesGroupIdPropertyName = "id";
 
     public const string ActionsPropertyName = "actions";
-    public const string ActionNamePropertyName = "type";
+    public const string ActionTypePropertyName = "type";
     public const string ActionSettingsPropertyName = "settings";
 
     public const string RouteKeyPropertyName = "routeKey";

@@ -51,20 +51,20 @@ namespace SecuredApi.Logic.Routing.Json
             if (_enumerator.MoveNext())
             {
                 var actionJson = _enumerator.Current;
-                if (!actionJson.TryGetProperty(ActionNamePropertyName, out var prop))
+                if (!actionJson.TryGetProperty(ActionTypePropertyName, out var prop))
                 {
                     throw new RouteConfigurationException("Action name not set");
                 }
-                string name = prop.GetString() 
+                string type = prop.GetString() 
                     ?? throw new RouteConfigurationException("Action name is null");
-                var settingsType = _config.ActionFactory.GetSettingsType(name);
+                var settingsType = _config.ActionFactory.GetSettingsType(type);
                 if (!actionJson.TryGetProperty(ActionSettingsPropertyName, out prop))
                 {
                     throw new RouteConfigurationException("Settings not configured");
                 }
                 var settings = JsonSerializer.Deserialize(prop.GetRawText(), settingsType, _config.SerializerOptions)
                     ?? throw new RouteConfigurationException("Invalid action settings");
-                _current = _config.ActionFactory.CreateAction(name, settings);
+                _current = _config.ActionFactory.CreateAction(type, settings);
                 return true;
             }
             return false;
