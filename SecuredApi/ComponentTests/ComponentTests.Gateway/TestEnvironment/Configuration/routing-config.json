@@ -222,23 +222,20 @@
       ]
     }
   ],
-  "notFoundRoute": {
-    "id": "159e5999-e200-43a6-a377-d248c524c688",
-    "actions": [
-      {
-        "type": "SetResponseHeader",
-        "settings": {
-          "key": "X-NOTFOUND-RESPONSE-HEADER",
-          "value": "NotFoundResponseHeaderValue"
-        }
-      },
-      {
-        "type": "SetResponse",
-        "settings": {
-          "httpCode": 404,
-          "body": "Route not found"
-        }
+  "routeNotFoundActions": [
+    {
+      "type": "SetResponseHeader",
+      "settings": {
+        "key": "X-NOTFOUND-RESPONSE-HEADER",
+        "value": "NotFoundResponseHeaderValue"
       }
-    ]
-  }
+    },
+    {
+      "type": "SetResponse",
+      "settings": {
+        "httpCode": 404,
+        "body": "Route not found"
+      }
+    }
+  ]
 }

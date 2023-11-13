@@ -30,5 +30,5 @@ public static class Properties
     public const string RouteKeyPropertyName = "routeKey";
     public const string RouteIdPropertyName = "id";
 
-    public const string RotFoundRoutePropertyName = "notFoundRoute";
+    public const string NotFoundRouteActionsPropertyName = "routeNotFoundActions";
 }

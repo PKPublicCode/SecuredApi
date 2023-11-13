@@ -30,16 +30,13 @@
       ]
     }
   ],
-  "notFoundRoute": {
-    "id": "159e5999-e200-43a6-a377-d248c524c688",
-    "actions": [
-      {
-        "type": "SetResponse",
-        "settings": {
-          "httpCode": 501,
-          "Body": "Route not configured"
-        }
+  "routeNotFoundActions": [
+    {
+      "type": "SetResponse",
+      "settings": {
+        "httpCode": 501,
+        "Body": "Route not configured"
       }
-    ]
-  }
+    }
+  ]
 }
