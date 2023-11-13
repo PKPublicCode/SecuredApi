@@ -12,15 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
+namespace SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Logic.Routing
+public class RouteRecord
 {
-    public class RouteRecord
-    {
-        public IRequestProcessor RequestProcessor { get; init; } = null!;
-        public Guid RouteId { get; init; }
-        public IReadOnlyList<RoutesGroup> Groups { get; init; } = null!;
-    }
+    public IRequestProcessor RequestProcessor { get; init; } = null!;
+    public Guid RouteId { get; init; }
+    public IReadOnlyList<RoutesGroup> Groups { get; init; } = null!;
 }
