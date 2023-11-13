@@ -16,7 +16,7 @@
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
-            "path": "/*"
+            "path": "/"
           },
           "actions": [
             {
@@ -34,10 +34,10 @@
     "id": "159e5999-e200-43a6-a377-d248c524c688",
     "actions": [
       {
-        "name": "SetRequestInfoToResponse",
+        "name": "SetResponse",
         "settings": {
-          "httpCode": 404,
-          "HeadLine": "Route not found"
+          "httpCode": 501,
+          "Body": "Route not configured"
         }
       }
     ]
