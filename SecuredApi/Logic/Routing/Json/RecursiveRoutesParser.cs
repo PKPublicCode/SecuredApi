@@ -24,7 +24,7 @@ internal class RecursiveRoutesParser
     private readonly IRoutingTableBuilder _builder;
 
     private readonly LinkedList<RoutesGroup> _groups = new();
-    private IReadOnlyList<RoutesGroup>? _currentGroupsList = null;
+    private IReadOnlyList<RoutesGroup> _currentGroupsList = _emptyList;
     private readonly ActionsEnumeratorConfig _config;
     private readonly RoutesParserConfig _jsonConfig;
 
@@ -92,7 +92,7 @@ internal class RecursiveRoutesParser
                 {
                     ParseRoute(routeJson);
                 }
-                _currentGroupsList = null;
+                _currentGroupsList = _emptyList;
             }
         }
 
@@ -107,7 +107,7 @@ internal class RecursiveRoutesParser
         {
             RouteId = Guid.NewGuid(), //Adding fake id, since for not found route it doesn't make any sense
             RequestProcessor = LoadRequestProcessor(routeJson),
-            Groups = _currentGroupsList!
+            Groups = _currentGroupsList
         };
     }
 
@@ -117,7 +117,7 @@ internal class RecursiveRoutesParser
         {
             RouteId = GetGuid(routeJson, RouteIdPropertyName),
             RequestProcessor = LoadRequestProcessor(GetProperty(routeJson, ActionsPropertyName)),
-            Groups = _currentGroupsList!
+            Groups = _currentGroupsList
         };
     }
 
@@ -224,4 +224,6 @@ internal class RecursiveRoutesParser
             Path = path;
         }
     }
+
+    private static IReadOnlyList<RoutesGroup> _emptyList = new List<RoutesGroup>();
 }
