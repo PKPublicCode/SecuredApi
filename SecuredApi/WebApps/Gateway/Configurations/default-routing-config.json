@@ -1,6 +1,5 @@
 {
   "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
-  "title": "Global",
   "preRequestActions": [
   ],
   "onRequestErrorActions": [
@@ -10,7 +9,7 @@
   "routesGroups": [
     {
       "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
-      "title": "Echo responses",
+      "description": "Welcome response",
       "routes": [
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",

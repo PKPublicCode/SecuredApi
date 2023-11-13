@@ -1,6 +1,5 @@
 ﻿{
   "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
-  "title": "Global",
   "preRequestActions": [
     {
       "type": "SetRequestHeader",
@@ -31,7 +30,7 @@
   "routesGroups": [
     {
       "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
-      "title": "Public responses",
+      "description": "Public responses",
       "routes": [
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
@@ -95,7 +94,7 @@
         },
         {
           "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
-          "title": "Call to remote endpoint",
+          "description": "Call to remote endpoint",
           "routeKey": {
             "method": "get",
             "path": "/public/remote/wildcard/*"
@@ -158,7 +157,7 @@
     },
     {
       "id": "602352d4-56e8-4269-965f-1290a92df903",
-      "title": "Private routes",
+      "description": "Private routes",
       "preRequestActions": [
         {
           "type": "CheckSubscription",
@@ -177,7 +176,7 @@
       "routesGroups": [
         {
           "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
-          "title": "API with redirect. Used in Integration Test",
+          "description": "API with redirect. Used in Integration Test",
           "routes": [
             {
               "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
@@ -199,7 +198,7 @@
         },
         {
           "id": "777b8aea-5d39-4070-88e9-1caa87d516a2",
-          "title": "Secured api 2",
+          "description": "Secured api 2",
           "routes": [
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
