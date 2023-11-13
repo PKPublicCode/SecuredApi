@@ -16,19 +16,19 @@ namespace SecuredApi.Logic.Routing.Json;
 
 public static class Properties
 {
+    public const string RoutesGroupIdPropertyName = "id";
     public const string RoutesGroupsPropertyName = "routesGroups";
-    public const string RoutesPropertyName = "routes";
     public const string RoutesGroupPreRequestActions = "preRequestActions";
     public const string RoutesGroupOnErrorActions = "onRequestErrorActions";
     public const string RoutesGroupOnSuccessActions = "onRequestSuccessActions";
-    public const string RoutesGroupIdPropertyName = "id";
 
     public const string ActionsPropertyName = "actions";
     public const string ActionTypePropertyName = "type";
     public const string ActionSettingsPropertyName = "settings";
 
-    public const string RouteKeyPropertyName = "routeKey";
     public const string RouteIdPropertyName = "id";
+    public const string RoutesPropertyName = "routes";
+    public const string RouteKeyPropertyName = "routeKey";
 
     public const string NotFoundRouteActionsPropertyName = "routeNotFoundActions";
 }

@@ -14,9 +14,10 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 namespace SecuredApi.Logic.Routing;
 
-public class RouteRecord
-{
-    public IRequestProcessor RequestProcessor { get; init; } = null!;
-    public Guid RouteId { get; init; }
-    public IReadOnlyList<RoutesGroup> Groups { get; init; } = null!;
-}
+public record RouteRecord
+(
+    IRequestProcessor RequestProcessor, // Holds list of actions and process them
+    IReadOnlyList<RoutesGroup> Groups, // List of all parent RoutesGroup, used to run PreRequest and onRequestXXX actions
+    IReadOnlySet<Guid> GroupIds, // Ids of the groups, used for faster search by allowed ids
+    Guid? RouteId = null // Id of specific route, not used right now. Can be used same as GroupIds
+);

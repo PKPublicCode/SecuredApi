@@ -16,7 +16,7 @@ namespace SecuredApi.Logic.Routing;
 
 public class RoutesGroup
 {
-    public Guid Id { get; init; }
+    public Guid? Id { get; init; }
     public IRequestProcessor PreRequestProcessor { get; init; } = null!;
     public IRequestProcessor OnRequestErrorProcessor { get; init; } = null!;
     public IRequestProcessor OnRequestSuccessProcessor { get; init; } = null!;

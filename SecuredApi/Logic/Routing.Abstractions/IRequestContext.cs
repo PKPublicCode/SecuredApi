@@ -20,7 +20,7 @@ public interface IRequestContext
 {
     public HttpRequest Request { get; }
     public IResponse Response { get; }
-    public IReadOnlyList<RoutesGroup> RoutesGroups { get; }
+    public RouteRecord Route { get; }
     public IServiceProvider ServiceProvider { get; }
     public string RemainingPath { get; }
     public IDictionary<string, object> Variables { get; }

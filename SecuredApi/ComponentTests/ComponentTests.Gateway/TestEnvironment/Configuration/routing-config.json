@@ -1,5 +1,4 @@
 ﻿{
-  "id": "36a9a09d-d779-4eb8-9196-18654b114ea1",
   "preRequestActions": [
     {
       "type": "SetRequestHeader",
@@ -29,11 +28,78 @@
   ],
   "routesGroups": [
     {
-      "id": "5cc75eb0-5f80-4274-bc1c-049c629d1cb5",
+      "id": "602352d4-56e8-4269-965f-1290a92df903",
+      "description": "Private routes",
+      "preRequestActions": [
+        {
+          "type": "CheckSubscription",
+          "settings": {
+            "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
+            "ErrorNotAuthorizedBody": "Subscription key not set or invalid",
+            "ErrorAccessDeniedBody": "Call Not Allowed"
+          }
+        },
+        {
+          "type": "RunConsumerActions",
+          "settings": {
+          }
+        }
+      ],
+      "routesGroups": [
+        {
+          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
+          "description": "API with redirect. Used in Integration Test!!!",
+          "routesGroups": [
+            {
+              "description": "Redundand neested route for testing purposes",
+              "routes": [
+                {
+                  "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
+                  "routeKey": {
+                    "method": "get",
+                    "path": "/private/redirect/wildcard/*"
+                  },
+                  "actions": [
+                    {
+                      "type": "RemoteCall",
+                      "settings": {
+                        "path": "$(EchoPath)",
+                        "method": "get"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Rote group to api that not allowed by existing subscriptions",
+          "routes": [
+            {
+              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
+              "routeKey": {
+                "method": "get",
+                "path": "/private/notallowed/wildcard/*"
+              },
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "settings": {
+                    "path": "$(EchoPath)",
+                    "method": "get"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "description": "Public responses",
       "routes": [
         {
-          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
             "path": "/public/echo/exact"
@@ -49,7 +115,6 @@
           ]
         },
         {
-          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
             "path": "/public/echo/delay"
@@ -71,7 +136,6 @@
           ]
         },
         {
-          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
             "path": "/public/echo/wildcard/*"
@@ -93,7 +157,6 @@
           ]
         },
         {
-          "id": "d6a3e9e8-a6f2-4a39-87a1-b5853e37faf3",
           "description": "Call to remote endpoint",
           "routeKey": {
             "method": "get",
@@ -123,7 +186,6 @@
           ]
         },
         {
-          "id": "d6a3e9e8-a6f4-4a39-87a1-b5853e37faf2",
           "routeKey": {
             "method": "get",
             "path": "/public/content/exact"
@@ -138,7 +200,6 @@
           ]
         },
         {
-          "id": "d6a3e9e8-a6f4-4a39-87a1-b5853e37faf3",
           "routeKey": {
             "method": "get",
             "path": "/public/content/wildcard/*"
@@ -150,71 +211,6 @@
                 "Path": "StaticFiles/WildcardContent",
                 "NotFoundMessage": "This is wrong file url"
               }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "602352d4-56e8-4269-965f-1290a92df903",
-      "description": "Private routes",
-      "preRequestActions": [
-        {
-          "type": "CheckSubscription",
-          "settings": {
-            "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
-            "ErrorNotAuthorizedBody": "Subscription key not set or invalid",
-            "ErrorAccessDeniedBody": "Call Not Allowed"
-          }
-        },
-        {
-          "type": "RunConsumerActions",
-          "settings": {
-          }
-        }
-      ],
-      "routesGroups": [
-        {
-          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
-          "description": "API with redirect. Used in Integration Test",
-          "routes": [
-            {
-              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
-              "routeKey": {
-                "method": "get",
-                "path": "/private/redirect/wildcard/*"
-              },
-              "actions": [
-                {
-                  "type": "RemoteCall",
-                  "settings": {
-                    "path": "$(EchoPath)",
-                    "method": "get"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "777b8aea-5d39-4070-88e9-1caa87d516a2",
-          "description": "Secured api 2",
-          "routes": [
-            {
-              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
-              "routeKey": {
-                "method": "get",
-                "path": "/private/notallowed/wildcard/*"
-              },
-              "actions": [
-                {
-                  "type": "RemoteCall",
-                  "settings": {
-                    "path": "$(EchoPath)",
-                    "method": "get"
-                  }
-                }
-              ]
             }
           ]
         }

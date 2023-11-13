@@ -14,6 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 using SecuredApi.Logic.Routing.RequestProcessors;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
@@ -24,7 +25,6 @@ internal class RecursiveRoutesParser
     private readonly IRoutingTableBuilder _builder;
 
     private readonly LinkedList<RoutesGroup> _groups = new();
-    private IReadOnlyList<RoutesGroup> _currentGroupsList = _emptyList;
     private readonly ActionsEnumeratorConfig _config;
     private readonly RoutesParserConfig _jsonConfig;
 
@@ -49,16 +49,16 @@ internal class RecursiveRoutesParser
     private IRoutingTable ParseRoot(JsonElement rootJson)
     {
         ParseRouteGroup(rootJson);
-
-        _currentGroupsList = _groups.ToList();
-        _builder.AddNotFoundRoute(LoadNotFoundActionsRoutingRecord(GetProperty(rootJson, NotFoundRouteActionsPropertyName)));
+        _builder.AddNotFoundRoute(LoadNotFoundActionsRoutingRecord(rootJson));
         return _builder.Build();
     }
 
-    private void ParseRoute(JsonElement routeJson)
+    private void ParseRoute(JsonElement routeJson,
+                            IReadOnlyList<RoutesGroup> groups,
+                            IReadOnlySet<Guid> groupIds)
     {
         var routeKey = GetProperty<RouteKey>(routeJson, RouteKeyPropertyName);
-        var routingRecord = LoadRoutingRecord(routeJson);
+        var routingRecord = LoadRoutingRecord(routeJson, groups, groupIds);
         _builder.AddRoute(routeKey.Path, routeKey.Method, routingRecord);
     }
 
@@ -66,7 +66,7 @@ internal class RecursiveRoutesParser
     {
         _groups.AddLast(new RoutesGroup()
         {
-            Id = GetGuid(routeGroupJson, RoutesGroupIdPropertyName),
+            Id = GetOptionalGuid(routeGroupJson, RoutesGroupIdPropertyName),
             PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
             OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
             OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
@@ -84,17 +84,18 @@ internal class RecursiveRoutesParser
                 ParseRouteGroup(innerRouteGroupJson);
             }
         }
+        else if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var routesJson))
+        {
+            var groups = _groups.ToList();
+            var groupIds = MakeSet(groups);
+            foreach (var routeJson in routesJson.EnumerateArray())
+            {
+                ParseRoute(routeJson, groups, groupIds);
+            }
+        }
         else
         {
-            if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var routesJson))
-            {
-                _currentGroupsList = _groups.ToList();
-                foreach (var routeJson in routesJson.EnumerateArray())
-                {
-                    ParseRoute(routeJson);
-                }
-                _currentGroupsList = _emptyList;
-            }
+            throw MakeException($"Niether {RoutesPropertyName}, nor {RoutesGroupsPropertyName} properties set. One of them has to be configured");
         }
 
         _groups.RemoveLast();
@@ -102,24 +103,28 @@ internal class RecursiveRoutesParser
     }
 
     // Constructs route record for Route Not Found Actions
-    private RouteRecord LoadNotFoundActionsRoutingRecord(JsonElement routeJson)
+    private RouteRecord LoadNotFoundActionsRoutingRecord(JsonElement rootJson)
     {
-        return new RouteRecord()
-        {
-            RouteId = Guid.NewGuid(), //Adding fake id, since for not found route it doesn't make any sense
-            RequestProcessor = LoadRequestProcessor(routeJson),
-            Groups = _currentGroupsList
-        };
+        var routeJson = GetProperty(rootJson, NotFoundRouteActionsPropertyName);
+        return new RouteRecord
+        (
+            RequestProcessor: LoadRequestProcessor(routeJson),
+            Groups: _emptyGroups,
+            GroupIds: _emptyIds
+        );
     }
 
-    private RouteRecord LoadRoutingRecord(JsonElement routeJson)
+    private RouteRecord LoadRoutingRecord(JsonElement routeJson,
+                                        IReadOnlyList<RoutesGroup> groups,
+                                        IReadOnlySet<Guid> groupIds)
     {
-        return new RouteRecord()
-        {
-            RouteId = GetGuid(routeJson, RouteIdPropertyName),
-            RequestProcessor = LoadRequestProcessor(GetProperty(routeJson, ActionsPropertyName)),
-            Groups = _currentGroupsList
-        };
+        return new RouteRecord
+        (
+            RouteId: GetOptionalGuid(routeJson, RouteIdPropertyName),
+            RequestProcessor: LoadRequestProcessor(GetProperty(routeJson, ActionsPropertyName)),
+            Groups: groups,
+            GroupIds: groupIds
+        );
     }
 
     private IRequestProcessor LoadRequestProcessorIfExists(JsonElement json, string propName)
@@ -154,13 +159,21 @@ internal class RecursiveRoutesParser
         return new SequencedRequestProcessor(actions);
     }
 
-    private Guid GetGuid(JsonElement json, string propertyName)
+    private Guid? GetOptionalGuid(JsonElement json, string propertyName)
     {
-        if (!GetProperty(json, propertyName).TryGetGuid(out var result))
+        if (json.TryGetProperty(propertyName, out var prop))
         {
-            throw MakeException("Required property is invalid {0}", propertyName);
+            if (prop.TryGetGuid(out var result))
+            {
+                return result;
+            }
+            else
+            {
+                throw MakeException("Invalid GUID value", propertyName);
+            }
         }
-        return result;
+
+        return null;
     }
 
     protected string GetString(JsonElement json, string propertyName)
@@ -214,6 +227,17 @@ internal class RecursiveRoutesParser
         return new RouteConfigurationException(sb.ToString());
     }
 
+    private static IReadOnlySet<Guid> MakeSet(List<RoutesGroup> groups)
+    {
+        var result = groups.Where(x => x.Id.HasValue).Select(x => x.Id!.Value).ToHashSet();
+        if (result.Count == 0)
+        {
+            return _emptyIds; // Release heap object and use common empty set
+        }
+
+        return result;
+    }
+
     private readonly struct RouteKey
     {
         public string Method { get; init; }
@@ -226,5 +250,6 @@ internal class RecursiveRoutesParser
         }
     }
 
-    private static IReadOnlyList<RoutesGroup> _emptyList = new List<RoutesGroup>();
-}
+    private static readonly IReadOnlyList<RoutesGroup> _emptyGroups = new List<RoutesGroup>();
+    private static readonly IReadOnlySet<Guid> _emptyIds = new HashSet<Guid>();
+    }
