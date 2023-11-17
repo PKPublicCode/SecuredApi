@@ -24,11 +24,11 @@ public static class Properties
 
     public const string ActionsPropertyName = "actions";
     public const string ActionTypePropertyName = "type";
-    public const string ActionSettingsPropertyName = "settings";
 
     public const string RouteIdPropertyName = "id";
     public const string RoutesPropertyName = "routes";
-    public const string RouteKeyPropertyName = "routeKey";
+    public const string RoutePath = "path";
+    public const string RouteMethod = "method";
 
     public const string NotFoundRouteActionsPropertyName = "routeNotFoundActions";
 }

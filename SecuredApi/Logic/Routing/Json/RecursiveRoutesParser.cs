@@ -14,7 +14,6 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
 using SecuredApi.Logic.Routing.RequestProcessors;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
@@ -57,9 +56,12 @@ internal class RecursiveRoutesParser
                             IReadOnlyList<RoutesGroup> groups,
                             IReadOnlySet<Guid> groupIds)
     {
-        var routeKey = GetProperty<RouteKey>(routeJson, RouteKeyPropertyName);
         var routingRecord = LoadRoutingRecord(routeJson, groups, groupIds);
-        _builder.AddRoute(routeKey.Path, routeKey.Method, routingRecord);
+        _builder.AddRoute(
+                          GetString(routeJson, RoutePath),
+                          GetString(routeJson, RouteMethod),
+                          routingRecord
+                         );
     }
 
     private void ParseRouteGroup(JsonElement routeGroupJson)
@@ -238,18 +240,6 @@ internal class RecursiveRoutesParser
         return result;
     }
 
-    private readonly struct RouteKey
-    {
-        public string Method { get; init; }
-        public string Path { get; init; }
-
-        public RouteKey(string method, string path)
-        {
-            Method = method;
-            Path = path;
-        }
-    }
-
     private static readonly IReadOnlyList<RoutesGroup> _emptyGroups = new List<RoutesGroup>();
     private static readonly IReadOnlySet<Guid> _emptyIds = new HashSet<Guid>();
-    }
+}

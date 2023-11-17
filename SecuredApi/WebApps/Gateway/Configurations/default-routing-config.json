@@ -10,10 +10,8 @@
       "description": "Welcome response",
       "routes": [
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/"
-          },
+          "method": "get",
+          "path": "/",
           "actions": [
             {
               "type": "ReturnStaticFile",

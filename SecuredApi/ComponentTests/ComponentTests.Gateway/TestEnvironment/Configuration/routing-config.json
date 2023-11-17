@@ -45,10 +45,8 @@
               "routes": [
                 {
                   "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
-                  "routeKey": {
-                    "method": "get",
-                    "path": "/private/redirect/wildcard/*"
-                  },
+                  "method": "get",
+                  "path": "/private/redirect/wildcard/*",
                   "actions": [
                     {
                       "type": "RemoteCall",
@@ -66,10 +64,8 @@
           "routes": [
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
-              "routeKey": {
-                "method": "get",
-                "path": "/private/notallowed/wildcard/*"
-              },
+              "method": "get",
+              "path": "/private/notallowed/wildcard/*",
               "actions": [
                 {
                   "type": "RemoteCall",
@@ -86,10 +82,8 @@
       "description": "Public responses",
       "routes": [
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/public/echo/exact"
-          },
+          "method": "get",
+          "path": "/public/echo/exact",
           "actions": [
             {
               "type": "SetResponse",
@@ -99,10 +93,8 @@
           ]
         },
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/public/echo/delay"
-          },
+          "method": "get",
+          "path": "/public/echo/delay",
           "actions": [
             {
               "type": "Delay",
@@ -116,10 +108,8 @@
           ]
         },
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/public/echo/wildcard/*"
-          },
+          "method": "get",
+          "path": "/public/echo/wildcard/*",
           "actions": [
             {
               "type": "CheckIPs",
@@ -134,10 +124,8 @@
         },
         {
           "description": "Call to remote endpoint",
-          "routeKey": {
-            "method": "get",
-            "path": "/public/remote/wildcard/*"
-          },
+          "method": "get",
+          "path": "/public/remote/wildcard/*",
           "actions": [
             {
               "type": "RemoteCall",
@@ -156,10 +144,8 @@
           ]
         },
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/public/content/exact"
-          },
+          "method": "get",
+          "path": "/public/content/exact",
           "actions": [
             {
               "type": "ReturnStaticFile",
@@ -168,10 +154,8 @@
           ]
         },
         {
-          "routeKey": {
-            "method": "get",
-            "path": "/public/content/wildcard/*"
-          },
+          "method": "get",
+          "path": "/public/content/wildcard/*",
           "actions": [
             {
               "type": "ReturnStaticFile",
