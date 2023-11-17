@@ -71,9 +71,9 @@ internal class RecursiveRoutesParser
 
         if (routeGroupJson.TryGetProperty(RoutesGroups, out var innerRouteGroupsJson))
         {
-            if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var _))
+            if (routeGroupJson.TryGetProperty(Routes, out var _))
             {
-                throw MakeException($"Route group can't have both {RoutesPropertyName} and {RoutesGroups} properties");
+                throw MakeException($"Route group can't have both {Routes} and {RoutesGroups} properties");
             }
 
             foreach (var innerRouteGroupJson in innerRouteGroupsJson.EnumerateArray())
@@ -81,7 +81,7 @@ internal class RecursiveRoutesParser
                 ParseRouteGroup(innerRouteGroupJson);
             }
         }
-        else if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var routesJson))
+        else if (routeGroupJson.TryGetProperty(Routes, out var routesJson))
         {
             var groups = _groups.ToList();
             var groupIds = MakeSet(groups);
@@ -92,7 +92,7 @@ internal class RecursiveRoutesParser
         }
         else
         {
-            throw MakeException($"Niether {RoutesPropertyName}, nor {RoutesGroups} properties set. One of them has to be configured");
+            throw MakeException($"Niether {Routes}, nor {RoutesGroups} properties set. One of them has to be configured");
         }
 
         PopRoutesGroupObject();
@@ -123,7 +123,7 @@ internal class RecursiveRoutesParser
     // Constructs route record for Route Not Found Actions
     private RouteRecord LoadNotFoundActionsRoutingRecord(JsonElement rootJson)
     {
-        var routeJson = GetProperty(rootJson, NotFoundRouteActions);
+        var routeJson = GetProperty(rootJson, RootRoutesGroupNotFoundRouteActions);
         return new RouteRecord
         (
             RequestProcessor: LoadRequestProcessor(routeJson),
@@ -138,7 +138,7 @@ internal class RecursiveRoutesParser
     {
         return new RouteRecord
         (
-            RouteId: GetOptionalGuid(routeJson, RouteIdPropertyName),
+            RouteId: GetOptionalGuid(routeJson, RouteId),
             RequestProcessor: LoadRequestProcessor(GetProperty(routeJson, Actions)),
             Groups: groups,
             GroupIds: groupIds
