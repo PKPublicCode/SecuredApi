@@ -26,6 +26,7 @@ internal class RecursiveRoutesParser
     private readonly LinkedList<RoutesGroup> _groups = new();
     private readonly ActionsEnumeratorConfig _config;
     private readonly RoutesParserConfig _jsonConfig;
+    private LinkedList<string> _errorTracePath = new();
 
     private RecursiveRoutesParser(IActionFactory actionFactory,
                             RoutesParserConfig jsonConfig,
@@ -66,19 +67,13 @@ internal class RecursiveRoutesParser
 
     private void ParseRouteGroup(JsonElement routeGroupJson)
     {
-        _groups.AddLast(new RoutesGroup()
-        {
-            Id = GetOptionalGuid(routeGroupJson, RoutesGroupId),
-            PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
-            OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
-            OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
-        });
+        ParseAndPushRoutesGroupObject(routeGroupJson);
 
         if (routeGroupJson.TryGetProperty(RoutesGroups, out var innerRouteGroupsJson))
         {
             if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var _))
             {
-                throw MakeException("Route group can't have both 'routes' and 'routeGroups' properties");
+                throw MakeException($"Route group can't have both {RoutesPropertyName} and {RoutesGroups} properties");
             }
 
             foreach (var innerRouteGroupJson in innerRouteGroupsJson.EnumerateArray())
@@ -100,8 +95,29 @@ internal class RecursiveRoutesParser
             throw MakeException($"Niether {RoutesPropertyName}, nor {RoutesGroups} properties set. One of them has to be configured");
         }
 
-        _groups.RemoveLast();
+        PopRoutesGroupObject();
         
+    }
+
+    private void ParseAndPushRoutesGroupObject(JsonElement routeGroupJson)
+    {
+        _groups.AddLast(new RoutesGroup()
+        {
+            Id = GetOptionalGuid(routeGroupJson, RoutesGroupId),
+            PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
+            OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
+            OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
+        });
+
+        _errorTracePath.AddLast(_groups.Last!.Value.Id?.ToString()
+                                ?? GetOptionalString(routeGroupJson, RoutesGroupDescription)
+                                ?? "Unknown");
+    }
+
+    private void PopRoutesGroupObject()
+    {
+        _groups.RemoveLast();
+        _errorTracePath.RemoveLast();
     }
 
     // Constructs route record for Route Not Found Actions
@@ -178,23 +194,30 @@ internal class RecursiveRoutesParser
         return null;
     }
 
-    protected string GetString(JsonElement json, string propertyName)
+    private string GetString(JsonElement json, string propertyName)
     {
-        var result = GetProperty(json, propertyName).GetString();
-        if (result == null)
+        return GetOptionalString(json, propertyName)
+            ?? throw MakeException("Required property is invalid {0}", propertyName);
+    }
+
+    private string? GetOptionalString(JsonElement json, string propertyName)
+    {
+        return GetOptionalProperty(json, propertyName)?.GetString();
+    }
+
+    private JsonElement? GetOptionalProperty(JsonElement json, string propertyName)
+    {
+        if (json.TryGetProperty(propertyName, out var result))
         {
-            throw MakeException("Required property is invalid {0}", propertyName);
+            return result;
         }
-        return result;
+        return null;
     }
 
     private JsonElement GetProperty(JsonElement json, string name)
     {
-        if (!json.TryGetProperty(name, out var result))
-        {
-            throw MakeException("Required property not set: {0}", name);
-        }
-        return result;
+        return GetOptionalProperty(json, name)
+            ?? throw MakeException("Required property not set: {0}", name);
     }
 
     private T GetProperty<T>(JsonElement json, string name)
@@ -225,7 +248,7 @@ internal class RecursiveRoutesParser
     private RouteConfigurationException MakeException(StringBuilder sb)
     {
         sb.Append("\r\n Path: ");
-        sb.AppendJoin("->", _groups.Select(x => "'" + x.Id.ToString() + "'"));
+        sb.AppendJoin("->", _errorTracePath.Select(x => "{" + x+ "}"));
         return new RouteConfigurationException(sb.ToString());
     }
 

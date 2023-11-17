@@ -21,6 +21,8 @@ public static class Properties
     public const string RoutesGroupPreRequestActions = "preRequestActions";
     public const string RoutesGroupOnErrorActions = "onRequestErrorActions";
     public const string RoutesGroupOnSuccessActions = "onRequestSuccessActions";
+    public const string NotFoundRouteActions = "routeNotFoundActions";
+    public const string RoutesGroupDescription = "description";
 
     public const string Actions = "actions";
     public const string ActionType = "type";
@@ -29,6 +31,5 @@ public static class Properties
     public const string RoutesPropertyName = "routes";
     public const string RoutePath = "path";
     public const string RouteMethod = "method";
-
-    public const string NotFoundRouteActions = "routeNotFoundActions";
+    public const string RouteDescription = "description";
 }
