@@ -4,7 +4,7 @@
   "PreRequestActions": [
     {
       "type": "SetResponseHeader",
-      "key": "X-CONSUMER-SPECIFIC-HEADER",
+      "name": "X-CONSUMER-SPECIFIC-HEADER",
       "value": "This is test client 1"
     }
   ]

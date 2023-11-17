@@ -18,12 +18,12 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public abstract class SetHeaderActionBase : IAction
 {
-    private readonly string _key;
+    private readonly string _name;
     private readonly string _value;
 
     protected SetHeaderActionBase(SetHeaderActionSettings settings)
     {
-        _key = settings.Key;
+        _name = settings.Name;
         _value = settings.Value;
     }
 
@@ -31,7 +31,7 @@ public abstract class SetHeaderActionBase : IAction
 
     public Task<bool> ExecuteAsync(IRequestContext context)
     {
-        GetHeaders(context).Append(_key, _value);
+        GetHeaders(context).Append(_name, _value);
         return Task.FromResult(true);
     }
 }

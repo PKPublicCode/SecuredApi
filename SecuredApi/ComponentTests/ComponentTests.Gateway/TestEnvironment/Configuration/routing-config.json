@@ -2,21 +2,21 @@
   "preRequestActions": [
     {
       "type": "SetRequestHeader",
-      "key": "X-COMMON-REQUEST-HEADER",
+      "name": "X-COMMON-REQUEST-HEADER",
       "value": "CommonRequestHeaderValue"
     }
   ],
   "onRequestErrorActions": [
     {
       "type": "SetResponseHeader",
-      "key": "X-COMMON-ON-ERROR-HEADER",
+      "name": "X-COMMON-ON-ERROR-HEADER",
       "value": "Gateway Rejected Your Call"
     }
   ],
   "onRequestSuccessActions": [
     {
       "type": "SetResponseHeader",
-      "key": "X-COMMON-RESPONSE-HEADER",
+      "name": "X-COMMON-RESPONSE-HEADER",
       "value": "CommonResponseHeaderValue"
     }
   ],
@@ -136,7 +136,7 @@
             },
             {
               "type": "SetResponseHeader",
-              "key": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
+              "name": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
               "value": "PublicRedirectResponseHeaderValue"
             },
             {
@@ -172,7 +172,7 @@
   "routeNotFoundActions": [
     {
       "type": "SetResponseHeader",
-      "key": "X-NOTFOUND-RESPONSE-HEADER",
+      "name": "X-NOTFOUND-RESPONSE-HEADER",
       "value": "NotFoundResponseHeaderValue"
     },
     {
