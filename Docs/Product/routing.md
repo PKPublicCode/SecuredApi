@@ -1,5 +1,7 @@
 ## WIP
 
+Routing configuration is defined in json format with enabled comments.
+
 # Main concept
 Three key elements
 * RoutesGroup

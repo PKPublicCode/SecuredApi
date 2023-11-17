@@ -1,4 +1,5 @@
 ﻿{
+  // Comment to test enabled comments
   "variables": [
     {
       "key": "EchoPath",

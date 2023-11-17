@@ -12,25 +12,21 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.IO;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
 {
-    public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
+    public async Task<GlobalConfiguration> ParseAsync(Stream s, CancellationToken cancellationToken)
     {
-        public async Task<GlobalConfiguration> ParseAsync(Stream s, CancellationToken cancellationToken)
-        {
-            return await JsonSerializer.DeserializeAsync<GlobalConfiguration>(s, _defaultSerializerOptions, cancellationToken)
-                ?? throw new RouteConfigurationException("Unable to parse global configuration");
-        }
-
-        private static JsonSerializerOptions _defaultSerializerOptions = new()
-        {
-            PropertyNameCaseInsensitive = true,
-        };
+        return await JsonSerializer.DeserializeAsync<GlobalConfiguration>(s, _defaultSerializerOptions, cancellationToken)
+            ?? throw new RouteConfigurationException("Unable to parse global configuration");
     }
+
+    private static JsonSerializerOptions _defaultSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        ReadCommentHandling = JsonCommentHandling.Skip
+    };
 }
