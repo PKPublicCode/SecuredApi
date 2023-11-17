@@ -68,13 +68,13 @@ internal class RecursiveRoutesParser
     {
         _groups.AddLast(new RoutesGroup()
         {
-            Id = GetOptionalGuid(routeGroupJson, RoutesGroupIdPropertyName),
+            Id = GetOptionalGuid(routeGroupJson, RoutesGroupId),
             PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
             OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
             OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
         });
 
-        if (routeGroupJson.TryGetProperty(RoutesGroupsPropertyName, out var innerRouteGroupsJson))
+        if (routeGroupJson.TryGetProperty(RoutesGroups, out var innerRouteGroupsJson))
         {
             if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var _))
             {
@@ -97,7 +97,7 @@ internal class RecursiveRoutesParser
         }
         else
         {
-            throw MakeException($"Niether {RoutesPropertyName}, nor {RoutesGroupsPropertyName} properties set. One of them has to be configured");
+            throw MakeException($"Niether {RoutesPropertyName}, nor {RoutesGroups} properties set. One of them has to be configured");
         }
 
         _groups.RemoveLast();
@@ -107,7 +107,7 @@ internal class RecursiveRoutesParser
     // Constructs route record for Route Not Found Actions
     private RouteRecord LoadNotFoundActionsRoutingRecord(JsonElement rootJson)
     {
-        var routeJson = GetProperty(rootJson, NotFoundRouteActionsPropertyName);
+        var routeJson = GetProperty(rootJson, NotFoundRouteActions);
         return new RouteRecord
         (
             RequestProcessor: LoadRequestProcessor(routeJson),
@@ -123,7 +123,7 @@ internal class RecursiveRoutesParser
         return new RouteRecord
         (
             RouteId: GetOptionalGuid(routeJson, RouteIdPropertyName),
-            RequestProcessor: LoadRequestProcessor(GetProperty(routeJson, ActionsPropertyName)),
+            RequestProcessor: LoadRequestProcessor(GetProperty(routeJson, Actions)),
             Groups: groups,
             GroupIds: groupIds
         );

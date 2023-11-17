@@ -49,7 +49,7 @@ internal struct ActionsEnumerator : IEnumerator<IAction>
         if (_enumerator.MoveNext())
         {
             var actionJson = _enumerator.Current;
-            if (!actionJson.TryGetProperty(ActionTypePropertyName, out var nameJson))
+            if (!actionJson.TryGetProperty(ActionType, out var nameJson))
             {
                 throw new RouteConfigurationException("Action type is not set");
             }
