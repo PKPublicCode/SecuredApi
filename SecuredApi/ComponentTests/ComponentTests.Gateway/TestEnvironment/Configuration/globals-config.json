@@ -2,7 +2,7 @@
   // Comment to test enabled comments
   "variables": [
     {
-      "key": "EchoPath",
+      "name": "EchoPath",
       "value": "https://remote.endpoint/api"
     }
   ]
