@@ -57,7 +57,7 @@ public class SubscriptionTests : GatewayTestsBase
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         // setup RemouteCall response
-        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}")
+        MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
             .Respond(
                         HttpStatusCode.OK,
                         new StringContent(InlineContent.PrivateRedirectWildcard)

@@ -22,6 +22,8 @@
   ],
   "routesGroups": [
     {
+      // This route is used for Integration and Performance tests.
+      // Be careful with deleting and updating it.
       "id": "602352d4-56e8-4269-965f-1290a92df903",
       "description": "Private routes",
       "preRequestActions": [
@@ -37,8 +39,6 @@
       ],
       "routesGroups": [
         {
-          // This route is used for Integration and Performance tests.
-          // Be careful with deleting and updating it.
           "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
           "description": "API with redirect",
           "routesGroups": [
@@ -52,7 +52,7 @@
                   "actions": [
                     {
                       "type": "RemoteCall",
-                      "path": "$(EchoPath)",
+                      "path": "$(ProtectedEchoPath)",
                       "method": "get"
                     }
                   ]
