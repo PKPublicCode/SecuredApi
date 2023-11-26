@@ -26,6 +26,7 @@ internal class RecursiveRoutesParser
     private readonly LinkedList<RoutesGroup> _groups = new();
     private readonly ActionsEnumeratorConfig _config;
     private readonly RoutesParserConfig _jsonConfig;
+    private readonly LinkedList<string?> _urlPath = new();
     private LinkedList<string> _errorTracePath = new();
 
     private RecursiveRoutesParser(IActionFactory actionFactory,
@@ -59,10 +60,17 @@ internal class RecursiveRoutesParser
     {
         var routingRecord = LoadRoutingRecord(routeJson, groups, groupIds);
         _builder.AddRoute(
-                          GetString(routeJson, RoutePath),
+                          MakeFullUrlPath(GetString(routeJson, RoutePath)),
                           GetString(routeJson, RouteMethod),
                           routingRecord
                          );
+    }
+
+    private string MakeFullUrlPath(string end)
+    {
+        //ToDo: Not efficient concatenation for every route. Will rewrite later
+        return string.Concat(string.Concat(_urlPath.Where(s => !string.IsNullOrEmpty(s))),
+                            end);
     }
 
     private void ParseRouteGroup(JsonElement routeGroupJson)
@@ -109,6 +117,8 @@ internal class RecursiveRoutesParser
             OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
         });
 
+        _urlPath.AddLast(GetOptionalString(routeGroupJson, RoutesGroupPath));
+
         _errorTracePath.AddLast(_groups.Last!.Value.Id?.ToString()
                                 ?? GetOptionalString(routeGroupJson, RoutesGroupDescription)
                                 ?? "Unknown");
@@ -117,6 +127,7 @@ internal class RecursiveRoutesParser
     private void PopRoutesGroupObject()
     {
         _groups.RemoveLast();
+        _urlPath.RemoveLast();
         _errorTracePath.RemoveLast();
     }
 

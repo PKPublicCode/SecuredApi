@@ -20,7 +20,6 @@ using SecuredApi.Logic.Routing.Engine.PartialRoutingTable;
 using SecuredApi.Logic.Routing.Variables;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing.Utils;
-using System.Net.Http;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Apps.Gateway.Actions;

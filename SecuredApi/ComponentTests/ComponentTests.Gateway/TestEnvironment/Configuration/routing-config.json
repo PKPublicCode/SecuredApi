@@ -26,6 +26,7 @@
       // Be careful with deleting and updating it.
       "id": "602352d4-56e8-4269-965f-1290a92df903",
       "description": "Private routes",
+      "path": "/private",
       "preRequestActions": [
         {
           "type": "CheckSubscription",
@@ -41,6 +42,7 @@
         {
           "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
           "description": "API with redirect",
+          "path": "/redirect",
           "routesGroups": [
             {
               "description": "Redundand neested route for testing purposes",
@@ -48,7 +50,7 @@
                 {
                   "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
                   "method": "get",
-                  "path": "/private/redirect/wildcard/*",
+                  "path": "/wildcard/*",
                   "actions": [
                     {
                       "type": "RemoteCall",
@@ -67,7 +69,7 @@
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
               "method": "get",
-              "path": "/private/notallowed/wildcard/*",
+              "path": "/notallowed/wildcard/*",
               "actions": [
                 {
                   "type": "RemoteCall",

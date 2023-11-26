@@ -23,6 +23,7 @@ public static class Properties
     public const string RoutesGroupOnSuccessActions = "onRequestSuccessActions";
     public const string RootRoutesGroupNotFoundRouteActions = "routeNotFoundActions";
     public const string RoutesGroupDescription = "description";
+    public const string RoutesGroupPath = "path";
 
     public const string Actions = "actions";
     public const string ActionType = "type";
