@@ -25,8 +25,8 @@ public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
 
         return new GlobalConfiguration()
         {
-            Variables = jsonDef.Variables?.Select(x => new KeyValuePair<string, string>(x.Name, x.Value)).ToList()
-                ?? throw new RouteConfigurationException("Variables property in global config is not defined")
+            Variables = jsonDef.Variables?.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList()
+                ?? new List<KeyValuePair<string, string>>()
         };
     }
 
@@ -36,14 +36,10 @@ public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
         ReadCommentHandling = JsonCommentHandling.Skip
     };
 
-    private class JsonVariableDefinition
-    {
-        public string Name { get; init; } = string.Empty;
-        public string Value { get; init;  } = string.Empty;
-    }
-
     private class JsonGlobalConfig
     {
-        public List<JsonVariableDefinition>? Variables { get; init; }
+        public Dictionary<string, string>? Variables { get; init; }
     }
+
+
 }

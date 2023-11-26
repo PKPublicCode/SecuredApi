@@ -44,7 +44,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     configureConsumers: true
     instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
-      GlobalVariables__EchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
+      Globals__Variables__EchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
     }
   }
 }

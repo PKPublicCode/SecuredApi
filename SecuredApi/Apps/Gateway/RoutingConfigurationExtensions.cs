@@ -67,7 +67,7 @@ public static class RoutingConfigurationExtensions
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
                         new DefaultGlobalVariablesProvider(
-                                srvs.GetRequiredService<IConfiguration>().GetSection("GlobalVariables")
+                                srvs.GetRequiredService<IConfiguration>().GetSection("Globals:Variables")
                             ));
     }
 
