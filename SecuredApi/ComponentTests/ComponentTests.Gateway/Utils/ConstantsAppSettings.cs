@@ -44,7 +44,7 @@ public static partial class Constants
         public const string PublicEchoWildcard = "/public/echo/wildcard";
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/public/echo/delay";
-        public const string PublicContentBase = "/public/content";
+        public const string PublicContentBase = "/public/echo/content";
         public const string PrivateRedirectWildcard = "/private/redirect/wildcard";
         public const string PrivateNotAllowedWildcard = "/private/notallowed/wildcard";
     }
