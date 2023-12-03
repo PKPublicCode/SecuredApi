@@ -10,7 +10,7 @@
       "description": "Welcome response",
       "routes": [
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/",
           "actions": [
             {

@@ -15,6 +15,7 @@
 using System.Text;
 using System.Text.Json;
 using SecuredApi.Logic.Routing.RequestProcessors;
+using static System.Text.Json.JsonElement;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
 namespace SecuredApi.Logic.Routing.Json;
@@ -59,11 +60,15 @@ internal class RecursiveRoutesParser
                             IReadOnlySet<Guid> groupIds)
     {
         var routingRecord = LoadRoutingRecord(routeJson, groups, groupIds);
-        _builder.AddRoute(
-                          MakeFullUrlPath(GetString(routeJson, RoutePath)),
-                          GetString(routeJson, RouteMethod),
+        var fullPath = MakeFullUrlPath(GetString(routeJson, RoutePath));
+        foreach (var method in EnumerateRequiredProperty(routeJson, RouteMethods))
+        {
+            _builder.AddRoute(
+                          fullPath,
+                          method.ToString(),
                           routingRecord
                          );
+        }
     }
 
     private string MakeFullUrlPath(string end)
@@ -216,6 +221,19 @@ internal class RecursiveRoutesParser
         return GetOptionalProperty(json, propertyName)?.GetString();
     }
 
+    private ArrayEnumerator EnumerateRequiredProperty(JsonElement json, string name)
+    {
+        var prop = GetProperty(json, name);
+        try
+        {
+            return prop.EnumerateArray();
+        }
+        catch (InvalidOperationException e)
+        {
+            throw MakeException("Invalid property type", name, e);
+        }
+    }
+
     private JsonElement? GetOptionalProperty(JsonElement json, string propertyName)
     {
         if (json.TryGetProperty(propertyName, out var result))
@@ -238,11 +256,11 @@ internal class RecursiveRoutesParser
             ?? throw MakeException("Invalid property: {0}", name);
     }
 
-    private RouteConfigurationException MakeException(string format, string param)
+    private RouteConfigurationException MakeException(string format, string param, Exception? inner = null)
     {
         var sb = new StringBuilder();
         sb.AppendFormat(format, param);
-        return MakeException(sb);
+        return MakeException(sb, inner);
     }
 
     private RouteConfigurationException MakeException(string message)
@@ -256,11 +274,11 @@ internal class RecursiveRoutesParser
         return MakeException(e.Message);
     }
 
-    private RouteConfigurationException MakeException(StringBuilder sb)
+    private RouteConfigurationException MakeException(StringBuilder sb, Exception? inner = null)
     {
         sb.Append("\r\n Path: ");
         sb.AppendJoin("->", _errorTracePath.Select(x => "{" + x+ "}"));
-        return new RouteConfigurationException(sb.ToString());
+        return new RouteConfigurationException(sb.ToString(), inner);
     }
 
     private static IReadOnlySet<Guid> MakeSet(List<RoutesGroup> groups)

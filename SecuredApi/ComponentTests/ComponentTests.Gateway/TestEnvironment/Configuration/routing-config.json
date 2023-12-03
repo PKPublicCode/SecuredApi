@@ -49,7 +49,7 @@
               "routes": [
                 {
                   "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
-                  "method": "get",
+                  "methods": [ "get" ],
                   "path": "/wildcard/*",
                   "actions": [
                     {
@@ -68,7 +68,7 @@
           "routes": [
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
-              "method": "get",
+              "methods": [ "get" ],
               "path": "/notallowed/wildcard/*",
               "actions": [
                 {
@@ -86,7 +86,7 @@
       "description": "Public responses",
       "routes": [
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/echo/exact",
           "actions": [
             {
@@ -97,7 +97,7 @@
           ]
         },
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/echo/delay",
           "actions": [
             {
@@ -112,7 +112,7 @@
           ]
         },
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/echo/wildcard/*",
           "actions": [
             {
@@ -128,7 +128,7 @@
         },
         {
           "description": "Call to remote endpoint",
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/remote/wildcard/*",
           "actions": [
             {
@@ -148,7 +148,7 @@
           ]
         },
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/content/exact",
           "actions": [
             {
@@ -158,7 +158,7 @@
           ]
         },
         {
-          "method": "get",
+          "methods": [ "get" ],
           "path": "/public/content/wildcard/*",
           "actions": [
             {

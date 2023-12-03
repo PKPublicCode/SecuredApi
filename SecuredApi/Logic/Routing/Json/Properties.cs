@@ -31,6 +31,6 @@ public static class Properties
     public const string RouteId = "id";
     public const string Routes = "routes";
     public const string RoutePath = "path";
-    public const string RouteMethod = "method";
+    public const string RouteMethods = "methods";
     public const string RouteDescription = "description";
 }
