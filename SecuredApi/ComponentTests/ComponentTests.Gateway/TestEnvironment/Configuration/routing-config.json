@@ -154,8 +154,8 @@
           "routes": [
             {
               "description": "Call to remote endpoint",
-              "methods": [ "get" ],
-              "path": "/remote/wildcard/*",
+              "methods": [ "get", "post" ],
+              "path": "/remote/wildcard_replacemethod/*",
               "actions": [
                 {
                   "type": "RemoteCall",

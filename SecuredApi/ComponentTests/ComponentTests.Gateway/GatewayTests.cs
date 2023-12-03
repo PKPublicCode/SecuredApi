@@ -43,20 +43,21 @@ public class GatewayTests: GatewayTestsBase
     //      Headers.TextPlainUtf8ContentType - implicitly sent by mocked remote endpoint with content
     //      TestResponseHeader - explicitly sent by mocked remote endpoint
     [Theory]
-    [InlineData("")]
-    [InlineData("/internal/path")]
-    public async Task RemoteCall_Found(string urlPath)
+    [InlineData("", _methodGet, _methodGet)]
+    [InlineData("/internal/path", _methodGet, _methodGet)]
+    [InlineData("/internal/path", _methodPost, _methodGet)]
+    public async Task RemoteCall_Found(string urlPath, string requestMethod, string expectedCallMethod)
     {
         const string body = "TestBody";
         HttpHeader TestRequestHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
         HttpHeader TestResponseHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
 
         // Simulate received http call by gateway
-        Request.SetupGet($"{RoutePaths.PublicRemoteWildcard}/{urlPath}");
+        Request.SetupMethod($"{RoutePaths.PublicRemoteWildcardReplace}/{urlPath}", requestMethod);
         Request.Headers.Add(TestRequestHeader);
 
         // setup RemouteCall response
-        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}{urlPath}")
+        MainHttpHandler.When(new HttpMethod(expectedCallMethod), $"{GlobalsPublicRemoteEndpoint}{urlPath}")
             .WithHeaders(new[] { Headers.RequestCommon.AsMock(), TestRequestHeader.AsMock() })
             .Respond(
                         HttpStatusCode.Accepted,
@@ -72,5 +73,9 @@ public class GatewayTests: GatewayTestsBase
 
         await ExecuteAsync();
     }
+
+    //Can't find existing methods defined as const string that is required to be used in attributes
+    private const string _methodGet = "get";
+    private const string _methodPost = "post";
 }
 
