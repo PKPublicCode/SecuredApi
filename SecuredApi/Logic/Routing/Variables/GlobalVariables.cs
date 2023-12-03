@@ -18,7 +18,7 @@ namespace SecuredApi.Logic.Routing.Variables;
 
 public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 {
-    private Dictionary<string, string> _variables = new();
+    private Dictionary<string, string> _variables = new(StringComparer.OrdinalIgnoreCase);
 
     public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
     {
@@ -32,7 +32,7 @@ public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 
     public void Update(IEnumerable<KeyValuePair<string, string>> values)
     {
-        var variables = new Dictionary<string, string>();
+        var variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach(var p in values)
         {
             variables.Add(p.Key, p.Value);

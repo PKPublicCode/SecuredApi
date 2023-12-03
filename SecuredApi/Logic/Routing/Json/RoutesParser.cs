@@ -40,7 +40,7 @@ public class RoutesParser : IRoutesParser
     {
         var jsonOptions = new JsonDocumentOptions()
         {
-            CommentHandling = JsonCommentHandling.Skip
+            CommentHandling = CommonSerializerOptions.Instance.ReadCommentHandling
         };
 
         try

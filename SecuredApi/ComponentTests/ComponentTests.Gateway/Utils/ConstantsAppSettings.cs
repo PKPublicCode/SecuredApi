@@ -40,7 +40,8 @@ public static partial class Constants
 
     public static class RoutePaths
     {
-        public const string PublicRemoteWildcardReplace = "/public/remote/wildcard_replacemethod";
+        public const string PublicRemoteWildcardGet = "/public/remote/wildcard_get_method";
+        public const string PublicRemoteWildcardOriginal = "/public/remote/wildcard_original_method";
         public const string PublicEchoWildcard = "/public/echo/wildcard";
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/public/echo/delay";

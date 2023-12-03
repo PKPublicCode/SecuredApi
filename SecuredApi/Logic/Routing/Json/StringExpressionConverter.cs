@@ -12,36 +12,34 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+public class StringExpressionConverter : JsonConverter<string>
 {
-    public class StringExpressionConverter : JsonConverter<string>
+    private readonly JsonSerializerOptions _options;
+    private readonly IExpressionProcessor _processor;
+
+    public StringExpressionConverter(JsonSerializerOptions defaultOptions, IExpressionProcessor processor)
     {
-        private readonly JsonSerializerOptions _options;
-        private readonly IExpressionProcessor _processor;
+        _options = defaultOptions;
+        _processor = processor;
+    }
 
-        public StringExpressionConverter(JsonSerializerOptions defaultOptions, IExpressionProcessor processor)
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = JsonSerializer.Deserialize<string>(ref reader, _options);
+        if (value != null)
         {
-            _options = defaultOptions;
-            _processor = processor;
+            return _processor.ConvertExpression(value);
         }
+        return value;
+    }
 
-        public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            var value = JsonSerializer.Deserialize<string>(ref reader, _options);
-            if (value != null)
-            {
-                return _processor.ConvertExpression(value);
-            }
-            return value;
-        }
-
-        public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
-        {
-            throw new NotImplementedException();
-        }
+    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
     }
 }

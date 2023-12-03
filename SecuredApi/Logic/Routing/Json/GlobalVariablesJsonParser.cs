@@ -20,7 +20,7 @@ public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
 {
     public async Task<GlobalConfiguration> ParseAsync(Stream s, CancellationToken cancellationToken)
     {
-        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, _defaultSerializerOptions, cancellationToken)
+        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, CommonSerializerOptions.Instance, cancellationToken)
            ?? throw new RouteConfigurationException("Unable to parse global configuration");
 
         return new GlobalConfiguration()
@@ -30,16 +30,8 @@ public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
         };
     }
 
-    private static JsonSerializerOptions _defaultSerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
-    };
-
     private class JsonGlobalConfig
     {
         public Dictionary<string, string>? Variables { get; init; }
     }
-
-
 }

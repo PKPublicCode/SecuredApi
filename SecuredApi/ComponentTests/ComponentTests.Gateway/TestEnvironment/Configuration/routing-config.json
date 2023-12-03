@@ -51,7 +51,8 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(ProtectedEchoPath)",
+                  // protectedEchoPath is set by appsettings json
+                  "path": "$(protectedEchoPath)",
                   "method": "get"
                 }
               ]
@@ -68,7 +69,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(EchoPath)",
+                  "path": "$(echoPath)",
                   "method": "get"
                 }
               ]
@@ -155,12 +156,33 @@
             {
               "description": "Call to remote endpoint",
               "methods": [ "get", "post" ],
-              "path": "/remote/wildcard_replacemethod/*",
+              "path": "/remote/wildcard_get_method/*",
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(EchoPath)",
+                  "path": "$(echoPath)",
                   "method": "get"
+                },
+                {
+                  "type": "SetResponseHeader",
+                  "name": "X-PUBLIC-REDIRECT-RESPONSE-HEADER",
+                  "value": "PublicRedirectResponseHeaderValue"
+                },
+                {
+                  "type": "SuppressResponseHeaders",
+                  "headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
+                }
+              ]
+            },
+            {
+              "description": "Call to remote endpoint",
+              "methods": [ "get", "post" ],
+              "path": "/remote/wildcard_original_method/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "path": "$(echoPath)",
+                  "method": "@(requestHttpMethod)"
                 },
                 {
                   "type": "SetResponseHeader",
