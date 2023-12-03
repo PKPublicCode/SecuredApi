@@ -32,7 +32,7 @@ public class RemoteCallAction: IAction
 
         //Shortcut to make runtime variable (requestHttpMethod) work.
         //Later will rewrite\redesign code for more generic use of runntime variables
-        if (config.Method != "@(requestHttpMethod)")
+        if (config.Method != VariableNames.RequestHttpMethod)
         {
             _method = new(config.Method);
         }

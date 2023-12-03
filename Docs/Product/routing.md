@@ -2,7 +2,7 @@
 
 Routing configuration is defined in json format with enabled comments.
 
-# Main concept
+# Main concepts
 Three key elements
 * RoutesGroup
 * Route
@@ -56,3 +56,13 @@ RouteKey contains method and path and has to be unique, ignoring wildcard. That 
     "path": "/mypath/"
 }
 ```
+
+# Variables
+Variable names are case insensitive
+
+## Global variables
+Format ```$(variableName)``` - available globally during config parsing stage. If variable name is unknown - parsing is stopped and configuration considered as invalid
+
+## Runtime variables
+Not fully implemented and under consideration. However, in some ocasions runtime variables (variables that has scope of the request) can be used.
+Format ```@(variableName)```. Example is ```@(requestHttpMethod)```
