@@ -26,7 +26,7 @@ public static class JsonConfigurationExtensions
         return srv.AddSingleton<IOnTheFlyRequestProcessor, OnTheFlyRequestProcessor>()
             .AddSingleton(new OnTheFlyRequestProcessorConfig
             (
-                DefaultSerializerOptions: _defaultSerializerOptions
+                DefaultSerializerOptions: CommonSerializerOptions.Instance
             ));
     }
 
@@ -35,20 +35,15 @@ public static class JsonConfigurationExtensions
         return srv.AddScoped<IRoutesParser, RoutesParser>()
             .AddSingleton(srv =>
             {
-                var customOptions = new JsonSerializerOptions(_defaultSerializerOptions);
+                var customOptions = new JsonSerializerOptions(CommonSerializerOptions.Instance);
                 var expressionProcessor = srv.GetRequiredService<IExpressionProcessor>();
-                customOptions.Converters.Add(new StringExpressionConverter(_defaultSerializerOptions, expressionProcessor));
+                customOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
                 return new RoutesParserConfig
                 (
                     ActionSerializerOptions: customOptions,
-                    ActionsGroupSerializerOptions: _defaultSerializerOptions
+                    ActionsGroupSerializerOptions: CommonSerializerOptions.Instance
                 );
             });
     }
-
-    private static readonly JsonSerializerOptions _defaultSerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
 
 }

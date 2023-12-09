@@ -12,209 +12,286 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using SecuredApi.Logic.Routing.RequestProcessors;
+using static System.Text.Json.JsonElement;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+internal class RecursiveRoutesParser
 {
-    internal class RecursiveRoutesParser
+    private readonly IRoutingTableBuilder _builder;
+
+    private readonly LinkedList<RoutesGroup> _groups = new();
+    private readonly ActionsEnumeratorConfig _config;
+    private readonly RoutesParserConfig _jsonConfig;
+    private readonly LinkedList<string?> _urlPath = new();
+    private LinkedList<string> _errorTracePath = new();
+
+    private RecursiveRoutesParser(IActionFactory actionFactory,
+                            RoutesParserConfig jsonConfig,
+                            IRoutingTableBuilder builder)
     {
-        private readonly IRoutingTableBuilder _builder;
-
-        private readonly LinkedList<RoutesGroup> _groups = new();
-        private IReadOnlyList<RoutesGroup>? _currentGroupsList = null;
-        private readonly ActionsEnumeratorConfig _config;
-        private readonly RoutesParserConfig _jsonConfig;
-
-        private RecursiveRoutesParser(IActionFactory actionFactory,
-                                RoutesParserConfig jsonConfig,
-                                IRoutingTableBuilder builder)
+        _builder = builder;
+        _jsonConfig = jsonConfig;
+        _config = new ActionsEnumeratorConfig()
         {
-            _builder = builder;
-            _jsonConfig = jsonConfig;
-            _config = new ActionsEnumeratorConfig()
-            {
-                ActionFactory = actionFactory,
-                SerializerOptions = _jsonConfig.ActionSerializerOptions
-            };
+            ActionFactory = actionFactory,
+            SerializerOptions = _jsonConfig.ActionSerializerOptions
+        };
+    }
+
+    public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, RoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
+    {
+        return new RecursiveRoutesParser(actionFactory, jsonConfig, builder).ParseRoot(rootJson);
+    }
+
+    private IRoutingTable ParseRoot(JsonElement rootJson)
+    {
+        ParseRouteGroup(rootJson);
+        _builder.AddNotFoundRoute(LoadNotFoundActionsRoutingRecord(rootJson));
+        return _builder.Build();
+    }
+
+    private void ParseRoute(JsonElement routeJson,
+                            IReadOnlyList<RoutesGroup> groups,
+                            IReadOnlySet<Guid> groupIds)
+    {
+        var routingRecord = LoadRoutingRecord(routeJson, groups, groupIds);
+        var fullPath = MakeFullUrlPath(GetString(routeJson, RoutePath));
+        foreach (var method in EnumerateRequiredProperty(routeJson, RouteMethods))
+        {
+            _builder.AddRoute(
+                          fullPath,
+                          method.ToString(),
+                          routingRecord
+                         );
         }
+    }
 
-        public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, RoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
+    private string MakeFullUrlPath(string end)
+    {
+        //ToDo: Not efficient concatenation for every route. Will rewrite later
+        return string.Concat(string.Concat(_urlPath.Where(s => !string.IsNullOrEmpty(s))),
+                            end);
+    }
+
+    private void ParseRouteGroup(JsonElement routeGroupJson)
+    {
+        ParseAndPushRoutesGroupObject(routeGroupJson);
+
+        if (routeGroupJson.TryGetProperty(RoutesGroups, out var innerRouteGroupsJson))
         {
-            return new RecursiveRoutesParser(actionFactory, jsonConfig, builder).ParseRoot(rootJson);
-        }
-
-        private IRoutingTable ParseRoot(JsonElement rootJson)
-        {
-            ParseRouteGroup(rootJson);
-
-            _currentGroupsList = _groups.ToList();
-            _builder.AddNotFoundRoute(LoadRoutingRecord(GetProperty(rootJson, RotFoundRoutePropertyName)));
-            return _builder.Build();
-        }
-
-        private void ParseRoute(JsonElement routeJson)
-        {
-            var routeKey = GetProperty<RouteKey>(routeJson, RouteKeyPropertyName);
-            var routingRecord = LoadRoutingRecord(routeJson);
-            _builder.AddRoute(routeKey.Path, routeKey.Method, routingRecord);
-        }
-
-        private void ParseRouteGroup(JsonElement routeGroupJson)
-        {
-            _groups.AddLast(new RoutesGroup()
+            if (routeGroupJson.TryGetProperty(Routes, out var _))
             {
-                Id = GetGuid(routeGroupJson, RoutesGroupIdPropertyName),
-                PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
-                OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
-                OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
-            });
-
-            if (routeGroupJson.TryGetProperty(RoutesGroupsPropertyName, out var innerRouteGroupsJson))
-            {
-                if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var _))
-                {
-                    throw MakeException("Route group can't have both 'routes' and 'routeGroups' properties");
-                }
-                foreach (var innerRouteGroupJson in innerRouteGroupsJson.EnumerateArray())
-                {
-                    ParseRouteGroup(innerRouteGroupJson);
-                }
-            }
-            else
-            {
-                if (routeGroupJson.TryGetProperty(RoutesPropertyName, out var routesJson))
-                {
-                    _currentGroupsList = _groups.ToList();
-                    foreach (var routeJson in routesJson.EnumerateArray())
-                    {
-                        ParseRoute(routeJson);
-                    }
-                    _currentGroupsList = null;
-                }
+                throw MakeException($"Route group can't have both {Routes} and {RoutesGroups} properties");
             }
 
-            _groups.RemoveLast();
-            
-        }
-
-        private RouteRecord LoadRoutingRecord(JsonElement routeJson)
-        {
-            return new RouteRecord()
+            foreach (var innerRouteGroupJson in innerRouteGroupsJson.EnumerateArray())
             {
-                RouteId = GetGuid(routeJson, RouteIdPropertyName),
-                RequestProcessor = LoadRequestProcessor(GetProperty(routeJson, ActionsPropertyName)),
-                Groups = _currentGroupsList!
-            };
-        }
-
-        private IRequestProcessor LoadRequestProcessorIfExists(JsonElement json, string propName)
-        {
-            if (json.TryGetProperty(propName, out var actionsJson))
-            {
-                return LoadRequestProcessor(actionsJson);
+                ParseRouteGroup(innerRouteGroupJson);
             }
+        }
+        else if (routeGroupJson.TryGetProperty(Routes, out var routesJson))
+        {
+            var groups = _groups.ToList();
+            var groupIds = MakeSet(groups);
+            foreach (var routeJson in routesJson.EnumerateArray())
+            {
+                ParseRoute(routeJson, groups, groupIds);
+            }
+        }
+        else
+        {
+            throw MakeException($"Niether {Routes}, nor {RoutesGroups} properties set. One of them has to be configured");
+        }
+
+        PopRoutesGroupObject();
+        
+    }
+
+    private void ParseAndPushRoutesGroupObject(JsonElement routeGroupJson)
+    {
+        _groups.AddLast(new RoutesGroup()
+        {
+            Id = GetOptionalGuid(routeGroupJson, RoutesGroupId),
+            PreRequestProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupPreRequestActions),
+            OnRequestErrorProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnErrorActions),
+            OnRequestSuccessProcessor = LoadRequestProcessorIfExists(routeGroupJson, RoutesGroupOnSuccessActions)
+        });
+
+        _urlPath.AddLast(GetOptionalString(routeGroupJson, RoutesGroupPath));
+
+        _errorTracePath.AddLast(_groups.Last!.Value.Id?.ToString()
+                                ?? GetOptionalString(routeGroupJson, RoutesGroupDescription)
+                                ?? "Unknown");
+    }
+
+    private void PopRoutesGroupObject()
+    {
+        _groups.RemoveLast();
+        _urlPath.RemoveLast();
+        _errorTracePath.RemoveLast();
+    }
+
+    // Constructs route record for Route Not Found Actions
+    private RouteRecord LoadNotFoundActionsRoutingRecord(JsonElement rootJson)
+    {
+        var routeJson = GetProperty(rootJson, RootRoutesGroupNotFoundRouteActions);
+        return new RouteRecord
+        (
+            RequestProcessor: LoadRequestProcessor(routeJson),
+            Groups: _emptyGroups,
+            GroupIds: _emptyIds
+        );
+    }
+
+    private RouteRecord LoadRoutingRecord(JsonElement routeJson,
+                                        IReadOnlyList<RoutesGroup> groups,
+                                        IReadOnlySet<Guid> groupIds)
+    {
+        return new RouteRecord
+        (
+            RouteId: GetOptionalGuid(routeJson, RouteId),
+            RequestProcessor: LoadRequestProcessor(GetProperty(routeJson, Actions)),
+            Groups: groups,
+            GroupIds: groupIds
+        );
+    }
+
+    private IRequestProcessor LoadRequestProcessorIfExists(JsonElement json, string propName)
+    {
+        if (json.TryGetProperty(propName, out var actionsJson))
+        {
+            return LoadRequestProcessor(actionsJson);
+        }
+        return EmptyProcessor.Instance;
+    }
+
+    private IRequestProcessor LoadRequestProcessor(JsonElement actionsJson)
+    {
+        int count = actionsJson.GetArrayLength();
+        if (count == 0)
+        {
             return EmptyProcessor.Instance;
         }
 
-        private IRequestProcessor LoadRequestProcessor(JsonElement actionsJson)
+        var actions = new List<IAction>(count);
+        try
         {
-            int count = actionsJson.GetArrayLength();
-            if (count == 0)
+            foreach (var action in new ActionsEnumerable(actionsJson, _config))
             {
-                return EmptyProcessor.Instance;
+                actions.Add(action);
             }
+        }
+        catch(RouteConfigurationException e)
+        {
+            throw MakeException(e);
+        }
+        return new SequencedRequestProcessor(actions);
+    }
 
-            var actions = new List<IAction>(count);
-            try
+    private Guid? GetOptionalGuid(JsonElement json, string propertyName)
+    {
+        if (json.TryGetProperty(propertyName, out var prop))
+        {
+            if (prop.TryGetGuid(out var result))
             {
-                foreach (var action in new ActionsEnumerable(actionsJson, _config))
-                {
-                    actions.Add(action);
-                }
+                return result;
             }
-            catch(RouteConfigurationException e)
+            else
             {
-                throw MakeException(e);
+                throw MakeException("Invalid GUID value", propertyName);
             }
-            return new SequencedRequestProcessor(actions);
         }
 
-        private Guid GetGuid(JsonElement json, string propertyName)
+        return null;
+    }
+
+    private string GetString(JsonElement json, string propertyName)
+    {
+        return GetOptionalString(json, propertyName)
+            ?? throw MakeException("Required property is invalid {0}", propertyName);
+    }
+
+    private string? GetOptionalString(JsonElement json, string propertyName)
+    {
+        return GetOptionalProperty(json, propertyName)?.GetString();
+    }
+
+    private ArrayEnumerator EnumerateRequiredProperty(JsonElement json, string name)
+    {
+        var prop = GetProperty(json, name);
+        try
         {
-            if (!GetProperty(json, propertyName).TryGetGuid(out var result))
-            {
-                throw MakeException($"Required property is invalid {0}", propertyName);
-            }
-            return result;
+            return prop.EnumerateArray();
         }
-
-        protected string GetString(JsonElement json, string propertyName)
+        catch (InvalidOperationException e)
         {
-            var result = GetProperty(json, propertyName).GetString();
-            if (result == null)
-            {
-                throw MakeException($"Required property is invalid {0}", propertyName);
-            }
-            return result;
-        }
-
-        private JsonElement GetProperty(JsonElement json, string name)
-        {
-            if (!json.TryGetProperty(name, out var result))
-            {
-                throw MakeException($"Required property not set: {0}", name);
-            }
-            return result;
-        }
-
-        private T GetProperty<T>(JsonElement json, string name)
-        {
-            var propJson = GetProperty(json, name);
-            return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.ActionsGroupSerializerOptions)
-                ?? throw MakeException("Invalid property: {0}", name);
-        }
-
-        private RouteConfigurationException MakeException(string format, string param)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat(format, param);
-            return MakeException(sb);
-        }
-
-        private RouteConfigurationException MakeException(string message)
-        {
-            var sb = new StringBuilder(message);
-            return MakeException(sb);
-        }
-
-        private RouteConfigurationException MakeException(RouteConfigurationException e)
-        {
-            return MakeException(e.Message);
-        }
-
-        private RouteConfigurationException MakeException(StringBuilder sb)
-        {
-            sb.Append("\r\n Path: ");
-            sb.AppendJoin("->", _groups.Select(x => "'" + x.Id.ToString() + "'"));
-            return new RouteConfigurationException(sb.ToString());
-        }
-
-        private readonly struct RouteKey
-        {
-            public string Method { get; init; }
-            public string Path { get; init; }
-
-            public RouteKey(string method, string path)
-            {
-                Method = method;
-                Path = path;
-            }
+            throw MakeException("Invalid property type", name, e);
         }
     }
+
+    private JsonElement? GetOptionalProperty(JsonElement json, string propertyName)
+    {
+        if (json.TryGetProperty(propertyName, out var result))
+        {
+            return result;
+        }
+        return null;
+    }
+
+    private JsonElement GetProperty(JsonElement json, string name)
+    {
+        return GetOptionalProperty(json, name)
+            ?? throw MakeException("Required property not set: {0}", name);
+    }
+
+    private T GetProperty<T>(JsonElement json, string name)
+    {
+        var propJson = GetProperty(json, name);
+        return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.ActionsGroupSerializerOptions)
+            ?? throw MakeException("Invalid property: {0}", name);
+    }
+
+    private RouteConfigurationException MakeException(string format, string param, Exception? inner = null)
+    {
+        var sb = new StringBuilder();
+        sb.AppendFormat(format, param);
+        return MakeException(sb, inner);
+    }
+
+    private RouteConfigurationException MakeException(string message)
+    {
+        var sb = new StringBuilder(message);
+        return MakeException(sb);
+    }
+
+    private RouteConfigurationException MakeException(RouteConfigurationException e)
+    {
+        return MakeException(e.Message);
+    }
+
+    private RouteConfigurationException MakeException(StringBuilder sb, Exception? inner = null)
+    {
+        sb.Append("\r\n Path: ");
+        sb.AppendJoin("->", _errorTracePath.Select(x => "{" + x+ "}"));
+        return new RouteConfigurationException(sb.ToString(), inner);
+    }
+
+    private static IReadOnlySet<Guid> MakeSet(List<RoutesGroup> groups)
+    {
+        var result = groups.Where(x => x.Id.HasValue).Select(x => x.Id!.Value).ToHashSet();
+        if (result.Count == 0)
+        {
+            return _emptyIds; // Release heap object and use common empty set
+        }
+
+        return result;
+    }
+
+    private static readonly IReadOnlyList<RoutesGroup> _emptyGroups = new List<RoutesGroup>();
+    private static readonly IReadOnlySet<Guid> _emptyIds = new HashSet<Guid>();
 }

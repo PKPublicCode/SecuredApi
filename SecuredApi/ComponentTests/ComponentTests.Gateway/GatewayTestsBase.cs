@@ -25,7 +25,7 @@ namespace SecuredApi.ComponentTests.Gateway;
 
 public abstract class GatewayTestsBase
 {
-    private const string _defaultFileName = "appsettings.json";
+    private const string _defaultFileName = "appsettings-common.json";
 
     protected readonly IServiceProvider _serviceProvider;
     protected readonly HttpContext Context = new DefaultHttpContext();

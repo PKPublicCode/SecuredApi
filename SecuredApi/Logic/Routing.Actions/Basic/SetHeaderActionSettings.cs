@@ -16,6 +16,6 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public record SetHeaderActionSettings
 (
-    string Key,
+    string Name,
     string Value
 );

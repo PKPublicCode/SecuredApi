@@ -12,30 +12,25 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
-using System.Linq;
+namespace SecuredApi.Logic.Routing.Engine.PartialRoutingTable;
 
-namespace SecuredApi.Logic.Routing.Engine.PartialRoutingTable
+public class RoutingTableBuilder : RoutingTableBuilderBase
 {
-    public class RoutingTableBuilder : RoutingTableBuilderBase
+    private readonly Dictionary<string, RoutesTree> _routeTrees = new();
+
+    public override void AddRoute(string path, string method, RouteRecord route)
     {
-        private readonly Dictionary<string, RoutesTree> _routeTrees = new();
-
-        public override void AddRoute(string path, string method, RouteRecord route)
+        method = method.ToLower();
+        if (!_routeTrees.TryGetValue(method, out var tree))
         {
-            method = method.ToLower();
-            if (!_routeTrees.TryGetValue(method, out var tree))
-            {
-                tree = new();
-                _routeTrees[method] = tree;
-            }
-            tree.AddRoute(path, route);
+            tree = new();
+            _routeTrees[method] = tree;
         }
+        tree.AddRoute(path, route);
+    }
 
-        public override IRoutingTable Build()
-        {
-            return new RoutingTable(_routeTrees.ToDictionary(x => x.Key, x => (IRoutesTree)x.Value), NotFoundRoute);
-        }
+    public override IRoutingTable Build()
+    {
+        return new RoutingTable(_routeTrees.ToDictionary(x => x.Key, x => (IRoutesTree)x.Value), NotFoundRoute);
     }
 }

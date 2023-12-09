@@ -28,7 +28,7 @@ namespace SecuredApi.Logic.Routing.Engine
         {
             var routeInfo = await _routingTable.GetRoutingAsync(httpContext.Request.Path, httpContext.Request.Method, httpContext.RequestAborted);
             var routingRecord = routeInfo.RouteRecord;
-            using var processingContext = new RequestContext(routingRecord.Groups, routeInfo.RemainingPath, httpContext);
+            using var processingContext = new RequestContext(routingRecord, routeInfo.RemainingPath, httpContext);
 
             if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
                 && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))

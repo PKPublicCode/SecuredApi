@@ -12,34 +12,31 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing.Variables
+namespace SecuredApi.Logic.Routing.Variables;
+
+public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 {
-    public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
+    private Dictionary<string, string> _variables = new(StringComparer.OrdinalIgnoreCase);
+
+    public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
     {
-        private Dictionary<string, string> _variables = new();
+        return _variables.TryGetValue(key, out value);
+    }
 
-        public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
-        {
-            return _variables.TryGetValue(key, out value);
-        }
+    public bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out string value)
+    {
+        return TryGetVariable(key.ToString(), out value);
+    }
 
-        public bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out string value)
+    public void Update(IEnumerable<KeyValuePair<string, string>> values)
+    {
+        var variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach(var p in values)
         {
-            return TryGetVariable(key.ToString(), out value);
+            variables.Add(p.Key, p.Value);
         }
-
-        public void Update(IEnumerable<KeyValuePair<string, string>> values)
-        {
-            var variables = new Dictionary<string, string>();
-            foreach(var p in values)
-            {
-                variables.Add(p.Key, p.Value);
-            }
-            _variables = variables;
-        }
+        _variables = variables;
     }
 }

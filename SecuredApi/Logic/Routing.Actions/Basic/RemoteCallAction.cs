@@ -22,14 +22,21 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 public class RemoteCallAction: IAction
 {
     private readonly Uri _uri;
-    private readonly HttpMethod _method;
+    private readonly HttpMethod? _method;
     private readonly TimeSpan _timeout;
     private readonly string _clientName;
 
     public RemoteCallAction(RemoteCallActionSettings config)
     {
         _uri = new Uri(config.Path);
-        _method = new(config.Method);
+
+        //Shortcut to make runtime variable (requestHttpMethod) work.
+        //Later will rewrite\redesign code for more generic use of runntime variables
+        if (config.Method != VariableNames.RequestHttpMethod)
+        {
+            _method = new(config.Method);
+        }
+
         if(config.Timeout == -1)
         {
             _timeout = Timeout.InfiniteTimeSpan;
@@ -38,6 +45,7 @@ public class RemoteCallAction: IAction
         {
             _timeout = TimeSpan.FromMilliseconds(config.Timeout);
         }
+
         _clientName = HttpClientNames.GetClientName(config.EnableRedirect);
     }
 
@@ -114,7 +122,9 @@ public class RemoteCallAction: IAction
         builder.Query += request.QueryString;
         message.RequestUri = builder.Uri;
 
-        message.Method = _method;
+        //Shortcut to make runtime variable (requestHttpMethod) work.
+        //Later will rewrite\redesign code for more generic use of runntime variables
+        message.Method = _method ?? new HttpMethod(request.Method);
 
         return message;
     }

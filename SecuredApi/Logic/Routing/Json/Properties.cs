@@ -12,27 +12,25 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Text.Json;
+namespace SecuredApi.Logic.Routing.Json;
 
-namespace SecuredApi.Logic.Routing.Json
+public static class Properties
 {
-    public static class Properties
-    {
-        public const string RoutesGroupsPropertyName = "routesGroups";
-        public const string RoutesPropertyName = "routes";
-        public const string RoutesGroupPreRequestActions = "preRequestActions";
-        public const string RoutesGroupOnErrorActions = "onRequestErrorActions";
-        public const string RoutesGroupOnSuccessActions = "onRequestSuccessActions";
-        public const string RoutesGroupIdPropertyName = "id";
+    public const string RoutesGroupId = "id";
+    public const string RoutesGroups = "routesGroups";
+    public const string RoutesGroupPreRequestActions = "preRequestActions";
+    public const string RoutesGroupOnErrorActions = "onRequestErrorActions";
+    public const string RoutesGroupOnSuccessActions = "onRequestSuccessActions";
+    public const string RootRoutesGroupNotFoundRouteActions = "routeNotFoundActions";
+    public const string RoutesGroupDescription = "description";
+    public const string RoutesGroupPath = "path";
 
-        public const string ActionsPropertyName = "actions";
-        public const string ActionNamePropertyName = "name";
-        public const string ActionSettingsPropertyName = "settings";
+    public const string Actions = "actions";
+    public const string ActionType = "type";
 
-        public const string RouteKeyPropertyName = "routeKey";
-        public const string RouteIdPropertyName = "id";
-
-        public const string RotFoundRoutePropertyName = "notFoundRoute";
-    }
+    public const string RouteId = "id";
+    public const string Routes = "routes";
+    public const string RoutePath = "path";
+    public const string RouteMethods = "methods";
+    public const string RouteDescription = "description";
 }

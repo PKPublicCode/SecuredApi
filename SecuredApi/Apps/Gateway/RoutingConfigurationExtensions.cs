@@ -20,7 +20,6 @@ using SecuredApi.Logic.Routing.Engine.PartialRoutingTable;
 using SecuredApi.Logic.Routing.Variables;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing.Utils;
-using System.Net.Http;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Apps.Gateway.Actions;
@@ -67,7 +66,7 @@ public static class RoutingConfigurationExtensions
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
                         new DefaultGlobalVariablesProvider(
-                                srvs.GetRequiredService<IConfiguration>().GetSection("GlobalVariables")
+                                srvs.GetRequiredService<IConfiguration>().GetSection("Globals:Variables")
                             ));
     }
 

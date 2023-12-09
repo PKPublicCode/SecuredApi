@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
 	<RootNamespace>SecuredApi.Logic.Routing</RootNamespace>
 	<AssemblyName>SecuredApi.Logic.Routing.Abstractions</AssemblyName>
 	<Nullable>Enable</Nullable>

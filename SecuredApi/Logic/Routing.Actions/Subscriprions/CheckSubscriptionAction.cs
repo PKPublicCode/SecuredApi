@@ -52,7 +52,7 @@ public class CheckSubscriptionAction : IAction
             return await context.SetNotAuthorizedErrorAsync(_subscriptionKeyNotSetOrInvalid);
         }
 
-        if (!CheckSubscription(subscriptionKey, context))
+        if (!context.Route.GroupIds.Overlaps(subscriptionKey.Routes))
         {
             return await context.SetAccessDeniedErrorAsync(_callNotAllowed);
         }
@@ -67,18 +67,5 @@ public class CheckSubscriptionAction : IAction
         //it will cause boxing. So we release big object, but allocate smaller one.
         context.SetSubscriptionKeyEntity(subscriptionKey);
         return true;
-    }
-
-    private static bool CheckSubscription(SubscriptionKeyEntity subscription, IRequestContext context)
-    {
-        var allowed = subscription.Routes.ToHashSet();
-        for (int i = 0; i < context.RoutesGroups.Count; ++i)
-        {
-            if(allowed.Contains(context.RoutesGroups[i].Id))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

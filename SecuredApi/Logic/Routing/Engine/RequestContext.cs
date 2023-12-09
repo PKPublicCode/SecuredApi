@@ -26,18 +26,16 @@ namespace SecuredApi.Logic.Routing.Engine
         public HttpContext HttpContext { get; }
         public HttpRequest Request => HttpContext.Request;
         public IResponse Response => _response;
-        public IReadOnlyList<RoutesGroup> RoutesGroups { get; }
+        public RouteRecord Route { get; }
         public string RemainingPath { get; }
         public IDictionary<string, object> Variables { get; } = new Dictionary<string, object>();
         public CancellationToken CancellationToken => HttpContext.RequestAborted;
         public IServiceProvider ServiceProvider => HttpContext.RequestServices;
         public ConnectionInfo ConnectionInfo => HttpContext.Connection;
 
-        public RequestContext(IReadOnlyList<RoutesGroup> routesGroups, 
-                                        string remainingPath, 
-                                        HttpContext httpContext)
+        public RequestContext(RouteRecord route, string remainingPath, HttpContext httpContext)
         {
-            RoutesGroups = routesGroups;
+            Route = route;
             RemainingPath = remainingPath;
             HttpContext = httpContext;
             _response = new Response(HttpContext.Response);

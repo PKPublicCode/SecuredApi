@@ -1,8 +1,6 @@
 ﻿{
-  "variables": [
-    {
-      "key": "EchoPath",
-      "value": "https://remote.endpoint/api"
-    }
-  ]
+  // Comment to test enabled comments
+  "variables": {
+    "echoPath": "https://remote.endpoint/api"
+  }
 }

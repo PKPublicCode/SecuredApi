@@ -12,14 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using System.Text.Json;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+internal class ActionsEnumeratorConfig
 {
-    internal class ActionsEnumeratorConfig
-    {
-        public IActionFactory ActionFactory { get; init; } = null!;
-        public JsonSerializerOptions SerializerOptions { get; init; } = null!;
-    }
+    public IActionFactory ActionFactory { get; init; } = null!;
+    public JsonSerializerOptions SerializerOptions { get; init; } = null!;
 }

@@ -12,31 +12,26 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SecuredApi.Logic.Routing.Engine.EqualityRoutingTable
+namespace SecuredApi.Logic.Routing.Engine.EqualityRoutingTable;
+
+internal class RoutingTable : IRoutingTable
 {
-    internal class RoutingTable : IRoutingTable
+    private readonly IDictionary<RouteKey, RouteRecord> _routes;
+    private readonly RouteRecord _notFoundRouting;
+
+    public RoutingTable(IDictionary<RouteKey, RouteRecord> routes, RouteRecord notFoundRoute)
     {
-        private readonly IDictionary<RouteKey, RouteRecord> _routes;
-        private readonly RouteRecord _notFoundRouting;
+        _routes = routes;
+        _notFoundRouting = notFoundRoute;
+    }
 
-        public RoutingTable(IDictionary<RouteKey, RouteRecord> routes, RouteRecord notFoundRoute)
+    public Task<RouteInfo> GetRoutingAsync(string path, string method, CancellationToken token)
+    {
+        if (!_routes.TryGetValue(new RouteKey(method, path).ToLower(), out var result))
         {
-            _routes = routes;
-            _notFoundRouting = notFoundRoute;
+            result = _notFoundRouting;
         }
-
-        public Task<RouteInfo> GetRoutingAsync(string path, string method, CancellationToken token)
-        {
-            if (!_routes.TryGetValue(new RouteKey(method, path).ToLower(), out var result))
-            {
-                result = _notFoundRouting;
-            }
-            return Task.FromResult(new RouteInfo(result, string.Empty));
-        }
+        return Task.FromResult(new RouteInfo(result, string.Empty));
     }
 }

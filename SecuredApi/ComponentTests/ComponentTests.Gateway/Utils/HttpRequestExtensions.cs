@@ -20,8 +20,13 @@ public static class HttpRequestExtensions
 {
     public static HttpRequest SetupGet(this HttpRequest r, string path)
     {
+        return r.SetupMethod(path, HttpMethods.Get);
+    }
+
+    public static HttpRequest SetupMethod(this HttpRequest r, string path, string method)
+    {
         r.Path = path;
-        r.Method = HttpMethods.Get;
+        r.Method = method;
         return r;
     }
 }

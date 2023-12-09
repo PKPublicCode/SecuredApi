@@ -12,68 +12,65 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Text.Json;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
-namespace SecuredApi.Logic.Routing.Json
+namespace SecuredApi.Logic.Routing.Json;
+
+internal struct ActionsEnumerator : IEnumerator<IAction>
 {
-    internal struct ActionsEnumerator : IEnumerator<IAction>
+    private JsonElement.ArrayEnumerator _enumerator;
+    private IAction? _current;
+    private readonly ActionsEnumeratorConfig _config;
+
+    public ActionsEnumerator(JsonElement json, ActionsEnumeratorConfig config)
     {
-        private JsonElement.ArrayEnumerator _enumerator;
-        private IAction? _current;
-        private readonly ActionsEnumeratorConfig _config;
+        _enumerator = json.EnumerateArray();
+        _config = config;
+        _current = null;
+    }
 
-        public ActionsEnumerator(JsonElement json, ActionsEnumeratorConfig config)
+    public IAction Current
+    {
+        get => _current ?? throw new InvalidOperationException("Incorrect enumerator state");
+        private set => _current = value;
+    }
+
+    object IEnumerator.Current => Current;
+
+    public void Dispose()
+    {
+        _enumerator.Dispose();
+    }
+
+    public bool MoveNext()
+    {
+        if (_enumerator.MoveNext())
         {
-            _enumerator = json.EnumerateArray();
-            _config = config;
-            _current = null;
-        }
-
-        public IAction Current
-        {
-            get => _current ?? throw new InvalidOperationException("Incorrect enumerator state");
-            private set => _current = value;
-        }
-
-        object IEnumerator.Current => Current;
-
-        public void Dispose()
-        {
-            _enumerator.Dispose();
-        }
-
-        public bool MoveNext()
-        {
-            if (_enumerator.MoveNext())
+            var actionJson = _enumerator.Current;
+            if (!actionJson.TryGetProperty(ActionType, out var nameJson))
             {
-                var actionJson = _enumerator.Current;
-                if (!actionJson.TryGetProperty(ActionNamePropertyName, out var prop))
-                {
-                    throw new RouteConfigurationException("Action name not set");
-                }
-                string name = prop.GetString() 
-                    ?? throw new RouteConfigurationException("Action name is null");
-                var settingsType = _config.ActionFactory.GetSettingsType(name);
-                if (!actionJson.TryGetProperty(ActionSettingsPropertyName, out prop))
-                {
-                    throw new RouteConfigurationException("Settings not configured");
-                }
-                var settings = JsonSerializer.Deserialize(prop.GetRawText(), settingsType, _config.SerializerOptions)
-                    ?? throw new RouteConfigurationException("Invalid action settings");
-                _current = _config.ActionFactory.CreateAction(name, settings);
-                return true;
+                throw new RouteConfigurationException("Action type is not set");
             }
-            return false;
-        }
 
-        public void Reset()
-        {
-            _enumerator.Reset();
-            Current = null!;
+            string type = nameJson.GetString() 
+                ?? throw new RouteConfigurationException("Action type is null");
+
+            var settingsType = _config.ActionFactory.GetSettingsType(type);
+            var settings = JsonSerializer.Deserialize(actionJson.GetRawText(), settingsType, _config.SerializerOptions)
+                ?? throw new RouteConfigurationException("Invalid action settings");
+
+            _current = _config.ActionFactory.CreateAction(type, settings);
+
+            return true;
         }
+        return false;
+    }
+
+    public void Reset()
+    {
+        _enumerator.Reset();
+        Current = null!;
     }
 }

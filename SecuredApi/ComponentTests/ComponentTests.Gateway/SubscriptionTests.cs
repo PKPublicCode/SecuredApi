@@ -21,6 +21,7 @@ namespace SecuredApi.ComponentTests.Gateway;
 public class SubscriptionTests : GatewayTestsBase
 {
     public SubscriptionTests()
+        :base("appsettings-subscriptions.json", (x, y) => { })
     {
     }
 
@@ -57,7 +58,7 @@ public class SubscriptionTests : GatewayTestsBase
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         // setup RemouteCall response
-        MainHttpHandler.When(HttpMethod.Get, $"{GlobalsPublicRemoteEndpoint}")
+        MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
             .Respond(
                         HttpStatusCode.OK,
                         new StringContent(InlineContent.PrivateRedirectWildcard)
@@ -65,7 +66,7 @@ public class SubscriptionTests : GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.Body = InlineContent.PrivateRedirectWildcard;
-        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.ResponseConsumerSpecificActions, Headers.TextPlainUtf8ContentType);
+        ExpectedResult.AddHeaders(Headers.ResponseConsumerSpecificActions, Headers.TextPlainUtf8ContentType);
 
         await ExecuteAsync();
     }

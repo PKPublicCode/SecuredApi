@@ -12,21 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Threading.Tasks;
 
-namespace SecuredApi.Logic.Routing.RequestProcessors
+namespace SecuredApi.Logic.Routing.RequestProcessors;
+
+public class EmptyProcessor : IRequestProcessor
 {
-    public class EmptyProcessor : IRequestProcessor
+    private EmptyProcessor()
     {
-        private EmptyProcessor()
-        {
-        }
-
-        public Task<bool> ProcessRequestAsync(IRequestContext processingContext)
-        {
-            return Task.FromResult(true);
-        }
-
-        public static EmptyProcessor Instance { get; } = new();
     }
+
+    public Task<bool> ProcessRequestAsync(IRequestContext processingContext)
+    {
+        return Task.FromResult(true);
+    }
+
+    public static EmptyProcessor Instance { get; } = new();
 }

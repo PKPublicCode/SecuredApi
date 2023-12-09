@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -13,11 +13,16 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
-
 namespace SecuredApi.Logic.Routing.Json;
 
-public record RoutesParserConfig
-(
-    JsonSerializerOptions ActionSerializerOptions,
-    JsonSerializerOptions ActionsGroupSerializerOptions
-);
+public static class CommonSerializerOptions
+{
+    private static JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        ReadCommentHandling = JsonCommentHandling.Skip
+    };
+
+    public static JsonSerializerOptions Instance => _jsonOptions;
+}
+

@@ -1,13 +1,12 @@
 $AccountName = $deploymentResults.configStorageName
 $rgName = $deploymentResults.sharedRgName
 
-#Assign rights to upload blobs
-./AssignRights.ps1 $AccountName $rgName 
-
 $context = New-AzStorageContext -StorageAccountName $AccountName
 
-function Upload-Blob([string]$filePath, [string]$containerName) {
-  $blobName = Split-Path $filePath -leaf
+function Upload-Blob([string]$filePath, [string]$containerName, [string]$blobName = $null) {
+  if ($blobName -eq $null) {
+    $blobName = Split-Path $filePath -leaf
+  }
 
   Set-AzStorageBlobContent -File $filePath `
                         -Container $containerName `
@@ -32,9 +31,11 @@ Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `
 Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
             $deploymentResults.gateway.blobs.consumers.name
 
-Upload-Blob './RoutingConfigs/EchoRouting/routing-config.json' `
-                $deploymentResults.echo.blobs.configuration.name
+Upload-Blob "$($componentTestFolder)/Configuration/routing-config-delay.json" ` `
+                $deploymentResults.echo.blobs.configuration.name `
+                "routing-config.json"
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config.json" `
-                $deploymentResults.gateway.blobs.configuration.name
+Upload-Blob "$($componentTestFolder)/Configuration/routing-config-subscriptions.json" `
+                $deploymentResults.gateway.blobs.configuration.name `
+                "routing-config.json"
 
