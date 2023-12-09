@@ -21,6 +21,7 @@ namespace SecuredApi.ComponentTests.Gateway;
 public class SubscriptionTests : GatewayTestsBase
 {
     public SubscriptionTests()
+        :base("appsettings-subscriptions.json", (x, y) => { })
     {
     }
 

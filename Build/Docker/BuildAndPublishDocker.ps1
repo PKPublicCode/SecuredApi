@@ -10,9 +10,9 @@ $verFile = "$($PSScriptRoot)/ver.txt"
 $strVer = Get-Content $verfile 
 $build = [System.Decimal]::Parse($strVer)
 
-$latestTag = "candidate"
-$majorVerTag = "$($majorVer).candidate"
-$minorVerTag = "$($majorVer).$($build).candidate"
+$latestTag = "rc"
+$majorVerTag = "$($majorVer).rc"
+$minorVerTag = "$($majorVer).$($build).rc"
 if ($Prod) {
     $latestTag = "latest"
     $majorVerTag = "$($majorVer)"

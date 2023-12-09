@@ -1,0 +1,95 @@
+﻿{
+  "preRequestActions": [
+    {
+      "type": "SetRequestHeader",
+      "name": "X-COMMON-REQUEST-HEADER",
+      "value": "CommonRequestHeaderValue"
+    }
+  ],
+  "onRequestErrorActions": [
+    {
+      "type": "SetResponseHeader",
+      "name": "X-COMMON-ON-ERROR-HEADER",
+      "value": "Gateway Rejected Your Call"
+    }
+  ],
+  "onRequestSuccessActions": [
+    {
+      "type": "SetResponseHeader",
+      "name": "X-COMMON-RESPONSE-HEADER",
+      "value": "CommonResponseHeaderValue"
+    }
+  ],
+  "routesGroups": [
+    {
+      // This route is used for Integration and Performance tests.
+      // Be careful with deleting and updating it.
+      "id": "602352d4-56e8-4269-965f-1290a92df903",
+      "description": "Private routes",
+      "path": "/private",
+      "preRequestActions": [
+        {
+          "type": "CheckSubscription",
+          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
+          "errorNotAuthorizedBody": "Subscription key not set or invalid",
+          "errorAccessDeniedBody": "Call Not Allowed"
+        },
+        {
+          "type": "RunConsumerActions"
+        }
+      ],
+      "routesGroups": [
+        {
+          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
+          "description": "API with redirect",
+          "path": "/redirect",
+          "routes": [
+            {
+              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
+              "methods": [ "get" ],
+              "path": "/wildcard/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  // protectedEchoPath is set by appsettings json
+                  "path": "$(protectedEchoPath)",
+                  "method": "get"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Rote group that is not allowed by existing subscriptions",
+          "routes": [
+            {
+              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
+              "methods": [ "get" ],
+              "path": "/notallowed/wildcard/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "path": "$(protectedEchoPath)",
+                  "method": "get"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routeNotFoundActions": [
+    {
+      "type": "SetResponseHeader",
+      "name": "X-NOTFOUND-RESPONSE-HEADER",
+      "value": "NotFoundResponseHeaderValue"
+    },
+    {
+      "type": "SetResponse",
+      "httpCode": 404,
+      "body": "Route not found"
+    }
+  ]
+  // Comment to test enabled comments
+}

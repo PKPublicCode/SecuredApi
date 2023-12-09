@@ -6,8 +6,10 @@ $rgName = $deploymentResults.sharedRgName
 
 $context = New-AzStorageContext -StorageAccountName $AccountName
 
-function Upload-Blob([string]$filePath, [string]$containerName) {
-  $blobName = Split-Path $filePath -leaf
+function Upload-Blob([string]$filePath, [string]$containerName, [string]$blobName = $null) {
+  if ($blobName -eq $null) {
+    $blobName = Split-Path $filePath -leaf
+  }
 
   Set-AzStorageBlobContent -File $filePath `
                         -Container $containerName `
@@ -35,6 +37,7 @@ Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
 Upload-Blob './RoutingConfigs/EchoRouting/routing-config.json' `
                 $deploymentResults.echo.blobs.configuration.name
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config.json" `
-                $deploymentResults.gateway.blobs.configuration.name
+Upload-Blob "$($componentTestFolder)/Configuration/routing-config-subscriptions.json" `
+                $deploymentResults.gateway.blobs.configuration.name `
+                "routing-config.json"
 
