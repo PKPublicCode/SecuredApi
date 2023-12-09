@@ -16,8 +16,17 @@ using System.Text.Json;
 
 namespace SecuredApi.Logic.Routing.Json;
 
-public record RoutesParserConfig
-(
-    JsonSerializerOptions ActionSerializerOptions,
-    JsonSerializerOptions ActionsGroupSerializerOptions
-);
+public class RoutesParserConfig : IRoutesParserConfig
+{
+    private JsonSerializerOptions _actionSerializerOptions;
+
+    public JsonSerializerOptions ActionSerializerOptions => _actionSerializerOptions;
+
+    public JsonSerializerOptions ActionsGroupSerializerOptions => CommonSerializerOptions.Instance;
+
+    public RoutesParserConfig(IExpressionProcessor expressionProcessor)
+    {
+        _actionSerializerOptions = new (CommonSerializerOptions.Instance);
+        _actionSerializerOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
+    }
+}

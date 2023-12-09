@@ -22,10 +22,10 @@ public class RoutesParser : IRoutesParser
     private readonly IActionFactory _actionFactory;
     private readonly ILogger _logger;
     private readonly IRoutingTableBuilderFactory _routingBuilderFactory;
-    private readonly RoutesParserConfig _jsonConfig;
+    private readonly IRoutesParserConfig _jsonConfig;
 
     public RoutesParser(IActionFactory actionFactory,
-                            RoutesParserConfig jsonConfig,
+                            IRoutesParserConfig jsonConfig,
                             ILogger<RoutesParser> logger,
                             IRoutingTableBuilderFactory routingBuilderFactory
         )

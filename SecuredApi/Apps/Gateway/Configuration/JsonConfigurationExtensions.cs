@@ -33,17 +33,7 @@ public static class JsonConfigurationExtensions
     public static IServiceCollection ConfigureRoutingConfigurationJsonParser(this IServiceCollection srv)
     {
         return srv.AddScoped<IRoutesParser, RoutesParser>()
-            .AddSingleton(srv =>
-            {
-                var customOptions = new JsonSerializerOptions(CommonSerializerOptions.Instance);
-                var expressionProcessor = srv.GetRequiredService<IExpressionProcessor>();
-                customOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
-                return new RoutesParserConfig
-                (
-                    ActionSerializerOptions: customOptions,
-                    ActionsGroupSerializerOptions: CommonSerializerOptions.Instance
-                );
-            });
+            .AddSingleton<IRoutesParserConfig, RoutesParserConfig>();
     }
 
 }

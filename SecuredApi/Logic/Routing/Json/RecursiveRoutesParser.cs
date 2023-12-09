@@ -26,12 +26,12 @@ internal class RecursiveRoutesParser
 
     private readonly LinkedList<RoutesGroup> _groups = new();
     private readonly ActionsEnumeratorConfig _config;
-    private readonly RoutesParserConfig _jsonConfig;
+    private readonly IRoutesParserConfig _jsonConfig;
     private readonly LinkedList<string?> _urlPath = new();
     private LinkedList<string> _errorTracePath = new();
 
     private RecursiveRoutesParser(IActionFactory actionFactory,
-                            RoutesParserConfig jsonConfig,
+                            IRoutesParserConfig jsonConfig,
                             IRoutingTableBuilder builder)
     {
         _builder = builder;
@@ -43,7 +43,7 @@ internal class RecursiveRoutesParser
         };
     }
 
-    public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, RoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
+    public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, IRoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
     {
         return new RecursiveRoutesParser(actionFactory, jsonConfig, builder).ParseRoot(rootJson);
     }
