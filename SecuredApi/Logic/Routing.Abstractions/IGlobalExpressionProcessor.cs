@@ -16,7 +16,7 @@ using System;
 
 namespace SecuredApi.Logic.Routing
 {
-    public interface IExpressionProcessor
+    public interface IGlobalExpressionProcessor
     {
         string ConvertExpression(string expression);
     }

@@ -24,7 +24,7 @@ public class RoutesParserConfig : IRoutesParserConfig
 
     public JsonSerializerOptions ActionsGroupSerializerOptions => CommonSerializerOptions.Instance;
 
-    public RoutesParserConfig(IExpressionProcessor expressionProcessor)
+    public RoutesParserConfig(IGlobalExpressionProcessor expressionProcessor)
     {
         _actionSerializerOptions = new (CommonSerializerOptions.Instance);
         _actionSerializerOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));

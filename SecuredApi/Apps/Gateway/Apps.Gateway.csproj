@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\Logic\Routing.Actions\Logic.Routing.Actions.csproj" />
     <ProjectReference Include="..\..\Logic\Routing\Logic.Routing.csproj" />
     <ProjectReference Include="..\..\Infrastructure\FileAccess.FileSystem\Infrustructure.FileAccess.FileSystem.csproj" />
+    <ProjectReference Include="..\..\Logic\Routing.Variables\Logic.Routing.Variables.csproj" />
   </ItemGroup>
 
 </Project>

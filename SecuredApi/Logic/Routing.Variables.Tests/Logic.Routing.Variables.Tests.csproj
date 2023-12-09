@@ -24,5 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Routing\Logic.Routing.csproj" />
+    <ProjectReference Include="..\Routing.Variables\Logic.Routing.Variables.csproj" />
   </ItemGroup>
 </Project>

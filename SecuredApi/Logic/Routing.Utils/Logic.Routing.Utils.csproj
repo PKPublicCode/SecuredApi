@@ -4,6 +4,7 @@
 	<TargetFramework>net7.0</TargetFramework>
 	<RootNamespace>SecuredApi.Logic.Routing.Utils</RootNamespace>
 	<AssemblyName>SecuredApi.Logic.Routing.Utils</AssemblyName>
+	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
   </PropertyGroup>
 

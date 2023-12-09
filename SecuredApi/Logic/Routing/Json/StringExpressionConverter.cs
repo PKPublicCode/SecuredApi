@@ -20,9 +20,9 @@ namespace SecuredApi.Logic.Routing.Json;
 public class StringExpressionConverter : JsonConverter<string>
 {
     private readonly JsonSerializerOptions _options;
-    private readonly IExpressionProcessor _processor;
+    private readonly IGlobalExpressionProcessor _processor;
 
-    public StringExpressionConverter(JsonSerializerOptions defaultOptions, IExpressionProcessor processor)
+    public StringExpressionConverter(JsonSerializerOptions defaultOptions, IGlobalExpressionProcessor processor)
     {
         _options = defaultOptions;
         _processor = processor;

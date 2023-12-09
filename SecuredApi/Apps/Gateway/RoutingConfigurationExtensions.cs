@@ -62,7 +62,7 @@ public static class RoutingConfigurationExtensions
     private static IServiceCollection ConfigureVariables(this IServiceCollection srv)
     {
         return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
-            .AddSingleton<IExpressionProcessor, ExpressionProcessor>()
+            .AddSingleton<IGlobalExpressionProcessor, GlobalExpressionProcessor>()
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
                         new DefaultGlobalVariablesProvider(

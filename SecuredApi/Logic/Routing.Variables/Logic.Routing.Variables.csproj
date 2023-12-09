@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SecuredApi.Logic.Routing.Variables</RootNamespace>
+    <AssemblyName>SecuredApi.Logic.Routing.Variables</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
+  </ItemGroup>
+</Project>
