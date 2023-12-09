@@ -1,10 +1,8 @@
 ﻿{
+  // Important!!!!
+  // This config is used for Integration and Performance tests.
+  // Be careful with deleting and updating it.
   "preRequestActions": [
-    {
-      "type": "SetRequestHeader",
-      "name": "X-COMMON-REQUEST-HEADER",
-      "value": "CommonRequestHeaderValue"
-    }
   ],
   "onRequestErrorActions": [
     {
@@ -14,16 +12,9 @@
     }
   ],
   "onRequestSuccessActions": [
-    {
-      "type": "SetResponseHeader",
-      "name": "X-COMMON-RESPONSE-HEADER",
-      "value": "CommonResponseHeaderValue"
-    }
   ],
   "routesGroups": [
     {
-      // This route is used for Integration and Performance tests.
-      // Be careful with deleting and updating it.
       "id": "602352d4-56e8-4269-965f-1290a92df903",
       "description": "Private routes",
       "path": "/private",
@@ -80,11 +71,6 @@
     }
   ],
   "routeNotFoundActions": [
-    {
-      "type": "SetResponseHeader",
-      "name": "X-NOTFOUND-RESPONSE-HEADER",
-      "value": "NotFoundResponseHeaderValue"
-    },
     {
       "type": "SetResponse",
       "httpCode": 404,

@@ -21,12 +21,16 @@ public class DurationTests : GatewayTestsBase
 {
     private long? _testRunDuration = null;
 
+    public DurationTests()
+        : base("appsettings-delay.json", (x, y) => { })
+    {
+    }
+
     [Fact]
     public async Task Route_Delay()
     {
         Request.SetupGet(RoutePaths.PublicEchoDelay);
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
-        ExpectedResult.AddHeaders(Headers.ResponseCommon);
         ExpectedResult.Body = InlineContent.EchoDelay;
 
         await ExecuteAsync();

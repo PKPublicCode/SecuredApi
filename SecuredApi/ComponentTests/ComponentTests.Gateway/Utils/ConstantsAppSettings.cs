@@ -44,7 +44,7 @@ public static partial class Constants
         public const string PublicRemoteWildcardOriginal = "/public/remote/wildcard_original_method";
         public const string PublicEchoWildcard = "/public/echo/wildcard";
         public const string PublicEchoExact = "/public/echo/exact";
-        public const string PublicEchoDelay = "/public/echo/delay";
+        public const string PublicEchoDelay = "/echo/delay";
         public const string PublicContentBase = "/public/echo/content";
         public const string PrivateRedirectWildcard = "/private/redirect/wildcard";
         public const string PrivateNotAllowedWildcard = "/private/notallowed/wildcard";
@@ -56,7 +56,7 @@ public static partial class Constants
         public const string EchoWildcard = "Echo wildcard route";
         public const string NotFound = "Route not found";
         public const string StaticFileWildcardNotFound = "This is wrong file url";
-        public const string EchoDelay = "Public delay route";
+        public const string EchoDelay = "This is Echo!\n V0.0001\n, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\n";
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string CallNotAllowed = "Call Not Allowed";
         public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";

@@ -66,7 +66,7 @@ public class SubscriptionTests : GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.Body = InlineContent.PrivateRedirectWildcard;
-        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.ResponseConsumerSpecificActions, Headers.TextPlainUtf8ContentType);
+        ExpectedResult.AddHeaders(Headers.ResponseConsumerSpecificActions, Headers.TextPlainUtf8ContentType);
 
         await ExecuteAsync();
     }

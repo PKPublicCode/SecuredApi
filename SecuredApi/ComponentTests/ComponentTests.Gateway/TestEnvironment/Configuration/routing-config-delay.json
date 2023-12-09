@@ -1,4 +1,7 @@
 {
+  // Important!!!!
+  // This config is used for Integration and Performance tests.
+  // Be careful with deleting and updating it.
   "preRequestActions": [
   ],
   "onRequestErrorActions": [
