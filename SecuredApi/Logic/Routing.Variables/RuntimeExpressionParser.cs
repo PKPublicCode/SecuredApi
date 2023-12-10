@@ -12,7 +12,6 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Text;
 using static SecuredApi.Logic.Routing.Variables.Constants.Runtime;
 namespace SecuredApi.Logic.Routing.Variables;
 
@@ -45,18 +44,7 @@ public class RuntimeExpressionParser: IRuntimeExpressionParser
 
         public static RuntimeExpression MakeShortExpression(string expression)
         {
-            if (expression.Length > 0)
-            {
-                return new RuntimeExpression(new List<ExpressionPart>(1)
-                {
-                    new ExpressionPart()
-                    {
-                        Value = expression,
-                        IsVariable = false
-                    }
-                }); ;
-            }
-            return new RuntimeExpression(_emptyParts);
+            return new RuntimeExpression(expression);
         }
 
         public ExpressionBuilder(int capacity)
@@ -80,8 +68,6 @@ public class RuntimeExpressionParser: IRuntimeExpressionParser
                 IsVariable = isVariable
             });
         }
-
-        private static readonly List<ExpressionPart> _emptyParts = new();
     }
 }
 

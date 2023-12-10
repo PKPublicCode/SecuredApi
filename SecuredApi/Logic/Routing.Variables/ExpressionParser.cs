@@ -51,7 +51,10 @@ public class ExpressionParser<T>
         int begin = 0;
         do
         {
-            sb.AddPart(expressionSpan[begin..varStart], expression); //add part of expression before start
+            if (begin < varStart)
+            {
+                sb.AddPart(expressionSpan[begin..varStart], expression); //add part of expression before start
+            }
             varStart += _variableStart.Length; //move to beginning of variable
             int varEnd = expression.IndexOf(_variableEnd, varStart); //find end of variable
             if (varEnd < 0)
@@ -63,7 +66,10 @@ public class ExpressionParser<T>
             varStart = expression.IndexOf(_variableStart, begin); //find start of the variable
         }
         while (varStart > 0);
-        sb.AddPart(expressionSpan[begin..expression.Length], expression);
+        if (begin < expression.Length)
+        {
+            sb.AddPart(expressionSpan[begin..expression.Length], expression);
+        }
     }
 }
 

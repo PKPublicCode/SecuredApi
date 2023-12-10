@@ -22,7 +22,9 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 public class RemoteCallAction: IAction
 {
     private readonly RuntimeExpression _path;
+    private readonly Uri? _constPath;
     private readonly RuntimeExpression _method;
+    private readonly HttpMethod? _constMethod;
     private readonly TimeSpan _timeout;
     private readonly string _clientName;
 
@@ -30,6 +32,17 @@ public class RemoteCallAction: IAction
     {
         _path = config.Path;
         _method = config.Method;
+
+        //Optimization to cache immutable objects in memory
+        if (_path.Immutable)
+        {
+            _constPath = new Uri(_path.ImmutableValue);
+        }
+
+        if (_method.Immutable)
+        {
+            _constMethod = new(_method.ImmutableValue);
+        }
 
         if (config.Timeout == -1)
         {
@@ -47,7 +60,7 @@ public class RemoteCallAction: IAction
     {
         var httpClient = context.GetRequiredService<IHttpClientFactory>().CreateClient(_clientName);
         httpClient.Timeout = _timeout;
-        using var message = CreateEndpointRequestMessage(context.RemainingPath, context);
+        using var message = CreateEndpointRequestMessage(context);
         try
         {
             // endpointReponse is IDisposable, however it can't be dispossed here.
@@ -86,8 +99,7 @@ public class RemoteCallAction: IAction
         response.Body = new HttpResponseMessageStream(message);
     }
 
-    //ToDo.0 Stop using remaining path
-    private HttpRequestMessage CreateEndpointRequestMessage(string remainingPath, IRequestContext context)
+    private HttpRequestMessage CreateEndpointRequestMessage(IRequestContext context)
     {
         var message = new HttpRequestMessage();
         var request = context.Request;
@@ -109,9 +121,10 @@ public class RemoteCallAction: IAction
         //Since destination is changed, previous Host value is not valid
         message.Headers.Remove("Host");
 
-        //ToDo.0 Optimization for constants
-        message.RequestUri = new Uri(_path.BuildString(context.Variables));
-        message.Method = new HttpMethod(_method.BuildString(context.Variables));
+        message.RequestUri = _constPath
+            ?? new Uri(_path.BuildString(context.Variables));
+        message.Method = _constMethod
+            ?? new HttpMethod(_method.BuildString(context.Variables));
 
         return message;
     }
