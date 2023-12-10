@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -14,7 +14,8 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 namespace SecuredApi.Logic.Routing;
 
-public interface IGlobalExpressionProcessor
+public interface IRuntimeExpressionParser
 {
-    string Parse(string expression);
+    RuntimeExpression Parse(string expression);
 }
+
