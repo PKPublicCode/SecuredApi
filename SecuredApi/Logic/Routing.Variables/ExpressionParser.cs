@@ -44,7 +44,6 @@ public class ExpressionParser<T>
         return false;
     }
 
-    //ToDo.0 Fix extra (empty) parts
     private void ProcessExpression(string expression, IExpressionBuilder sb, int varStart)
     {
         var expressionSpan = expression.AsSpan();
