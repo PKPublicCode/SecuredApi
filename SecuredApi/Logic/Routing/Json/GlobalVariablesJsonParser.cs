@@ -18,9 +18,16 @@ namespace SecuredApi.Logic.Routing.Json;
 
 public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
 {
+    private readonly ICommonParserConfig _config;
+
+    public GlobalVariablesJsonParser(ICommonParserConfig config)
+    {
+        _config = config;
+    }
+
     public async Task<GlobalConfiguration> ParseAsync(Stream s, CancellationToken cancellationToken)
     {
-        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, CommonSerializerOptions.Instance, cancellationToken)
+        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, _config.SerializerOptions, cancellationToken)
            ?? throw new RouteConfigurationException("Unable to parse global configuration");
 
         return new GlobalConfiguration()

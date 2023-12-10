@@ -38,14 +38,9 @@ public class RoutesParser : IRoutesParser
 
     public async Task<IRoutingTable> ParseAsync(Stream routeCfg, CancellationToken cancellationToken)
     {
-        var jsonOptions = new JsonDocumentOptions()
-        {
-            CommentHandling = CommonSerializerOptions.Instance.ReadCommentHandling
-        };
-
         try
         {
-            using var document = await JsonDocument.ParseAsync(routeCfg, jsonOptions, cancellationToken);
+            using var document = await JsonDocument.ParseAsync(routeCfg, _jsonConfig.DocumentOptions, cancellationToken);
             return RecursiveRoutesParser.Parse(document.RootElement, _actionFactory, _jsonConfig, _routingBuilderFactory.Create());
         }
         catch(RouteConfigurationException e)

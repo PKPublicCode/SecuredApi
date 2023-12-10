@@ -39,7 +39,7 @@ internal class RecursiveRoutesParser
         _config = new ActionsEnumeratorConfig()
         {
             ActionFactory = actionFactory,
-            SerializerOptions = _jsonConfig.ActionSerializerOptions
+            SerializerOptions = _jsonConfig.SerializerOptions
         };
     }
 
@@ -252,7 +252,7 @@ internal class RecursiveRoutesParser
     private T GetProperty<T>(JsonElement json, string name)
     {
         var propJson = GetProperty(json, name);
-        return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.ActionsGroupSerializerOptions)
+        return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.SerializerOptions)
             ?? throw MakeException("Invalid property: {0}", name);
     }
 

@@ -13,7 +13,8 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
-namespace SecuredApi.Logic.Routing.Json;
+
+namespace SecuredApi.Apps.Gateway.Routing;
 
 public static class CommonSerializerOptions
 {

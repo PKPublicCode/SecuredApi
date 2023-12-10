@@ -16,9 +16,8 @@ using System.Text.Json;
 
 namespace SecuredApi.Logic.Routing.Json;
 
-public interface IRoutesParserConfig
+public interface ICommonParserConfig
 {
     public JsonSerializerOptions SerializerOptions { get; }
-    public JsonDocumentOptions DocumentOptions { get; }
 }
 

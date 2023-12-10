@@ -13,20 +13,28 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
+using SecuredApi.Logic.Routing;
+using SecuredApi.Logic.Routing.Json;
 
-namespace SecuredApi.Logic.Routing.Json;
+namespace SecuredApi.Apps.Gateway.Routing;
 
 public class RoutesParserConfig : IRoutesParserConfig
 {
-    private JsonSerializerOptions _actionSerializerOptions;
+    private readonly JsonSerializerOptions _serializerOptions;
+    private readonly JsonDocumentOptions _documentOptions;
 
-    public JsonSerializerOptions ActionSerializerOptions => _actionSerializerOptions;
+    public JsonSerializerOptions SerializerOptions => _serializerOptions;
 
-    public JsonSerializerOptions ActionsGroupSerializerOptions => CommonSerializerOptions.Instance;
+    public JsonDocumentOptions DocumentOptions => _documentOptions;
 
     public RoutesParserConfig(IGlobalExpressionProcessor expressionProcessor)
     {
-        _actionSerializerOptions = new (CommonSerializerOptions.Instance);
-        _actionSerializerOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
+        _serializerOptions = new (CommonSerializerOptions.Instance);
+        _serializerOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
+
+        _documentOptions = new ()
+        {
+            CommentHandling = CommonSerializerOptions.Instance.ReadCommentHandling
+        };
     }
 }

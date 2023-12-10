@@ -12,13 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using SecuredApi.Logic.Routing.Json;
 using System.Text.Json;
 
-namespace SecuredApi.Logic.Routing.Json;
+namespace SecuredApi.Apps.Gateway.Routing;
 
-public interface IRoutesParserConfig
+public class CommonParserConfig: ICommonParserConfig
 {
-    public JsonSerializerOptions SerializerOptions { get; }
-    public JsonDocumentOptions DocumentOptions { get; }
+    public JsonSerializerOptions SerializerOptions => CommonSerializerOptions.Instance;
 }
 

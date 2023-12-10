@@ -12,10 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing;
+using SecuredApi.Apps.Gateway.Routing;
 
 namespace SecuredApi.Apps.Gateway.Configuration;
 
@@ -33,7 +33,8 @@ public static class JsonConfigurationExtensions
     public static IServiceCollection ConfigureRoutingConfigurationJsonParser(this IServiceCollection srv)
     {
         return srv.AddScoped<IRoutesParser, RoutesParser>()
-            .AddSingleton<IRoutesParserConfig, RoutesParserConfig>();
+            .AddSingleton<IRoutesParserConfig, RoutesParserConfig>()
+            .AddSingleton<ICommonParserConfig, CommonParserConfig>();
     }
 
 }
