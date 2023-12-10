@@ -27,10 +27,11 @@ public class RoutesParserConfig : IRoutesParserConfig
 
     public JsonDocumentOptions DocumentOptions => _documentOptions;
 
-    public RoutesParserConfig(IGlobalExpressionProcessor expressionProcessor)
+    public RoutesParserConfig(IGlobalExpressionProcessor globalProcessor, IRuntimeExpressionParser runtimeParser)
     {
         _serializerOptions = new (CommonSerializerOptions.Instance);
-        _serializerOptions.Converters.Add(new StringExpressionConverter(CommonSerializerOptions.Instance, expressionProcessor));
+        _serializerOptions.Converters.Add(new StringGlobalExpressionConverter(globalProcessor));
+        _serializerOptions.Converters.Add(new RuntimeExpressionConverter(runtimeParser));
 
         _documentOptions = new ()
         {

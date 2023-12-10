@@ -124,7 +124,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(echoPath)",
+                  "path": "$(echoPath)/new_remote_path/@(requestRemainingPath)@(requestQueryString)",
                   "method": "@(requestHttpMethod)"
                 },
                 {

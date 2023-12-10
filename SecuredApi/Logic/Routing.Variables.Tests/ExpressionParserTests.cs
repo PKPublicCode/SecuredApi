@@ -35,26 +35,36 @@ public class ExpressionParserTests
     public void Positive(string expression, string expected)
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
-        Assert.Equal(expected, sut.ConvertExpression(expression));
+        Assert.Equal(expected, sut.Parse(expression));
     }
 
     [Fact()]
     public void InvalidExpression()
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
-        Assert.Throws<RouteConfigurationException>(() => sut.ConvertExpression("blabla$(asfasdf"));
+        Assert.Throws<RouteConfigurationException>(() => sut.Parse("blabla$(asfasdf"));
     }
 
     [Fact()]
     public void NotFoundVariable()
     {
         var sut = new GlobalExpressionProcessor(new NotFoundeGlobalVariables());
-        Assert.Throws<RouteConfigurationException>(() => sut.ConvertExpression("Hello$(value)"));
+        Assert.Throws<RouteConfigurationException>(() => sut.Parse("Hello$(value)"));
     }
 
     //Unable to mock methods with ReadOnlySpan with NSubstitute. Need more research
     private class SimplePositiveGlobalVariables : IGlobalVariables
     {
+        public string GetVariable(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetVariable(ReadOnlySpan<char> key)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
         {
             value = $"_{key}_";
@@ -69,6 +79,16 @@ public class ExpressionParserTests
 
     private class NotFoundeGlobalVariables : IGlobalVariables
     {
+        public string GetVariable(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetVariable(ReadOnlySpan<char> key)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
         {
             value = null;

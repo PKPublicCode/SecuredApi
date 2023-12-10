@@ -63,7 +63,8 @@ public static partial class Constants
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
-    public const string AppSettingnsProtectedRemoteEndpoint = "https://protected.remote.endpoint/api.v2";
+    public const string GlobalsPublicRemoteEndpointWithExtra = "https://remote.endpoint/api/new_remote_path/";
+    public const string AppSettingnsProtectedRemoteEndpoint = "https://protected.remote.endpoint/api.v2/";
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
     public const int PublicEchoDelayMilliseconds = 300;
 

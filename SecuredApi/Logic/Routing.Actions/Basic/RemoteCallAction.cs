@@ -21,23 +21,17 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class RemoteCallAction: IAction
 {
-    private readonly Uri _uri;
-    private readonly HttpMethod? _method;
+    private readonly RuntimeExpression _path;
+    private readonly RuntimeExpression _method;
     private readonly TimeSpan _timeout;
     private readonly string _clientName;
 
     public RemoteCallAction(RemoteCallActionSettings config)
     {
-        _uri = new Uri(config.Path);
+        _path = config.Path;
+        _method = config.Method;
 
-        //Shortcut to make runtime variable (requestHttpMethod) work.
-        //Later will rewrite\redesign code for more generic use of runntime variables
-        if (config.Method != VariableNames.RequestHttpMethod)
-        {
-            _method = new(config.Method);
-        }
-
-        if(config.Timeout == -1)
+        if (config.Timeout == -1)
         {
             _timeout = Timeout.InfiniteTimeSpan;
         }
@@ -53,7 +47,7 @@ public class RemoteCallAction: IAction
     {
         var httpClient = context.GetRequiredService<IHttpClientFactory>().CreateClient(_clientName);
         httpClient.Timeout = _timeout;
-        using var message = CreateEndpointRequestMessage(context.RemainingPath, context.Request);
+        using var message = CreateEndpointRequestMessage(context.RemainingPath, context);
         try
         {
             // endpointReponse is IDisposable, however it can't be dispossed here.
@@ -92,9 +86,11 @@ public class RemoteCallAction: IAction
         response.Body = new HttpResponseMessageStream(message);
     }
 
-    private HttpRequestMessage CreateEndpointRequestMessage(string remainingPath, HttpRequest request)
+    //ToDo.0 Stop using remaining path
+    private HttpRequestMessage CreateEndpointRequestMessage(string remainingPath, IRequestContext context)
     {
         var message = new HttpRequestMessage();
+        var request = context.Request;
 
         if (request.ContentLength > 0)
         {
@@ -113,18 +109,9 @@ public class RemoteCallAction: IAction
         //Since destination is changed, previous Host value is not valid
         message.Headers.Remove("Host");
 
-        var builder = new UriBuilder(_uri);
-        if (remainingPath.Length > 0  && remainingPath[0] != '/')
-        {
-            builder.Path += '/';
-        }
-        builder.Path += remainingPath;
-        builder.Query += request.QueryString;
-        message.RequestUri = builder.Uri;
-
-        //Shortcut to make runtime variable (requestHttpMethod) work.
-        //Later will rewrite\redesign code for more generic use of runntime variables
-        message.Method = _method ?? new HttpMethod(request.Method);
+        //ToDo.0 Optimization for constants
+        message.RequestUri = new Uri(_path.BuildString(context.Variables));
+        message.Method = new HttpMethod(_method.BuildString(context.Variables));
 
         return message;
     }

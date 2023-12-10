@@ -17,23 +17,21 @@ using System.Text.Json.Serialization;
 
 namespace SecuredApi.Logic.Routing.Json;
 
-public class StringExpressionConverter : JsonConverter<string>
+public class StringGlobalExpressionConverter : JsonConverter<string>
 {
-    private readonly JsonSerializerOptions _options;
     private readonly IGlobalExpressionProcessor _processor;
 
-    public StringExpressionConverter(JsonSerializerOptions defaultOptions, IGlobalExpressionProcessor processor)
+    public StringGlobalExpressionConverter(IGlobalExpressionProcessor processor)
     {
-        _options = defaultOptions;
         _processor = processor;
     }
 
     public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var value = JsonSerializer.Deserialize<string>(ref reader, _options);
+        var value = reader.GetString();
         if (value != null)
         {
-            return _processor.ConvertExpression(value);
+            return _processor.Parse(value);
         }
         return value;
     }

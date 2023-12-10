@@ -20,6 +20,10 @@ public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 {
     private Dictionary<string, string> _variables = new(StringComparer.OrdinalIgnoreCase);
 
+    public string GetVariable(string key) => _variables[key];
+
+    public string GetVariable(ReadOnlySpan<char> key) => _variables[key.ToString()];
+
     public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
     {
         return _variables.TryGetValue(key, out value);

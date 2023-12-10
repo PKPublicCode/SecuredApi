@@ -12,12 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using SecuredApi.Logic.Routing.Variables;
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class RemoteCallActionSettings
 {
-    public string Path { get; init; } = null!;
-    public string Method { get; init; } = null!;
+    public RuntimeExpression Path { get; init; }
+    public RuntimeExpression Method { get; init; }
     public int Timeout { get; init; } = -1;
     public bool EnableRedirect { get; init; } = true;
 }

@@ -17,24 +17,24 @@ namespace SecuredApi.Logic.Routing.Utils;
 
 public static class RequestContextVariablesExtensions
 {
-
+    //ToDo.0 Move to variables
     public static void SetVariable(this IRequestContext ctx, string name, object o)
     {
-        ctx.Variables[name] = o;
+        ctx.Variables.SetVariable(name, o);
     }
 
     public static T GetVariable<T>(this IRequestContext context, string name)
     {
-        return (T)context.Variables[name];
+        return (T) context.Variables.GetVariable(name);
     }
 
     public static bool TryGetVariable<T>(this IRequestContext context, string name, [MaybeNullWhen(false)] out T value)
     {
-        if (context.Variables.TryGetValue(name, out var o)
-            && o is T)
+        if (context.Variables.TryGetVariable(name, out var o)
+            && o is T t)
         {
-            value = (T) o;
-            return value != null;
+            value = t;
+            return true;
         }
         value = default;
         return false;

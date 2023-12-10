@@ -12,13 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Collections.Generic;
+namespace SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Logic.Routing
+public interface IGlobalVariablesUpdater
 {
-    public interface IGlobalVariablesUpdater
-    {
-        void Update(IEnumerable<KeyValuePair<string, string>> values);
-    }
+    void Update(IEnumerable<KeyValuePair<string, string>> values);
 }

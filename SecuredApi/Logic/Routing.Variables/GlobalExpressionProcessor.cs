@@ -19,14 +19,14 @@ namespace SecuredApi.Logic.Routing.Variables;
 
 public class GlobalExpressionProcessor : IGlobalExpressionProcessor
 {
-    private readonly ExpressionParser _expressionParser;
+    private readonly ExpressionParser<StringBuilderExpression> _expressionParser;
 
     public GlobalExpressionProcessor(IGlobalVariables globalVariables)
     {
-        _expressionParser = new ExpressionParser(_variableStart, _variableEnd, new BuilderFactory(globalVariables));
+        _expressionParser = new (_variableStart, _variableEnd, new BuilderFactory(globalVariables));
     }
 
-    public string ConvertExpression(string expression)
+    public string Parse(string expression)
     {
         if (_expressionParser.Parse(expression, out var sb))
         {
@@ -35,7 +35,7 @@ public class GlobalExpressionProcessor : IGlobalExpressionProcessor
         return expression;
     }
 
-    private class BuilderFactory: IExpressionFactory
+    private class BuilderFactory: IExpressionBuilderFactory<StringBuilderExpression>
     {
         private readonly IGlobalVariables _globalVariables;
         
@@ -44,7 +44,8 @@ public class GlobalExpressionProcessor : IGlobalExpressionProcessor
             _globalVariables = globalVariables;
         }
 
-        public IExpressionBuilder Create() => new StringBuilderExpression(_globalVariables);
+        public StringBuilderExpression Create(int capacity)
+            => new StringBuilderExpression(_globalVariables, capacity);
     }
 
     private class StringBuilderExpression: IExpressionBuilder
@@ -52,10 +53,10 @@ public class GlobalExpressionProcessor : IGlobalExpressionProcessor
         private readonly StringBuilder _sb;
         private readonly IGlobalVariables _globalVariables;
 
-        public StringBuilderExpression(IGlobalVariables globalVariables)
+        public StringBuilderExpression(IGlobalVariables globalVariables, int capacity)
         {
             _globalVariables = globalVariables;
-            _sb = new();
+            _sb = new(capacity);
         }
 
         public void AddPart(ReadOnlySpan<char> part, string _) => _sb.Append(part);

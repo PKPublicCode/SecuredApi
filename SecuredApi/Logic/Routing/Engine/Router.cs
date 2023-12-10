@@ -30,6 +30,11 @@ namespace SecuredApi.Logic.Routing.Engine
             var routingRecord = routeInfo.RouteRecord;
             using var processingContext = new RequestContext(routingRecord, routeInfo.RemainingPath, httpContext);
 
+            //ToDo.0 Improve and move to variables
+            processingContext.Variables.SetVariable("requestRemainingPath", routeInfo.RemainingPath);
+            processingContext.Variables.SetVariable("requestHttpMethod", httpContext.Request.Method);
+            processingContext.Variables.SetVariable("requestQueryString", httpContext.Request.QueryString.ToString());
+
             if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
                 && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))
             {

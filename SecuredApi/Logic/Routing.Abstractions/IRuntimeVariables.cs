@@ -12,11 +12,15 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Routing;
 
-public interface IExpressionBuilderFactory<T>
-    where T: IExpressionBuilder
+//ToDo.0 Simplify and refactor
+public interface IVariablesUpdater<T>
 {
-    public T Create(int capacity);
+    void SetVariable(string name, T value);
+}
+
+public interface IRuntimeVariables: IVariables<object>, IVariablesUpdater<object>
+{
 }
 

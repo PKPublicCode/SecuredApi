@@ -20,10 +20,10 @@ namespace SecuredApi.Logic.Routing.Actions;
 
 public static class SubscriptionVariablesExtensions
 {
+    //ToDo.0 Move to variables
     public static string Subscription { get; } = "Subscription";
     public static string ConsumerId { get; } = "ConsumerId";
     public static string SubscriptionKeyEntityName { get; } = "SubscriptionKey";
-
 
     public static bool TryGetSubscriptionKeyEntity(this IRequestContext ctx, [MaybeNullWhen(false)] out SubscriptionKeyEntity value)
     {

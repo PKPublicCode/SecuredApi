@@ -12,12 +12,18 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Logic.Routing
+//ToDo.0 Simplify\split
+public interface IExpresionParser<T>
 {
-    public interface IGlobalExpressionProcessor
-    {
-        string ConvertExpression(string expression);
-    }
+    T Parse(string expression);
+}
+
+public interface IGlobalExpressionProcessor: IExpresionParser<string>
+{
+}
+
+public interface IRuntimeExpressionParser : IExpresionParser<RuntimeExpression>
+{
 }

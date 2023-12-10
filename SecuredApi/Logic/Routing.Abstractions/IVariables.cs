@@ -12,11 +12,16 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Variables;
+using System.Diagnostics.CodeAnalysis;
 
-public interface IExpressionBuilderFactory<T>
-    where T: IExpressionBuilder
+namespace SecuredApi.Logic.Routing;
+
+//ToDo.0 Move to variables
+public interface IVariables<T>
 {
-    public T Create(int capacity);
+    bool TryGetVariable(string key, [MaybeNullWhen(false)] out T value);
+    bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out T value);
+    T GetVariable(string key);
+    T GetVariable(ReadOnlySpan<char> key);
 }
 

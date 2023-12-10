@@ -16,32 +16,35 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SecuredApi.Logic.Routing.Variables;
 
-public class ExpressionParser
+public class ExpressionParser<T>
+    where T: IExpressionBuilder
 {
     private readonly string _variableStart;
     private readonly char _variableEnd;
-    private readonly IExpressionFactory _factory;
+    private readonly IExpressionBuilderFactory<T> _factory;
 
-    public ExpressionParser(string startMarker, char endMarker, IExpressionFactory factory)
+    public ExpressionParser(string startMarker, char endMarker, IExpressionBuilderFactory<T> factory)
     {
         _variableStart = startMarker;
         _variableEnd = endMarker;
         _factory = factory;
     }
 
-    public bool Parse(string expression, [MaybeNullWhen(false)] out IExpressionBuilder builder)
+    public bool Parse(string expression, [MaybeNullWhen(false)] out T builder)
     {
         int start = expression.IndexOf(_variableStart);
         if (start >= 0)
         {
-            builder = _factory.Create();
+            //ToDo.0 Calculate capacity!!!!
+            builder = _factory.Create(0);
             ProcessExpression(expression, builder, start);
             return true;
         }
-        builder = null;
+        builder = default;
         return false;
     }
 
+    //ToDo.0 Fix extra (empty) parts
     private void ProcessExpression(string expression, IExpressionBuilder sb, int varStart)
     {
         var expressionSpan = expression.AsSpan();
