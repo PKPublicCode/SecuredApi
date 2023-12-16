@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
+using SecuredApi.Logic.Routing.Variables;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 

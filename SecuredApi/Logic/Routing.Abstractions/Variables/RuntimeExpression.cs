@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
-namespace SecuredApi.Logic.Routing;
+namespace SecuredApi.Logic.Routing.Variables;
 
 public readonly struct RuntimeExpression
 {
@@ -35,7 +35,7 @@ public readonly struct RuntimeExpression
     public string ImmutableValue => _immutableValue
         ?? throw new InvalidOperationException("Trying to access null value of expression. Use BuildString instead");
 
-    public string BuildString(IRuntimeVariables variables)
+    public string BuildString(IVariables<object> variables)
     {
         // Optimization. Value is constant
         if (_immutableValue != null)
@@ -51,7 +51,7 @@ public readonly struct RuntimeExpression
         // Optimization. If only one element, that we don't need to create extra objects
         if (_parts.Count == 1)
         {
-            return variables.GetVariable(_parts[0].Value).ToString()
+            return variables.GetVariable(_parts[0].Value)?.ToString()
                 ?? throw new InvalidOperationException($"Variable {_parts[0].Value} is null");
         }
 

@@ -14,10 +14,11 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing;
+namespace SecuredApi.Logic.Routing.Variables;
 
 //ToDo.0 Move to variables
 public interface IVariables<T>
+    where T: class
 {
     bool TryGetVariable(string key, [MaybeNullWhen(false)] out T value);
     bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out T value);
