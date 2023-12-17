@@ -18,40 +18,26 @@ using SecuredApi.Logic.Common;
 using SecuredApi.Logic.Routing.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class ReturnStaticFileAction : IAction
 {
-    private readonly string _fullPath;
-    private readonly bool _singleFile;
     private readonly StringResponseStream _notFoundBody;
     private readonly bool _autoMimeType;
+    public RuntimeExpression _path { get; init; }
 
     public ReturnStaticFileAction(ReturnStaticFileActionSettings settings)
     {
-        _fullPath = Path.Combine(settings.Path.Safe(), settings.FileName.Safe());
-        _singleFile = !settings.FileName.IsNullOrEmpty();
         _notFoundBody = settings.NotFoundMessage ?? StringResponseStream.Empty;
         _autoMimeType = settings.AutoDiscoverMimeType;
+        _path = settings.Path;
     }
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
     {
-        string path = _fullPath;
-        if (!_singleFile)
-        {
-            // Need to add this check because empty remaining path means trying to open folder as file.
-            // This can cause some side effects. E.g. on MacOs (at least) it will cause AccessDenied (UnauthorizedAccessException) exception
-            // (meaning that attempting to open folder as file causes UnauthorizedAccessException)
-            // So, just returning 404 in this case on this level, since it's kind of logical edge case, whatewer concret file provider is implemented
-            if (context.RemainingPath.IsNullOrEmpty())
-            {
-                await context.SetResponseAsync(StatusCodes.Status404NotFound, _notFoundBody);
-                return false;
-            }
-            path = Path.Combine(path, context.RemainingPath);
-        }
+        string path = _path.BuildString(context.Variables);
         var fileProvider = context.GetRequiredService<FileAccess.IFileProvider<ReturnStaticFileAction>>();
         StreamResult result;
         try

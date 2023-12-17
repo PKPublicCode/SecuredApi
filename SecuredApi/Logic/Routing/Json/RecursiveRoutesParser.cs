@@ -15,6 +15,7 @@
 using System.Text;
 using System.Text.Json;
 using SecuredApi.Logic.Routing.RequestProcessors;
+using SecuredApi.Logic.Variables;
 using static System.Text.Json.JsonElement;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
@@ -26,12 +27,12 @@ internal class RecursiveRoutesParser
 
     private readonly LinkedList<RoutesGroup> _groups = new();
     private readonly ActionsEnumeratorConfig _config;
-    private readonly RoutesParserConfig _jsonConfig;
+    private readonly IRoutesParserConfig _jsonConfig;
     private readonly LinkedList<string?> _urlPath = new();
     private LinkedList<string> _errorTracePath = new();
 
     private RecursiveRoutesParser(IActionFactory actionFactory,
-                            RoutesParserConfig jsonConfig,
+                            IRoutesParserConfig jsonConfig,
                             IRoutingTableBuilder builder)
     {
         _builder = builder;
@@ -39,11 +40,11 @@ internal class RecursiveRoutesParser
         _config = new ActionsEnumeratorConfig()
         {
             ActionFactory = actionFactory,
-            SerializerOptions = _jsonConfig.ActionSerializerOptions
+            SerializerOptions = _jsonConfig.SerializerOptions
         };
     }
 
-    public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, RoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
+    public static IRoutingTable Parse(JsonElement rootJson, IActionFactory actionFactory, IRoutesParserConfig jsonConfig, IRoutingTableBuilder builder)
     {
         return new RecursiveRoutesParser(actionFactory, jsonConfig, builder).ParseRoot(rootJson);
     }
@@ -186,7 +187,9 @@ internal class RecursiveRoutesParser
                 actions.Add(action);
             }
         }
-        catch(RouteConfigurationException e)
+        catch(Exception e)
+            when (e is RouteConfigurationException
+                || e is InvalidExpressionException)
         {
             throw MakeException(e);
         }
@@ -203,7 +206,7 @@ internal class RecursiveRoutesParser
             }
             else
             {
-                throw MakeException("Invalid GUID value", propertyName);
+                throw MakeException("Invalid GUID value in property {0}", propertyName);
             }
         }
 
@@ -230,7 +233,7 @@ internal class RecursiveRoutesParser
         }
         catch (InvalidOperationException e)
         {
-            throw MakeException("Invalid property type", name, e);
+            throw MakeException("Invalid property type {0}", name, e);
         }
     }
 
@@ -252,7 +255,7 @@ internal class RecursiveRoutesParser
     private T GetProperty<T>(JsonElement json, string name)
     {
         var propJson = GetProperty(json, name);
-        return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.ActionsGroupSerializerOptions)
+        return JsonSerializer.Deserialize<T>(propJson.GetRawText(), _jsonConfig.SerializerOptions)
             ?? throw MakeException("Invalid property: {0}", name);
     }
 
@@ -263,15 +266,15 @@ internal class RecursiveRoutesParser
         return MakeException(sb, inner);
     }
 
-    private RouteConfigurationException MakeException(string message)
+    private RouteConfigurationException MakeException(string message, Exception? inner = null)
     {
         var sb = new StringBuilder(message);
-        return MakeException(sb);
+        return MakeException(sb, inner);
     }
 
-    private RouteConfigurationException MakeException(RouteConfigurationException e)
+    private RouteConfigurationException MakeException(Exception e)
     {
-        return MakeException(e.Message);
+        return MakeException(e.Message, e);
     }
 
     private RouteConfigurationException MakeException(StringBuilder sb, Exception? inner = null)

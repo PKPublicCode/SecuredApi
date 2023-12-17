@@ -12,9 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing;
+namespace SecuredApi.Logic.Variables;
 
-public class GlobalConfiguration
+public interface IGlobalVariablesStreamParser
 {
-    public List<KeyValuePair<string, string>> Variables { get; init; } = null!;
+    Task<List<KeyValuePair<string, string>>> ParseAsync(Stream s, CancellationToken cancellationToken);
 }

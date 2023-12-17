@@ -12,15 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Routing.Utils;
 
-namespace SecuredApi.Logic.Routing.Utils
+public static class HttpClientNames
 {
-    public static class HttpClientNames
-    {
-        public const string RemoteCallRedirectDisabled = "RemoteCall.RedirectDisabled";
-        public const string RemoteCallRedirectEnabled = "RemoteCall.RedirectEnabled";
+    public const string RemoteCallRedirectDisabled = "RemoteCall.RedirectDisabled";
+    public const string RemoteCallRedirectEnabled = "RemoteCall.RedirectEnabled";
 
-        public static string GetClientName(bool redirect) => redirect ? RemoteCallRedirectEnabled : RemoteCallRedirectDisabled;
-    }
+    public static string GetClientName(bool redirect) => redirect ? RemoteCallRedirectEnabled : RemoteCallRedirectDisabled;
 }

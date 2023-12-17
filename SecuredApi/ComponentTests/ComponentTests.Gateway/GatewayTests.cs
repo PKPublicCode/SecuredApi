@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using System.Net.Mime;
 using System.Net;
+using static SecuredApi.ComponentTests.Gateway.Utils.Constants.RoutePaths;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -43,24 +44,27 @@ public class GatewayTests: GatewayTestsBase
     //      Headers.TextPlainUtf8ContentType - implicitly sent by mocked remote endpoint with content
     //      TestResponseHeader - explicitly sent by mocked remote endpoint
     [Theory]
-    [InlineData(RoutePaths.PublicRemoteWildcardGet, "", _methodGet, _methodGet)]
-    [InlineData(RoutePaths.PublicRemoteWildcardGet, "/internal/path", _methodGet, _methodGet)]
-    [InlineData(RoutePaths.PublicRemoteWildcardGet, "/internal/path", _methodPost, _methodGet)]
-    [InlineData(RoutePaths.PublicRemoteWildcardOriginal, "/arbitrary/path", _methodGet, _methodGet)]
-    [InlineData(RoutePaths.PublicRemoteWildcardOriginal, "/arbitrary/path", _methodPost, _methodPost)]
-    public async Task RemoteCall_Found(string basePath, string urlPath, string requestMethod, string expectedCallMethod)
+    [InlineData($"{PublicRemoteWildcardGet}/internal/path", "?myParam=6", _methodGet, $"{GlobalsPublicRemoteEndpoint}", "", _methodGet)]
+    [InlineData($"{PublicRemoteWildcardGet}/internal/path", "", _methodPost, $"{GlobalsPublicRemoteEndpoint}", "", _methodGet)]
+    [InlineData($"{PublicRemoteWildcardOriginal}", "", _methodGet, $"{GlobalsPublicRemoteEndpointWithExtra}", "", _methodGet)]
+    [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "", _methodGet, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "", _methodGet)]
+    [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "", _methodPost, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "", _methodPost)]
+    [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "?myParam=1&myParam=2", _methodGet, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "?myParam=1&myParam=2", _methodGet)]
+    public async Task RemoteCall_Found(string path, string query, string requestMethod, string exprectedPath, string expectedQuery, string expectedMethod)
     {
         const string body = "TestBody";
         HttpHeader TestRequestHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
         HttpHeader TestResponseHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
 
         // Simulate received http call by gateway
-        Request.SetupMethod($"{basePath}/{urlPath}", requestMethod);
+        Request.SetupMethod(path, requestMethod);
         Request.Headers.Add(TestRequestHeader);
+        Request.QueryString = new QueryString(query);
 
         // setup RemouteCall response
-        MainHttpHandler.When(new HttpMethod(expectedCallMethod), $"{GlobalsPublicRemoteEndpoint}{urlPath}")
+        MainHttpHandler.When(new HttpMethod(expectedMethod), exprectedPath)
             .WithHeaders(new[] { Headers.RequestCommon.AsMock(), TestRequestHeader.AsMock() })
+            .WithQueryString(expectedQuery)
             .Respond(
                         HttpStatusCode.Accepted,
                         new[] { TestResponseHeader.AsMock(), Headers.ResponseSuppressPublicRedirect.AsMock() },

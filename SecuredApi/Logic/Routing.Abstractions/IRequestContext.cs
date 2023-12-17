@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing;
 
@@ -22,8 +23,7 @@ public interface IRequestContext
     public IResponse Response { get; }
     public RouteRecord Route { get; }
     public IServiceProvider ServiceProvider { get; }
-    public string RemainingPath { get; }
-    public IDictionary<string, object> Variables { get; }
+    public IRuntimeVariables Variables { get; }
     public CancellationToken CancellationToken { get; }
     public ConnectionInfo ConnectionInfo { get; }
 }

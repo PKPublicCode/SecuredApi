@@ -14,11 +14,15 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 {
     private Dictionary<string, string> _variables = new(StringComparer.OrdinalIgnoreCase);
+
+    public string GetVariable(string key) => _variables[key];
+
+    public string GetVariable(ReadOnlySpan<char> key) => _variables[key.ToString()];
 
     public bool TryGetVariable(string key, [MaybeNullWhen(false)] out string value)
     {

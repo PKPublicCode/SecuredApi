@@ -12,13 +12,9 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.Logic.Variables;
+namespace SecuredApi.Logic.Variables;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic;
-
-public class ReturnStaticFileActionSettings
+public interface IGlobalVariablesUpdater
 {
-    public RuntimeExpression Path { get; init; }
-    public string? NotFoundMessage { get; init; }
-    public bool AutoDiscoverMimeType { get; init; } = true;
+    void Update(IEnumerable<KeyValuePair<string, string>> values);
 }

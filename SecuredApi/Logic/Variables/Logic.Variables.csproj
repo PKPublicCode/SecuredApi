@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SecuredApi.Logic.Variables</RootNamespace>
+	  <AssemblyName>SecuredApi.Logic.Variables</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Variables.Abstractions\Logic.Variables.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

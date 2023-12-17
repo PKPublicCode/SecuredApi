@@ -12,12 +12,8 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Text.Json;
+namespace SecuredApi.Logic.Variables;
 
-namespace SecuredApi.Logic.Routing.Json;
-
-public record RoutesParserConfig
-(
-    JsonSerializerOptions ActionSerializerOptions,
-    JsonSerializerOptions ActionsGroupSerializerOptions
-);
+public interface IGlobalVariables: IVariables<string>
+{
+}

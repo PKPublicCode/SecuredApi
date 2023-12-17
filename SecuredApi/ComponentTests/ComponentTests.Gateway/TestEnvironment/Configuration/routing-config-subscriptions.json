@@ -43,7 +43,7 @@
                 {
                   "type": "RemoteCall",
                   // protectedEchoPath is set by appsettings json
-                  "path": "$(protectedEchoPath)",
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
                   "method": "get"
                 }
               ]
@@ -60,7 +60,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)",
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
                   "method": "get"
                 }
               ]

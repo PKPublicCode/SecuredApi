@@ -14,31 +14,27 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Json;
 
-public class StringExpressionConverter : JsonConverter<string>
+public class RuntimeExpressionConverter : JsonConverter<RuntimeExpression>
 {
-    private readonly JsonSerializerOptions _options;
-    private readonly IExpressionProcessor _processor;
+    private readonly IRuntimeExpressionParser _runtimeParser;
 
-    public StringExpressionConverter(JsonSerializerOptions defaultOptions, IExpressionProcessor processor)
+    public RuntimeExpressionConverter(IRuntimeExpressionParser runtimeParser)
     {
-        _options = defaultOptions;
-        _processor = processor;
+        _runtimeParser = runtimeParser;
     }
 
-    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override RuntimeExpression Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var value = JsonSerializer.Deserialize<string>(ref reader, _options);
-        if (value != null)
-        {
-            return _processor.ConvertExpression(value);
-        }
-        return value;
+        var value = JsonSerializer.Deserialize<string>(ref reader, options)
+            ?? throw new RouteConfigurationException("RuntimeExpression value can't be null");
+        return _runtimeParser.Parse(value);
     }
 
-    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, RuntimeExpression value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }

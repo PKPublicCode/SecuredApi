@@ -22,10 +22,10 @@ public class RoutesParser : IRoutesParser
     private readonly IActionFactory _actionFactory;
     private readonly ILogger _logger;
     private readonly IRoutingTableBuilderFactory _routingBuilderFactory;
-    private readonly RoutesParserConfig _jsonConfig;
+    private readonly IRoutesParserConfig _jsonConfig;
 
     public RoutesParser(IActionFactory actionFactory,
-                            RoutesParserConfig jsonConfig,
+                            IRoutesParserConfig jsonConfig,
                             ILogger<RoutesParser> logger,
                             IRoutingTableBuilderFactory routingBuilderFactory
         )
@@ -38,14 +38,9 @@ public class RoutesParser : IRoutesParser
 
     public async Task<IRoutingTable> ParseAsync(Stream routeCfg, CancellationToken cancellationToken)
     {
-        var jsonOptions = new JsonDocumentOptions()
-        {
-            CommentHandling = CommonSerializerOptions.Instance.ReadCommentHandling
-        };
-
         try
         {
-            using var document = await JsonDocument.ParseAsync(routeCfg, jsonOptions, cancellationToken);
+            using var document = await JsonDocument.ParseAsync(routeCfg, _jsonConfig.DocumentOptions, cancellationToken);
             return RecursiveRoutesParser.Parse(document.RootElement, _actionFactory, _jsonConfig, _routingBuilderFactory.Create());
         }
         catch(RouteConfigurationException e)

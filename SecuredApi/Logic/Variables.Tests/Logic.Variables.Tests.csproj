@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-	<Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-	<RootNamespace>SecuredApi.Logic.Routing</RootNamespace>
-	<AssemblyName>SecuredApi.Logic.Routing.Tests</AssemblyName>
+    <RootNamespace>SecuredApi.Logic.Variables</RootNamespace>
+    <AssemblyName>SecuredApi.Logic.Variables.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Routing\Logic.Routing.csproj" />
+    <ProjectReference Include="..\Variables\Logic.Variables.csproj" />
   </ItemGroup>
 </Project>

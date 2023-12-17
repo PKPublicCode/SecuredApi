@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Engine;
 using SecuredApi.Logic.Routing.Engine.PartialRoutingTable;
-using SecuredApi.Logic.Routing.Variables;
+using SecuredApi.Logic.Variables;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Routing.Actions.Basic;
@@ -62,8 +62,10 @@ public static class RoutingConfigurationExtensions
     private static IServiceCollection ConfigureVariables(this IServiceCollection srv)
     {
         return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
-            .AddSingleton<IExpressionProcessor, ExpressionProcessor>()
+            .AddSingleton<IGlobalExpressionProcessor, GlobalExpressionProcessor>()
+            .AddSingleton<IRuntimeExpressionParser, RuntimeExpressionParser>()
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
+            .AddScoped<IRuntimeVariables, RuntimeVariables>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
                         new DefaultGlobalVariablesProvider(
                                 srvs.GetRequiredService<IConfiguration>().GetSection("Globals:Variables")

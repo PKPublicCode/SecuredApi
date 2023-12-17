@@ -12,9 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Basic;
+using System.Text.Json;
 
-public static class VariableNames
+namespace SecuredApi.Logic.Routing.Json;
+
+public interface IRoutesParserConfig
 {
-    public const string RequestHttpMethod = "@(requestHttpMethod)";
+    public JsonSerializerOptions SerializerOptions { get; }
+    public JsonDocumentOptions DocumentOptions { get; }
 }
+

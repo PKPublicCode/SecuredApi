@@ -16,28 +16,36 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class RemoteCallAction: IAction
 {
-    private readonly Uri _uri;
-    private readonly HttpMethod? _method;
+    private readonly RuntimeExpression _path;
+    private readonly Uri? _constPath;
+    private readonly RuntimeExpression _method;
+    private readonly HttpMethod? _constMethod;
     private readonly TimeSpan _timeout;
     private readonly string _clientName;
 
     public RemoteCallAction(RemoteCallActionSettings config)
     {
-        _uri = new Uri(config.Path);
+        _path = config.Path;
+        _method = config.Method;
 
-        //Shortcut to make runtime variable (requestHttpMethod) work.
-        //Later will rewrite\redesign code for more generic use of runntime variables
-        if (config.Method != VariableNames.RequestHttpMethod)
+        //Optimization to cache immutable objects in memory
+        if (_path.Immutable)
         {
-            _method = new(config.Method);
+            _constPath = new Uri(_path.ImmutableValue);
         }
 
-        if(config.Timeout == -1)
+        if (_method.Immutable)
+        {
+            _constMethod = new(_method.ImmutableValue);
+        }
+
+        if (config.Timeout == -1)
         {
             _timeout = Timeout.InfiniteTimeSpan;
         }
@@ -53,7 +61,7 @@ public class RemoteCallAction: IAction
     {
         var httpClient = context.GetRequiredService<IHttpClientFactory>().CreateClient(_clientName);
         httpClient.Timeout = _timeout;
-        using var message = CreateEndpointRequestMessage(context.RemainingPath, context.Request);
+        using var message = CreateEndpointRequestMessage(context);
         try
         {
             // endpointReponse is IDisposable, however it can't be dispossed here.
@@ -92,9 +100,10 @@ public class RemoteCallAction: IAction
         response.Body = new HttpResponseMessageStream(message);
     }
 
-    private HttpRequestMessage CreateEndpointRequestMessage(string remainingPath, HttpRequest request)
+    private HttpRequestMessage CreateEndpointRequestMessage(IRequestContext context)
     {
         var message = new HttpRequestMessage();
+        var request = context.Request;
 
         if (request.ContentLength > 0)
         {
@@ -113,18 +122,10 @@ public class RemoteCallAction: IAction
         //Since destination is changed, previous Host value is not valid
         message.Headers.Remove("Host");
 
-        var builder = new UriBuilder(_uri);
-        if (remainingPath.Length > 0  && remainingPath[0] != '/')
-        {
-            builder.Path += '/';
-        }
-        builder.Path += remainingPath;
-        builder.Query += request.QueryString;
-        message.RequestUri = builder.Uri;
-
-        //Shortcut to make runtime variable (requestHttpMethod) work.
-        //Later will rewrite\redesign code for more generic use of runntime variables
-        message.Method = _method ?? new HttpMethod(request.Method);
+        message.RequestUri = _constPath
+            ?? new Uri(_path.BuildString(context.Variables));
+        message.Method = _constMethod
+            ?? new HttpMethod(_method.BuildString(context.Variables));
 
         return message;
     }

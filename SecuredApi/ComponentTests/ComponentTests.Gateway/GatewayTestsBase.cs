@@ -67,7 +67,6 @@ public abstract class GatewayTestsBase
 
         _serviceProvider = srv.BuildServiceProvider();
 
-        Context.RequestServices = _serviceProvider;
         Context.Response.Body = new MemoryStream();
     }
 
@@ -81,6 +80,7 @@ public abstract class GatewayTestsBase
     protected virtual async Task ActAsync()
     {
         using var scope = _serviceProvider.CreateAsyncScope();
+        Context.RequestServices = scope.ServiceProvider;
         await scope.ServiceProvider.GetRequiredService<IRouter>()
                                     .ProcessAsync(Context);
     }

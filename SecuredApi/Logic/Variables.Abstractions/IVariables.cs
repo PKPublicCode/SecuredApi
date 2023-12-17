@@ -12,17 +12,16 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Text.Json;
-namespace SecuredApi.Logic.Routing.Json;
+using System.Diagnostics.CodeAnalysis;
 
-public static class CommonSerializerOptions
+namespace SecuredApi.Logic.Variables;
+
+public interface IVariables<T>
+    where T: class
 {
-    private static JsonSerializerOptions _jsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
-    };
-
-    public static JsonSerializerOptions Instance => _jsonOptions;
+    bool TryGetVariable(string key, [MaybeNullWhen(false)] out T value);
+    bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out T value);
+    T GetVariable(string key);
+    T GetVariable(ReadOnlySpan<char> key);
 }
 

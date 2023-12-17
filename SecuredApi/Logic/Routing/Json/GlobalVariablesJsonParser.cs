@@ -13,21 +13,26 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Json;
 
 public class GlobalVariablesJsonParser : IGlobalVariablesStreamParser
 {
-    public async Task<GlobalConfiguration> ParseAsync(Stream s, CancellationToken cancellationToken)
+    private readonly ICommonParserConfig _config;
+
+    public GlobalVariablesJsonParser(ICommonParserConfig config)
     {
-        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, CommonSerializerOptions.Instance, cancellationToken)
+        _config = config;
+    }
+
+    public async Task<List<KeyValuePair<string, string>>> ParseAsync(Stream s, CancellationToken cancellationToken)
+    {
+        var jsonDef =  await JsonSerializer.DeserializeAsync<JsonGlobalConfig>(s, _config.SerializerOptions, cancellationToken)
            ?? throw new RouteConfigurationException("Unable to parse global configuration");
 
-        return new GlobalConfiguration()
-        {
-            Variables = jsonDef.Variables?.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList()
-                ?? new List<KeyValuePair<string, string>>()
-        };
+        return jsonDef.Variables?.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList()
+                ?? new List<KeyValuePair<string, string>>();
     }
 
     private class JsonGlobalConfig
