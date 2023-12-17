@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Engine;
 using SecuredApi.Logic.Routing.Engine.PartialRoutingTable;
-using SecuredApi.Logic.Routing.Variables;
+using SecuredApi.Logic.Variables;
 using SecuredApi.Logic.Routing.Json;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Routing.Actions.Basic;

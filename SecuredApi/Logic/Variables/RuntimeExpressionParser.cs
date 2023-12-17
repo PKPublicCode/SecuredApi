@@ -12,8 +12,8 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using static SecuredApi.Logic.Routing.Variables.Constants.Runtime;
-namespace SecuredApi.Logic.Routing.Variables;
+using static SecuredApi.Logic.Variables.Constants.Runtime;
+namespace SecuredApi.Logic.Variables;
 
 public class RuntimeExpressionParser: IRuntimeExpressionParser
 {

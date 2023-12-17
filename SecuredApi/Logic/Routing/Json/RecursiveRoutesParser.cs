@@ -15,6 +15,7 @@
 using System.Text;
 using System.Text.Json;
 using SecuredApi.Logic.Routing.RequestProcessors;
+using SecuredApi.Logic.Variables;
 using static System.Text.Json.JsonElement;
 using static SecuredApi.Logic.Routing.Json.Properties;
 
@@ -186,7 +187,9 @@ internal class RecursiveRoutesParser
                 actions.Add(action);
             }
         }
-        catch(RouteConfigurationException e)
+        catch(Exception e)
+            when (e is RouteConfigurationException
+                || e is InvalidExpressionException)
         {
             throw MakeException(e);
         }
@@ -203,7 +206,7 @@ internal class RecursiveRoutesParser
             }
             else
             {
-                throw MakeException("Invalid GUID value", propertyName);
+                throw MakeException("Invalid GUID value in property {0}", propertyName);
             }
         }
 
@@ -230,7 +233,7 @@ internal class RecursiveRoutesParser
         }
         catch (InvalidOperationException e)
         {
-            throw MakeException("Invalid property type", name, e);
+            throw MakeException("Invalid property type {0}", name, e);
         }
     }
 
@@ -263,15 +266,15 @@ internal class RecursiveRoutesParser
         return MakeException(sb, inner);
     }
 
-    private RouteConfigurationException MakeException(string message)
+    private RouteConfigurationException MakeException(string message, Exception? inner = null)
     {
         var sb = new StringBuilder(message);
-        return MakeException(sb);
+        return MakeException(sb, inner);
     }
 
-    private RouteConfigurationException MakeException(RouteConfigurationException e)
+    private RouteConfigurationException MakeException(Exception e)
     {
-        return MakeException(e.Message);
+        return MakeException(e.Message, e);
     }
 
     private RouteConfigurationException MakeException(StringBuilder sb, Exception? inner = null)

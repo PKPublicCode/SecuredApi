@@ -12,20 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
-public static class Constants
+public interface IExpressionBuilderFactory<T>
+    where T: IExpressionBuilder
 {
-    public static class Global
-    {
-        public const string _variableStart = "$(";
-        public const char _variableEnd = ')';
-    }
-
-    public static class Runtime
-    {
-        public const string _variableStart = "@(";
-        public const char _variableEnd = ')';
-    }
+    public T Create(int capacity);
 }
 

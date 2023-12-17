@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public readonly struct RuntimeExpression
 {
@@ -51,7 +51,7 @@ public readonly struct RuntimeExpression
         // Optimization. If only one element, that we don't need to create extra objects
         if (_parts.Count == 1)
         {
-            return variables.GetVariable(_parts[0].Value)?.ToString()
+            return variables.GetVariable(_parts[0].Value).ToString()
                 ?? throw new InvalidOperationException($"Variable {_parts[0].Value} is null");
         }
 
@@ -69,11 +69,5 @@ public readonly struct RuntimeExpression
         }
         return sb.ToString();
     }
-}
-
-public readonly struct ExpressionPart
-{
-    public string Value { get; init; }
-    public bool IsVariable { get; init; }
 }
 

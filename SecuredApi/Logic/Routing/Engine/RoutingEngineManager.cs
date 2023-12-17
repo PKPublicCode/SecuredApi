@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 using SecuredApi.Logic.FileAccess;
 using Microsoft.Extensions.Options;
 using SecuredApi.Logic.Common;
-using SecuredApi.Logic.Routing.Variables;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Engine;
 
@@ -67,7 +67,7 @@ public class RoutingEngineManager: IRoutingEngineManager
         if (!string.IsNullOrEmpty(_config.GlobalCfgFileId))
         {
             using var content = await LoadFileConfigurationAsync(_config.GlobalCfgFileId, cancellationToken);
-            globalVars = (await _variablesParser.ParseAsync(content.Content, cancellationToken)).Variables;
+            globalVars = await _variablesParser.ParseAsync(content.Content, cancellationToken);
         }
         
         var defVariables = await _defaultGlobalVariables.GetGlobalVariablesAsync(cancellationToken);

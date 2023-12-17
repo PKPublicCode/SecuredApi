@@ -12,10 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
-public interface IRuntimeVariables: IVariables<object>
+public interface IExpressionBuilder
 {
-    void SetVariable(string name, object value);
+    public void AddPart(ReadOnlySpan<char> part, string expression);
+    public void AddVariable(ReadOnlySpan<char> variable, string expression);
 }
 

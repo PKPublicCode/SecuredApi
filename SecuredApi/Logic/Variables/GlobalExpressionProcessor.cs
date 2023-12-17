@@ -13,9 +13,9 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
-using static SecuredApi.Logic.Routing.Variables.Constants.Global;
+using static SecuredApi.Logic.Variables.Constants.Global;
 
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public class GlobalExpressionProcessor : IGlobalExpressionProcessor
 {
@@ -65,7 +65,7 @@ public class GlobalExpressionProcessor : IGlobalExpressionProcessor
         {
             if (!_globalVariables.TryGetVariable(variable, out var value))
             {
-                throw new RouteConfigurationException($"Variable {variable.ToString()} not defined in {expression}");
+                throw new InvalidExpressionException($"Variable {variable.ToString()} is not defined in {expression}");
             }
             _sb.Append(value);
         }

@@ -14,6 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Json;
 

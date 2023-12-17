@@ -12,11 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Xunit;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public class ExpressionParserTests
 {
@@ -42,14 +41,14 @@ public class ExpressionParserTests
     public void InvalidExpression()
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
-        Assert.Throws<RouteConfigurationException>(() => sut.Parse("blabla$(asfasdf"));
+        Assert.Throws<InvalidExpressionException>(() => sut.Parse("blabla$(asfasdf"));
     }
 
     [Fact()]
     public void NotFoundVariable()
     {
         var sut = new GlobalExpressionProcessor(new NotFoundeGlobalVariables());
-        Assert.Throws<RouteConfigurationException>(() => sut.Parse("Hello$(value)"));
+        Assert.Throws<InvalidExpressionException>(() => sut.Parse("Hello$(value)"));
     }
 
     //Unable to mock methods with ReadOnlySpan with NSubstitute. Need more research

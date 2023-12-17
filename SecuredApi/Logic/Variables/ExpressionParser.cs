@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public class ExpressionParser<T>
     where T: IExpressionBuilder
@@ -58,7 +58,7 @@ public class ExpressionParser<T>
             int varEnd = expression.IndexOf(_variableEnd, varStart); //find end of variable
             if (varEnd < 0)
             {
-                throw new RouteConfigurationException($"Invalid expression {expression}");
+                throw new InvalidExpressionException($"Invalid expression {expression}");
             }
             sb.AddVariable(expressionSpan[varStart..varEnd], expression);
             begin = varEnd + 1; //move to the beginnig of remaining expression

@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Diagnostics.CodeAnalysis;
 
-namespace SecuredApi.Logic.Routing.Variables;
+namespace SecuredApi.Logic.Variables;
 
 public class GlobalVariables : IGlobalVariables, IGlobalVariablesUpdater
 {

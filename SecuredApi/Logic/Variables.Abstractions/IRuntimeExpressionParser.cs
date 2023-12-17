@@ -12,17 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Diagnostics.CodeAnalysis;
+namespace SecuredApi.Logic.Variables;
 
-namespace SecuredApi.Logic.Routing.Variables;
-
-//ToDo.0 Move to variables
-public interface IVariables<T>
-    where T: class
+public interface IRuntimeExpressionParser
 {
-    bool TryGetVariable(string key, [MaybeNullWhen(false)] out T value);
-    bool TryGetVariable(ReadOnlySpan<char> key, [MaybeNullWhen(false)] out T value);
-    T GetVariable(string key);
-    T GetVariable(ReadOnlySpan<char> key);
+    RuntimeExpression Parse(string expression);
 }
 

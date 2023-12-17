@@ -13,9 +13,8 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text.Json;
-using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Json;
-using SecuredApi.Logic.Routing.Variables;
+using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Apps.Gateway.Routing;
 
