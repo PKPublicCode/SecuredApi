@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>SecuredApi.Logic.Variables</RootNamespace>
-	<AssemblyName>SecuredApi.Logic.Variables.Tests</AssemblyName>
+    <AssemblyName>SecuredApi.Logic.Variables.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
