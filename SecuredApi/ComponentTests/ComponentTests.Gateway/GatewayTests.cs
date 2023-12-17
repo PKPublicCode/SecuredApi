@@ -57,7 +57,7 @@ public class GatewayTests: GatewayTestsBase
         HttpHeader TestResponseHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");
 
         // Simulate received http call by gateway
-        Request.SetupMethod($"{path}", requestMethod);
+        Request.SetupMethod(path, requestMethod);
         Request.Headers.Add(TestRequestHeader);
         Request.QueryString = new QueryString(query);
 
