@@ -15,7 +15,7 @@
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "fileName": "StaticFiles/welcome.html"
+              "path": "StaticFiles/welcome.html"
             }
           ]
         }
