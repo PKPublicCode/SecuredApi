@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Variables;
 
 namespace SecuredApi.Logic.Routing.Engine;
@@ -30,12 +31,11 @@ public class RequestContext: IRequestContext, IDisposable
     public IServiceProvider ServiceProvider => HttpContext.RequestServices;
     public ConnectionInfo ConnectionInfo => HttpContext.Connection;
 
-    // ToDo.0 Remove remaining path
     public RequestContext(RouteRecord route, HttpContext httpContext)
     {
         Route = route;
         HttpContext = httpContext;
-        Variables = new RuntimeVariables();
+        Variables = httpContext.RequestServices.GetRequiredService<IRuntimeVariables>();
         _response = new Response(HttpContext.Response);
     }
 

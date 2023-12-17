@@ -65,6 +65,7 @@ public static class RoutingConfigurationExtensions
             .AddSingleton<IGlobalExpressionProcessor, GlobalExpressionProcessor>()
             .AddSingleton<IRuntimeExpressionParser, RuntimeExpressionParser>()
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
+            .AddScoped<IRuntimeVariables, RuntimeVariables>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>
                         new DefaultGlobalVariablesProvider(
                                 srvs.GetRequiredService<IConfiguration>().GetSection("Globals:Variables")
