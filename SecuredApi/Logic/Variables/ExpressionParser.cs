@@ -12,12 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SecuredApi.Logic.Variables;
 
 public class ExpressionParser<T>
-    where T: IExpressionBuilder
+    where T : IExpressionBuilder
 {
     private readonly string _variableStart;
     private readonly char _variableEnd;
@@ -46,11 +47,7 @@ public class ExpressionParser<T>
     private int GetCapacity(int index, string expression)
     {
         int capacity = index > 0 ? 2 : 1; //if symbols before the variable, then capacity at least 2
-        int endIndex = expression.IndexOf(_variableEnd, index);
-        if (endIndex == -1)
-        {
-            throw new InvalidExpressionException($"Invalid expression {expression}");
-        }
+        int endIndex = GetEndIndex(index, expression);
         index = expression.IndexOf(_variableStart, endIndex);
         while (index != -1)
         {
@@ -59,11 +56,7 @@ public class ExpressionParser<T>
             {
                 ++capacity; //string between prev variable and new variable
             }
-            endIndex = expression.IndexOf(_variableEnd, index);
-            if (endIndex == -1)
-            {
-                throw new InvalidExpressionException($"Invalid expression {expression}");
-            }
+            endIndex = GetEndIndex(index, expression);
             index = expression.IndexOf(_variableStart, endIndex);
         }
         if (endIndex < expression.Length - 1)
@@ -71,6 +64,16 @@ public class ExpressionParser<T>
             ++capacity; //one more part in the end   
         }
         return capacity;
+    }
+
+    private int GetEndIndex(int start, string expression)
+    {
+        int endIndex = expression.IndexOf(_variableEnd, start);
+        if (endIndex == -1)
+        {
+            throw new InvalidExpressionException($"Invalid expression {expression}");
+        }
+        return endIndex;
     }
 
     private void ProcessExpression(string expression, IExpressionBuilder sb, int varStart)
