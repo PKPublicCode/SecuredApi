@@ -87,11 +87,7 @@ public class ExpressionParser<T>
                 sb.AddPart(expressionSpan[begin..varStart], expression); //add part of expression before start
             }
             varStart += _variableStart.Length; //move to beginning of variable
-            int varEnd = expression.IndexOf(_variableEnd, varStart); //find end of variable
-            if (varEnd < 0)
-            {
-                throw new InvalidExpressionException($"Invalid expression {expression}");
-            }
+            int varEnd = GetEndIndex(varStart, expression);
             sb.AddVariable(expressionSpan[varStart..varEnd], expression);
             begin = varEnd + 1; //move to the beginnig of remaining expression
             varStart = expression.IndexOf(_variableStart, begin); //find start of the variable
