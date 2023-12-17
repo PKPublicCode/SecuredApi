@@ -65,7 +65,7 @@ public class CheckSubscriptionAction : IAction
         //For consideration. Here we store complex object (object + array) into dictionary.
         //Technically, Guid ConsumerId only is enougth, But if we save Guid into dictionary of objects,
         //it will cause boxing. So we release big object, but allocate smaller one.
-        context.SetSubscriptionKeyEntity(subscriptionKey);
+        context.SetConsumerId(subscriptionKey.ConsumerId);
         return true;
     }
 }

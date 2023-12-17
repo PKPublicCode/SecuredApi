@@ -12,6 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using System.Diagnostics.CodeAnalysis;
 
 namespace SecuredApi.Logic.Routing.Utils;
 
@@ -22,6 +23,11 @@ public static class VariableNames
         public const string RemainingPath = "requestRemainingPath";
         public const string HttpMethod = "requestHttpMethod";
         public const string QueryString = "requestQueryString";
+    }
+
+    public static class Subscription
+    {
+        public const string ConsumerId = "SubscriptionConsumerId";
     }
 }
 

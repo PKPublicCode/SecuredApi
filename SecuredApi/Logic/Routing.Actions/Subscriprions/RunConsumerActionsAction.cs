@@ -15,6 +15,7 @@
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Subscriptions;
 using Microsoft.Extensions.Logging;
+using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 
 namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
@@ -33,20 +34,20 @@ public class RunConsumerActionsAction : IScopedAction<EmptySettings>
         _processor = processor;
         _logger = logger;
     }
-
+    
     public async Task<bool> ExecuteAsync(IRequestContext context, EmptySettings settings)
     {
-        if (!context.TryGetSubscriptionKeyEntity(out var subscription))
+        if (!context.TryGetConsumerId(out var consumerId))
         {
             _logger.LogError("Subscription data hasn't been loaded. Unable process consumer specific actions");
             return await context.ReturnDataInconsistencyError();
         }
 
-        var consumer = await _repo.GetConsumerAsync(subscription.ConsumerId, context.CancellationToken);
+        var consumer = await _repo.GetConsumerAsync(consumerId, context.CancellationToken);
         if (consumer == null)
         {
             //Either inconsistent data, or low probable race condition when user profile was deleted
-            _logger.LogError("Unable to load consumer profile {consumerId}", subscription.ConsumerId.ToString());
+            _logger.LogError("Unable to load consumer profile {consumerId}", consumerId.ToString());
             return await context.ReturnDataInconsistencyError();
         }
 

@@ -12,6 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using System.Diagnostics.CodeAnalysis;
 using static SecuredApi.Logic.Routing.Utils.VariableNames;
 
 namespace SecuredApi.Logic.Routing.Utils;
@@ -31,6 +32,17 @@ public static class RequestContextCommonVariablesExtensions
     public static void SetRequestQueryString(this IRequestContext ctx, string value)
     {
         ctx.Variables.SetVariable(Request.QueryString, value);
+    }
+
+    public static void SetConsumerId(this IRequestContext ctx, Guid value)
+    {
+        // Warning. Guid will be boxed!
+        ctx.SetVariable(Subscription.ConsumerId, value);
+    }
+
+    public static bool TryGetConsumerId(this IRequestContext ctx, [MaybeNullWhen(false)] out Guid value)
+    {
+        return ctx.TryGetVariable(Subscription.ConsumerId, out value);
     }
 }
 
