@@ -12,17 +12,15 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace SecuredApi.Logic.Routing.Utils
+namespace SecuredApi.Logic.Routing.Utils;
+
+public static class RequestContextDiExtensions
 {
-    public static class RequestContextDiExtensions
-    {
-        public static T GetRequiredService<T>(this IRequestContext c) => c.ServiceProvider.GetRequiredService<T>();
-        public static T GetService<T>(this IRequestContext c) => c.ServiceProvider.GetService<T>();
-        public static T CreateInstance<T>(this IRequestContext c) => ActivatorUtilities.CreateInstance<T>(c.ServiceProvider);
-        public static ILogger<T> GetLogger<T>(this IRequestContext c) => c.ServiceProvider.GetRequiredService<ILogger<T>>();
-    }
+    public static T GetRequiredService<T>(this IRequestContext c) => c.ServiceProvider.GetRequiredService<T>();
+    public static T GetService<T>(this IRequestContext c) => c.ServiceProvider.GetService<T>();
+    public static T CreateInstance<T>(this IRequestContext c) => ActivatorUtilities.CreateInstance<T>(c.ServiceProvider);
+    public static ILogger<T> GetLogger<T>(this IRequestContext c) => c.ServiceProvider.GetRequiredService<ILogger<T>>();
 }

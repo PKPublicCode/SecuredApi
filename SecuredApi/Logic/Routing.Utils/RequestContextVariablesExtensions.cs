@@ -17,7 +17,6 @@ namespace SecuredApi.Logic.Routing.Utils;
 
 public static class RequestContextVariablesExtensions
 {
-    //ToDo.0 Move to variables
     public static void SetVariable(this IRequestContext ctx, string name, object o)
     {
         ctx.Variables.SetVariable(name, o);

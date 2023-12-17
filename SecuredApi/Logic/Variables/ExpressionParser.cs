@@ -35,13 +35,42 @@ public class ExpressionParser<T>
         int start = expression.IndexOf(_variableStart);
         if (start >= 0)
         {
-            //ToDo.0 Calculate capacity!!!!
-            builder = _factory.Create(0);
+            builder = _factory.Create(GetCapacity(start, expression));
             ProcessExpression(expression, builder, start);
             return true;
         }
         builder = default;
         return false;
+    }
+
+    private int GetCapacity(int index, string expression)
+    {
+        int capacity = index > 0 ? 2 : 1; //if symbols before the variable, then capacity at least 2
+        int endIndex = expression.IndexOf(_variableEnd, index);
+        if (endIndex == -1)
+        {
+            throw new InvalidExpressionException($"Invalid expression {expression}");
+        }
+        index = expression.IndexOf(_variableStart, endIndex);
+        while (index != -1)
+        {
+            ++capacity; // found next variable
+            if (endIndex + 1 != index)
+            {
+                ++capacity; //string between prev variable and new variable
+            }
+            endIndex = expression.IndexOf(_variableEnd, index);
+            if (endIndex == -1)
+            {
+                throw new InvalidExpressionException($"Invalid expression {expression}");
+            }
+            index = expression.IndexOf(_variableStart, endIndex);
+        }
+        if (endIndex < expression.Length - 1)
+        {
+            ++capacity; //one more part in the end   
+        }
+        return capacity;
     }
 
     private void ProcessExpression(string expression, IExpressionBuilder sb, int varStart)
