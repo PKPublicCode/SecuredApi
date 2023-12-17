@@ -12,86 +12,81 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Threading;
-using System.Collections.Generic;
+using SecuredApi.Logic.Routing.Utils;
 
-namespace SecuredApi.Logic.Routing.Engine
+namespace SecuredApi.Logic.Routing.Engine;
+
+public class Router : IRouter, IRouterUpdater
 {
-    public class Router : IRouter, IRouterUpdater
+    private IRoutingTable _routingTable = new EmptyRoutingTable();
+
+    public async Task ProcessAsync(HttpContext httpContext)
     {
-        private IRoutingTable _routingTable = new EmptyRoutingTable();
+        var routeInfo = await _routingTable.GetRoutingAsync(httpContext.Request.Path, httpContext.Request.Method, httpContext.RequestAborted);
+        var routingRecord = routeInfo.RouteRecord;
+        using var processingContext = new RequestContext(routingRecord, httpContext);
 
-        public async Task ProcessAsync(HttpContext httpContext)
+        processingContext.SetRequestRemainingPath(routeInfo.RemainingPath);
+        processingContext.SetRequestHttpMethod(httpContext.Request.Method);
+        processingContext.SetRequestQueryString(httpContext.Request.QueryString.ToString());
+
+        if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
+            && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))
         {
-            var routeInfo = await _routingTable.GetRoutingAsync(httpContext.Request.Path, httpContext.Request.Method, httpContext.RequestAborted);
-            var routingRecord = routeInfo.RouteRecord;
-            using var processingContext = new RequestContext(routingRecord, httpContext);
+            await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnSuccess);
+        }
+        else
+        {
+            await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnError);
+        }
+        await SendResponseAsync(processingContext);
+    }
 
-            //ToDo.0 Improve and move to variables
-            processingContext.Variables.SetVariable("requestRemainingPath", routeInfo.RemainingPath);
-            processingContext.Variables.SetVariable("requestHttpMethod", httpContext.Request.Method);
-            processingContext.Variables.SetVariable("requestQueryString", httpContext.Request.QueryString.ToString());
+    public void UpdateRouter(IRoutingTable routingTree)
+    {
+        Interlocked.Exchange(ref _routingTable, routingTree);
+    }
 
-            if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
-                && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))
+    private const int _streamCopyBufferSize = 81920;
+    private delegate Task<bool> ExecuteDelegate(RoutesGroup group, RequestContext procContext);
+    private static readonly ExecuteDelegate _executeOnSuccess = (g, p) => g.OnRequestSuccessProcessor.ProcessRequestAsync(p);
+    private static readonly ExecuteDelegate _executeOnError = (g, p) => g.OnRequestErrorProcessor.ProcessRequestAsync(p);
+    private static readonly ExecuteDelegate _executePreRequest = (g, p) => g.PreRequestProcessor.ProcessRequestAsync(p);
+
+    private static Task SendResponseAsync(RequestContext context)
+    {
+        return context.Response.Body?.CopyToAsync(context.HttpContext.Response.Body, _streamCopyBufferSize, context.HttpContext.RequestAborted)
+            ?? Task.CompletedTask;
+    }
+
+    private static async Task<bool> ProcessReversedGroupsActionsAsync(
+                                        IReadOnlyList<RoutesGroup> groups, 
+                                        RequestContext procContext,
+                                        ExecuteDelegate exec)
+    {
+        for (int i = groups.Count - 1; i >= 0; --i)
+        {
+            if (!await exec(groups[i], procContext))
             {
-                await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnSuccess);
+                return false;
             }
-            else
+        }
+        return true;
+    }
+
+    private static async Task<bool> ProcessGroupsActionsAsync(
+                                        IReadOnlyList<RoutesGroup> groups,
+                                        RequestContext procContext,
+                                        ExecuteDelegate exec)
+    {
+        foreach(var g in groups)
+        {
+            if (!await exec(g, procContext))
             {
-                await ProcessReversedGroupsActionsAsync(routingRecord.Groups, processingContext, _executeOnError);
+                return false;
             }
-            await SendResponseAsync(processingContext);
         }
-
-        public void UpdateRouter(IRoutingTable routingTree)
-        {
-            Interlocked.Exchange(ref _routingTable, routingTree);
-        }
-
-        private const int _streamCopyBufferSize = 81920;
-        private delegate Task<bool> ExecuteDelegate(RoutesGroup group, RequestContext procContext);
-        private static readonly ExecuteDelegate _executeOnSuccess = (g, p) => g.OnRequestSuccessProcessor.ProcessRequestAsync(p);
-        private static readonly ExecuteDelegate _executeOnError = (g, p) => g.OnRequestErrorProcessor.ProcessRequestAsync(p);
-        private static readonly ExecuteDelegate _executePreRequest = (g, p) => g.PreRequestProcessor.ProcessRequestAsync(p);
-
-        private static Task SendResponseAsync(RequestContext context)
-        {
-            return context.Response.Body?.CopyToAsync(context.HttpContext.Response.Body, _streamCopyBufferSize, context.HttpContext.RequestAborted)
-                ?? Task.CompletedTask;
-        }
-
-        private static async Task<bool> ProcessReversedGroupsActionsAsync(
-                                            IReadOnlyList<RoutesGroup> groups, 
-                                            RequestContext procContext,
-                                            ExecuteDelegate exec)
-        {
-            for (int i = groups.Count - 1; i >= 0; --i)
-            {
-                if (!await exec(groups[i], procContext))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private static async Task<bool> ProcessGroupsActionsAsync(
-                                            IReadOnlyList<RoutesGroup> groups,
-                                            RequestContext procContext,
-                                            ExecuteDelegate exec)
-        {
-            foreach(var g in groups)
-            {
-                if (!await exec(g, procContext))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        return true;
     }
 }
