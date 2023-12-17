@@ -23,7 +23,6 @@ public interface IRequestContext
     public IResponse Response { get; }
     public RouteRecord Route { get; }
     public IServiceProvider ServiceProvider { get; }
-    public string RemainingPath { get; }
     public IRuntimeVariables Variables { get; }
     public CancellationToken CancellationToken { get; }
     public ConnectionInfo ConnectionInfo { get; }

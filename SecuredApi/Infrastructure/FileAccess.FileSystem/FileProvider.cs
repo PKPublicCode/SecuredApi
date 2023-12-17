@@ -38,7 +38,9 @@ public class FileProvider<T> : IFileProvider<T>
             when (e is DirectoryNotFoundException 
                   || e is PathTooLongException
                   || e is NotSupportedException
-                  || e is System.IO.FileNotFoundException)
+                  || e is System.IO.FileNotFoundException
+                  // On Unix UnauthorizedAccessException is thrown if open folder as file
+                  || e is UnauthorizedAccessException)
         {
             throw new Logic.FileAccess.FileNotFoundException("Invalid file id", e);
         }

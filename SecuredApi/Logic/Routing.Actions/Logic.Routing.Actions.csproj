@@ -19,7 +19,6 @@
 	<ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
 	<ProjectReference Include="..\Subscriptions\Logic.Subscriptions.csproj" />
 	<ProjectReference Include="..\Routing.Utils\Logic.Routing.Utils.csproj" />
-	<ProjectReference Include="..\Routing.Variables\Logic.Routing.Variables.csproj" />
   </ItemGroup>
 
 </Project>

@@ -25,17 +25,15 @@ public class RequestContext: IRequestContext, IDisposable
     public HttpRequest Request => HttpContext.Request;
     public IResponse Response => _response;
     public RouteRecord Route { get; }
-    public string RemainingPath { get; }
     public IRuntimeVariables Variables { get; }
     public CancellationToken CancellationToken => HttpContext.RequestAborted;
     public IServiceProvider ServiceProvider => HttpContext.RequestServices;
     public ConnectionInfo ConnectionInfo => HttpContext.Connection;
 
     // ToDo.0 Remove remaining path
-    public RequestContext(RouteRecord route, string remainingPath, HttpContext httpContext)
+    public RequestContext(RouteRecord route, HttpContext httpContext)
     {
         Route = route;
-        RemainingPath = remainingPath;
         HttpContext = httpContext;
         Variables = new RuntimeVariables();
         _response = new Response(HttpContext.Response);

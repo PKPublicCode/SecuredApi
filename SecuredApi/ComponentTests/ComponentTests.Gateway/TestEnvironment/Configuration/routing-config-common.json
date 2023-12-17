@@ -76,7 +76,7 @@
               "actions": [
                 {
                   "type": "ReturnStaticFile",
-                  "fileName": "StaticFiles/welcome.html"
+                  "path": "StaticFiles/welcome.html"
                 }
               ]
             },
@@ -86,7 +86,7 @@
               "actions": [
                 {
                   "type": "ReturnStaticFile",
-                  "path": "StaticFiles/WildcardContent",
+                  "path": "StaticFiles/WildcardContent/@(requestRemainingPath)",
                   "notFoundMessage": "This is wrong file url"
                 }
               ]

@@ -20,9 +20,16 @@ public class RuntimeVariables: IRuntimeVariables
 {
     private readonly Dictionary<string, object> _variables = new ();
 
-    public object GetVariable(string key) => _variables[key];
+    public object GetVariable(string key)
+    {
+        if (!_variables.TryGetValue(key, out var result))
+        {
+            throw new InvalidExpressionException($"Unknown variable {key}");
+        }
+        return result;
+    }
 
-    public object GetVariable(ReadOnlySpan<char> key) => _variables[key.ToString()];
+    public object GetVariable(ReadOnlySpan<char> key) => GetVariable(key.ToString());
 
     public void SetVariable(string key, object value) => _variables[key] = value;
 
