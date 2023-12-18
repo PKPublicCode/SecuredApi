@@ -78,7 +78,7 @@ var _routingSettings = {
   RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
 }
 
-resource appService 'Microsoft.Web/sites@2023-01-01' = {
+resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webSiteName
   location: location
   identity: {
