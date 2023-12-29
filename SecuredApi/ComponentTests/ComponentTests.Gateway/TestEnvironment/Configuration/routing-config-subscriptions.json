@@ -42,7 +42,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  // protectedEchoPath is set by appsettings json
+                  // In ComponentTests protectedEchoPath is set by appsettings json
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
                   "method": "get"
                 }
@@ -77,5 +77,4 @@
       "body": "Route not found"
     }
   ]
-  // Comment to test enabled comments
 }

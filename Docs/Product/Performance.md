@@ -19,9 +19,9 @@ Scenario C: Same as scenario B, but Gateway hosted on 1 instance. Kind of PPE en
 
 | Scenario | Duration(s) | Median(ms) | P90(ms) | P95(ms) | P99(ms) | Throughput(req/s) |
 |--------------|-----|------|---------|--------|----------|----------|
-| Scenario A | 64 | 306 | 310 | 312 | 324 | 625 |
-| Scenario B | 69 | 330 | 342 | 349 | 368 | 579 |
-| Scenario C | 77 | 359 | 412 | 436 | 511 | 519 |
+| Scenario A | 63 | 304 | 307 | 309 | 317 | 635 |
+| Scenario B | 68 | 324 | 332 | 336 | 351 | 588 |
+| Scenario C | 70 | 338 | 370 | 383 | 450 | 571 |
 
 ### Environment
 
