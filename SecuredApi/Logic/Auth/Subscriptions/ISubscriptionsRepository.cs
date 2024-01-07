@@ -12,21 +12,17 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
-public class DataStorageException : Exception
+public interface ISubscriptionsRepository
 {
-    public DataStorageException()
+    Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, Guid consumerId, CancellationToken ct)
     {
+        throw new NotImplementedException();
     }
 
-    public DataStorageException(string message)
-        : base(message)
+    Task<SubscriptionEntity?> GetSubscriptionAsync(Guid id, CancellationToken ct)
     {
-    }
-
-    public DataStorageException(string message, Exception inner)
-        : base(message, inner)
-    {
+        throw new NotImplementedException();
     }
 }

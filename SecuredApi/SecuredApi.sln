@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrustructure.FileAccess.F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing.Actions", "Logic\Routing.Actions\Logic.Routing.Actions.csproj", "{B9BDD718-45FE-4545-9A9D-AB2C335E812B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Subscriptions", "Logic\Subscriptions\Logic.Subscriptions.csproj", "{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Auth", "Logic\Auth\Logic.Auth.csproj", "{07FB0E60-9B4A-4EAA-B29E-F89C4897DC46}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentTests", "ComponentTests", "{DE8C2D00-5013-4976-9365-896D624CD532}"
 EndProject
@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComponentTests.Gateway", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps.Gateway.Azure", "Apps\Gateway.Azure\Apps.Gateway.Azure.csproj", "{B33866AC-455B-4E09-8255-7B6C679F178E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Subscriptions.Tests", "Logic\Subscriptions.Tests\Logic.Subscriptions.Tests.csproj", "{D09F3A76-0F77-4C80-9EF5-571A7DB6DBD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Auth.Tests", "Logic\Auth.Tests\Logic.Auth.Tests.csproj", "{D09F3A76-0F77-4C80-9EF5-571A7DB6DBD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Variables", "Logic\Variables\Logic.Variables.csproj", "{2672111C-70E7-4D17-A705-6C61915783B8}"
 EndProject

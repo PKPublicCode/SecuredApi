@@ -12,16 +12,21 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
-public class DataStorageConnectionErrorException: DataStorageException
+public class DataCorruptedException : DataStorageException
 {
-    public DataStorageConnectionErrorException()
+    public DataCorruptedException()
     {
     }
 
-    public DataStorageConnectionErrorException(string message, Exception inner)
-        :base(message, inner)
+    public DataCorruptedException(string message)
+        : base(message)
+    {
+    }
+
+    public DataCorruptedException(string message, Exception inner)
+        : base(message, inner)
     {
     }
 }

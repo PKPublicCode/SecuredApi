@@ -12,12 +12,21 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
-public class SubscriptionKeyEntity
+public class DataStorageException : Exception
 {
-    public string HashedKey { get; init; } = null!;
-    public Guid SubscriptionId { get; init; }
-    public Guid ConsumerId { get; init; }
-    public Guid[] Routes { get; init; } = Array.Empty<Guid>();
+    public DataStorageException()
+    {
+    }
+
+    public DataStorageException(string message)
+        : base(message)
+    {
+    }
+
+    public DataStorageException(string message, Exception inner)
+        : base(message, inner)
+    {
+    }
 }

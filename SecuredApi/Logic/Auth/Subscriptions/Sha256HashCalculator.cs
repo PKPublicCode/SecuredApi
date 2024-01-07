@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public class Sha256HashCalculator: IHashCalculator
 {

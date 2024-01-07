@@ -16,7 +16,7 @@ using SecuredApi.Logic.Common;
 using SecuredApi.Logic.FileAccess;
 using System.Text;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public abstract class RepositoryTestsBase<T>
     where T: class

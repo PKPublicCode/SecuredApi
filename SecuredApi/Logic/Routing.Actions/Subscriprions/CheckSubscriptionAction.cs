@@ -10,9 +10,9 @@
 // Server Side Public License for more details.
 //
 // You should have received a copy of the Server Side Public License
-// along with this program. If not, see
+// along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.Logic.Subscriptions;
+using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 

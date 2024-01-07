@@ -15,7 +15,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public class ObjectToStringConverter: JsonConverter<string>
 {

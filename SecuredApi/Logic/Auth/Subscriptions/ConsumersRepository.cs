@@ -16,7 +16,7 @@ using SecuredApi.Logic.FileAccess;
 using SecuredApi.Logic.Common;
 using System.Text.Json.Serialization;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public class ConsumersRepository: RepositoryBase, IConsumersRepository
 {

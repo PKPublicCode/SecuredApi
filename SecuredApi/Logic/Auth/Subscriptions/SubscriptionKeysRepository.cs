@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.FileAccess;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public class SubscriptionKeysRepository: RepositoryBase, ISubscriptionKeysRepository
 {

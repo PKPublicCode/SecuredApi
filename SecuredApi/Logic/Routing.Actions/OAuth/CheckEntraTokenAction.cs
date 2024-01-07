@@ -57,8 +57,8 @@ public class CheckEntraTokenAction : IAction
 
         var validationParameters = new TokenValidationParameters()
         {
-            ValidIssuer = _settings.Issuer,
-            ValidAudience = _settings.Audience,
+            ValidIssuers = _settings.OneOfIssuers,
+            ValidAudiences = _settings.OneOfAudiences,
             ValidateLifetime = true,
             ValidateAudience = true,
             ValidateIssuer = true,

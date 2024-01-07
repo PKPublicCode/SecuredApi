@@ -15,7 +15,7 @@
 using SecuredApi.Logic.Common;
 using SecuredApi.Logic.FileAccess;
 
-namespace SecuredApi.Logic.Subscriptions;
+namespace SecuredApi.Logic.Auth.Subscriptions;
 
 public abstract class RepositoryBase
 {

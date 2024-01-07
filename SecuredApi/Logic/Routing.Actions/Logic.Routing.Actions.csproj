@@ -17,7 +17,7 @@
   <ItemGroup>
 	<ProjectReference Include="..\FileAccess.Abstractions\Logic.FileAccess.Abstractions.csproj" />
 	<ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
-	<ProjectReference Include="..\Subscriptions\Logic.Subscriptions.csproj" />
+	<ProjectReference Include="..\Auth\Logic.Auth.csproj" />
 	<ProjectReference Include="..\Routing.Utils\Logic.Routing.Utils.csproj" />
 	<ProjectReference Include="..\OAuth\Logic.OAuth.csproj" />
   </ItemGroup>

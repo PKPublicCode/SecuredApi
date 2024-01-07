@@ -27,6 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Subscriptions\Logic.Subscriptions.csproj" />
+    <ProjectReference Include="..\Auth\Logic.Auth.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Subscriptions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Subscriptions\" />
   </ItemGroup>
 </Project>
