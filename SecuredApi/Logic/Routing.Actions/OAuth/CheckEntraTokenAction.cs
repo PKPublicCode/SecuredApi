@@ -23,7 +23,7 @@ namespace SecuredApi.Logic.Routing.Actions.OAuth;
 public class CheckEntraTokenAction : IAction
 {
     private static readonly StringResponseStream _notAuthorized = new("Not Authorized");
-    private static readonly StringResponseStream _notAllowed = new("Access denied");
+    private static readonly StringResponseStream _notAllowed = new("Access Denied");
 
     private readonly CheckEntraTokenActionSettings _settings;
 
