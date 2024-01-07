@@ -16,3 +16,4 @@ global using Xunit;
 global using SecuredApi.ComponentTests.Gateway.Utils;
 global using static SecuredApi.ComponentTests.Gateway.Utils.Constants;
 global using FluentAssertions;
+global using NSubstitute;

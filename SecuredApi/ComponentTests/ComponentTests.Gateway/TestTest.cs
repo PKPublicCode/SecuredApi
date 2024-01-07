@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,24 +12,24 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using SecuredApi.Apps.Gateway;
+using SecuredApi.ComponentTests.Gateway.Hosting;
 
-namespace SecuredApi.WebApps.Gateway;
+namespace SecuredApi.ComponentTests.Gateway;
 
-public class Program
+public class TestTest: IClassFixture<GatewayHostFixture>
 {
-    public static void Main(string[] args)
+    private GatewayHostFixture _gateway;
+
+    public TestTest(GatewayHostFixture fixture)
     {
-        CreateHostBuilder(args).Build().Run();
+        _gateway = fixture;
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureRoutingInitializer()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    [Fact]
+    public async Task Test()
+    {
+        await _gateway.StartAsync("appsettings-common.json");
+        Assert.True(true);
+    }
 }
+

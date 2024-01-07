@@ -20,12 +20,13 @@ using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using SecuredApi.Logic.Routing.Utils;
+using ISecuredApiRouter = SecuredApi.Logic.Routing.IRouter;  //Have to resolve conflict with asp.net
 
 namespace SecuredApi.ComponentTests.Gateway;
 
 public abstract class GatewayTestsBase
 {
-    private const string _defaultFileName = "appsettings-common.json";
+    protected const string _defaultFileName = "appsettings-common.json";
 
     protected readonly IServiceProvider _serviceProvider;
     protected readonly HttpContext Context = new DefaultHttpContext();
@@ -81,7 +82,7 @@ public abstract class GatewayTestsBase
     {
         using var scope = _serviceProvider.CreateAsyncScope();
         Context.RequestServices = scope.ServiceProvider;
-        await scope.ServiceProvider.GetRequiredService<IRouter>()
+        await scope.ServiceProvider.GetRequiredService<ISecuredApiRouter>()
                                     .ProcessAsync(Context);
     }
 

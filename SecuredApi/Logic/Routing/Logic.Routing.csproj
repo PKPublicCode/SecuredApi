@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	<RootNamespace>SecuredApi.Logic.Routing</RootNamespace>
-	<AssemblyName>SecuredApi.Logic.Routing</AssemblyName>
-	<Nullable>enable</Nullable>
+	  <RootNamespace>SecuredApi.Logic.Routing</RootNamespace>
+	  <AssemblyName>SecuredApi.Logic.Routing</AssemblyName>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -20,34 +20,33 @@ using Microsoft.Extensions.Configuration;
 using SecuredApi.Apps.Gateway;
 using SecuredApi.Apps.Gateway.Azure.Configuration;
 
-namespace SecuredApi.WebApps.Gateway
+namespace SecuredApi.WebApps.Gateway;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration config)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = config;
+    }
 
-        public Startup(IConfiguration config)
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Code-less instrumentation is not available for .net5 for linux. Will be available for .net6.
+        // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
+        services.AddApplicationInsightsTelemetry();
+        services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
+        services.ConfigureRoutingHttpClients();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            _configuration = config;
+            app.UseDeveloperExceptionPage();
         }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Code-less instrumentation is not available for .net5 for linux. Will be available for .net6.
-            // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
-            services.AddApplicationInsightsTelemetry();
-            services.ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration);
-            services.ConfigureRoutingHttpClients();
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRoutingMiddleware();
-        }
+        app.UseRoutingMiddleware();
     }
 }

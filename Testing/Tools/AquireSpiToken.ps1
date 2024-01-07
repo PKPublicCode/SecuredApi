@@ -10,7 +10,7 @@ $scope = "api://securedapi-gateway-ptst/.default"
 #Prepare token request
 $url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
 
-'https://login.microsoftonline.com/a9e2b040-93ef-4252-992e-0d9830029ae8/v2.0/.well-known/openid-configuration' 
+#$wellKnown = 'https://login.microsoftonline.com/a9e2b040-93ef-4252-992e-0d9830029ae8/v2.0/.well-known/openid-configuration' 
 
 $body = @{
     grant_type = "client_credentials"

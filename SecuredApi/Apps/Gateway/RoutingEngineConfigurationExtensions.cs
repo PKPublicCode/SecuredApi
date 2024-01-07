@@ -12,32 +12,30 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SecuredApi.Apps.Gateway.Engine;
 using Microsoft.AspNetCore.Builder;
 
-namespace SecuredApi.Apps.Gateway
+namespace SecuredApi.Apps.Gateway;
+
+public static class RoutingEngineConfigurationExtensions
 {
-    public static class RoutingEngineConfigurationExtensions
+    public static IServiceCollection AddRoutingInitializer(this IServiceCollection services)
     {
-        public static IServiceCollection AddRoutingInitializer(this IServiceCollection services)
-        {
-            return services.AddHostedService<RoutingInitializer>();
-        }
+        return services.AddHostedService<RoutingInitializer>();
+    }
 
-        public static IHostBuilder ConfigureRoutingInitializer(this IHostBuilder builder)
+    public static IHostBuilder ConfigureRoutingInitializer(this IHostBuilder builder)
+    {
+        return builder.ConfigureServices(services =>
         {
-            return builder.ConfigureServices(services =>
-            {
-                services.AddRoutingInitializer();
-            });
-        }
+            services.AddRoutingInitializer();
+        });
+    }
 
-        public static IApplicationBuilder UseRoutingMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<RoutingMiddleware>();
-        }
+    public static IApplicationBuilder UseRoutingMiddleware(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<RoutingMiddleware>();
     }
 }

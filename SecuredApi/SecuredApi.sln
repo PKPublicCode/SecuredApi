@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{74648731
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing.Abstractions", "Logic\Routing.Abstractions\Logic.Routing.Abstractions.csproj", "{D50A613E-5147-4809-85DB-85686D50129B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.Routing", "Logic\Routing\Logic.Routing.csproj", "{F0F7DE84-1D7D-4438-B3E3-11F25746BF3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing", "Logic\Routing\Logic.Routing.csproj", "{F0F7DE84-1D7D-4438-B3E3-11F25746BF3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic.FileAccess.Abstractions", "Logic\FileAccess.Abstractions\Logic.FileAccess.Abstractions.csproj", "{6CB5DC40-B0B0-4427-9D8E-DD2F52626CA2}"
 EndProject
@@ -54,6 +54,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Variables.Abstractions", "Logic\Variables.Abstractions\Logic.Variables.Abstractions.csproj", "{54A40967-2A53-4E83-905E-517DFD2570B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Variables.Tests", "Logic\Variables.Tests\Logic.Variables.Tests.csproj", "{240A4548-CF5D-4236-A06D-F37057B63739}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.OAuth", "Logic\OAuth\Logic.OAuth.csproj", "{A446637C-1606-4AB4-9C59-96CBC33E9814}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -269,6 +271,18 @@ Global
 		{240A4548-CF5D-4236-A06D-F37057B63739}.Release|x64.Build.0 = Release|Any CPU
 		{240A4548-CF5D-4236-A06D-F37057B63739}.Release|x86.ActiveCfg = Release|Any CPU
 		{240A4548-CF5D-4236-A06D-F37057B63739}.Release|x86.Build.0 = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|x64.Build.0 = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Debug|x86.Build.0 = Debug|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|x64.ActiveCfg = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|x64.Build.0 = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|x86.ActiveCfg = Release|Any CPU
+		{A446637C-1606-4AB4-9C59-96CBC33E9814}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -291,6 +305,7 @@ Global
 		{2672111C-70E7-4D17-A705-6C61915783B8} = {74648731-0487-44A2-86E4-5F375B9B1B67}
 		{54A40967-2A53-4E83-905E-517DFD2570B8} = {74648731-0487-44A2-86E4-5F375B9B1B67}
 		{240A4548-CF5D-4236-A06D-F37057B63739} = {74648731-0487-44A2-86E4-5F375B9B1B67}
+		{A446637C-1606-4AB4-9C59-96CBC33E9814} = {74648731-0487-44A2-86E4-5F375B9B1B67}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17278AB9-ACAB-4584-89E3-112FDCDB0A15}
