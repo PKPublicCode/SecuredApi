@@ -30,7 +30,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public void NoRolesNoScope_Valid()
+    public async Task NoRolesNoScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -38,14 +38,14 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey2, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), null!, null!);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), null!, null!);
 
         result.Status.Should().Be(ValidationStatus.Ok);
         result.Succeed.Should().BeTrue();
     }
 
     [Fact]
-    public void ValidRole_Valid()
+    public async Task ValidRole_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -53,13 +53,13 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey2, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1), "Read Write");
         SetAllowedKeys(issuer, allowedKeys);
         
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), null!, MakeList("All", "Read"));
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), null!, MakeList("All", "Read"));
 
         result.Status.Should().Be(ValidationStatus.Ok);
     }
 
     [Fact]
-    public void ValidScope_Valid()
+    public async Task ValidScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -67,13 +67,13 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey2, MakeList("Guest", "User"), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), MakeList("User", "Admin"), null!);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), MakeList("User", "Admin"), null!);
 
         result.Status.Should().Be(ValidationStatus.Ok);
     }
 
     [Fact]
-    public void NoRequiredRoles_AccessDenied()
+    public async Task NoRequiredRoles_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -81,13 +81,13 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey2, MakeList("Guest"), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), MakeList("User", "Admin"), null!);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), MakeList("User", "Admin"), null!);
 
         result.Status.Should().Be(ValidationStatus.AccessDenied);
     }
 
     [Fact]
-    public void NoRequiredScope_Valid()
+    public async Task NoRequiredScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -95,13 +95,13 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey2, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1), "Other.Scope Other.Scope2");
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), null!, MakeList("Write", "Read"));
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), null!, MakeList("Write", "Read"));
 
         result.Status.Should().Be(ValidationStatus.AccessDenied);
     }
 
     [Fact]
-    public void SigningKeyIsInvalid_NotAuthorized()
+    public async Task SigningKeyIsInvalid_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -109,13 +109,41 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey3, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
 
         result.Status.Should().Be(ValidationStatus.NotAuthorized);
     }
 
     [Fact]
-    public void IssuerIsInvalid_AccessDenied()
+    public async Task TokenNotSigned_NotAuthorized()
+    {
+        var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
+        const string issuer = "https://my-issuer.com";
+        const string audience = "api://my-audience";
+        var token = CreateJwtToken(issuer, audience, null, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
+        SetAllowedKeys(issuer, allowedKeys);
+
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
+
+        result.Status.Should().Be(ValidationStatus.NotAuthorized);
+    }
+
+    [Fact]
+    public async Task TokenNotSignedAndNoAllowedKeysProvided_NotAuthorized()
+    {
+        //testcase actually tests underlying JsonWebToken behavior. But nice to know that.
+        const string issuer = "https://my-issuer.com";
+        const string audience = "api://my-audience";
+        var token = CreateJwtToken(issuer, audience, null, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
+        SetAllowedKeys(issuer, Array.Empty<SecurityKey>());
+
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
+
+        result.Status.Should().Be(ValidationStatus.NotAuthorized);
+    }
+
+    [Fact]
+    public async Task IssuerIsInvalid_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -123,26 +151,26 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey3, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer + ".ua", MakeList(audience), EmptyStrings, EmptyStrings);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer + ".ua", MakeList(audience), EmptyStrings, EmptyStrings);
 
         result.Status.Should().Be(ValidationStatus.AccessDenied);
     }
 
     [Fact]
-    public void AudiencceIsInvalid_AccessDenied()
+    public async Task AudiencceIsInvalid_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
         var token = CreateJwtToken(issuer, "api://my-audience", TestKey3, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer + ".ua", MakeList("api://another-audience"), EmptyStrings, EmptyStrings);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer + ".ua", MakeList("api://another-audience"), EmptyStrings, EmptyStrings);
 
         result.Status.Should().Be(ValidationStatus.AccessDenied);
     }
 
     [Fact]
-    public void TokenIsExpired_MotAuthorized()
+    public async Task TokenIsExpired_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -150,7 +178,7 @@ public class TokenValidatorTests
         var token = CreateJwtToken(issuer, audience, TestKey1, Array.Empty<string>(), DateTime.UtcNow.AddHours(-1), TimeSpan.FromMinutes(1));
         SetAllowedKeys(issuer, allowedKeys);
 
-        var result = TokenValidator.ValidateToken(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
+        var result = await TokenValidator.ValidateTokenAsync(token, _keysProvider, issuer, MakeList(audience), EmptyStrings, EmptyStrings);
 
         result.Status.Should().Be(ValidationStatus.NotAuthorized);
     }
@@ -161,16 +189,20 @@ public class TokenValidatorTests
     private static T[] MakeList<T>(params T[] a) => a;
     private static string[] EmptyStrings => Array.Empty<string>();
 
-    private static string CreateJwtToken(string issuer, string audience, RsaKeyInfo key, IEnumerable<string> roles, DateTime start, TimeSpan duration, string? scope = null)
+    private static string CreateJwtToken(string issuer, string audience, RsaKeyInfo? key, IEnumerable<string> roles, DateTime start, TimeSpan duration, string? scope = null)
     {
-        using var privateKey = RSA.Create();
-        privateKey.ImportFromPem(key.Private);
-        var signingKey = new RsaSecurityKey(privateKey) { KeyId = key.Kid };
+        using var privateKey = RSA.Create(); //will need it not disposable till the end
+        SigningCredentials? signingCredentials = null;
 
-        var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256)
+        if (key != null)
         {
-            CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
-        };
+            privateKey.ImportFromPem(key.Private);
+            var signingKey = new RsaSecurityKey(privateKey) { KeyId = key.Kid };
+            signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256)
+            {
+                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
+            };
+        }
 
         var claims = new ClaimsIdentity(
                 roles.Select(r => new Claim("roles", r))

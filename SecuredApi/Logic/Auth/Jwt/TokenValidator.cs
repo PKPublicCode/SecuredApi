@@ -12,39 +12,42 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace SecuredApi.Logic.Auth.Jwt;
 
 public static class TokenValidator
 {
-    public static ValidationResult ValidateToken(string token,
+    public static async Task<ValidationResult> ValidateTokenAsync(string token,
                                 ISigningKeysProvider keysProvider,
                                 string? issuer,
                                 string[]? oneOfAudiences,
                                 string[]? oneOfRoles,
-                                string[]? oneOfScopes
+                                string[]? oneOfScopes,
+                                CancellationToken ct = default
                                 )
     {
-        var result = ParseAndPreValidate(token, keysProvider, issuer, oneOfAudiences, out var jwtToken);
+        var handler = new JsonWebTokenHandler();
+        var jwt = handler.ReadJsonWebToken(token);
+        var keys = await keysProvider.GetKeysAsync(jwt.Issuer, ct);
+
+        var result = await ValidateMainTokenPropsAsync(jwt, handler, keys, issuer, oneOfAudiences);
         if (result.Succeed)
         {
-            return ValidateClaims(jwtToken!, oneOfRoles, oneOfScopes);
+            result = ValidateClaims(jwt, oneOfRoles, oneOfScopes);
         }
 
         return result;
     }
 
-    private static ValidationResult ParseAndPreValidate(string tokenStr,
-                                        ISigningKeysProvider keysProvider,
+    private static async Task<ValidationResult> ValidateMainTokenPropsAsync(JsonWebToken token,
+                                        JsonWebTokenHandler handler,
+                                        IEnumerable<SecurityKey> keys,
                                         string? issuer,
-                                        string[]? oneOfAudiences,
-                                        out JwtSecurityToken? token
+                                        string[]? oneOfAudiences
                                         )
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        // public delegate IEnumerable<SecurityKey> IssuerSigningKeyResolver (string token, SecurityToken securityToken, string kid, TokenValidationParameters validationParameters);
         var validationParameters = new TokenValidationParameters()
         {
             ValidIssuer = issuer,
@@ -52,39 +55,25 @@ public static class TokenValidator
             ValidateLifetime = true,
             ValidateAudience = true,
             ValidateIssuer = true,
-            IssuerSigningKeyResolver = (t, token, kid, p) => {
-                return keysProvider.GetKeysAsync(token.Issuer, CancellationToken.None).GetAwaiter().GetResult();
-            }
+            IssuerSigningKeys = keys,
         };
 
-        token = null;
+        var res = await handler.ValidateTokenAsync(token, validationParameters);
 
-        try
+        if (!res.IsValid)
         {
-            tokenHandler.ValidateToken(tokenStr, validationParameters, out var result);
-            token =  (JwtSecurityToken) result;
+            return ResultFromException(res.Exception);
         }
-        catch (SecurityTokenException e)
-            when (e is SecurityTokenExpiredException
-                    || e is SecurityTokenSignatureKeyNotFoundException)
-        {
-            return ValidationResult.MakeNotAuthorized(e);
-        }
-        catch(SecurityTokenException e)
-            when (e is SecurityTokenInvalidIssuerException)
-        {
-            return ValidationResult.MakeAccessDenied(e);
-        }
-        catch (SecurityTokenException e)
-        {
-            // return access denied by default
-            return ValidationResult.MakeAccessDenied(e);
-        }
-
         return ValidationResult.MakeOk();
     }
 
-    private static ValidationResult ValidateClaims(JwtSecurityToken token, string[]? oneOfRoles, string[]? oneOfScopes)
+    private static ValidationResult ResultFromException(Exception e) => e switch
+    {
+        SecurityTokenInvalidIssuerException => ValidationResult.MakeAccessDenied(e),
+        _ => ValidationResult.MakeNotAuthorized(e)
+    };
+
+    private static ValidationResult ValidateClaims(JsonWebToken token, string[]? oneOfRoles, string[]? oneOfScopes)
     {
         var roles = oneOfRoles ?? Array.Empty<string>();
         var scopes = oneOfScopes ?? Array.Empty<string>();
@@ -99,11 +88,13 @@ public static class TokenValidator
             switch (item.Type)
             {
                 case "roles":
+                    // roles is an array in json, that interpret by JsonWebToken class as multiple claims with same name
                     roleOk = roleOk || roles.Contains(item.Value);
                     break;
                 case "scp":
-                    if (!scopeOk)
+                    if (!scopeOk) // if scope check required at all
                     {
+                        //in contrast of roles, scopes claim is string with items split by space
                         var parsedScp = item.Value.Split(" ");
                         foreach (var s in parsedScp)
                         {
