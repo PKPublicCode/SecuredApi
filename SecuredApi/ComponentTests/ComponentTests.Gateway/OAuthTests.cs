@@ -20,6 +20,9 @@ using SecuredApi.Logic.Routing.Actions.OAuth;
 using SecuredApi.Logic.Routing.Engine;
 using SecuredApi.Logic.Auth.Jwt;
 
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+
 namespace SecuredApi.ComponentTests.Gateway;
 
 public class OAuthTests: GatewayTestsBase
@@ -39,9 +42,22 @@ public class OAuthTests: GatewayTestsBase
                    }
                );
 
-            srv.AddSingleton<ISigningKeysProvider>(keyProvider);
+            srv.AddSingleton(keyProvider);
         })
     {
+    }
+
+    [Fact]
+    public async Task TestConfiguration()
+    {
+        string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
+
+        ConfigurationManager<OpenIdConnectConfiguration> configManager
+            = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
+
+        OpenIdConnectConfiguration config = await configManager.GetConfigurationAsync();
+
+        Assert.True(true);
     }
 
     [Fact] //ToDo.0 Move out of component tests
@@ -51,7 +67,7 @@ public class OAuthTests: GatewayTestsBase
             WellKnownUrl: null!,
             Issuer: "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/",
             OneOfAudiences: new[] { "api://securedapi-gateway-ptst" }
-            ); ;
+            );
         var sut = new CheckEntraTokenAction(settings);
         var tokenStr = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSIsImtpZCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSJ9.eyJhdWQiOiJhcGk6Ly9zZWN1cmVkYXBpLWdhdGV3YXktcHRzdCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2E5ZTJiMDQwLTkzZWYtNDI1Mi05OTJlLTBkOTgzMDAyOWFlOC8iLCJpYXQiOjE3MDQ2NDkyMDIsIm5iZiI6MTcwNDY0OTIwMiwiZXhwIjoxNzA0NjUzMTAyLCJhaW8iOiJFMlZnWUlnNG1QTG1WWDdlcTJ1Ly9LdzB4Vk5xQUE9PSIsImFwcGlkIjoiMDg1NWE1MzAtOWYxZC00OTljLTliYjAtZGVjM2M5ZjU5NjllIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYTllMmIwNDAtOTNlZi00MjUyLTk5MmUtMGQ5ODMwMDI5YWU4LyIsIm9pZCI6ImFjN2M5MjMzLWI0YTItNDU0Yi05MTEwLWNlYWU3OGM1NmQ4YyIsInJoIjoiMC5BVWNBUUxEaXFlLVRVa0taTGcyWU1BS2E2Si04Rlc0WVpJSkV2RFVBYm1CeUZZOUhBQUEuIiwicm9sZXMiOlsiRWNob1Nydi5SZWFkLkFsbCJdLCJzdWIiOiJhYzdjOTIzMy1iNGEyLTQ1NGItOTExMC1jZWFlNzhjNTZkOGMiLCJ0aWQiOiJhOWUyYjA0MC05M2VmLTQyNTItOTkyZS0wZDk4MzAwMjlhZTgiLCJ1dGkiOiJHZ3NUd3ZmRG8wcTNLZDlFY1ltZUFnIiwidmVyIjoiMS4wIn0.OzTnbMT0RpudblK2tEcEufmEEhzhLAitd2dG8ITB3RdtWD1RciNbYy6ocp6CqbP-_TdWDTi0w534R5Nx9NivhxxTR1uiZWcPkXIMN_A31dq0nijml4PVkAaFljaMs1uEMLN_H56F1Y556uI_4ICddp6AuDql0kCiJ-ThY8Vb75sCxu8fHzNy08oH1Ulltw6bHsSv3QwiG07o6UxcJWXHjpj3Hw14anO9IzNecjJC14UXqggrEZibq5g5Qspl7yWB7u8bm3ahTBqPo5fZ0YPW5NR0_p8F9MXt8m0_ebCJ_s0_0TQjDrsIbCC5lTAi_Z7z8xHfXuYBbgMH0JnP9hnTTg";
 

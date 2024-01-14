@@ -19,7 +19,6 @@
 	<ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
 	<ProjectReference Include="..\Auth\Logic.Auth.csproj" />
 	<ProjectReference Include="..\Routing.Utils\Logic.Routing.Utils.csproj" />
-	<ProjectReference Include="..\OAuth\Logic.OAuth.csproj" />
   </ItemGroup>
 
 </Project>

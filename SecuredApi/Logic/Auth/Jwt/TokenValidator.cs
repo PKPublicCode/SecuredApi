@@ -94,9 +94,8 @@ public static class TokenValidator
                 case "scp":
                     if (!scopeOk) // if scope check required at all
                     {
-                        //in contrast of roles, scopes claim is string with items split by space
-                        var parsedScp = item.Value.Split(" ");
-                        foreach (var s in parsedScp)
+                        //in contrast of roles, scp claim is string that contains items that split by space
+                        foreach (var s in item.Value.Split(" "))
                         {
                             if (scopes.Contains(s))
                             {
