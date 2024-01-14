@@ -25,7 +25,7 @@ namespace SecuredApi.ComponentTests.Gateway;
 public class OAuthTests: GatewayTestsBase
 {
     public OAuthTests()
-        :base("appsettings-subscriptions.json", (srv, config) =>
+        :base("appsettings-oauth.json", (srv, config) =>
         {
             var keyProvider = Substitute.For<ISigningKeysProvider>();
 

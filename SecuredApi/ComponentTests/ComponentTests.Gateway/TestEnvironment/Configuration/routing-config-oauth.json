@@ -15,18 +15,14 @@
   ],
   "routesGroups": [
     {
-      "id": "602352d4-56e8-4269-965f-1290a92df903",
       "description": "Private routes subscription key authentication",
-      "path": "/private_api_key",
+      "path": "/private_oauth",
       "preRequestActions": [
         {
-          "type": "CheckSubscription",
-          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
-          "errorNotAuthorizedBody": "Subscription key not set or invalid",
-          "errorAccessDeniedBody": "Call Not Allowed"
-        },
-        {
-          "type": "RunConsumerActions"
+          "type": "CheckEntraJwt",
+          "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
+          "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
+          "keepData":  true
         }
       ],
       "routesGroups": [
@@ -40,6 +36,11 @@
               "methods": [ "get" ],
               "path": "/wildcard/*",
               "actions": [
+                {
+                  "type": "CheckEntraJwtClaims",
+                  "oneOfRoles": [ "EchoSrv.Read.All" ],
+                  "cleanup": true
+                },
                 {
                   "type": "RemoteCall",
                   // In ComponentTests protectedEchoPath is set by appsettings json
@@ -58,6 +59,10 @@
               "methods": [ "get" ],
               "path": "/notallowed/wildcard/*",
               "actions": [
+                {
+                  "type": "CheckEntraJwtClaims",
+                  "OneOfRoles": [ "EchoSrv.Write.All" ]
+                },
                 {
                   "type": "RemoteCall",
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
