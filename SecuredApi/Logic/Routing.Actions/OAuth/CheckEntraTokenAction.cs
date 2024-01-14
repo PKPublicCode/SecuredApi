@@ -36,7 +36,7 @@ public class CheckEntraTokenAction : IAction
         if (TryGetToken(context, out var strToken))
         {
             var result = await TokenValidator.ValidateTokenAsync(strToken!, context.GetRequiredService<ISigningKeysProvider>(),
-                                            _settings.Issuer, _settings.OneOfAudiences,
+                                            _settings.OneOfIssuers, _settings.OneOfAudiences,
                                             _settings.OneOfRoles, _settings.OneOfScopes);
 
             if (result.Status == ValidationStatus.NotAuthorized)

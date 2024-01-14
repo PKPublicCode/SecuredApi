@@ -29,6 +29,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
+    <ProjectReference Include="..\..\Testing\Testing.Common\Testing.Common.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

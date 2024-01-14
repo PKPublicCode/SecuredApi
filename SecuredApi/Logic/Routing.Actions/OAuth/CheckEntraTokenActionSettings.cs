@@ -16,9 +16,8 @@ namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public record CheckEntraTokenActionSettings
 (
-    string WellKnownUrl,
-    string Issuer,
-    string[]? OneOfAudiences = null,
+    string[] OneOfIssuers,
+    string[] OneOfAudiences,
     string[]? OneOfRoles = null,
     string[]? OneOfScopes = null,
     string HeaderName = "Authorization",

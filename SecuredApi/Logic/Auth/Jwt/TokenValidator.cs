@@ -21,8 +21,8 @@ public static class TokenValidator
 {
     public static async Task<ValidationResult> ValidateTokenAsync(string token,
                                 ISigningKeysProvider keysProvider,
-                                string? issuer,
-                                string[]? oneOfAudiences,
+                                string[] oneOfIssuers,
+                                string[] oneOfAudiences,
                                 string[]? oneOfRoles,
                                 string[]? oneOfScopes,
                                 CancellationToken ct = default
@@ -32,7 +32,7 @@ public static class TokenValidator
         var jwt = handler.ReadJsonWebToken(token);
         var keys = await keysProvider.GetKeysAsync(jwt.Issuer, ct);
 
-        var result = await ValidateMainTokenPropsAsync(jwt, handler, keys, issuer, oneOfAudiences);
+        var result = await ValidateMainTokenPropsAsync(jwt, handler, keys, oneOfIssuers, oneOfAudiences);
         if (result.Succeed)
         {
             result = ValidateClaims(jwt, oneOfRoles, oneOfScopes);
@@ -44,13 +44,13 @@ public static class TokenValidator
     private static async Task<ValidationResult> ValidateMainTokenPropsAsync(JsonWebToken token,
                                         JsonWebTokenHandler handler,
                                         IEnumerable<SecurityKey> keys,
-                                        string? issuer,
+                                        string[] oneOfIssuers,
                                         string[]? oneOfAudiences
                                         )
     {
         var validationParameters = new TokenValidationParameters()
         {
-            ValidIssuer = issuer,
+            ValidIssuers = oneOfIssuers,
             ValidAudiences = oneOfAudiences,
             ValidateLifetime = true,
             ValidateAudience = true,
@@ -69,7 +69,8 @@ public static class TokenValidator
 
     private static ValidationResult ResultFromException(Exception e) => e switch
     {
-        SecurityTokenInvalidIssuerException => ValidationResult.MakeAccessDenied(e),
+        SecurityTokenInvalidIssuerException
+            or SecurityTokenInvalidAudienceException => ValidationResult.MakeAccessDenied(e),
         _ => ValidationResult.MakeNotAuthorized(e)
     };
 
@@ -88,7 +89,7 @@ public static class TokenValidator
             switch (item.Type)
             {
                 case "roles":
-                    // roles is an array in json, that interpret by JsonWebToken class as multiple claims with same name
+                    // roles is an array in json, that interpreted by JsonWebToken class as multiple claims with same name
                     roleOk = roleOk || roles.Contains(item.Value);
                     break;
                 case "scp":
