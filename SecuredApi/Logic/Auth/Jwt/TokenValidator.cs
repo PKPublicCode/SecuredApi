@@ -64,17 +64,10 @@ public static class TokenValidator
         {
             return ResultFromException(res.Exception);
         }
-        return ValidationResult.MakeOk();
+        return ValidationResult.MakeOk(token);
     }
 
-    private static ValidationResult ResultFromException(Exception e) => e switch
-    {
-        SecurityTokenInvalidIssuerException
-            or SecurityTokenInvalidAudienceException => ValidationResult.MakeAccessDenied(e),
-        _ => ValidationResult.MakeNotAuthorized(e)
-    };
-
-    private static ValidationResult ValidateClaims(JsonWebToken token, string[]? oneOfRoles, string[]? oneOfScopes)
+    public static ValidationResult ValidateClaims(JsonWebToken token, string[]? oneOfRoles, string[]? oneOfScopes)
     {
         var roles = oneOfRoles ?? Array.Empty<string>();
         var scopes = oneOfScopes ?? Array.Empty<string>();
@@ -113,10 +106,17 @@ public static class TokenValidator
         
         if (allOk)
         {
-            return ValidationResult.MakeOk();
+            return ValidationResult.MakeOk(token);
         }
 
         return ValidationResult.MakeAccessDenied();
     }
+
+    private static ValidationResult ResultFromException(Exception e) => e switch
+    {
+        SecurityTokenInvalidIssuerException
+            or SecurityTokenInvalidAudienceException => ValidationResult.MakeAccessDenied(e),
+        _ => ValidationResult.MakeNotAuthorized(e)
+    };
 }
 

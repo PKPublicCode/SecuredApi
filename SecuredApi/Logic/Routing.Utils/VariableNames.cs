@@ -29,5 +29,10 @@ public static class VariableNames
     {
         public const string ConsumerId = "SubscriptionConsumerId";
     }
+
+    public static class Jwt
+    {
+        public const string Token = "AuthorizationJwt";
+    }
 }
 

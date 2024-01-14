@@ -15,6 +15,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
+using SecuredApi.Logic.Routing.Actions.OAuth;
 
 namespace SecuredApi.Apps.Gateway.Actions;
 
@@ -43,6 +44,8 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
             .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
             .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
+            .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
+            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
             ;
     } 
 }

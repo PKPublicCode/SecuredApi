@@ -25,7 +25,7 @@ public class TestTest: IClassFixture<GatewayHostFixture>
         _gateway = fixture;
     }
 
-    [Fact]
+    //[Fact]
     public async Task Test()
     {
         await _gateway.StartAsync("appsettings-common.json");

@@ -14,13 +14,10 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
-public record CheckEntraTokenActionSettings
+public record CheckEntraJwtClaimsActionSettings
 (
-    string[] OneOfIssuers,
-    string[] OneOfAudiences,
     string[]? OneOfRoles = null,
     string[]? OneOfScopes = null,
-    string HeaderName = "Authorization",
-    string TokenPrefix = "Bearer "
+    bool Cleanup = true
 );
 

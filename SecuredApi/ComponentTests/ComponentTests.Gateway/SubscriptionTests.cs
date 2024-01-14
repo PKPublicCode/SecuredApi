@@ -28,7 +28,7 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_SubscriptionKeyNotSet()
     {
-        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
         ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
@@ -40,7 +40,7 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_SubscriptionKeyNotExists()
     {
-        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
         SetSubscriptionKey("KeyKeyKey");
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
@@ -54,7 +54,7 @@ public class SubscriptionTests : GatewayTestsBase
     public async Task PrivateRote_CallAlowedConsumerWithActions()
     {
         //Test uses same route as used in itegration tests, and so it has remoute call inside
-        Request.SetupGet(RoutePaths.PrivateRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         // setup RemouteCall response
@@ -74,7 +74,7 @@ public class SubscriptionTests : GatewayTestsBase
     [Fact]
     public async Task PrivateRote_CallNotAlowedConsumerWithActions()
     {
-        Request.SetupGet(RoutePaths.PrivateNotAllowedWildcard);
+        Request.SetupGet(RoutePaths.PrivateApiKeyNotAllowedWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;

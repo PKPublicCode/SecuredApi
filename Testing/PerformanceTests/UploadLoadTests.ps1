@@ -28,4 +28,4 @@ Upload-Test "Echo" `
 Upload-Test "Gateway" `
             $deploymentResults.gateway.appServiceName `
             $deploymentResults.gateway.hostEndpoint `
-            "/private/redirect/wildcard/" ` 
+            "/private_api_key/redirect/wildcard/" ` 

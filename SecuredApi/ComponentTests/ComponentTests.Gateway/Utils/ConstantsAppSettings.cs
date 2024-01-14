@@ -36,6 +36,8 @@ public static partial class Constants
         public static HttpHeader ResponseConsumerSpecificActions { get; } = new("X-CONSUMER-SPECIFIC-HEADER", "This is test client 1");
 
         public const string SubscriptionKeyHeaderName = "X-SUBSCRIPTION-KEY";
+
+        public const string AuthorizationHeaderName = "Authorization";
     }
 
     public static class RoutePaths
@@ -46,8 +48,10 @@ public static partial class Constants
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/echo/delay";
         public const string PublicContentBase = "/public/echo/content";
-        public const string PrivateRedirectWildcard = "/private/redirect/wildcard";
-        public const string PrivateNotAllowedWildcard = "/private/notallowed/wildcard";
+        public const string PrivateApiKeyRedirectWildcard = "/private_api_key/redirect/wildcard";
+        public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
+        public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard";
+        public const string PrivateOAuthNotAllowedWildcard = "/private_oauth/notallowed/wildcard";
     }
 
     public static class InlineContent
@@ -60,6 +64,12 @@ public static partial class Constants
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string CallNotAllowed = "Call Not Allowed";
         public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
+    }
+
+    public static class JwtClaims
+    {
+        public const string AllowedEntraTokenAudience = "api://securedapi-gateway-ptst";
+        public const string AllowedEntraTokenIssuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/";
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";

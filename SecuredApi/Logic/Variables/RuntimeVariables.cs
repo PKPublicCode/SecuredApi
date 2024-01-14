@@ -31,6 +31,11 @@ public class RuntimeVariables: IRuntimeVariables
 
     public object GetVariable(ReadOnlySpan<char> key) => GetVariable(key.ToString());
 
+    public void RemoveVariable(string name)
+    {
+        _variables.Remove(name);
+    }
+
     public void SetVariable(string key, object value) => _variables[key] = value;
 
     public bool TryGetVariable(string key, [MaybeNullWhen(false)] out object value)

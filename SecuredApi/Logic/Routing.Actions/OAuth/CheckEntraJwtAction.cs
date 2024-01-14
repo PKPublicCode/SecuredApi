@@ -19,14 +19,11 @@ using SecuredApi.Logic.Auth.Jwt;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
-public class CheckEntraTokenAction : IAction
+public class CheckEntraJwtAction : IAction
 {
-    private static readonly StringResponseStream _notAuthorized = new("Not Authorized");
-    private static readonly StringResponseStream _notAllowed = new("Access Denied");
+    private readonly CheckEntraJwtActionSettings _settings;
 
-    private readonly CheckEntraTokenActionSettings _settings;
-
-    public CheckEntraTokenAction(CheckEntraTokenActionSettings settings)
+    public CheckEntraJwtAction(CheckEntraJwtActionSettings settings)
     {
         _settings = settings;
     }
@@ -35,25 +32,26 @@ public class CheckEntraTokenAction : IAction
     {
         if (TryGetToken(context, out var strToken))
         {
-            var result = await TokenValidator.ValidateTokenAsync(strToken!, context.GetRequiredService<ISigningKeysProvider>(),
+            var result = await TokenValidator.ValidateTokenAsync(strToken, context.GetRequiredService<ISigningKeysProvider>(),
                                             _settings.OneOfIssuers, _settings.OneOfAudiences,
                                             _settings.OneOfRoles, _settings.OneOfScopes);
 
-            if (result.Status == ValidationStatus.NotAuthorized)
+            if(!result.Succeed)
             {
-                return await context.SetNotAuthorizedErrorAsync(_notAuthorized);
+                return await result.Status.TranslateError(context);
             }
-            else if (result.Status == ValidationStatus.AccessDenied)
+
+            if (_settings.KeepData)
             {
-                return await context.SetAccessDeniedErrorAsync(_notAllowed);
+                context.Variables.SetVariable(VariableNames.Jwt.Token, result.Jwt!);
             }
+            return true;
         }
 
-        return true;
-
+        return await context.SetNotAuthorizedErrorAsync(ValidationResultExtensions.NotAuthorized);
     }
 
-    private bool TryGetToken(IRequestContext context, [MaybeNullWhen(false)] out string? value)
+    private bool TryGetToken(IRequestContext context, [MaybeNullWhen(false)] out string value)
     {
         if (context.Request.Headers.TryGetValue(_settings.HeaderName, out var header)
             && header.Count > 0)

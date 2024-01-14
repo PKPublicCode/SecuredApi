@@ -4,7 +4,7 @@ $result = $null
 $duration = Measure-Command -Expression { 
         try {
             $result = Invoke-WebRequest `
-            -Uri "https://$($deploymentResults.gateway.hostEndpoint)/private/redirect/wildcard/warmup" `
+            -Uri "https://$($deploymentResults.gateway.hostEndpoint)/private_api_key/redirect/wildcard/warmup" `
             -Headers @{"X-SUBSCRIPTION-KEY"="5F39D492-A141-498A-AE04-76C6B77F246A"}
         }
         catch {
