@@ -16,11 +16,11 @@ namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public record CheckEntraTokenActionSettings
 (
-    string? WellKnownUrl = null,
-    string[]? OneOfIssuers = null,
+    string WellKnownUrl,
+    string Issuer,
     string[]? OneOfAudiences = null,
     string[]? OneOfRoles = null,
-    string? scope = null,
+    string[]? OneOfScopes = null,
     string HeaderName = "Authorization",
     string TokenPrefix = "Bearer "
 );

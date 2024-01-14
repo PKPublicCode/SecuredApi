@@ -5,7 +5,8 @@ $connectionDetails = @{
     'ClientId'    = '0855a530-9f1d-499c-9bb0-dec3c9f5969e'
     'Interactive' = $true
     #'Scopes' = 'api://securedapi-gateway-ptst/EchosSrv.Admin'
-    'Scopes' = 'api://securedapi-gateway-ptst/EchoSrv.ReadWrite'
+    #'Scopes' = 'api://securedapi-gateway-ptst/EchoSrv.ReadWrite'
+    'Scopes' = 'api://securedapi-gateway-ptst/EchoSrv.Read'
 }
 
 $token = Get-MsalToken @connectionDetails

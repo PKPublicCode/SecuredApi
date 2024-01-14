@@ -12,11 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.IdentityModel.Tokens;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
 using SecuredApi.Logic.Routing.Utils;
+using SecuredApi.Logic.Auth.Jwt;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
@@ -34,48 +33,24 @@ public class CheckEntraTokenAction : IAction
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
     {
-        if (!TryGetToken(context, out var strToken))
+        if (TryGetToken(context, out var strToken))
         {
-            return await context.SetNotAuthorizedErrorAsync(_notAuthorized);
-        }
+            var result = TokenValidator.ValidateToken(strToken!, context.GetRequiredService<ISigningKeysProvider>(),
+                                            _settings.Issuer, _settings.OneOfAudiences,
+                                            _settings.OneOfRoles, _settings.OneOfScopes);
 
-        var keys = await context.GetRequiredService<ISigningKeysProvider>().GetKeysAsync(context.CancellationToken);
-
-        if (!BasicTokenValidation(context, strToken!, keys, out var jwtToken))
-        {
-            return await context.SetAccessDeniedErrorAsync(_notAllowed);
+            if (result.Status == ValidationStatus.NotAuthorized)
+            {
+                return await context.SetNotAuthorizedErrorAsync(_notAuthorized);
+            }
+            else if (result.Status == ValidationStatus.AccessDenied)
+            {
+                return await context.SetAccessDeniedErrorAsync(_notAllowed);
+            }
         }
 
         return true;
-    }
 
-    private bool BasicTokenValidation(IRequestContext context, string tokenStr, IEnumerable<SecurityKey> keys, [MaybeNullWhen(false)] out JwtSecurityToken? jwtToken)
-    {
-        jwtToken = default;
-        var result = false;
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var validationParameters = new TokenValidationParameters()
-        {
-            ValidIssuers = _settings.OneOfIssuers,
-            ValidAudiences = _settings.OneOfAudiences,
-            ValidateLifetime = true,
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            IssuerSigningKeys = keys,
-        };
-
-        try
-        {
-            var principal = tokenHandler.ValidateToken(tokenStr, validationParameters, out var token);
-            jwtToken = (JwtSecurityToken)token;
-        }
-        catch (SecurityTokenException ex)
-        {
-            result = false;
-        }
-
-        return result;
     }
 
     private bool TryGetToken(IRequestContext context, [MaybeNullWhen(false)] out string? value)

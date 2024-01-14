@@ -12,12 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.IdentityModel.Tokens;
+namespace SecuredApi.Logic.Auth.Jwt;
 
-namespace SecuredApi.Logic.Routing.Actions.OAuth;
-
-public interface ISigningKeysProvider
+public class RsaKeyInfo
 {
-    Task<IEnumerable<SecurityKey>> GetKeysAsync(CancellationToken ct);
+    public string Kid { get; init; } = string.Empty;
+    public string Public { get; init; } = string.Empty;
+    public string Private { get; init; } = string.Empty;
 }
 

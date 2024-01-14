@@ -4,8 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>SecuredApi.Logic.Subscriptions</RootNamespace>
-    <AssemblyName>SecuredApi.Logic.Subscriptions.Tests</AssemblyName>
+    <RootNamespace>SecuredApi.Logic.Auth</RootNamespace>
+    <AssemblyName>SecuredApi.Logic.Auth.Tests</AssemblyName>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -31,8 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Subscriptions\" />
+    <None Remove="Jwt\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Subscriptions\" />
+    <Folder Include="Jwt\" />
   </ItemGroup>
 </Project>
