@@ -13,10 +13,8 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using static SecuredApi.Logic.Auth.Jwt.SigningKeys;
+using static SecuredApi.Testing.Common.Jwt.SigningKeys;
+using static SecuredApi.Testing.Common.Jwt.TokenHelper;
 
 namespace SecuredApi.Logic.Auth.Jwt;
 
@@ -188,58 +186,5 @@ public class TokenValidatorTests
 
     private static T[] MakeList<T>(params T[] a) => a;
     private static string[] EmptyStrings => Array.Empty<string>();
-
-    private static string CreateJwtToken(string issuer, string audience, RsaKeyInfo? key, IEnumerable<string> roles, DateTime start, TimeSpan duration, string? scope = null)
-    {
-        using var privateKey = RSA.Create(); //will need it not disposable till the end
-        SigningCredentials? signingCredentials = null;
-
-        if (key != null)
-        {
-            privateKey.ImportFromPem(key.Private);
-            var signingKey = new RsaSecurityKey(privateKey) { KeyId = key.Kid };
-            signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256)
-            {
-                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false },
-            };
-        }
-
-        var claims = new ClaimsIdentity(
-                roles.Select(r => new Claim("roles", r))
-            );
-        if (scope != null)
-        {
-            claims.AddClaim(new Claim("scp", scope));
-        }
-
-        var descriptor = new SecurityTokenDescriptor
-        {
-            Issuer = issuer,
-            Audience = audience,
-            IssuedAt = start,
-            NotBefore = start,
-            Expires = start.Add(duration),
-            Subject = claims,
-            SigningCredentials = signingCredentials
-        };
-
-        var handler = new JwtSecurityTokenHandler();
-
-        var token = handler.CreateJwtSecurityToken(descriptor);
-
-        return handler.WriteToken(token);
-    }
-
-    private static IEnumerable<SecurityKey> MakePublicKeysList(params RsaKeyInfo[] keys)
-    {
-        return keys.Select(x =>
-        {
-            var rsa = RSA.Create();
-            rsa.ImportFromPem(x.Public);
-            return new RsaSecurityKey(rsa) { KeyId = x.Kid };
-            //var jwk = JsonWebKeyConverter.ConvertFromSecurityKey(new RsaSecurityKey(rsa) { KeyId = x.Kid });
-            //return jwk;
-        }).ToArray();
-    }
 }
 
