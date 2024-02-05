@@ -15,25 +15,58 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Collections.Concurrent;
 
 namespace SecuredApi.Logic.Auth.Jwt;
 
 public class SigningKeysProvider: ISigningKeysProvider
 {
+    private readonly ConcurrentDictionary<string, ConfigurationManager<OpenIdConnectConfiguration>> _configs = new(StringComparer.OrdinalIgnoreCase);
+    private readonly SemaphoreSlim _lock = new(1);
+    private const string _wellknownSuffix = "/v2.0/.well-known/openid-configuration";
+
     public SigningKeysProvider()
     {
     }
 
     public async Task<IEnumerable<SecurityKey>> GetKeysAsync(string issuer, CancellationToken ct)
     {
-        string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
+        if (!_configs.TryGetValue(issuer, out var configManager))
+        {
+            configManager = await SafeAddConfigurationAsync(issuer, ct);
+        }
 
-        ConfigurationManager<OpenIdConnectConfiguration> configManager
-            = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
-
-        OpenIdConnectConfiguration config = await configManager.GetConfigurationAsync();
+        //According to current implementation, ConfigurationManager is threadsafe and caches configuration
+        var config = await configManager.GetConfigurationAsync();
 
         return config.JsonWebKeySet.Keys;
+    }
+
+    private async Task<ConfigurationManager<OpenIdConnectConfiguration>> SafeAddConfigurationAsync(string issuer, CancellationToken ct)
+    {
+        await _lock.WaitAsync(ct);
+        try
+        {
+            // Check again, if value was added during awating the lock
+            if (_configs.TryGetValue(issuer, out var config))
+            {
+                return config;
+            }
+
+            string stsDiscoveryEndpoint = issuer + _wellknownSuffix;
+
+            //ToDo find way to inject configurable HttpClient
+            config = new ConfigurationManager<OpenIdConnectConfiguration>(
+                            stsDiscoveryEndpoint,
+                            new OpenIdConnectConfigurationRetriever()
+                         );
+            _configs.TryAdd(issuer, config);
+            return config;
+        }
+        finally
+        {
+            _lock.Release();
+        }
     }
 }
 

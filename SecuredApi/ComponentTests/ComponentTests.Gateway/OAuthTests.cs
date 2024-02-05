@@ -38,26 +38,13 @@ public class OAuthTests: GatewayTestsBase
     {
     }
 
-    //[Fact]
-    //public async Task TestAction()
-    //{
-    //    string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
-
-    //    ConfigurationManager<OpenIdConnectConfiguration> configManager
-    //        = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
-
-    //    OpenIdConnectConfiguration config = await configManager.GetConfigurationAsync();
-
-    //    Assert.True(true);
-    //}
-
     [Fact]
-    public async Task PrivateRote_CallAlowedConsumerWithActions()
+    public async Task PrivateRoute_CallAlowedConsumerWithActions()
     {
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
                                     TestKey2,
-                                    MakeList("EchoSrv.Read.All"),
+                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
@@ -77,12 +64,65 @@ public class OAuthTests: GatewayTestsBase
         await ExecuteAsync();
     }
 
+    [Fact]
+    public async Task PrivateRoute_CallNotAllowed()
+    {
+        var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
+                                    JwtClaims.AllowedEntraTokenAudience,
+                                    TestKey2,
+                                    MakeList("EchoSrv.Read.All"),
+                                    DateTime.UtcNow,
+                                    TimeSpan.FromHours(1));
+        SetToken(token);
+        Request.SetupGet(RoutePaths.PrivateOAuthNotAllowedWildcard);
+
+        // setup RemouteCall response
+        MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
+            .Respond(
+                        HttpStatusCode.OK,
+                        new StringContent(InlineContent.PrivateRedirectWildcard)
+                    );
+
+        ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
+        ExpectedResult.Body = InlineContent.AccessDenied;
+        //ExpectedResult.AddHeaders(Headers.TextPlainUtf8ContentType);
+
+        await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task PrivateRoute_CallAlowedConsumerWithWrongKey()
+    {
+        var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
+                                    JwtClaims.AllowedEntraTokenAudience,
+                                    TestKey3,
+                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
+                                    DateTime.UtcNow,
+                                    TimeSpan.FromHours(1));
+        SetToken(token);
+        Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
+
+        // setup RemouteCall response
+        MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
+            .Respond(
+                        HttpStatusCode.OK,
+                        new StringContent(InlineContent.PrivateRedirectWildcard)
+                    );
+
+        ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
+        ExpectedResult.Body = InlineContent.NotAuthorized;
+        //ExpectedResult.AddHeaders(Headers.TextPlainUtf8ContentType);
+
+        await ExecuteAsync();
+    }
+
     private void SetToken(string token)
     {
         Request.Headers.Add(new("Authorization", "Bearer " + token));
     }
 
     [Fact]
+    //ToDo.0 Delete this test
     public async Task TestAction()
     {
         var issuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/";
@@ -103,6 +143,17 @@ public class OAuthTests: GatewayTestsBase
         bool result = await sut.ExecuteAsync(ctx);
 
         Assert.True(result);
+    }
+
+    [Fact]
+    public async Task Test()
+    {
+        var v = new SigningKeysProvider();
+        // https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/v2.0/.well-known/openid-configuration
+        var issuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8";
+        var keys = await v.GetKeysAsync(issuer, default);
+
+        int i = 0;
     }
 
     private static T[] MakeList<T>(params T[] a) => a;

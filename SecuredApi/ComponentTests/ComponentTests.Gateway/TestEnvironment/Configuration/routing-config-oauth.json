@@ -5,11 +5,6 @@
   "preRequestActions": [
   ],
   "onRequestErrorActions": [
-    {
-      "type": "SetResponseHeader",
-      "name": "X-COMMON-ON-ERROR-HEADER",
-      "value": "Gateway Rejected Your Call"
-    }
   ],
   "onRequestSuccessActions": [
   ],

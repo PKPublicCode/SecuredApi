@@ -59,7 +59,7 @@ public class CheckEntraJwtAction : IAction
             var token = header.Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
             if (token != null && token.StartsWith(_settings.TokenPrefix))
             {
-                value = token.Substring(_settings.TokenPrefix.Length);
+                value = token[_settings.TokenPrefix.Length..];
                 return true;
             }
         }

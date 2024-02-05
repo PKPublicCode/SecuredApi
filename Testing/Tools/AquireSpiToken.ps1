@@ -2,10 +2,10 @@
 #We use the client credentials flow as an example. For production use, REPLACE the code below with your preferred auth method. NEVER STORE CREDENTIALS IN PLAIN TEXT!!!
 
 #Variables to configure
-$tenantID = "a9e2b040-93ef-4252-992e-0d9830029ae8" #your tenantID or tenant root domain
-$appID = "0855a530-9f1d-499c-9bb0-dec3c9f5969e" #the GUID of your app.
-$client_secret = "" #client secret for the app
-$scope = "api://securedapi-gateway-ptst/.default"
+$tenantID = $env:SECURED_API_TENANT_ID#your tenantID or tenant root domain
+$appID = $env:SECURED_API_CLIENT_ID#the GUID of your app.
+$client_secret = $env:SECURED_API_CLIENT_SECRET
+$scope = "api://securedapi-gateway-integration-test/.default"
 
 #Prepare token request
 $url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
