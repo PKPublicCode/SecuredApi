@@ -12,9 +12,6 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using SecuredApi.Logic.Routing;
 using Microsoft.Extensions.DependencyInjection;

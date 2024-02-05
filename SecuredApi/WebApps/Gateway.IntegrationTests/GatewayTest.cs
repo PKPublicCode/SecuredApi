@@ -41,7 +41,9 @@ public class GatewayTests: IClassFixture<GatewayHostFixture>
         msg.RequestUri = new Uri(PrivateApiKeyRedirectWildcard, UriKind.Relative);
         //using var content = new StringContent("Hello hello", Encoding.UTF8, MediaTypeNames.Text.Plain);
         //var uri = new Uri(PrivateApiKeyRedirectWildcard);
-        var rusult = await _gateway.HttpClient.SendAsync(msg);
+        var result = await _gateway.HttpClient.SendAsync(msg);
+
+        var tmp = await result.Content.ReadAsStringAsync();
         //await Task.Delay(10000);
         Assert.True(true);
     }

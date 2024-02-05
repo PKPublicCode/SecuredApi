@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Net;
+using SecuredApi.WebApps.Gateway;
 
 namespace SecuredApi.Apps.Gateway.Azure.Hosting;
 
@@ -28,10 +29,17 @@ public class GatewayRunner: IAsyncDisposable
         HostAddress = GetHostUrl(config);
         Client.BaseAddress = new Uri(HostAddress);
 
-        _task = InternalHost.RunHostAsync<GatewayStartup>(
-            config,
-            srv => { },
-            _stopToken.Token);
+        //_task = InternalHost.RunHostAsync<GatewayStartup>(
+        //    config,
+        //    srv => { },
+        //    _stopToken.Token);
+        _task = Program.CreateHostBuilder(Array.Empty<string>())
+                    .ConfigureAppConfiguration(cfgBuilder =>
+                    {
+                        cfgBuilder.AddJsonFile(config, false);
+                    })
+                    .Build()
+                    .RunAsync(_stopToken.Token);
     }
 
     public async Task WarmupAsync()

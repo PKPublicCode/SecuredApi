@@ -7,7 +7,7 @@
     "SecuredApi.Apps.Gateway.Azure": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:7537",
+      "applicationUrl": "http://localhost:23757",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
