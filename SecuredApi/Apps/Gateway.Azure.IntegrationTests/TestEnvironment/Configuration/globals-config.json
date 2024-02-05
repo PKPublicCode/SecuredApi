@@ -1,0 +1,6 @@
+﻿{
+  // Comment to test enabled comments
+  "variables": {
+    "echoPath": "http://localhost:5401"
+  }
+}
