@@ -15,24 +15,18 @@
 using System.Net;
 using SecuredApi.WebApps.Gateway;
 
-namespace SecuredApi.Apps.Gateway.Azure.Hosting;
+namespace SecuredApi.WebApps.Gateway.Hosting;
 
-public class GatewayRunner: IAsyncDisposable
+public sealed class GatewayRunner: IAsyncDisposable
 {
     private CancellationTokenSource _stopToken = new();
     private readonly Task? _task;
     public HttpClient Client { get; } = new();
-    public string HostAddress { get; }
 
     public GatewayRunner(string config)
     {
-        HostAddress = GetHostUrl(config);
-        Client.BaseAddress = new Uri(HostAddress);
+        Client.BaseAddress = new Uri(GetHostUrl(config));
 
-        //_task = InternalHost.RunHostAsync<GatewayStartup>(
-        //    config,
-        //    srv => { },
-        //    _stopToken.Token);
         _task = Program.CreateHostBuilder(Array.Empty<string>())
                     .ConfigureAppConfiguration(cfgBuilder =>
                     {

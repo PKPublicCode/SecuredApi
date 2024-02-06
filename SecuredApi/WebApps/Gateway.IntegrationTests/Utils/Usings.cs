@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 global using Xunit;
-global using SecuredApi.Apps.Gateway.Azure.Utils;
-global using static SecuredApi.Apps.Gateway.Azure.Utils.Constants;
+global using SecuredApi.WebApps.Gateway.Utils;
+global using static SecuredApi.WebApps.Gateway.Utils.Constants;
 global using FluentAssertions;
 global using NSubstitute;

@@ -16,7 +16,7 @@
 using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
 
-namespace SecuredApi.Apps.Gateway.Azure.Utils;
+namespace SecuredApi.WebApps.Gateway.Utils;
 
 // Represents common HTTP related strings
 public static partial class Constants

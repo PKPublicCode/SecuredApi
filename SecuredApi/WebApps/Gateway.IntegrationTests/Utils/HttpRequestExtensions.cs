@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
 
-namespace SecuredApi.Apps.Gateway.Azure.Utils;
+namespace SecuredApi.WebApps.Gateway.Utils;
 
 public static class HttpRequestExtensions
 {

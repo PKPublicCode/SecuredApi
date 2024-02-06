@@ -12,11 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using RichardSzalay.MockHttp;
-using SecuredApi.Logic.Routing.Utils;
-using System.Net;
-
-namespace SecuredApi.Apps.Gateway.Azure.Hosting;
+namespace SecuredApi.WebApps.Gateway.Hosting;
 
 public sealed class GatewayHostFixture: IDisposable
 {
@@ -29,7 +25,6 @@ public sealed class GatewayHostFixture: IDisposable
     }
 
     public HttpClient HttpClient => _gateway.Client;
-    //public Uri BaseAddress => _gateway.Client.BaseAddress
 
     public async Task StartAsync()
     {

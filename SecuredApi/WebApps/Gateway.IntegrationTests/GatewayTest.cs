@@ -12,13 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.Apps.Gateway.Azure.Hosting;
+using SecuredApi.WebApps.Gateway.Hosting;
 using System.Text;
 using System.Net.Mime;
-using static SecuredApi.Apps.Gateway.Azure.Utils.Constants.RoutePaths;
+using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
-namespace SecuredApi.Apps.Gateway.Azure;
+namespace SecuredApi.WebApps.Gateway;
 
 public class GatewayTests: IClassFixture<GatewayHostFixture>
 {

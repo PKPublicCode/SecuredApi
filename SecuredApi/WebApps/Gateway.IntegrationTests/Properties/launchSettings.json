@@ -4,7 +4,7 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-    "SecuredApi.Apps.Gateway.Azure": {
+    "SecuredApi.WebApps.Gateway": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:23757",

@@ -5,12 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-    <RootNamespace>SecuredApi.Apps.Gateway.Azure</RootNamespace>
-	<AssemblyName>SecuredApi.Apps.Gateway.Azure.IntegrationTests</AssemblyName>
+    <RootNamespace>SecuredApi.WebApps.Gateway</RootNamespace>
+	<AssemblyName>SecuredApi.WebApps.Gateway.IntegrationTests</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SecuredApi.Apps.Gateway.Azure' " />
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
