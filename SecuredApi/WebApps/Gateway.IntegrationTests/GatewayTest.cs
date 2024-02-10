@@ -13,18 +13,17 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.WebApps.Gateway.Hosting;
-using System.Text;
-using System.Net.Mime;
 using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System.Net;
 
 namespace SecuredApi.WebApps.Gateway;
 
-public class GatewayTests: IClassFixture<GatewayHostFixture>
+public class GatewayTests: TestsBase, IClassFixture<GatewayHostFixture>
 {
     private GatewayHostFixture _gateway;
 
     public GatewayTests(GatewayHostFixture fixture)
+        : base(fixture)
     {
         _gateway = fixture;
     }
@@ -32,20 +31,33 @@ public class GatewayTests: IClassFixture<GatewayHostFixture>
     [Fact]
     public async Task ApiKeyCall_Positive()
     {
-        await _gateway.StartAsync();
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(PrivateApiKeyRedirectWildcard)
+            .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F246A");
 
-        using var msg = new HttpRequestMessage();
-        msg.Method = HttpMethod.Post;
-        msg.Content = new StringContent("Hello hello", Encoding.UTF8, MediaTypeNames.Text.Plain);
-        msg.Headers.Add(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F246A");
-        msg.RequestUri = new Uri(PrivateApiKeyRedirectWildcard, UriKind.Relative);
-        //using var content = new StringContent("Hello hello", Encoding.UTF8, MediaTypeNames.Text.Plain);
-        //var uri = new Uri(PrivateApiKeyRedirectWildcard);
-        var result = await _gateway.HttpClient.SendAsync(msg);
+        ExpectedResult.Body = InlineContent.EchoDelay;
+        ExpectedResult.StatusCode = HttpStatusCode.OK;
+        ExpectedResult.AddHeaders(Headers.ResponseConsumerSpecificActions, Headers.ResponseEchoServerRequestProcessed);
 
-        var tmp = await result.Content.ReadAsStringAsync();
-        //await Task.Delay(10000);
-        Assert.True(true);
+        await ActAsync();
+        await AssertAsync();
+    }
+
+    [Fact]
+    public async Task ApiKeyCall_NotAuthorized()
+    {
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(PrivateApiKeyRedirectWildcard)
+            .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F2463");
+
+        ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
+        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+
+        await ActAsync();
+        await AssertAsync();
     }
 }
 

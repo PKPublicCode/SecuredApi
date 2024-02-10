@@ -12,11 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using System.Net;
 namespace SecuredApi.WebApps.Gateway.Utils;
 
 public class ExpectedResult
 {
-    public int StatusCode { get; set; } = -1;
+    public HttpStatusCode StatusCode { get; set; }
     public List<HttpHeader> Headers { get; } = new();
     public string Body { get; set; } = string.Empty;
 

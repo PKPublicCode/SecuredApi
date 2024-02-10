@@ -35,6 +35,8 @@ public static partial class Constants
 
         public static HttpHeader ResponseConsumerSpecificActions { get; } = new("X-CONSUMER-SPECIFIC-HEADER", "This is test client 1");
 
+        public static HttpHeader ResponseEchoServerRequestProcessed { get; } = new("X-ECHO-SERVER", "Echo server processed request");
+
         public const string SubscriptionKeyHeaderName = "X-SUBSCRIPTION-KEY";
 
         public const string AuthorizationHeaderName = "Authorization";

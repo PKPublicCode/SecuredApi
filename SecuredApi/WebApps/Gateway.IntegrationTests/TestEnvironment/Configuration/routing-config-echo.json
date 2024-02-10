@@ -7,6 +7,11 @@
   "onRequestErrorActions": [
   ],
   "onRequestSuccessActions": [
+    {
+      "type": "SetResponseHeader",
+      "name": "X-ECHO-SERVER",
+      "value": "Echo server processed request"
+    }
   ],
   "routesGroups": [
     {

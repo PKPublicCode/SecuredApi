@@ -13,7 +13,6 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Net;
-using SecuredApi.WebApps.Gateway;
 
 namespace SecuredApi.WebApps.Gateway.Hosting;
 
