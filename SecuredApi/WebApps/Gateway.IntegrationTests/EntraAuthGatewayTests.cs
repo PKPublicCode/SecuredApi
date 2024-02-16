@@ -52,12 +52,12 @@ public class EntraAuthGatewayTests : TestsBase
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateApiKeyRedirectWildcard);
+            .SetRelativePath(PrivateOAuthNotAllowedWildcard);
         AddAuthorizationHeader(await _entra.GetTokenAsync(default));
 
-        ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
+        ExpectedResult.StatusCode = HttpStatusCode.Forbidden;
         ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
-        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+        ExpectedResult.Body = InlineContent.AccessDenied;
 
         await ActAsync();
         await AssertAsync();

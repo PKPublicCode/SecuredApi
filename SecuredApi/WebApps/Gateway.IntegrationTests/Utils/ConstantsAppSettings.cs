@@ -21,15 +21,15 @@ public static partial class Constants
 {
     public static partial class Headers
     {
-        public static HttpHeader RequestCommon { get; } = new("X-COMMON-REQUEST-HEADER", "CommonRequestHeaderValue");
+        //public static HttpHeader RequestCommon { get; } = new("X-COMMON-REQUEST-HEADER", "CommonRequestHeaderValue");
 
-        public static HttpHeader ResponseCommon { get; } = new("X-COMMON-RESPONSE-HEADER", "CommonResponseHeaderValue");
+        //public static HttpHeader ResponseCommon { get; } = new("X-COMMON-RESPONSE-HEADER", "CommonResponseHeaderValue");
 
-        public static HttpHeader ResponseNotFound { get; } = new("X-NOTFOUND-RESPONSE-HEADER", "NotFoundResponseHeaderValue");
+        //public static HttpHeader ResponseNotFound { get; } = new("X-NOTFOUND-RESPONSE-HEADER", "NotFoundResponseHeaderValue");
 
-        public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
+        //public static HttpHeader ResponsePublicRedirect { get; } = new("X-PUBLIC-REDIRECT-RESPONSE-HEADER", "PublicRedirectResponseHeaderValue");
 
-        public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
+        //public static HttpHeader ResponseSuppressPublicRedirect { get; } = new("X-PUBLIC-REDIRECT-SUPPRESS-HEADER", "Blablabla");
 
         public static HttpHeader ResponseCommonOnError { get; } = new("X-COMMON-ON-ERROR-HEADER", "Gateway Rejected Your Call");
 
@@ -44,12 +44,12 @@ public static partial class Constants
 
     public static class RoutePaths
     {
-        public const string PublicRemoteWildcardGet = "/public/remote/wildcard_get_method";
-        public const string PublicRemoteWildcardOriginal = "/public/remote/wildcard_original_method";
-        public const string PublicEchoWildcard = "/public/echo/wildcard";
-        public const string PublicEchoExact = "/public/echo/exact";
-        public const string PublicEchoDelay = "/echo/delay";
-        public const string PublicContentBase = "/public/echo/content";
+        //public const string PublicRemoteWildcardGet = "/public/remote/wildcard_get_method";
+        //public const string PublicRemoteWildcardOriginal = "/public/remote/wildcard_original_method";
+        //public const string PublicEchoWildcard = "/public/echo/wildcard";
+        //public const string PublicEchoExact = "/public/echo/exact";
+        //public const string PublicEchoDelay = "/echo/delay";
+        //public const string PublicContentBase = "/public/echo/content";
         public const string PrivateApiKeyRedirectWildcard = "/private_api_key/redirect/wildcard";
         public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
         public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard";
@@ -58,14 +58,14 @@ public static partial class Constants
 
     public static class InlineContent
     {
-        public const string EchoExact = "Echo exact route";
-        public const string EchoWildcard = "Echo wildcard route";
-        public const string NotFound = "Route not found";
-        public const string StaticFileWildcardNotFound = "This is wrong file url";
+        //public const string EchoExact = "Echo exact route";
+        //public const string EchoWildcard = "Echo wildcard route";
+        //public const string NotFound = "Route not found";
+        //public const string StaticFileWildcardNotFound = "This is wrong file url";
         public const string EchoDelay = "This is Echo!\n V0.0001\n, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\n";
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
-        public const string CallNotAllowed = "Call Not Allowed";
-        public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
+        //public const string CallNotAllowed = "Call Not Allowed";
+        //public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
         public const string NotAuthorized = "Not Authorized";
         public const string AccessDenied = "Access Denied";
     }
@@ -76,11 +76,11 @@ public static partial class Constants
         public const string AllowedEntraTokenIssuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/";
     }
 
-    public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
-    public const string GlobalsPublicRemoteEndpointWithExtra = "https://remote.endpoint/api/new_remote_path/";
-    public const string AppSettingnsProtectedRemoteEndpoint = "https://protected.remote.endpoint/api.v2/";
-    public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
-    public const int PublicEchoDelayMilliseconds = 300;
+    //public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
+    //public const string GlobalsPublicRemoteEndpointWithExtra = "https://remote.endpoint/api/new_remote_path/";
+    //public const string AppSettingnsProtectedRemoteEndpoint = "https://protected.remote.endpoint/api.v2/";
+    //public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
+    //public const int PublicEchoDelayMilliseconds = 300;
     public const string OAuthHeaderPrefix = "Bearer ";
 
     public static class PublicContent

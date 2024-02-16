@@ -15,6 +15,7 @@
 using RichardSzalay.MockHttp;
 using System.Net.Mime;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using static SecuredApi.ComponentTests.Gateway.Utils.Constants.RoutePaths;
 
 namespace SecuredApi.ComponentTests.Gateway;

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -29,9 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
-    <ProjectReference Include="..\..\Testing\Testing.Common\Testing.Common.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Testing\Testing.Common\Testing.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,10 +66,11 @@
     <None Update="appsettings-delay.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="Properties\launchSettings.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </Content>
+    <None Update="appsettings-oauth.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestEnvironment\Configuration\routing-config-oauth.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

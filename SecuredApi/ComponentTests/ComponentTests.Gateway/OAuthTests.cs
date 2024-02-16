@@ -15,8 +15,10 @@
 using SecuredApi.Logic.Auth.Jwt;
 using RichardSzalay.MockHttp;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
