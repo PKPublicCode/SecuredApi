@@ -28,7 +28,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task NoRolesNoScope_Valid()
+    public async Task ValidateToken_NoRolesNoScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -43,7 +43,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidRole_Valid()
+    public async Task ValidateToken_ValidRole_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -57,7 +57,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidScope_Valid()
+    public async Task ValidateToken_ValidScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -71,7 +71,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task NoRequiredRoles_AccessDenied()
+    public async Task ValidateToken_NoRequiredRoles_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -85,7 +85,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task NoRequiredScope_Valid()
+    public async Task ValidateToken_NoRequiredScope_Valid()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -99,7 +99,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task SigningKeyIsInvalid_NotAuthorized()
+    public async Task ValidateToken_SigningKeyIsUnknown_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -113,7 +113,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task TokenNotSigned_NotAuthorized()
+    public async Task ValidateToken_TokenNotSigned_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -127,7 +127,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task TokenNotSignedAndNoAllowedKeysProvided_NotAuthorized()
+    public async Task ValidateToken_TokenNotSignedAndNoAllowedKeysProvided_NotAuthorized()
     {
         //testcase actually tests underlying JsonWebToken behavior. But nice to know that.
         const string issuer = "https://my-issuer.com";
@@ -141,7 +141,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task IssuerIsInvalid_AccessDenied()
+    public async Task ValidateToken_IssuerIsInvalid_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -155,7 +155,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task AudienceIsInvalid_AccessDenied()
+    public async Task ValidateToken_AudienceIsInvalid_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -168,7 +168,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task TokenIsExpired_NotAuthorized()
+    public async Task ValidateToken_TokenIsExpired_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";

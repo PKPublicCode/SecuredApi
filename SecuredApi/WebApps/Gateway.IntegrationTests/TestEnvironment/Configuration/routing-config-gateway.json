@@ -68,6 +68,66 @@
           ]
         }
       ]
+    },
+    {
+      "description": "Private routes subscription key authentication",
+      "path": "/private_oauth",
+      "preRequestActions": [
+        {
+          "type": "CheckEntraJwt",
+          "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
+          "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
+          "keepData": true
+        }
+      ],
+      "routesGroups": [
+        {
+          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
+          "description": "API with redirect",
+          "path": "/redirect",
+          "routes": [
+            {
+              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
+              "methods": [ "post" ],
+              "path": "/wildcard/*",
+              "actions": [
+                {
+                  "type": "CheckEntraJwtClaims",
+                  "oneOfRoles": [ "EchoSrv.Read.All" ],
+                  "cleanup": true
+                },
+                {
+                  "type": "RemoteCall",
+                  // In ComponentTests protectedEchoPath is set by appsettings json
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "method": "get"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Rote group that is not allowed by the configured roles",
+          "routes": [
+            {
+              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
+              "methods": [ "post" ],
+              "path": "/notallowed/wildcard/*",
+              "actions": [
+                {
+                  "type": "CheckEntraJwtClaims",
+                  "OneOfRoles": [ "EchoSrv.Write.All" ]
+                },
+                {
+                  "type": "RemoteCall",
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "method": "get"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "routeNotFoundActions": [

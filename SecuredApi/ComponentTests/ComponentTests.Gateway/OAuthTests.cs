@@ -16,9 +16,10 @@ using SecuredApi.Logic.Routing.Actions.OAuth;
 using SecuredApi.Logic.Routing.Engine;
 using SecuredApi.Logic.Auth.Jwt;
 using RichardSzalay.MockHttp;
+using System.Net;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
-using System.Net;
+using static SecuredApi.Testing.Common.CollectionsShortcuts;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -155,7 +156,5 @@ public class OAuthTests: GatewayTestsBase
 
         int i = 0;
     }
-
-    private static T[] MakeList<T>(params T[] a) => a;
 }
 

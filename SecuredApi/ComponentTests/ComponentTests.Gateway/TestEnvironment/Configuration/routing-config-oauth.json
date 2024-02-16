@@ -47,7 +47,7 @@
           ]
         },
         {
-          "description": "Rote group that is not allowed by existing subscriptions",
+          "description": "Rote group that is not allowed by the configured roles",
           "routes": [
             {
               "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",

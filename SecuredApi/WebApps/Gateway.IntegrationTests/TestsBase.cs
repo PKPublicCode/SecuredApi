@@ -33,13 +33,13 @@ public abstract class TestsBase: IDisposable
         Request.Dispose();
     }
 
-    public async Task ActAsync()
+    protected virtual async Task ActAsync()
     {
         await Gateway.StartAsync();
         Response = await Gateway.HttpClient.SendAsync(Request);
     }
 
-    public async Task AssertAsync()
+    protected virtual async Task AssertAsync()
     {
         if (Response == null)
         {

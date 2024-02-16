@@ -27,7 +27,7 @@ public class ApiKeyGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task ApiKeyCall_Positive()
+    public async Task ProtectedRoute_ValidKeyForConsumerWithActions_Success()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
@@ -43,7 +43,7 @@ public class ApiKeyGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task ApiKeyCall_NotAuthorized()
+    public async Task ProtectedRoute_NonExistingKey_NotAuthorized()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")

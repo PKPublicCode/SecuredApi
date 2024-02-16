@@ -44,7 +44,15 @@ export SECURED_API_INTEGRATION_TESTS__SpiClient__ClientId=""
 export SECURED_API_INTEGRATION_TESTS__SpiClient__ClientSecret=""
 export SECURED_API_INTEGRATION_TESTS__SpiClient__TenantId=""
 export SECURED_API_INTEGRATION_TESTS__SpiClient__Scope=""
+
+export Globals__Variables__AllowedEntraTokenIssuer=""
+export Globals__Variables__AllowedEntraTokenAudience=""
 ```
 
 ##### Not used anymore
+```
 export SecuredApi__Global__Keyvault=https://kv-name.vault.azure.net/
+```
+
+If above vars set in .bash_profile, then to make VS for Mac accept above variables, app should be launced from console
+``` open /Applications/Visual\ Studio.app ```

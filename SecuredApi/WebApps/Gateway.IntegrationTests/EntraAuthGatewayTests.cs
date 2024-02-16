@@ -13,6 +13,11 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.WebApps.Gateway.Fixtures;
+using System.Net;
+using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
+using static SecuredApi.Testing.Common.Jwt.SigningKeys;
+using static SecuredApi.Testing.Common.Jwt.TokenHelper;
+using static SecuredApi.Testing.Common.CollectionsShortcuts;
 
 namespace SecuredApi.WebApps.Gateway;
 
@@ -28,9 +33,62 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task PositiveTest()
+    public async Task ProtectedByReadRoleRoute_TokenWithReadRole_Success()
     {
-        var token = await _entra.GetTokenAsync(default);
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(PrivateOAuthRedirectWildcard);
+        AddAuthorizationHeader(await _entra.GetTokenAsync(default));
+
+        ExpectedResult.Body = InlineContent.EchoDelay;
+        ExpectedResult.StatusCode = HttpStatusCode.OK;
+        ExpectedResult.AddHeaders(Headers.ResponseEchoServerRequestProcessed);
+
+        await ActAsync();
+        await AssertAsync();
+    }
+
+    [Fact]
+    public async Task ProtectedByWriteRoleRoute_TokenWithReadRole_NotAuthorized()
+    {
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(PrivateApiKeyRedirectWildcard);
+        AddAuthorizationHeader(await _entra.GetTokenAsync(default));
+
+        ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
+        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+
+        await ActAsync();
+        await AssertAsync();
+    }
+
+    [Fact]
+    public async Task ProtectedByWriteRoleRoute_SignedByWrongKeys_NotAuthorized()
+    {
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(PrivateApiKeyRedirectWildcard);
+        var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
+                                    JwtClaims.AllowedEntraTokenAudience,
+                                    TestKey2,
+                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
+                                    DateTime.UtcNow,
+                                    TimeSpan.FromHours(1));
+        AddAuthorizationHeader(token);
+
+        ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
+        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+
+        await ActAsync();
+        await AssertAsync();
+    }
+
+    private void AddAuthorizationHeader(string token)
+    {
+        Request.AddHeader(Headers.AuthorizationHeaderName, OAuthHeaderPrefix + token);
     }
 }
 
