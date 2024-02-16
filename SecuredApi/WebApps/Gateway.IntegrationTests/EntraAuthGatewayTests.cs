@@ -14,6 +14,8 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.WebApps.Gateway.Fixtures;
 using System.Net;
+using SecuredApi.Testing.Common;
+using SecuredApi.Apps.Gateway.Configuration;
 using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
@@ -69,8 +71,10 @@ public class EntraAuthGatewayTests : TestsBase
         Request.SetPost()
             .SetStringContent("Hello hello")
             .SetRelativePath(PrivateApiKeyRedirectWildcard);
-        var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
-                                    JwtClaims.AllowedEntraTokenAudience,
+
+        var config = Configuration.Build("appsettings-tests");
+        var token = CreateJwtToken(config.GetRequiredSection("Globals:Variables:AllowedEntraTokenIssuer").GetRequired<string>(),
+                                    config.GetRequiredSection("Globals:Variables:AllowedEntraTokenAudience").GetRequired<string>(),
                                     TestKey2,
                                     new [] {"EchoSrv.Read.All", "EchoSrv.Write.All"},
                                     DateTime.UtcNow,

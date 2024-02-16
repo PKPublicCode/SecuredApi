@@ -14,6 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Azure.Identity;
 using Azure.Core;
+using SecuredApi.Testing.Common;
 
 namespace SecuredApi.WebApps.Gateway.Fixtures;
 
@@ -25,10 +26,7 @@ public class EntraAuthenticationFixture
 
     public EntraAuthenticationFixture()
     {
-        var config = new ConfigurationBuilder()
-                            .AddJsonFile("appsettings-tests.json")
-                            .AddEnvironmentVariables("SECURED_API_INTEGRATION_TESTS__")
-                            .Build();
+        var config = Configuration.Build("appsettings-tests", "SECURED_API_INTEGRATION_TESTS__");
 
          _clientConfig = config.GetRequiredSection("SpiClient").Get<SpiClient>()
                         ?? throw new InvalidOperationException("Entra client not configured");
