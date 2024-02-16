@@ -2,15 +2,16 @@
 #We use the client credentials flow as an example. For production use, REPLACE the code below with your preferred auth method. NEVER STORE CREDENTIALS IN PLAIN TEXT!!!
 
 #Variables to configure
-$tenantID = $env:SECURED_API_TENANT_ID#your tenantID or tenant root domain
-$appID = $env:SECURED_API_CLIENT_ID#the GUID of your app.
-$client_secret = $env:SECURED_API_CLIENT_SECRET
-$scope = "api://securedapi-gateway-integration-test/.default"
+$tenantID = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__TenantId 
+$appID = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__ClientId 
+$client_secret = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__ClientSecret
+$scope = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__Scope
 
 #Prepare token request
 $url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
 
-#$wellKnown = 'https://login.microsoftonline.com/a9e2b040-93ef-4252-992e-0d9830029ae8/v2.0/.well-known/openid-configuration' 
+#$wellKnown = 'https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration' 
+#How to load from KV: Get-AzKeyVaultSecret -VaultName ([System.Uri]$env:SecuredApi__Global__Keyvault).Host.Split('.')[0]  -Name 'name'  -AsPlainText
 
 $body = @{
     grant_type = "client_credentials"

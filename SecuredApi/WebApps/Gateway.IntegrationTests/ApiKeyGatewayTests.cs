@@ -12,20 +12,18 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.WebApps.Gateway.Hosting;
+using SecuredApi.WebApps.Gateway.Fixtures;
 using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
 using System.Net;
 
 namespace SecuredApi.WebApps.Gateway;
 
-public class GatewayTests: TestsBase, IClassFixture<GatewayHostFixture>
+[Collection("Gateway runner")]
+public class ApiKeyGatewayTests: TestsBase
 {
-    private GatewayHostFixture _gateway;
-
-    public GatewayTests(GatewayHostFixture fixture)
+    public ApiKeyGatewayTests(GatewayHostFixture fixture)
         : base(fixture)
     {
-        _gateway = fixture;
     }
 
     [Fact]

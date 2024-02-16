@@ -8,12 +8,12 @@ $echoApp = $deploymentResults.echo.appServiceName
 $mainRg = $deploymentResults.performanceTestRgName
 
 if (-not $gwApp) { 
-    Write-Host("`$env:PERFORMANCETEST_GATEWAY_APPSERVICE_NAME is not set")
+    Write-Host("`deploymentResults is not set")
     exit
 }
 
 if (-not $echoApp) { 
-    Write-Host("`$env:PERFORMANCETEST_ECHOSRV_APPSERVICE_NAME is not set")
+    Write-Host("`deploymentResults is not set")
     exit
 }
 

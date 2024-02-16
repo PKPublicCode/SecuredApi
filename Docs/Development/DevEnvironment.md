@@ -31,3 +31,20 @@ brew install bicep
 
 #### Docker
 According to your choice
+
+#### To run tests and deploy env you need following variables:
+##### short code that will be used as ending of resources during 
+```
+export SECURED_API_NAME_ENDING=code
+```
+
+##### needed for integration tests and for few ps scripts
+```
+export SECURED_API_INTEGRATION_TESTS__SpiClient__ClientId=""
+export SECURED_API_INTEGRATION_TESTS__SpiClient__ClientSecret=""
+export SECURED_API_INTEGRATION_TESTS__SpiClient__TenantId=""
+export SECURED_API_INTEGRATION_TESTS__SpiClient__Scope=""
+```
+
+##### Not used anymore
+export SecuredApi__Global__Keyvault=https://kv-name.vault.azure.net/

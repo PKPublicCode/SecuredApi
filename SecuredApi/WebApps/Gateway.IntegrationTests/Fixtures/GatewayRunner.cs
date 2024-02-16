@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Net;
 
-namespace SecuredApi.WebApps.Gateway.Hosting;
+namespace SecuredApi.WebApps.Gateway.Fixtures;
 
 public sealed class GatewayRunner: IAsyncDisposable
 {

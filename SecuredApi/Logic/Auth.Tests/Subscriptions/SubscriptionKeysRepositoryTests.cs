@@ -29,14 +29,13 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
         Guid consumerId = Guid.Parse("2B04A7D7-6257-4577-AE71-1E85645AD65F");
         Guid subscriptionId = Guid.Parse("E81C1972-81B3-437C-8EA2-7620B7652FBC");      
         const string content = @"
-{
-    ""ConsumerId"":""2B04A7D7-6257-4577-AE71-1E85645AD65F"",
-    ""SubscriptionId"":""E81C1972-81B3-437C-8EA2-7620B7652FBC"",
-    ""Routes"":[]
-}
-";
+        {
+            ""ConsumerId"":""2B04A7D7-6257-4577-AE71-1E85645AD65F"",
+            ""SubscriptionId"":""E81C1972-81B3-437C-8EA2-7620B7652FBC"",
+            ""Routes"":[]
+        }";
         SetupReturn(hash, content);
-
+        
         var result = await _sut.GetSubscriptionKeyAsync(hash, CancellationToken.None);
 
         result.Should().NotBeNull();

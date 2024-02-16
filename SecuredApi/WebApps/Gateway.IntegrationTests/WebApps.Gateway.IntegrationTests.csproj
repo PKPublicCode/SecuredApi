@@ -61,13 +61,13 @@
     <None Update="TestEnvironment\Configuration\routing-config-delay.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings-common.json">
+    <None Update="appsettings-echo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings-subscriptions.json">
+    <None Update="appsettings-gateway.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings-delay.json">
+    <None Update="appsettings-tests.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
