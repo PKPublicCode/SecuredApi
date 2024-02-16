@@ -70,8 +70,8 @@ public static partial class Constants
 
     public static class JwtClaims
     {
-        public const string AllowedEntraTokenAudience = "api://securedapi-gateway-ptst";
-        public const string AllowedEntraTokenIssuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/";
+        public const string AllowedEntraTokenAudience = "api://secured-api-gateway";
+        public const string AllowedEntraTokenIssuer = "https://secured-api.com/";
     }
 
     public const string GlobalsPublicRemoteEndpoint = "https://remote.endpoint/api";
