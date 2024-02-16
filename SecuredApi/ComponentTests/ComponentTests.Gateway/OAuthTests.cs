@@ -12,14 +12,11 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using SecuredApi.Logic.Routing.Actions.OAuth;
-using SecuredApi.Logic.Routing.Engine;
 using SecuredApi.Logic.Auth.Jwt;
 using RichardSzalay.MockHttp;
 using System.Net;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
-using static SecuredApi.Testing.Common.CollectionsShortcuts;
 
 namespace SecuredApi.ComponentTests.Gateway;
 
@@ -44,8 +41,8 @@ public class OAuthTests: GatewayTestsBase
     {
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
-                                    TestKey2,
-                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
+                                    TestKey2,  
+                                    new[] { "EchoSrv.Read.All", "EchoSrv.Write.All" },
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
@@ -71,7 +68,7 @@ public class OAuthTests: GatewayTestsBase
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
                                     TestKey2,
-                                    MakeList("EchoSrv.Read.All"),
+                                    new[] { "EchoSrv.Read.All" },
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
@@ -86,7 +83,6 @@ public class OAuthTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
         ExpectedResult.Body = InlineContent.AccessDenied;
-        //ExpectedResult.AddHeaders(Headers.TextPlainUtf8ContentType);
 
         await ExecuteAsync();
     }
@@ -97,7 +93,7 @@ public class OAuthTests: GatewayTestsBase
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
                                     TestKey3,
-                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
+                                    new[] { "EchoSrv.Read.All", "EchoSrv.Write.All" },
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
@@ -112,49 +108,13 @@ public class OAuthTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
         ExpectedResult.Body = InlineContent.NotAuthorized;
-        //ExpectedResult.AddHeaders(Headers.TextPlainUtf8ContentType);
 
         await ExecuteAsync();
     }
 
     private void SetToken(string token)
     {
-        Request.Headers.Add(new("Authorization", "Bearer " + token));
-    }
-
-    [Fact]
-    //ToDo.0 Delete this test
-    public async Task TestAction()
-    {
-        var issuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/";
-        var audience = "api://securedapi-gateway-ptst";
-        var settings = new CheckEntraJwtActionSettings(
-            OneOfIssuers: MakeList(issuer),
-            OneOfAudiences: new[] { audience }
-            );
-        var sut = new CheckEntraJwtAction(settings);
-        var token = CreateJwtToken(issuer, audience, TestKey2, Array.Empty<string>(), DateTime.UtcNow, TimeSpan.FromHours(1));
-
-        Request.Headers.Add(new("Authorization", "Bearer " + token));
-
-        using var scope = _serviceProvider.CreateAsyncScope();
-        Context.RequestServices = scope.ServiceProvider;
-        var ctx = new RequestContext(null!, Context);
-
-        bool result = await sut.ExecuteAsync(ctx);
-
-        Assert.True(result);
-    }
-
-    [Fact]
-    public async Task Test()
-    {
-        var v = new SigningKeysProvider();
-        // https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8/v2.0/.well-known/openid-configuration
-        var issuer = "https://sts.windows.net/a9e2b040-93ef-4252-992e-0d9830029ae8";
-        var keys = await v.GetKeysAsync(issuer, default);
-
-        int i = 0;
+        Request.Headers.Add(new(Headers.AuthorizationHeaderName, OAuthHeaderPrefix + token));
     }
 }
 

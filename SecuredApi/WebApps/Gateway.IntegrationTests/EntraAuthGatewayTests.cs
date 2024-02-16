@@ -17,7 +17,6 @@ using System.Net;
 using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
-using static SecuredApi.Testing.Common.CollectionsShortcuts;
 
 namespace SecuredApi.WebApps.Gateway;
 
@@ -73,7 +72,7 @@ public class EntraAuthGatewayTests : TestsBase
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
                                     TestKey2,
-                                    MakeList("EchoSrv.Read.All", "EchoSrv.Write.All"),
+                                    new [] {"EchoSrv.Read.All", "EchoSrv.Write.All"},
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         AddAuthorizationHeader(token);
