@@ -12,15 +12,17 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Net;
-namespace SecuredApi.WebApps.Gateway.Utils;
+using Microsoft.Extensions.Primitives;
 
-public class ExpectedResult
+namespace SecuredApi.Testing.Common;
+
+public class ExpectedResult<TStatusCode>
+    where TStatusCode: struct
 {
-    public HttpStatusCode StatusCode { get; set; }
-    public List<HttpHeader> Headers { get; } = new();
+    public TStatusCode StatusCode { get; set; }
+    public List<KeyValuePair<string, StringValues>> Headers { get; } = new();
     public string Body { get; set; } = string.Empty;
 
-    public void AddHeaders(params HttpHeader[] headers) => Headers.AddRange(headers);
+    public void AddHeaders(params KeyValuePair<string, StringValues>[] headers) => Headers.AddRange(headers);
 }
 

@@ -20,6 +20,7 @@ using SecuredApi.Logic.Routing;
 using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using SecuredApi.Logic.Routing.Utils;
+using SecuredApi.Testing.Common;
 using ISecuredApiRouter = SecuredApi.Logic.Routing.IRouter;  //Have to resolve conflict with asp.net
 
 namespace SecuredApi.ComponentTests.Gateway;
@@ -36,7 +37,7 @@ public abstract class GatewayTestsBase
     protected MockHttpMessageHandler CommonHttpHandler { get; } = new ();
     protected MockHttpMessageHandler MainHttpHandler { get; } = new ();
     protected MockHttpMessageHandler NonRedirectHttpHandler { get; } = new ();
-    protected ExpectedResult ExpectedResult { get; } = new();
+    protected ExpectedResult<int> ExpectedResult { get; } = new();
 
     protected GatewayTestsBase()
         :this(_defaultFileName, (x, y) => { })

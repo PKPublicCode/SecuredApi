@@ -13,12 +13,14 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.WebApps.Gateway.Fixtures;
+using SecuredApi.Testing.Common;
+using System.Net;
 
 namespace SecuredApi.WebApps.Gateway;
 
 public abstract class TestsBase: IDisposable
 {
-    protected readonly ExpectedResult ExpectedResult = new();
+    protected readonly ExpectedResult<HttpStatusCode> ExpectedResult = new();
     protected readonly HttpRequestMessage Request = new();
     protected readonly GatewayHostFixture Gateway;
     protected HttpResponseMessage? Response;
