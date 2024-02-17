@@ -32,9 +32,3 @@ catch {
 $token = ($tokenRequest.Content | ConvertFrom-Json).access_token
 
 $token
-
-# $authHeader = @{
-#    'Content-Type'='application\json'
-#    'Authorization'="Bearer $token"
-# }
-#endregion Authentication
