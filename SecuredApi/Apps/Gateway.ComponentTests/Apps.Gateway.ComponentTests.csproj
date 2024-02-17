@@ -6,7 +6,8 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>SecuredApi.ComponentTests.Gateway</RootNamespace>
+    <RootNamespace>SecuredApi.Apps.Gateway.ComponentTests</RootNamespace>
+    <AssemblyName>SecuredApi.Apps.Gateway.ComponentTests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Apps\Gateway\Apps.Gateway.csproj" />
+    <ProjectReference Include="..\Gateway\Apps.Gateway.csproj" />
     <ProjectReference Include="..\..\Testing\Testing.Common\Testing.Common.csproj" />
   </ItemGroup>
 
