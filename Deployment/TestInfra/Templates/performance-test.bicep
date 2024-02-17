@@ -7,6 +7,7 @@ param commonNameEnding string
 param appPlanSku string = 'S1'
 param gatewayInstanceNum int = 1
 param dockerTag string = 'latest'
+param entraAudience string
 
 
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-01-01' = {
@@ -45,6 +46,8 @@ module gatewayService './Modules/gateway-service.bicep' = {
     instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
       Globals__Variables__ProtectedEchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
+      Globals__Variables__AllowedEntraTokenIssuer: 'https://sts.windows.net/${tenant().tenantId}/'
+      Globals__Variables__AllowedEntraTokenAudience: entraAudience
     }
   }
 }

@@ -33,7 +33,8 @@ $result = New-AzSubscriptionDeployment `
     -commonNameEnding $infraCommonNameEnding `
     -dockerTag "$($dockerTag)" `
     -appPlanSku $AppPlanSku `
-    -gatewayInstanceNum $GatewayInstanceNum
+    -gatewayInstanceNum $GatewayInstanceNum `
+    -entraAudience $env:SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenAudience 
     #-Whatif
 
 $global:debugDeploymentResult = $result

@@ -23,7 +23,7 @@ function Upload-Folder ([string]$folder, [string]$container) {
   }
 }
 
-$componentTestFolder = './../../SecuredApi/ComponentTests/ComponentTests.Gateway/TestEnvironment'
+$componentTestFolder = './../../SecuredApi/Apps/Gateway.ComponentTests/TestEnvironment'
 $integrationTestsFolder = './../../SecuredApi/WebApps/Gateway.IntegrationTests/TestEnvironment'
 
 Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `

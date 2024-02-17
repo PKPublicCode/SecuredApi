@@ -50,7 +50,7 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task ProtectedByWriteRoleRoute_TokenWithReadRole_NotAuthorized()
+    public async Task ProtectedByWriteRoleRoute_TokenWithReadRole_AccessDenied()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")

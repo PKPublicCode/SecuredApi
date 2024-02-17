@@ -34,7 +34,7 @@ public static partial class Constants
     {
         public const string PrivateApiKeyRedirectWildcard = "/private_api_key/redirect/wildcard";
         public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
-        public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard";
+        public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard/delay";
         public const string PrivateOAuthNotAllowedWildcard = "/private_oauth/notallowed/wildcard";
     }
 

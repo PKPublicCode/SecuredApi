@@ -44,7 +44,7 @@
                   "type": "RemoteCall",
                   // In ComponentTests protectedEchoPath is set by appsettings json
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "get"
+                  "method": "@(requestHttpMethod)"
                 }
               ]
             }
@@ -61,7 +61,7 @@
                 {
                   "type": "RemoteCall",
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "get"
+                  "method": "post"
                 }
               ]
             }
@@ -100,7 +100,7 @@
                   "type": "RemoteCall",
                   // In ComponentTests protectedEchoPath is set by appsettings json
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "get"
+                  "method": "@(requestHttpMethod)"
                 }
               ]
             }
@@ -121,7 +121,7 @@
                 {
                   "type": "RemoteCall",
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "get"
+                  "method": "post"
                 }
               ]
             }

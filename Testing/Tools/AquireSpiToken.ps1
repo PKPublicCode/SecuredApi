@@ -2,10 +2,10 @@
 #We use the client credentials flow as an example. For production use, REPLACE the code below with your preferred auth method. NEVER STORE CREDENTIALS IN PLAIN TEXT!!!
 
 #Variables to configure
-$tenantID = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__TenantId 
-$appID = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__ClientId 
-$client_secret = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__ClientSecret
-$scope = $env:SECURED_API_INTEGRATION_TESTS__SpiClient__Scope
+$tenantID = $env:SECAPI_IT_MAIN__SpiClient__TenantId 
+$appID = $env:SECAPI_IT_MAIN__SpiClient__ClientId 
+$client_secret = $env:SECAPI_IT_MAIN__SpiClient__ClientSecret
+$scope = $env:SECAPI_IT_MAIN__SpiClient__Scope
 
 #Prepare token request
 $url = 'https://login.microsoftonline.com/' + $tenantId + '/oauth2/v2.0/token'
@@ -26,7 +26,7 @@ try { $tokenRequest = Invoke-WebRequest -Method Post -Uri $url -ContentType "app
 catch { 
     Write-Host "Unable to obtain access token, aborting..."; 
     $_.Exception.Response.Content 
-    return 
+    throw 
 }
 
 $token = ($tokenRequest.Content | ConvertFrom-Json).access_token
