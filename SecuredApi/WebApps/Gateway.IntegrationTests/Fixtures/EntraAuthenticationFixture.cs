@@ -26,7 +26,7 @@ public class EntraAuthenticationFixture
 
     public EntraAuthenticationFixture()
     {
-        var config = Configuration.Build("appsettings-tests", "SECURED_API_INTEGRATION_TESTS__");
+        var config = Configuration.Build("appsettings-tests", "SECAPI_IT_MAIN__");
 
          _clientConfig = config.GetRequiredSection("SpiClient").Get<SpiClient>()
                         ?? throw new InvalidOperationException("Entra client not configured");

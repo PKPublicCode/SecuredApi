@@ -22,7 +22,7 @@ public sealed class GatewayRunner: IAsyncDisposable
     private readonly Task? _task;
     public HttpClient Client { get; } = new();
 
-    public GatewayRunner(string config)
+    public GatewayRunner(string config, string? envVarPrefix = null)
     {
         Client.BaseAddress = new Uri(GetHostUrl(config));
 
@@ -30,6 +30,10 @@ public sealed class GatewayRunner: IAsyncDisposable
                     .ConfigureAppConfiguration(cfgBuilder =>
                     {
                         cfgBuilder.AddJsonFile(config, false);
+                        if (envVarPrefix != null)
+                        {
+                            cfgBuilder.AddEnvironmentVariables(envVarPrefix);
+                        }
                     })
                     .Build()
                     .RunAsync(_stopToken.Token);
@@ -37,15 +41,30 @@ public sealed class GatewayRunner: IAsyncDisposable
 
     public async Task WarmupAsync()
     {
+        const int delay = 300; //ms
+        const int maxCount = 80; //24 seconds. In case config is loaded from azure, it can take time
+        int count = 0;
         do
         {
-            var v = await Client.GetAsync("");
-            //Define codes to validate
-            if (v.StatusCode == HttpStatusCode.NotFound)
+            try
             {
-                break;
+                var v = await Client.GetAsync("");
+                // current configs suppose to return "NotFound" for root url
+                if (v.StatusCode == HttpStatusCode.NotFound)
+                {
+                    break;
+                }
             }
-            await Task.Delay(100);
+            catch(HttpRequestException) // Handling connection refused.
+            {
+                //ToDo:0 shoutdown after a while
+            }
+            ++count;
+            if (count > maxCount)
+            {
+                throw new InvalidOperationException("Unable to start server");
+            }
+            await Task.Delay(delay);
         }
         while (true);
     }

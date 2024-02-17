@@ -16,7 +16,7 @@ namespace SecuredApi.WebApps.Gateway.Fixtures;
 
 public sealed class GatewayHostFixture: IDisposable
 {
-    private readonly GatewayRunner _gateway = new("appsettings-gateway.json");
+    private readonly GatewayRunner _gateway = new("appsettings-gateway.json", "SECAPI_IT_GW__");
     private readonly GatewayRunner _echo = new("appsettings-echo.json");
     private bool _started = false;
 

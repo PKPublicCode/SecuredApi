@@ -37,12 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestEnvironment\Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestEnvironment\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestEnvironment\StaticFiles\welcome.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

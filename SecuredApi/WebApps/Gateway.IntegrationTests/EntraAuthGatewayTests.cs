@@ -72,7 +72,8 @@ public class EntraAuthGatewayTests : TestsBase
             .SetStringContent("Hello hello")
             .SetRelativePath(PrivateApiKeyRedirectWildcard);
 
-        var config = Configuration.Build("appsettings-tests");
+        // Loading GW config to get proper (expected) issuer and audience
+        var config = Configuration.Build("appsettings-gateway", "SECAPI_IT_GW__");
         var token = CreateJwtToken(config.GetRequiredSection("Globals:Variables:AllowedEntraTokenIssuer").GetRequired<string>(),
                                     config.GetRequiredSection("Globals:Variables:AllowedEntraTokenAudience").GetRequired<string>(),
                                     TestKey2,

@@ -24,6 +24,7 @@ function Upload-Folder ([string]$folder, [string]$container) {
 }
 
 $componentTestFolder = './../../SecuredApi/ComponentTests/ComponentTests.Gateway/TestEnvironment'
+$integrationTestsFolder = './../../SecuredApi/WebApps/Gateway.IntegrationTests/TestEnvironment'
 
 Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `
             $deploymentResults.gateway.blobs.subscriptionKeys.name
@@ -31,11 +32,11 @@ Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `
 Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
             $deploymentResults.gateway.blobs.consumers.name
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config-delay.json" ` `
+Upload-Blob "$($integrationTestsFolder)/Configuration/routing-config-echo.json" ` `
                 $deploymentResults.echo.blobs.configuration.name `
                 "routing-config.json"
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config-subscriptions.json" `
+Upload-Blob "$($integrationTestsFolder)/Configuration/routing-config-gateway.json" `
                 $deploymentResults.gateway.blobs.configuration.name `
                 "routing-config.json"
 
