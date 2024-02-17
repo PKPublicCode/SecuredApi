@@ -16,29 +16,28 @@ using Microsoft.Extensions.Hosting;
 using SecuredApi.Logic.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SecuredApi.Apps.Gateway.Engine
+namespace SecuredApi.Apps.Gateway.Engine;
+
+public class RoutingInitializer : IHostedService
 {
-    public class RoutingInitializer : IHostedService
+    private IServiceScopeFactory _serviceScopeFactory;
+
+    //IHostedService is singleton, so unable to inject transient services dirrectly
+    //That's why scope service factory is injected. Then services registered with any scope can be used
+    public RoutingInitializer(IServiceScopeFactory serviceScopedFactory)
     {
-        private IServiceScopeFactory _serviceScopeFactory;
+        _serviceScopeFactory = serviceScopedFactory;
+    }
 
-        //IHostedService is singleton, so unable to inject transient services dirrectly
-        //That's why scope service factory is injected. Then services registered with any scope can be used
-        public RoutingInitializer(IServiceScopeFactory serviceScopedFactory)
-        {
-            _serviceScopeFactory = serviceScopedFactory;
-        }
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        var manager = scope.ServiceProvider.GetRequiredService<IRoutingEngineManager>();
+        await manager.InitializeRoutingEngineAsync(cancellationToken);
+    }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var manager = scope.ServiceProvider.GetRequiredService<IRoutingEngineManager>();
-            await manager.InitializeRoutingEngineAsync(cancellationToken);
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }
