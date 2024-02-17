@@ -57,13 +57,14 @@ public sealed class GatewayRunner: IAsyncDisposable
             }
             catch(HttpRequestException) // Handling connection refused.
             {
-                //ToDo:0 shoutdown after a while
             }
+
             ++count;
             if (count > maxCount)
             {
                 throw new InvalidOperationException("Unable to start server");
             }
+
             await Task.Delay(delay);
         }
         while (true);
