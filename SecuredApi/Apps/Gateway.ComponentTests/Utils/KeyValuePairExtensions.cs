@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 
-namespace SecuredApi.ComponentTests.Gateway.Utils;
+namespace SecuredApi.Apps.Gateway.ComponentTests.Utils;
 
 public static class KeyValuePairExtensions
 {

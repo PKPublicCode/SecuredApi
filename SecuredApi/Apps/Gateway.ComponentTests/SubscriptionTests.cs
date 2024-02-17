@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Http;
 using RichardSzalay.MockHttp;
 using System.Net;
 
-namespace SecuredApi.ComponentTests.Gateway;
+namespace SecuredApi.Apps.Gateway.ComponentTests;
 
 public class SubscriptionTests : GatewayTestsBase
 {

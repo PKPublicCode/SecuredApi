@@ -17,7 +17,7 @@ using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
 using System.Net;
 
-namespace SecuredApi.ComponentTests.Gateway;
+namespace SecuredApi.Apps.Gateway.ComponentTests;
 
 public class EchoTests: GatewayTestsBase
 {

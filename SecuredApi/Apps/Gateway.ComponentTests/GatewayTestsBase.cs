@@ -23,7 +23,7 @@ using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Testing.Common;
 using ISecuredApiRouter = SecuredApi.Logic.Routing.IRouter;  //Have to resolve conflict with asp.net
 
-namespace SecuredApi.ComponentTests.Gateway;
+namespace SecuredApi.Apps.Gateway.ComponentTests;
 
 public abstract class GatewayTestsBase
 {

@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Net;
 
-namespace SecuredApi.ComponentTests.Gateway.Utils;
+namespace SecuredApi.Apps.Gateway.ComponentTests.Utils;
 
 // Represents strings used in routing.json and globals.json
 public static partial class Constants

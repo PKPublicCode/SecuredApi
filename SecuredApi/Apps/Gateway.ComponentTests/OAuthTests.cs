@@ -20,7 +20,7 @@ using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SecuredApi.ComponentTests.Gateway;
+namespace SecuredApi.Apps.Gateway.ComponentTests;
 
 public class OAuthTests: GatewayTestsBase
 {

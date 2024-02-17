@@ -16,7 +16,7 @@
 using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
 
-namespace SecuredApi.ComponentTests.Gateway.Utils;
+namespace SecuredApi.Apps.Gateway.ComponentTests.Utils;
 
 // Represents common HTTP related strings
 public static partial class Constants

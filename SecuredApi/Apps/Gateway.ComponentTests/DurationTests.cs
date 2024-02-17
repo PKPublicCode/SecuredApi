@@ -15,7 +15,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 
-namespace SecuredApi.ComponentTests.Gateway;
+namespace SecuredApi.Apps.Gateway.ComponentTests;
 
 public class DurationTests : GatewayTestsBase
 {
