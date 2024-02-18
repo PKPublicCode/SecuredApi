@@ -16,16 +16,19 @@ using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using System.Diagnostics.CodeAnalysis;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
+using Microsoft.Extensions.Logging;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public class CheckEntraJwtAction : IAction
 {
     private readonly CheckEntraJwtActionSettings _settings;
+    private readonly ILogger _logger;
 
-    public CheckEntraJwtAction(CheckEntraJwtActionSettings settings)
+    public CheckEntraJwtAction(CheckEntraJwtActionSettings settings, ILogger<CheckEntraJwtAction> logger)
     {
         _settings = settings;
+        _logger = logger;
     }
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
@@ -38,6 +41,7 @@ public class CheckEntraJwtAction : IAction
 
             if(!result.Succeed)
             {
+                _logger.LogTrace(result.Exception, "Token validation failed");
                 return await result.Status.TranslateError(context);
             }
 

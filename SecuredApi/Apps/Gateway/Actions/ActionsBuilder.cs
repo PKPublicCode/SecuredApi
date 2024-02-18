@@ -19,25 +19,25 @@ using SecuredApi.Apps.Gateway.Configuration;
 
 namespace SecuredApi.Apps.Gateway.Actions;
 
-public class ActionFactoryBuilder
+public class ActionsBuilder
 {
     private readonly IServiceCollection _services;
     private readonly Dictionary<string, ActionInfo> _actions;
 
-    public ActionFactoryBuilder(IServiceCollection srv)
+    public ActionsBuilder(IServiceCollection srv)
     {
         _services = srv;
         _actions = new();
     }
 
-    public ActionFactoryBuilder AddAction<TAction, TSettings>(string name)
+    public ActionsBuilder AddAction<TAction, TSettings>(string name)
         where TAction : IAction
     {
         _actions[name] = MakeAction<TAction, TSettings>();
         return this;
     }
 
-    public ActionFactoryBuilder AddScopedAction<TAction, TSettings>(string name)
+    public ActionsBuilder AddScopedAction<TAction, TSettings>(string name)
         where TAction : class, IScopedAction<TSettings>
     {
         _actions[name] = MakeScopedAction<TAction, TSettings>();
@@ -46,9 +46,7 @@ public class ActionFactoryBuilder
 
     public IServiceCollection ConfigureActionFactory()
     {
-        var factory = new ActionFactory(_actions);
-        _services.AddSingleton<IActionFactory>(factory);
-        return _services;
+        return _services.AddSingleton(_actions);
     }
 
     private static ActionInfo MakeAction<TAction, TSettings>()
@@ -68,8 +66,6 @@ public class ActionFactoryBuilder
         return new ActionInfo
         (
             ActionType: action,
-            ActionCtor: action.GetConstructor(new[] { settings })
-                                ?? throw new ConfigurationException($"Action {action.Name} doesn't have valid constructor"),
             SettingsType: settings
         );
     }

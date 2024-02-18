@@ -12,22 +12,26 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using Microsoft.Extensions.DependencyInjection;
+
 namespace SecuredApi.Logic.Routing.Actions;
 
 public class ActionFactory : IActionFactory
 {
     private readonly Dictionary<string, ActionInfo> _actions;
+    private readonly IServiceProvider _srvProvider;
 
-    public ActionFactory(Dictionary<string, ActionInfo> actions)
+    public ActionFactory(Dictionary<string, ActionInfo> actions, IServiceProvider srvProvider)
     {
         _actions = actions;
+        _srvProvider = srvProvider;
     }
 
     public IAction CreateAction(string name, object settings)
     {
         if (_actions.TryGetValue(name, out var info))
         {
-            return (IAction)info.ActionCtor.Invoke(new[] { settings });
+            return (IAction)ActivatorUtilities.CreateInstance(_srvProvider, info.ActionType, settings);
         }
         throw MakeActionNotFoundException(name);
     }
