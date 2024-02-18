@@ -19,14 +19,14 @@ namespace SecuredApi.Logic.Auth.Jwt;
 public readonly struct ValidationResult
 {
     public ValidationStatus Status { get; }
-    public Exception? ErrorMessage { get; }
+    public Exception? Exception { get; }
     public JsonWebToken? Jwt { get; }
     public bool Succeed => Status == ValidationStatus.Ok;
 
     public ValidationResult(ValidationStatus status, JsonWebToken? jwt = null, Exception? e = null)
     {
         Status = status;
-        ErrorMessage = e;
+        Exception = e;
         Jwt = jwt;
     }
 

@@ -45,7 +45,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     configureConsumers: true
     instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
-      Globals__Variables__ProtectedEchoPath: 'http://${echoService.outputs.hostEndpoint}/echo'
+      Globals__Variables__ProtectedEchoPath: 'http://${echoService.outputs.hostEndpoint}/echo/delay'
       Globals__Variables__AllowedEntraTokenIssuer: 'https://sts.windows.net/${tenant().tenantId}/'
       Globals__Variables__AllowedEntraTokenAudience: entraAudience
     }

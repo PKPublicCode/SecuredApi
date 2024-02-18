@@ -39,7 +39,7 @@ public class OAuthTests: GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRoute_CallAlowedConsumerWithActions()
+    public async Task RouteProtectedWithReadRole_CallWithReadRoleToken_Success()
     {
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
@@ -65,7 +65,7 @@ public class OAuthTests: GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRoute_CallNotAllowed()
+    public async Task RouteProtectedWithWriteRole_CallWithReadRoleToken_AccessDenied()
     {
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
@@ -90,7 +90,7 @@ public class OAuthTests: GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRoute_CallAlowedConsumerWithWrongKey()
+    public async Task RouteProtectedWithReadRole_CallWithTokenSignedByNotExpectedKey_NotAuthorized()
     {
         var token = CreateJwtToken(JwtClaims.AllowedEntraTokenIssuer,
                                     JwtClaims.AllowedEntraTokenAudience,
@@ -99,6 +99,25 @@ public class OAuthTests: GatewayTestsBase
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
+        Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
+
+        // setup RemouteCall response
+        MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
+            .Respond(
+                        HttpStatusCode.OK,
+                        new StringContent(InlineContent.PrivateRedirectWildcard)
+                    );
+
+        ExpectedResult.StatusCode = StatusCodes.Status401Unauthorized;
+        ExpectedResult.Body = InlineContent.NotAuthorized;
+
+        await ExecuteAsync();
+    }
+
+    [Fact]
+    public async Task RouteProtectedWithReadRole_CallWithMalformedToken_Unauthorized()
+    {
+        SetToken("my token blablabla");
         Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
 
         // setup RemouteCall response

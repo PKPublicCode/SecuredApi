@@ -29,42 +29,19 @@ public static class TokenValidator
                                 )
     {
         var handler = new JsonWebTokenHandler();
-        var jwt = handler.ReadJsonWebToken(token);
-        var keys = await keysProvider.GetKeysAsync(jwt.Issuer, ct);
-
-        var result = await ValidateMainTokenPropsAsync(jwt, handler, keys, oneOfIssuers, oneOfAudiences);
+        var result = ReadJwtToken(handler, token);
         if (result.Succeed)
         {
-            result = ValidateClaims(jwt, oneOfRoles, oneOfScopes);
+            var jwt = result.Jwt!;
+            var keys = await keysProvider.GetKeysAsync(jwt.Issuer, ct);
+            result = await ValidateMainTokenPropsAsync(jwt, handler, keys, oneOfIssuers, oneOfAudiences);
+            if (result.Succeed)
+            {
+                result = ValidateClaims(jwt, oneOfRoles, oneOfScopes);
+            }
         }
 
         return result;
-    }
-
-    private static async Task<ValidationResult> ValidateMainTokenPropsAsync(JsonWebToken token,
-                                        JsonWebTokenHandler handler,
-                                        IEnumerable<SecurityKey> keys,
-                                        string[] oneOfIssuers,
-                                        string[]? oneOfAudiences
-                                        )
-    {
-        var validationParameters = new TokenValidationParameters()
-        {
-            ValidIssuers = oneOfIssuers,
-            ValidAudiences = oneOfAudiences,
-            ValidateLifetime = true,
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            IssuerSigningKeys = keys,
-        };
-
-        var res = await handler.ValidateTokenAsync(token, validationParameters);
-
-        if (!res.IsValid)
-        {
-            return ResultFromException(res.Exception);
-        }
-        return ValidationResult.MakeOk(token);
     }
 
     public static ValidationResult ValidateClaims(JsonWebToken token, string[]? oneOfRoles, string[]? oneOfScopes)
@@ -110,6 +87,44 @@ public static class TokenValidator
         }
 
         return ValidationResult.MakeAccessDenied();
+    }
+
+    private static ValidationResult ReadJwtToken(JsonWebTokenHandler handler, string strToken)
+    {
+        try
+        {
+            return ValidationResult.MakeOk(handler.ReadJsonWebToken(strToken));
+        }
+        catch (SecurityTokenMalformedException e)
+        {
+            return ValidationResult.MakeNotAuthorized(e);
+        }
+    }
+
+    private static async Task<ValidationResult> ValidateMainTokenPropsAsync(JsonWebToken token,
+                                        JsonWebTokenHandler handler,
+                                        IEnumerable<SecurityKey> keys,
+                                        string[] oneOfIssuers,
+                                        string[]? oneOfAudiences
+                                        )
+    {
+        var validationParameters = new TokenValidationParameters()
+        {
+            ValidIssuers = oneOfIssuers,
+            ValidAudiences = oneOfAudiences,
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            IssuerSigningKeys = keys,
+        };
+
+        var res = await handler.ValidateTokenAsync(token, validationParameters);
+
+        if (!res.IsValid)
+        {
+            return ResultFromException(res.Exception);
+        }
+        return ValidationResult.MakeOk(token);
     }
 
     private static ValidationResult ResultFromException(Exception e) => e switch
