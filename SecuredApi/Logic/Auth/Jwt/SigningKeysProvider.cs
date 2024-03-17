@@ -37,7 +37,7 @@ public class SigningKeysProvider: ISigningKeysProvider
         }
 
         //According to current implementation, ConfigurationManager is threadsafe and caches configuration
-        var config = await configManager.GetConfigurationAsync();
+        var config = await configManager.GetConfigurationAsync(ct);
 
         return config.JsonWebKeySet.Keys;
     }

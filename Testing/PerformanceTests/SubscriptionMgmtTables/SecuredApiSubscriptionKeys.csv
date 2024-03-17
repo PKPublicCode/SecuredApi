@@ -1,2 +1,0 @@
-PartitionKey,RowKey,Timestamp,ConsumerId,ConsumerId@type,Routes,Routes@type,SubscriptionId,SubscriptionId@type
-304fab5e-89a1-472a-9c19-437aa8571eb5,304fab5e-89a1-472a-9c19-437aa8571eb5,2023-05-07T13:52:08.0634449Z,c449ecfe-0d22-45db-aedc-3eae7710cc18,Guid,"[""780da1b9-5bae-4a62-b4d7-7f9602dc00d3""]",String,fb3fe2a8-cf00-4578-b8ef-1a285c874f93,Guid
