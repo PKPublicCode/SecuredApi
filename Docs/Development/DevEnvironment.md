@@ -1,6 +1,6 @@
 WIP!!!!
 
-# Tools and Depencies
+# Tools and Decencies
 Below tools user for development and build
 #### Powershell
 ``` 
@@ -52,5 +52,5 @@ export SECAPI_IT_GW__RoutingEngineManager__FileAccess__Rbac__Uri=""
 
 ```
 
-If above vars set in .bash_profile, then to make VS for Mac accept above variables, app should be launced from console
+If above vars set in .bash_profile, then to make VS for Mac accept above variables, app should be launched from console
 ``` open /Applications/Visual\ Studio.app ```

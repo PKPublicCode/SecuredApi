@@ -1,5 +1,4 @@
 $AccountName = $deploymentResults.configStorageName
-$rgName = $deploymentResults.sharedRgName
 
 $context = New-AzStorageContext -StorageAccountName $AccountName
 
@@ -23,20 +22,19 @@ function Upload-Folder ([string]$folder, [string]$container) {
   }
 }
 
-$componentTestFolder = './../../SecuredApi/Apps/Gateway.ComponentTests/TestEnvironment'
-$integrationTestsFolder = './../../SecuredApi/WebApps/Gateway.IntegrationTests/TestEnvironment'
+$contentBasePath = './../CommonContent'
 
-Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `
+Upload-Folder "$($contentBasePath)/Subscriptions/Keys" `
             $deploymentResults.gateway.blobs.subscriptionKeys.name
 
-Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
+Upload-Folder "$($contentBasePath)/Subscriptions/Consumers" `
             $deploymentResults.gateway.blobs.consumers.name
 
-Upload-Blob "$($integrationTestsFolder)/Configuration/routing-config-echo.json" ` `
+Upload-Blob "$($contentBasePath)/Configuration/routing-config-echo.json" ` `
                 $deploymentResults.echo.blobs.configuration.name `
                 "routing-config.json"
 
-Upload-Blob "$($integrationTestsFolder)/Configuration/routing-config-gateway.json" `
+Upload-Blob "$($contentBasePath)/Configuration/routing-config-gateway.json" `
                 $deploymentResults.gateway.blobs.configuration.name `
                 "routing-config.json"
 

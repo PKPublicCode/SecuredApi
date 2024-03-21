@@ -1,9 +1,11 @@
 [CmdletBinding()]
 param (
     [switch] $Force = $false
-    , $dockerTag="latest"
-    , $AppPlanSku="S1" #use P0V3 for better performance
-    , $GatewayInstanceNum=1
+    , [ValidateSet("lates", "rc")]
+    [string] $dockerTag = "latest"
+    , [ValidateSet("S1", "P0V3", "P1V3")]
+    [string] $AppPlanSku = "S1"
+    , $GatewayInstanceNum = 1
 )
 
 $infraCommonNameEnding = $env:SECURED_API_NAME_ENDING
@@ -39,7 +41,7 @@ $result = New-AzSubscriptionDeployment `
 
 $global:debugDeploymentResult = $result
 
-if ($result.Outputs -ne $null) {
+if ($null -ne $result.Outputs) {
     # convert ugly presentation of outputs to the object
     $output = @{}
     foreach ($h in $result.Outputs.GetEnumerator()) {

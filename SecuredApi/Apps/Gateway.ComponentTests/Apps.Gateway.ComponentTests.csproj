@@ -34,18 +34,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestEnvironment\Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
+    <None Include="..\..\..\Testing\CommonContent\Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f">
+      <Link>TestEnvironment\Subscriptions\Consumers\38fb3127-e186-4d23-a098-03e9b7bed44f</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestEnvironment\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074">
+    <None Include="..\..\..\Testing\CommonContent\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074">
+      <Link>TestEnvironment\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestEnvironment\StaticFiles\welcome.html">
+    <None Include="..\..\..\Testing\CommonContent\StaticFiles\welcome.html">
+      <Link>TestEnvironment\StaticFiles\welcome.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestEnvironment\StaticFiles\WildcardContent\Hello.txt">
+    <None Include="..\..\..\Testing\CommonContent\StaticFiles\WildcardContent\Hello.txt">
+      <Link>TestEnvironment\StaticFiles\WildcardContent\Hello.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="TestEnvironment\Configuration\globals-config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
