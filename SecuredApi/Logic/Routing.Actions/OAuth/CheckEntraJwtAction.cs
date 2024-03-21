@@ -71,7 +71,5 @@ public class CheckEntraJwtAction : IAction
         value = default;
         return false;
     }
-
-
 }
 

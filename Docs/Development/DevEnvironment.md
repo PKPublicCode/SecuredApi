@@ -10,7 +10,6 @@ pwsh #test run
 Required modules
 ```
 Install-Module -Name Az -Repository PSGallery -Forces
-Install-Module AzTable # Not used anymore
 Install-Module -Name MSAL.PS
 ```
 #### Jmeter
