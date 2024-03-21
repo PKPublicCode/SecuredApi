@@ -23,8 +23,9 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
     protected override SubscriptionKeysRepository MakeSut() => new(_fileProvider);
 
     [Fact]
-    public async Task GetSubscriptionKey_EmptyNotRequiredFields_Exists()
+    public async Task GetSubscriptionKey_SubscriptionWithEmptyOptionalFields_ReturnsValidObject()
     {
+        //Arrange
         const string hash = "2437C599-801E-4AFB-AF99-BA9165A9EA53";
         Guid consumerId = Guid.Parse("2B04A7D7-6257-4577-AE71-1E85645AD65F");
         Guid subscriptionId = Guid.Parse("E81C1972-81B3-437C-8EA2-7620B7652FBC");      
@@ -35,9 +36,11 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
             ""Routes"":[]
         }";
         SetupReturn(hash, content);
-        
+
+        //Act
         var result = await _sut.GetSubscriptionKeyAsync(hash, CancellationToken.None);
 
+        //Assert
         result.Should().NotBeNull();
         result!.ConsumerId.Should().Be(consumerId);
         result!.SubscriptionId.Should().Be(subscriptionId);
@@ -45,8 +48,9 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
     }
 
     [Fact]
-    public async Task GetSubscriptionKey_NonEmptyFields_Exists()
+    public async Task GetSubscriptionKey_SubscriptionWithFilledFields_ReturnsValidObjects()
     {
+        //Arrange
         const string hash = "2437C599-801E-4AFB-AF99-BA9165A9EA53";
         Guid consumerId = Guid.Parse("2B04A7D7-6257-4577-AE71-1E85645AD65F");
         Guid subscriptionId = Guid.Parse("E81C1972-81B3-437C-8EA2-7620B7652FBC");
@@ -67,8 +71,10 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
 ";
         SetupReturn(hash, content);
 
+        //Act
         var result = await _sut.GetSubscriptionKeyAsync(hash, CancellationToken.None);
 
+        //Assert
         result.Should().NotBeNull();
         result!.ConsumerId.Should().Be(consumerId);
         result!.SubscriptionId.Should().Be(subscriptionId);
@@ -76,7 +82,7 @@ public class SubscriptionKeysRepositoryTests: RepositoryTestsBase<ISubscriptionK
     }
 
     [Fact]
-    public async Task GetSubscriptionKey_NoFile_ReturnsNull()
+    public async Task GetSubscriptionKey_KeyDoNotExists_ReturnsNull()
     {
         const string hash = "2437C599-801E-4AFB-AF99-BA9165A9EA53";
         // No content setup to return from file provider

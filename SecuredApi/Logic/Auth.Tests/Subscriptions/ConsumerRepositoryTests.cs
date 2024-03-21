@@ -19,8 +19,9 @@ public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
     protected override ConsumersRepository MakeSut() => new(_fileProvider);
 
     [Fact]
-    public async Task GetConsumer_EmptyMainFields_Exists()
+    public async Task GetConsumer_ConsumerWithNoSubscriptionAndActions_ReturnsValidInstance()
     {
+        //Arrange
         Guid fileId = Guid.Parse("2437C599-801E-4AFB-AF99-BA9165A9EA53");
         const string consumerName = "Test Consumer";
         const string content = @"
@@ -32,8 +33,10 @@ public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
 ";
         SetupReturn(fileId.ToString(), content);
 
+        //Act
         var result = await _sut.GetConsumerAsync(fileId, CancellationToken.None);
 
+        //Assert
         result.Should().NotBeNull();
         result!.Id.Should().Be(fileId);
         result!.Name.Should().Be(consumerName);
@@ -42,8 +45,9 @@ public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
     }
 
     [Fact]
-    public async Task GetConsumer_NonEmptyFields_Exists()
+    public async Task GetConsumer_ConsumerWithSubscriptionAndActions_ReturnsValidInstance()
     {
+        //Arrange
         Guid fileId = Guid.Parse("2437C599-801E-4AFB-AF99-BA9165A9EA54");
         Guid subscriptionId = Guid.Parse("4D81AA95-2887-455D-BE2B-7AE42BC36C2E");
         const string preRequestAction = @"[{""Action"": { ""BlaBla"": ""Bla"" } }]";
@@ -57,8 +61,10 @@ public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
 ";
         SetupReturn(fileId.ToString(), content);
 
+        //Act
         var result = await _sut.GetConsumerAsync(fileId, CancellationToken.None);
 
+        //Assert
         result.Should().NotBeNull();
         result!.Id.Should().Be(fileId);
         result!.Name.Should().Be(consumerName);
@@ -67,13 +73,16 @@ public class ConsumerRepositoryTests: RepositoryTestsBase<IConsumersRepository>
     }
 
     [Fact]
-    public async Task GetConsumer_NoFile_ReturnsNull()
+    public async Task GetConsumer_ConsumerDoesntExist_ReturnsNull()
     {
+        //Arrange
         Guid fileId = Guid.Parse("2437C599-801E-4AFB-AF99-BA9165A9EA53");
         // No content setup to return from file provider
 
+        //Act
         var result = await _sut.GetConsumerAsync(fileId, CancellationToken.None);
 
+        //Assert
         result.Should().BeNull();
     }
 }

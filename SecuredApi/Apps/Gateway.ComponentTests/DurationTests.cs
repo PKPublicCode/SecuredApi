@@ -27,7 +27,7 @@ public class DurationTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task Route_Delay()
+    public async Task RouteWithDelay_Call_StasusOkAfterDelay()
     {
         Request.SetupGet(RoutePaths.PublicEchoDelay);
         ExpectedResult.StatusCode = StatusCodes.Status200OK;

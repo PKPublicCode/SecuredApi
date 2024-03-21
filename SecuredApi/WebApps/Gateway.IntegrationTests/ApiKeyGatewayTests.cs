@@ -27,7 +27,7 @@ public class ApiKeyGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task ProtectedRoute_ValidKeyForConsumerWithActions_Success()
+    public async Task ProtectedRoute_ValidKeyForConsumerWithActions_StatusOk()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")

@@ -34,7 +34,7 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task ProtectedByReadRoleRoute_TokenWithReadRole_Success()
+    public async Task ProtectedByReadRoleRoute_TokenWithReadRole_StatusOk()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")

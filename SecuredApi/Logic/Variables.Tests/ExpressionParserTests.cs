@@ -31,23 +31,28 @@ public class ExpressionParserTests
     [InlineData("$(value)Hello", "_value_Hello")]
     [InlineData("Hello$(value)BlaBla", "Hello_value_BlaBla")]
     [InlineData("Hello$(value)BlaBla$(value1)blu$(value3)ble", "Hello_value_BlaBla_value1_blu_value3_ble")]
-    public void Positive(string expression, string expected)
+    public void Parse_ProperlyFormedExpression_Success(string expression, string expected)
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
-        Assert.Equal(expected, sut.Parse(expression));
+
+        var result = sut.Parse(expression);
+
+        Assert.Equal(expected, result);
     }
 
     [Fact()]
-    public void InvalidExpression()
+    public void Parse_MalformedExpression_InvalidExpressionExpression()
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
+
         Assert.Throws<InvalidExpressionException>(() => sut.Parse("blabla$(asfasdf"));
     }
 
     [Fact()]
-    public void NotFoundVariable()
+    public void Parse_VariableNotExist_InvalidExpressionException()
     {
         var sut = new GlobalExpressionProcessor(new NotFoundeGlobalVariables());
+
         Assert.Throws<InvalidExpressionException>(() => sut.Parse("Hello$(value)"));
     }
 

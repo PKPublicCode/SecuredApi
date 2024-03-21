@@ -50,7 +50,7 @@ public class GatewayTests: GatewayTestsBase
     [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "", _methodGet, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "", _methodGet)]
     [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "", _methodPost, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "", _methodPost)]
     [InlineData($"{PublicRemoteWildcardOriginal}/arbitrary/path", "?myParam=1&myParam=2", _methodGet, $"{GlobalsPublicRemoteEndpointWithExtra}arbitrary/path", "?myParam=1&myParam=2", _methodGet)]
-    public async Task RemoteCall_Found(string path, string query, string requestMethod, string exprectedPath, string expectedQuery, string expectedMethod)
+    public async Task RemoteCallRouteWithWildcard_CallWithDifferentPaths_RemoteCalledWithPathEnding(string path, string query, string requestMethod, string exprectedPath, string expectedQuery, string expectedMethod)
     {
         const string body = "TestBody";
         HttpHeader TestRequestHeader = new("TestResponseHeaderName", "TestResponseHeaderValue");

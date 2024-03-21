@@ -26,7 +26,7 @@ public class SubscriptionTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRote_SubscriptionKeyNotSet()
+    public async Task ProtectedRote_SubscriptionKeyNotSet_NotAuthorized()
     {
         Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
 
@@ -38,7 +38,7 @@ public class SubscriptionTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRote_SubscriptionKeyNotExists()
+    public async Task ProtectedRote_SubscriptionKeyNotExists_NotAuthorized()
     {
         Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
         SetSubscriptionKey("KeyKeyKey");
@@ -51,7 +51,7 @@ public class SubscriptionTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRote_CallAlowedConsumerWithActions()
+    public async Task ProtectedRote_CallAlowedConsumerWithActions_OkAndConsumerActionsRun()
     {
         //Test uses same route as used in itegration tests, and so it has remoute call inside
         Request.SetupGet(RoutePaths.PrivateApiKeyRedirectWildcard);
@@ -72,7 +72,7 @@ public class SubscriptionTests : GatewayTestsBase
     }
 
     [Fact]
-    public async Task PrivateRote_CallNotAlowedConsumerWithActions()
+    public async Task ProtectedRote_CallNotAlowedConsumerWithActions_Forbidden()
     {
         Request.SetupGet(RoutePaths.PrivateApiKeyNotAllowedWildcard);
         SetSubscriptionKey("5F39D492-A141-498A-AE04-76C6B77F246A");

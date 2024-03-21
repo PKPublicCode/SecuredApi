@@ -28,7 +28,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_NoRolesNoScope_Valid()
+    public async Task ValidateToken_WithNoRolesNoScope_StatusOk()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -43,7 +43,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_ValidRole_Valid()
+    public async Task ValidateToken_WithValidRole_StatusOk()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -57,7 +57,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_ValidScope_Valid()
+    public async Task ValidateToken_WithValidScope_StatusOk()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -71,7 +71,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_NoRequiredRoles_AccessDenied()
+    public async Task ValidateToken_WithoutRequiredRoles_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -85,7 +85,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_NoRequiredScope_Valid()
+    public async Task ValidateToken_WithoutRequiredScope_AccessDenied()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";
@@ -99,7 +99,7 @@ public class TokenValidatorTests
     }
 
     [Fact]
-    public async Task ValidateToken_SigningKeyIsUnknown_NotAuthorized()
+    public async Task ValidateToken_WithUnknownSigningKey_NotAuthorized()
     {
         var allowedKeys = MakePublicKeysList(TestKey1, TestKey2);
         const string issuer = "https://my-issuer.com";

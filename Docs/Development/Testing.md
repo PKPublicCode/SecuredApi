@@ -1,13 +1,18 @@
 # Testing Strategy
-Unit tests are good, but they are not about testing in broad sense, and they are expensive from dev effort perspective, especially for the dynamic project.
+Unit tests are good and powerful tool to keep app well designed and properly functioning. However, with modern tech stacks and having properly designed application framework, application logic is implemented as set of small built-in blocks, that depend on each other and on the framework itself. Meaningful functional parts primarily depends on the DI and application configuration. In this case value of proper unit tests is reduced, but cost of their maintenance is decreased.
 
-Automated Integration Tests are good too, and they test nearly e2e scenarious, but execution time is consuming, require extra effort to setup\maintain environment, infrastructure, need permanent care.
+To address maintenance cost issues, this project introduces component tests. Components tests are in memory tests (same as Unit Tests), and so they are fast, flexible, with high potential of using mocking approaches. However they test units connected to meaningful scenario, and cover units, appropriate part of DI and application configuration. This approach decreases costs of tests maintenance if in case of design changes and is focused rather on functional testing, then testing of code itself. Due lack of resources this project rely on these types of tests.
 
-This project can't afford neither of above on the current stage.
 
-Idea is to rely on Component Tests that's between UT and IT - something that can be executed in-process, don't need environment\infra setup, but at the same time test integration of units. Component tests use mocks for infrastructure code (so don't work with real storages, etc), however instantiate whole chain of dependencies (classes), so can test whole piece of logic.
+#### Strategy:
+* Unit Tests: Units and methods with complex logic or algorithms only
+* Component Tests: Most of the scenarios, including happy path and negative test cases.
+* Integration tests: Happy path with E2E scenarios, covering main infra-integration capabilities.
+* Performance tests: Few main happypath scenarios on jmeter to bench-mark performance of the app deployed to cloud.
 
-Current strategy can be described as:
-* Use Unit Tests for units with complex algorithms only
-* Main happy paths and main negative cases are tested with Component Tests
-* Integration tests are manual (semi-automated) testing using JMeter, or Rest Client. Later will be substituted by fully automated tests
+#### Naming convention:
+##### Unit tests:
+MethodName_TestCaseDetails_ExpectedBehavior
+
+###### Component and Integration tests
+Scenario_TestCaseDetails_ExpectedBehavior 

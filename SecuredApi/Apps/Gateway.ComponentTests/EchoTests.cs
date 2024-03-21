@@ -18,7 +18,12 @@ using System.Net.Mime;
 using System.Net;
 
 namespace SecuredApi.Apps.Gateway.ComponentTests;
-
+// ToDo.0
+// 1. [X] Normilize test names
+// 2. Try to save all shared test data (like subscriptions) to the common folder
+// 3. Document IT dependencies (including subscriptions, configuration file
+// 4. Extend IT for returning static content
+// 5. Consider reuse of IT config???
 public class EchoTests: GatewayTestsBase
 {
     public EchoTests()
@@ -28,7 +33,7 @@ public class EchoTests: GatewayTestsBase
     [Theory]
     [InlineData("/")]
     [InlineData($"{RoutePaths.PublicEchoExact}/path")]
-    public async Task Echo_NotFound(string urlPath)
+    public async Task EchoRoute_CallNotConfiguredPath_NotFound(string urlPath)
     {
         Request.SetupGet(urlPath);
 
@@ -44,7 +49,7 @@ public class EchoTests: GatewayTestsBase
     [InlineData($"{RoutePaths.PublicEchoWildcard}", InlineContent.EchoWildcard)]
     [InlineData($"{RoutePaths.PublicEchoWildcard}/", InlineContent.EchoWildcard)]
     [InlineData($"{RoutePaths.PublicEchoWildcard}/path", InlineContent.EchoWildcard)]
-    public async Task EchoRoute_Found(string urlPath, string expectedContent)
+    public async Task EchoRoute_CallConfiguredPaths_StatusOk(string urlPath, string expectedContent)
     {
         Request.SetupGet(urlPath);
         Context.Connection.RemoteIpAddress = EchoWildcardAllowedIp;
@@ -57,7 +62,7 @@ public class EchoTests: GatewayTestsBase
     }
 
     [Fact]
-    public async Task EchoRoute_IpIsNotAllowed()
+    public async Task EchoRouteProtectedByIp_CallWithNotAllowedIP_Forbidden()
     {
         Request.SetupGet(RoutePaths.PublicEchoWildcard);
         Context.Connection.RemoteIpAddress = IPAddress.Parse("20.20.20.22"); //Not Allowed IP Address
@@ -72,7 +77,7 @@ public class EchoTests: GatewayTestsBase
     [Theory]
     [InlineData(PublicContent.Exact.Path, PublicContent.Exact.Content, MediaTypeNames.Text.Html)]
     [InlineData(PublicContent.WildcardHelloTxt.Path, PublicContent.WildcardHelloTxt.Content, MediaTypeNames.Text.Plain)]
-    public async Task StaticFile_Found(string urlPath, string expectedContent, string expectedContentType)
+    public async Task StaticFileRoute_CallExistingContent_StatusOk(string urlPath, string expectedContent, string expectedContentType)
     {
         Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
 
@@ -86,7 +91,7 @@ public class EchoTests: GatewayTestsBase
     [Theory]
     [InlineData("/wildcard/")]
     [InlineData("/wildcard/blabla.html")]
-    public async Task StaticFile_NotFound(string urlPath)
+    public async Task StaticFileRoute_CallNotExistingPath_NotFound(string urlPath)
     {
         Request.SetupGet($"{RoutePaths.PublicContentBase}{urlPath}");
 
