@@ -18,12 +18,7 @@ using System.Net.Mime;
 using System.Net;
 
 namespace SecuredApi.Apps.Gateway.ComponentTests;
-// ToDo.0
-// 1. [X] Normilize test names
-// 2. [X] Try to save all shared test data (like subscriptions) to the common folder
-// 3. Document IT dependencies (including subscriptions, configuration file
-// 4. Extend IT for returning static content
-// 5. Consider reuse of IT config???
+
 public class EchoTests: GatewayTestsBase
 {
     public EchoTests()
