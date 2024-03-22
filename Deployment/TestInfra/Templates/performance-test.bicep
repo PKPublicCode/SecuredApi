@@ -43,6 +43,7 @@ module gatewayService './Modules/gateway-service.bicep' = {
     configureSubscriptions: true
     subscriptionKeysSalt: '5b951d0869cc4d2da993b6d188197c71'
     configureConsumers: true
+    configureStaticContent: true
     instanceNum: gatewayInstanceNum
     appServiceConfiguration: {
       Globals__Variables__ProtectedEchoPath: 'http://${echoService.outputs.hostEndpoint}/echo/delay'

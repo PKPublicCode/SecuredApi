@@ -16,6 +16,7 @@ param appServiceConfiguration object = {
 param configStorageName string
 param configStorageRG string
 param configContainer string = makeContainerName('config', bundleName)
+param configureStaticContent bool = false
 param staticContentContainer string = makeContainerName('static', bundleName)
 
 param configureSubscriptions bool = false
@@ -79,6 +80,11 @@ var _routingSettings = {
   RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
 }
 
+var _staticContentSettings = !configureStaticContent ? _emptySettings : {
+  StaticFilesProvider__FileAccess__Type: 'AzureStorage'
+  StaticFilesProvider__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
+}
+
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webSiteName
   location: location
@@ -103,6 +109,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
       _subscriptionSettings,
       _consumersSettings,
       _routingSettings,
+      _staticContentSettings,
       appServiceConfiguration,
       { // Required settings
         APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
