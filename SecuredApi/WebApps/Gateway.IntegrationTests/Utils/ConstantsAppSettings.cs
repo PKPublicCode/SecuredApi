@@ -36,6 +36,7 @@ public static partial class Constants
         public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
         public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard/delay";
         public const string PrivateOAuthNotAllowedWildcard = "/private_oauth/notallowed/wildcard";
+        public const string PublicStaticContent = "/static_content";
     }
 
     public static class InlineContent
@@ -44,15 +45,16 @@ public static partial class Constants
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string NotAuthorized = "Not Authorized";
         public const string AccessDenied = "Access Denied";
+        public const string StaticFileNotFound = "This is wrong file url";
     }
 
     public const string OAuthHeaderPrefix = "Bearer ";
 
     public static class PublicContent
     {
-        public static class Exact 
+        public static class WelcomeHtml 
         {
-            public const string Path = "/Exact";
+            public const string Path = "/welcome.html";
             public const string Content =
 @"<html>
 <head>
@@ -69,7 +71,7 @@ public static partial class Constants
 
         public static class WildcardHelloTxt
         {
-            public const string Path = "/wildcard/Hello.txt";
+            public const string Path = "/Content/Hello.txt";
             public const string Content = "This is content of hello.txt";
         }
     }

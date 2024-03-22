@@ -86,7 +86,7 @@
               "actions": [
                 {
                   "type": "ReturnStaticFile",
-                  "path": "StaticFiles/WildcardContent/@(requestRemainingPath)",
+                  "path": "StaticFiles/Content/@(requestRemainingPath)",
                   "notFoundMessage": "This is wrong file url"
                 }
               ]

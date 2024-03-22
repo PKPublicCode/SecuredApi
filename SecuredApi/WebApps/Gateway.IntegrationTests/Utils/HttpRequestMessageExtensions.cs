@@ -25,6 +25,12 @@ public static class HttpRequestMessageExtensions
         return msg;
     }
 
+    public static HttpRequestMessage SetGet(this HttpRequestMessage msg)
+    {
+        msg.Method = HttpMethod.Get;
+        return msg;
+    }
+
     public static HttpRequestMessage SetRelativePath(this HttpRequestMessage msg, string path)
     {
         msg.RequestUri = new Uri(path, UriKind.Relative);

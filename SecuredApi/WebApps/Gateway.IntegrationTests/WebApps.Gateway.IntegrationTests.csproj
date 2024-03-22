@@ -43,6 +43,12 @@
     <None Include="..\..\..\Testing\CommonContent\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074">
       <Link>TestEnvironment\Subscriptions\Keys\70C0B884A57C5B7171DE377C777B159B55CCA11E9F5DD8CD9D8DFD2DAF735074</Link>
     </None>
+    <None Include="..\..\..\Testing\CommonContent\StaticFiles\welcome.html">
+      <Link>TestEnvironment\StaticFiles\welcome.html</Link>
+    </None>
+    <None Include="..\..\..\Testing\CommonContent\StaticFiles\Content\Hello.txt">
+      <Link>TestEnvironment\StaticFiles\Content\Hello.txt</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings-echo.json">

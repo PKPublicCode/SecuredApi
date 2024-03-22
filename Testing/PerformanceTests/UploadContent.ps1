@@ -16,13 +16,18 @@ function Upload-Blob([string]$filePath, [string]$containerName, [string]$blobNam
 }
 
 function Upload-Folder ([string]$folder, [string]$container) {
-  $files = Get-ChildItem $folder -File 
+  $basePathLen = "$(Resolve-Path $folder)".Length + 1
+  $files = Get-ChildItem $folder -File -Recurse
   foreach($file in $files) {
-    Upload-Blob $file.FullName $container
+    $blobName = $file.FullName.Substring($basePathLen)
+    Upload-Blob $file.FullName $container $blobName
   }
 }
 
 $contentBasePath = './../CommonContent'
+
+Upload-Folder "$($contentBasePath)/StaticFiles" `
+            $deploymentResults.gateway.blobs.staticContent.name
 
 Upload-Folder "$($contentBasePath)/Subscriptions/Keys" `
             $deploymentResults.gateway.blobs.subscriptionKeys.name

@@ -46,8 +46,8 @@
       <Link>TestEnvironment\StaticFiles\welcome.html</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\..\Testing\CommonContent\StaticFiles\WildcardContent\Hello.txt">
-      <Link>TestEnvironment\StaticFiles\WildcardContent\Hello.txt</Link>
+    <None Include="..\..\..\Testing\CommonContent\StaticFiles\Content\Hello.txt">
+      <Link>TestEnvironment\StaticFiles\Content\Hello.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -16,6 +16,7 @@ param appServiceConfiguration object = {
 param configStorageName string
 param configStorageRG string
 param configContainer string = makeContainerName('config', bundleName)
+param staticContentContainer string = makeContainerName('static', bundleName)
 
 param configureSubscriptions bool = false
 param subscriptionsContainer string = makeContainerName('subscriptions', bundleName)
@@ -161,7 +162,7 @@ module storageContent 'storage-content.bicep' = {
   params: {
     storageName: configStorageName
     containers: union(
-      [configContainer],
+      [configContainer, staticContentContainer],
       configureConsumers ? [consumersContainer] : [],
       configureSubscriptions ? [subscriptionKeysContainer, subscriptionsContainer] : []
     )
@@ -181,6 +182,10 @@ output blobs object = {
   configuration: {
     name: configContainer
     url: storageContent.outputs.blobUrls[configContainer]
+  }
+  staticContent: {
+    name: staticContentContainer
+    url: storageContent.outputs.blobUrls[staticContentContainer]
   }
   subscriptions: !configureSubscriptions ? null : {
     name: subscriptionsContainer
