@@ -59,12 +59,11 @@ public static partial class Constants
 @"<html>
 <head>
     <meta charset=""utf-8"" />
-    <title>Secured API</title>
+    <title>Secured API test instance</title>
 </head>
 <body>
     <h1>Welcome to Secured API</h1>
-    This is default configuration.<br>
-    Enjoy!!!
+    This is test configuration<br>
 </body>
 </html>";
         }
