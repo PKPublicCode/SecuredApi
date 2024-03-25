@@ -22,10 +22,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SecuredApi.Apps.Gateway.ComponentTests;
 
-public class OAuthTests: GatewayTestsBase
+public class EntraJwtTests: GatewayTestsBase
 {
-    public OAuthTests()
-        :base("appsettings-oauth.json", (srv, config) =>
+    public EntraJwtTests()
+        :base("appsettings-entrajwt.json", (srv, config) =>
         {
             var keyProvider = Substitute.For<ISigningKeysProvider>();
 
@@ -48,7 +48,7 @@ public class OAuthTests: GatewayTestsBase
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
-        Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateJwtRedirectWildcard);
 
         // setup RemouteCall response
         MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
@@ -74,7 +74,7 @@ public class OAuthTests: GatewayTestsBase
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
-        Request.SetupGet(RoutePaths.PrivateOAuthNotAllowedWildcard);
+        Request.SetupGet(RoutePaths.PrivateJwtNotAllowedWildcard);
 
         // setup RemouteCall response
         MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
@@ -99,7 +99,7 @@ public class OAuthTests: GatewayTestsBase
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         SetToken(token);
-        Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateJwtRedirectWildcard);
 
         // setup RemouteCall response
         MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
@@ -118,7 +118,7 @@ public class OAuthTests: GatewayTestsBase
     public async Task RouteProtectedWithReadRole_CallWithMalformedToken_Unauthorized()
     {
         SetToken("my token blablabla");
-        Request.SetupGet(RoutePaths.PrivateOAuthRedirectWildcard);
+        Request.SetupGet(RoutePaths.PrivateJwtRedirectWildcard);
 
         // setup RemouteCall response
         MainHttpHandler.When(HttpMethod.Get, AppSettingnsProtectedRemoteEndpoint)
@@ -135,7 +135,7 @@ public class OAuthTests: GatewayTestsBase
 
     private void SetToken(string token)
     {
-        Request.Headers.Add(new(Headers.AuthorizationHeaderName, OAuthHeaderPrefix + token));
+        Request.Headers.Add(new(Headers.AuthorizationHeaderName, JwtHeaderPrefix + token));
     }
 }
 

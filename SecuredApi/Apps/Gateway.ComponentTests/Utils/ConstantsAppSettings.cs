@@ -50,8 +50,8 @@ public static partial class Constants
         public const string PublicContentBase = "/public/echo/content";
         public const string PrivateApiKeyRedirectWildcard = "/private_api_key/redirect/wildcard";
         public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
-        public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard";
-        public const string PrivateOAuthNotAllowedWildcard = "/private_oauth/notallowed/wildcard";
+        public const string PrivateJwtRedirectWildcard = "/private_jwt/redirect/wildcard";
+        public const string PrivateJwtNotAllowedWildcard = "/private_jwt/notallowed/wildcard";
     }
 
     public static class InlineContent
@@ -79,7 +79,7 @@ public static partial class Constants
     public const string AppSettingnsProtectedRemoteEndpoint = "https://protected.remote.endpoint/api.v2/";
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
     public const int PublicEchoDelayMilliseconds = 300;
-    public const string OAuthHeaderPrefix = "Bearer ";
+    public const string JwtHeaderPrefix = "Bearer ";
 
     public static class PublicContent
     {

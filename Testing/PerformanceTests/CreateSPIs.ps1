@@ -3,36 +3,40 @@ param (
     [string]$gwAppName
 )
 
+if (!$gwAppName) {
+    "Specify application display name"
+    exit
+}
+
 # AzureAD module doesn't work in ps core, so... using az cli
 
 $gwApiUri = "api://$gwAppName"
 $clientAppName = "$gwAppName-client"
 
-$roles = @{
-    Read = "EchoSrv.Read.All"
-    Write = "EchoSrv.Write.All" # will not be granted
-}
-
-$gwRolesJson = @(
+$gwRoles = @(
     @{
         allowedMemberTypes = @(
             "Application"
         )
-        description= "Allow get requests"
-        displayName= "Reader"
+        description= "Grants access to basic features"
+        displayName= "Basic access"
         isEnabled= "true"
-        value= $roles.Read
+        value= "EchoSrv.API.Basic"
     },
     @{
         allowedMemberTypes= @(
             "Application"
         )
-        description= "Allow post requests"
-        displayName= "Writer"
+        description= "Grants access to restricted API"
+        displayName= "Privileged access"
         isEnabled= "true"
-        value= $roles.Write
+        value= "EchoSrv.API.Privileged"
     }
-) | ConvertTo-Json -Depth 100 -Compress
+)
+
+$gwRolesJson = $gwRoles | ConvertTo-Json -Depth 100 -Compress
+$basicRole = $gwRoles[0].value
+$privilegedRole = $gwRoles[1].value
 
 $currentUserId = (az ad signed-in-user show | ConvertFrom-Json).id
 
@@ -50,8 +54,8 @@ az ad sp create --id $gwApp.appId
 #find role id
 $appRoles = (az ad app show --id $gwApp.appId | ConvertFrom-Json).appRoles
 foreach($role in $appRoles) {
-    if ($role.value -eq $roles.Read) {
-        $readerRoleId = $role.id
+    if ($role.value -eq $basicRole) {
+        $basicRoleId = $role.id
         break
     }
 }
@@ -66,12 +70,18 @@ az ad app owner add --id $clientApp.appId --owner-object-id $currentUserId
 
 $clientAppCredentials = az ad app credential reset --id $clientApp.appId | ConvertFrom-Json
 
-#Delay for 10 secs to make sure all SPIs properly populated
-Start-Sleep -s 10
-
 #Grant permissions
-az ad app permission add --id $clientApp.appId --api $gwApp.appId --api-permissions "$readerRoleId=Role" --only-show-errors
+
+#Wait for 10 secs to make sure all SPIs properly populated.
+Start-Sleep -s 10
+az ad app permission add --id $clientApp.appId --api $gwApp.appId --api-permissions "$basicRoleId=Role" --only-show-errors
+
+#Wait for 10 secs to to make above changes populated
+Start-Sleep -s 30
 az ad app permission admin-consent --id $clientApp.appId
+
+"If pemission still not grantd run:"
+"az ad app permission admin-consent --id $($clientApp.appId)"
 
 #$tenantId = (az account show | ConvertFrom-Json).tenantId
 #Show results

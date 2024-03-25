@@ -27,11 +27,11 @@ public class ApiKeyGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task ProtectedRoute_ValidKeyForConsumerWithActions_StatusOk()
+    public async Task BasicApi_SubscriptionWithBasicApiAndConsumerWithActions_StatusOk()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateApiKeyRedirectWildcard)
+            .SetRelativePath(ApiKeyBasicFeatures)
             .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F246A");
 
         ExpectedResult.Body = InlineContent.EchoDelay;
@@ -43,16 +43,32 @@ public class ApiKeyGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task ProtectedRoute_NonExistingKey_NotAuthorized()
+    public async Task BasicApi_KeyDoesNotExist_NotAuthorized()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateApiKeyRedirectWildcard)
+            .SetRelativePath(ApiKeyBasicFeatures)
             .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F2463");
 
         ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
         ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
-        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+        ExpectedResult.Body = InlineContent.NotAuthorized;
+
+        await ActAsync();
+        await AssertAsync();
+    }
+
+    [Fact]
+    public async Task PreviligedApi_SubscriptionWithBasicApi_AccessDenied()
+    {
+        Request.SetPost()
+            .SetStringContent("Hello hello")
+            .SetRelativePath(ApiKeyPriviligedFeatures)
+            .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F246A");
+
+        ExpectedResult.StatusCode = HttpStatusCode.Forbidden;
+        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
+        ExpectedResult.Body = InlineContent.AccessDenied;
 
         await ActAsync();
         await AssertAsync();

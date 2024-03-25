@@ -34,11 +34,11 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task ProtectedByReadRoleRoute_TokenWithReadRole_StatusOk()
+    public async Task BasicApi_ValidTokenBasicRole_StatusOk()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateOAuthRedirectWildcard);
+            .SetRelativePath(ApiEntraJwtBasicFeatures);
         AddAuthorizationHeader(await _entra.GetTokenAsync(default));
 
         ExpectedResult.Body = InlineContent.EchoDelay;
@@ -50,11 +50,11 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task ProtectedByWriteRoleRoute_TokenWithReadRole_AccessDenied()
+    public async Task PriviligedApi_ValidTokenBasicRole_AccessDenied()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateOAuthNotAllowedWildcard);
+            .SetRelativePath(ApiEntraJwtPreviligedFeatures);
         AddAuthorizationHeader(await _entra.GetTokenAsync(default));
 
         ExpectedResult.StatusCode = HttpStatusCode.Forbidden;
@@ -66,25 +66,25 @@ public class EntraAuthGatewayTests : TestsBase
     }
 
     [Fact]
-    public async Task ProtectedByWriteRoleRoute_SignedByWrongKeys_NotAuthorized()
+    public async Task BasicApi_JwtSignedByWrongKeyWithBasicRole_NotAuthorized()
     {
         Request.SetPost()
             .SetStringContent("Hello hello")
-            .SetRelativePath(PrivateApiKeyRedirectWildcard);
+            .SetRelativePath(ApiEntraJwtBasicFeatures);
 
         // Loading GW config to get proper (expected) issuer and audience
         var config = Configuration.Build("appsettings-gateway", "SECAPI_IT_GW__");
         var token = CreateJwtToken(config.GetRequiredSection("Globals:Variables:AllowedEntraTokenIssuer").GetRequired<string>(),
                                     config.GetRequiredSection("Globals:Variables:AllowedEntraTokenAudience").GetRequired<string>(),
                                     TestKey2,
-                                    new [] {"EchoSrv.Read.All", "EchoSrv.Write.All"},
+                                    new [] { "EchoSrv.API.Basic", "EchoSrv.API.Privileged" },
                                     DateTime.UtcNow,
                                     TimeSpan.FromHours(1));
         AddAuthorizationHeader(token);
 
         ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
         ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
-        ExpectedResult.Body = InlineContent.SubscriptionKeyNotSetOrInvalid;
+        ExpectedResult.Body = InlineContent.NotAuthorized;
 
         await ActAsync();
         await AssertAsync();
@@ -92,7 +92,7 @@ public class EntraAuthGatewayTests : TestsBase
 
     private void AddAuthorizationHeader(string token)
     {
-        Request.AddHeader(Headers.AuthorizationHeaderName, OAuthHeaderPrefix + token);
+        Request.AddHeader(Headers.AuthorizationHeaderName, JwtHeaderPrefix + token);
     }
 }
 

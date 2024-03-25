@@ -8,7 +8,7 @@
   "routesGroups": [
     {
       "description": "Private routes subscription key authentication",
-      "path": "/private_oauth",
+      "path": "/private_jwt",
       "preRequestActions": [
         {
           "type": "CheckEntraJwt",

@@ -31,26 +31,3 @@ brew install bicep
 #### Docker
 According to your choice
 
-#### To run tests and deploy env you need following variables:
-##### short code that will be used as ending of resources during 
-```
-export SECURED_API_NAME_ENDING=code
-```
-
-##### needed for integration tests and for few ps experimental scripts (ex. to aquire access tokens)
-```
-export SECAPI_IT_MAIN__SpiClient__TenantId=""
-export SECAPI_IT_MAIN__SpiClient__ClientId=""
-export SECAPI_IT_MAIN__SpiClient__ClientSecret=""
-export SECAPI_IT_MAIN__SpiClient__Scope=""
-
-export SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenIssuer=""
-export SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenAudience=""
-export SECAPI_IT_GW__Subscriptions__Keys__FileAccess__Rbac__Uri=""
-export SECAPI_IT_GW__Subscriptions__Consumers__FileAccess__Rbac__Uri=""
-export SECAPI_IT_GW__RoutingEngineManager__FileAccess__Rbac__Uri=""
-
-```
-
-If above vars set in .bash_profile, then to make VS for Mac accept above variables, app should be launched from console
-``` open /Applications/Visual\ Studio.app ```

@@ -15,63 +15,8 @@
   ],
   "routesGroups": [
     {
-      "id": "602352d4-56e8-4269-965f-1290a92df903",
-      "description": "Private routes subscription key authentication",
-      "path": "/private_api_key",
-      "preRequestActions": [
-        {
-          "type": "CheckSubscription",
-          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY",
-          "errorNotAuthorizedBody": "Subscription key not set or invalid",
-          "errorAccessDeniedBody": "Call Not Allowed"
-        },
-        {
-          "type": "RunConsumerActions"
-        }
-      ],
-      "routesGroups": [
-        {
-          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
-          "description": "API with redirect",
-          "path": "/redirect",
-          "routes": [
-            {
-              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
-              "methods": [ "get", "post" ],
-              "path": "/wildcard/*",
-              "actions": [
-                {
-                  "type": "RemoteCall",
-                  // In ComponentTests protectedEchoPath is set by appsettings json
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "@(requestHttpMethod)"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Rote group that is not allowed by existing subscriptions",
-          "routes": [
-            {
-              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
-              "methods": [ "get" ],
-              "path": "/notallowed/wildcard/*",
-              "actions": [
-                {
-                  "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "post"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "description": "Private routes subscription key authentication",
-      "path": "/private_oauth",
+      "description": "API protected by App Registration roles",
+      "path": "/api/jwt",
       "preRequestActions": [
         {
           "type": "CheckEntraJwt",
@@ -80,25 +25,63 @@
           "keepData": true
         }
       ],
+      "routes": [
+        {
+          "methods": [ "post" ],
+          "path": "/basic_features/*",
+          "actions": [
+            {
+              "type": "CheckEntraJwtClaims",
+              "oneOfRoles": [ "EchoSrv.API.Basic" ]
+            },
+            {
+              "type": "RemoteCall",
+              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+              "method": "@(requestHttpMethod)"
+            }
+          ]
+        },
+        {
+          "methods": [ "post" ],
+          "path": "/privileged_features/*",
+          "actions": [
+            {
+              "type": "CheckEntraJwtClaims",
+              "OneOfRoles": [ "EchoSrv.API.Privileged" ]
+            },
+            {
+              "type": "RemoteCall",
+              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+              "method": "post"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "API protected by API Key",
+      "path": "/api/api_key",
+      "preRequestActions": [
+        {
+          "type": "CheckSubscription",
+          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY"
+        },
+        {
+          "type": "RunConsumerActions"
+        }
+      ],
       "routesGroups": [
         {
           "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
-          "description": "API with redirect",
-          "path": "/redirect",
+          "description": "Group's id allowed for the test subscription",
+          "path": "/basic_features",
           "routes": [
             {
-              "id": "d24a2d63-321d-4164-aaea-67bc1e3d87c3",
-              "methods": [ "post" ],
-              "path": "/wildcard/*",
+              "methods": [ "get", "post" ],
+              "path": "/*",
               "actions": [
                 {
-                  "type": "CheckEntraJwtClaims",
-                  "oneOfRoles": [ "EchoSrv.Read.All" ],
-                  "cleanup": true
-                },
-                {
                   "type": "RemoteCall",
-                  // In ComponentTests protectedEchoPath is set by appsettings json
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
                   "method": "@(requestHttpMethod)"
                 }
@@ -107,17 +90,12 @@
           ]
         },
         {
-          "description": "Rote group that is not allowed by the configured roles",
+          "description": "Group's id is not allowed",
           "routes": [
             {
-              "id": "efa366f9-d47a-4f5f-85be-c2192a95edfa",
-              "methods": [ "post" ],
-              "path": "/notallowed/wildcard/*",
+              "methods": [ "get", "post" ],
+              "path": "/privileged_features/*",
               "actions": [
-                {
-                  "type": "CheckEntraJwtClaims",
-                  "OneOfRoles": [ "EchoSrv.Write.All" ]
-                },
                 {
                   "type": "RemoteCall",
                   "path": "$(protectedEchoPath)/@(requestRemainingPath)",
@@ -131,16 +109,14 @@
     },
     {
       "description": "Returns static content from blob or disk",
-      "path": "/static_content",
       "routes": [
         {
           "methods": [ "get" ],
-          "path": "/*",
+          "path": "/ui/*",
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "path": "@(requestRemainingPath)",
-              "notFoundMessage": "This is wrong file url"
+              "path": "@(requestRemainingPath)"
             }
           ]
         }

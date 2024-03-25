@@ -33,9 +33,9 @@ Upload-Test "Echo" `
 Upload-Test "Gateway_ApiKey" `
             $deploymentResults.gateway.appServiceName `
             $deploymentResults.gateway.hostEndpoint `
-            "/private_api_key/redirect/wildcard/" 
+            "/api/api_key/basic_features/" 
 
-Upload-Test "Gateway_OAuth" `
+Upload-Test "Gateway_EntraJwt" `
             $deploymentResults.gateway.appServiceName `
             $deploymentResults.gateway.hostEndpoint `
-            "/private_oauth/redirect/wildcard/" 
+            "/api/jwt/basic_features/" 

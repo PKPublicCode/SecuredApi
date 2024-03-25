@@ -29,7 +29,7 @@ public class StaticContentGatewayTests: TestsBase
     [Theory]
     [InlineData(PublicContent.WelcomeHtml.Path, PublicContent.WelcomeHtml.Content)]
     [InlineData(PublicContent.WildcardHelloTxt.Path, PublicContent.WildcardHelloTxt.Content)]
-    public async Task WildcardPath_ExistingContent_StatusOk(string path, string expectedContent)
+    public async Task UiPath_ExistingContent_StatusOk(string path, string expectedContent)
     {
         Request.SetGet()
             .SetRelativePath($"{PublicStaticContent}{path}");
@@ -42,7 +42,7 @@ public class StaticContentGatewayTests: TestsBase
     }
 
     [Fact]
-    public async Task WildcardPath_NotExistingContent_NotFound()
+    public async Task UiPath_NotExistingContent_NotFound()
     {
         Request.SetGet()
             .SetRelativePath($"{PublicStaticContent}/blablabla.html");

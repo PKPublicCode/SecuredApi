@@ -32,23 +32,22 @@ public static partial class Constants
 
     public static class RoutePaths
     {
-        public const string PrivateApiKeyRedirectWildcard = "/private_api_key/redirect/wildcard";
-        public const string PrivateApiKeyNotAllowedWildcard = "/private_api_key/notallowed/wildcard";
-        public const string PrivateOAuthRedirectWildcard = "/private_oauth/redirect/wildcard/delay";
-        public const string PrivateOAuthNotAllowedWildcard = "/private_oauth/notallowed/wildcard";
-        public const string PublicStaticContent = "/static_content";
+        public const string ApiKeyBasicFeatures = "/api/api_key/basic_features/delay";
+        public const string ApiKeyPriviligedFeatures = "/api/api_key/privileged_features/delay";
+        public const string ApiEntraJwtBasicFeatures = "/api/jwt/basic_features/delay";
+        public const string ApiEntraJwtPreviligedFeatures = "/api/jwt/privileged_features/delay";
+        public const string PublicStaticContent = "/ui";
     }
 
     public static class InlineContent
     {
         public const string EchoDelay = "This is Echo!\n V0.0001\n, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\n";
-        public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string NotAuthorized = "Not Authorized";
         public const string AccessDenied = "Access Denied";
-        public const string StaticFileNotFound = "This is wrong file url";
+        public const string StaticFileNotFound = "File Not Found";
     }
 
-    public const string OAuthHeaderPrefix = "Bearer ";
+    public const string JwtHeaderPrefix = "Bearer ";
 
     public static class PublicContent
     {
