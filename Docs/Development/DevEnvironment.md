@@ -29,5 +29,5 @@ brew install bicep
 ```
 
 #### Docker
-According to your choice
+App of your choice
 

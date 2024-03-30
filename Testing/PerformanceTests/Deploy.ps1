@@ -51,5 +51,17 @@ if ($null -ne $result.Outputs) {
     $global:deploymentResults = $output
 
     $global:deploymentResults | ConvertTo-Json -Depth 10
+
+    "
+Copy-paste following to your .bash_profile:
+export SECAPI_IT_GW__Subscriptions__Keys__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.subscriptionKeys.url)`"
+export SECAPI_IT_GW__Subscriptions__Consumers__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.consumers.url)`"
+export SECAPI_IT_GW__RoutingEngineManager__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.configuration.url)`"
+export SECAPI_IT_GW__StaticFilesProvider__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.staticContent.url)`"
+
+export SRV_URL_PATH=`"/api/jwt/basic_features/delay`"
+export SRV_URL=`"$($output.gateway.hostEndpoint)`"
+    "
+
 }
 
