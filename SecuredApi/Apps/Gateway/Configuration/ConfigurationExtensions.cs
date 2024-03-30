@@ -15,15 +15,16 @@
 using Microsoft.Extensions.Configuration;
 
 namespace SecuredApi.Apps.Gateway.Configuration;
+
 public static class ConfigurationExtensions
 {
-    public static IConfigurationSection GetRequiredSection(this IConfigurationSection config, string name)
+    public static T GetRequired<T>(this IConfigurationSection cfg)
+        where T: class
     {
-        var result = config.GetSection(name);
-
-        if (!result.Exists())
+        var result = cfg.Get<T>();
+        if (result == default)
         {
-            throw new ConfigurationException($"Required section {config.Path}:{name} is not configured");
+            throw new ConfigurationException("Not configured: " + cfg.Path);
         }
         return result;
     }

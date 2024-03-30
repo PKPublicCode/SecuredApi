@@ -15,20 +15,24 @@
 using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
+using SecuredApi.Logic.Routing.Actions.OAuth;
+using SecuredApi.Logic.Routing;
+using SecuredApi.Logic.Routing.Actions;
 
 namespace SecuredApi.Apps.Gateway.Actions;
 
 public static class ActionFactoryBuilderExtensions
 {
-    public static ActionFactoryBuilder CreateActionFactoryBuilder(this IServiceCollection srv) => new(srv);
-
     public static IServiceCollection AddActionFactory(this IServiceCollection srv)
     {
         return srv.CreateDefaultActionsFactory()
-                .ConfigureActionFactory();
+                .ConfigureActionFactory()
+                .AddSingleton<IActionFactory, ActionFactory>(); ;
     }
 
-    public static ActionFactoryBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
+    private static ActionsBuilder CreateActionFactoryBuilder(this IServiceCollection srv) => new(srv);
+
+    private static ActionsBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
     {
         return srv.CreateActionFactoryBuilder()
             .AddAction<RemoteCallAction, RemoteCallActionSettings>("RemoteCall")
@@ -43,6 +47,8 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
             .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
             .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
+            .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
+            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
             ;
     } 
 }

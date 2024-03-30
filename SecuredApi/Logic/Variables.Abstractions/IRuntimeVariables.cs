@@ -17,5 +17,6 @@ namespace SecuredApi.Logic.Variables;
 public interface IRuntimeVariables: IVariables<object>
 {
     void SetVariable(string name, object value);
+    void RemoveVariable(string name);
 }
 

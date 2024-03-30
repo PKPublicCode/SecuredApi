@@ -25,7 +25,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Apps.Gateway.Actions;
 using SecuredApi.Apps.Gateway.Routing;
 using SecuredApi.Apps.Gateway.Configuration;
-using SecuredApi.Logic.Subscriptions;
+using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 
 namespace SecuredApi.Apps.Gateway;

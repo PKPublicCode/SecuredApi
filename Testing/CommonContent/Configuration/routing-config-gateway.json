@@ -1,0 +1,133 @@
+﻿{
+  // Important!!!!
+  // This config is used for Integration and Performance tests.
+  // Be careful with deleting and updating it.
+  "preRequestActions": [
+  ],
+  "onRequestErrorActions": [
+    {
+      "type": "SetResponseHeader",
+      "name": "X-COMMON-ON-ERROR-HEADER",
+      "value": "Gateway Rejected Your Call"
+    }
+  ],
+  "onRequestSuccessActions": [
+  ],
+  "routesGroups": [
+    {
+      "description": "API protected by App Registration roles",
+      "path": "/api/jwt",
+      "preRequestActions": [
+        {
+          "type": "CheckEntraJwt",
+          "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
+          "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
+          "keepData": true
+        }
+      ],
+      "routes": [
+        {
+          "methods": [ "post" ],
+          "path": "/basic_features/*",
+          "actions": [
+            {
+              "type": "CheckEntraJwtClaims",
+              "oneOfRoles": [ "EchoSrv.API.Basic" ]
+            },
+            {
+              "type": "RemoteCall",
+              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+              "method": "@(requestHttpMethod)"
+            }
+          ]
+        },
+        {
+          "methods": [ "post" ],
+          "path": "/privileged_features/*",
+          "actions": [
+            {
+              "type": "CheckEntraJwtClaims",
+              "OneOfRoles": [ "EchoSrv.API.Privileged" ]
+            },
+            {
+              "type": "RemoteCall",
+              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+              "method": "post"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "API protected by API Key",
+      "path": "/api/api_key",
+      "preRequestActions": [
+        {
+          "type": "CheckSubscription",
+          "subscriptionKeyHeaderName": "X-SUBSCRIPTION-KEY"
+        },
+        {
+          "type": "RunConsumerActions"
+        }
+      ],
+      "routesGroups": [
+        {
+          "id": "caa6ca7b-1032-4370-b236-d7fa9578e8f7",
+          "description": "Group's id allowed for the test subscription",
+          "path": "/basic_features",
+          "routes": [
+            {
+              "methods": [ "get", "post" ],
+              "path": "/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "method": "@(requestHttpMethod)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "description": "Group's id is not allowed",
+          "routes": [
+            {
+              "methods": [ "get", "post" ],
+              "path": "/privileged_features/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "method": "post"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Returns static content from blob or disk",
+      "routes": [
+        {
+          "methods": [ "get" ],
+          "path": "/ui/*",
+          "actions": [
+            {
+              "type": "ReturnStaticFile",
+              "path": "@(requestRemainingPath)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routeNotFoundActions": [
+    {
+      "type": "SetResponse",
+      "httpCode": 404,
+      "body": "Gateway route not found"
+    }
+  ]
+}

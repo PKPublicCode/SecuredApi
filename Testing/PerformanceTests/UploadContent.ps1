@@ -1,5 +1,4 @@
 $AccountName = $deploymentResults.configStorageName
-$rgName = $deploymentResults.sharedRgName
 
 $context = New-AzStorageContext -StorageAccountName $AccountName
 
@@ -17,25 +16,30 @@ function Upload-Blob([string]$filePath, [string]$containerName, [string]$blobNam
 }
 
 function Upload-Folder ([string]$folder, [string]$container) {
-  $files = Get-ChildItem $folder -File 
+  $basePathLen = "$(Resolve-Path $folder)".Length + 1
+  $files = Get-ChildItem $folder -File -Recurse
   foreach($file in $files) {
-    Upload-Blob $file.FullName $container
+    $blobName = $file.FullName.Substring($basePathLen)
+    Upload-Blob $file.FullName $container $blobName
   }
 }
 
-$componentTestFolder = './../../SecuredApi/ComponentTests/ComponentTests.Gateway/TestEnvironment'
+$contentBasePath = './../CommonContent'
 
-Upload-Folder "$($componentTestFolder)/Subscriptions/Keys" `
+Upload-Folder "$($contentBasePath)/StaticFiles" `
+            $deploymentResults.gateway.blobs.staticContent.name
+
+Upload-Folder "$($contentBasePath)/Subscriptions/Keys" `
             $deploymentResults.gateway.blobs.subscriptionKeys.name
 
-Upload-Folder "$($componentTestFolder)/Subscriptions/Consumers" `
+Upload-Folder "$($contentBasePath)/Subscriptions/Consumers" `
             $deploymentResults.gateway.blobs.consumers.name
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config-delay.json" ` `
+Upload-Blob "$($contentBasePath)/Configuration/routing-config-echo.json" ` `
                 $deploymentResults.echo.blobs.configuration.name `
                 "routing-config.json"
 
-Upload-Blob "$($componentTestFolder)/Configuration/routing-config-subscriptions.json" `
+Upload-Blob "$($contentBasePath)/Configuration/routing-config-gateway.json" `
                 $deploymentResults.gateway.blobs.configuration.name `
                 "routing-config.json"
 

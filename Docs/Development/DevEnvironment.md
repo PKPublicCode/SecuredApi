@@ -1,6 +1,6 @@
 WIP!!!!
 
-# Tools and Depencies
+# Tools and Decencies
 Below tools user for development and build
 #### Powershell
 ``` 
@@ -10,7 +10,7 @@ pwsh #test run
 Required modules
 ```
 Install-Module -Name Az -Repository PSGallery -Forces
-Install-Module AzTable
+Install-Module -Name MSAL.PS
 ```
 #### Jmeter
 Install:
@@ -29,4 +29,5 @@ brew install bicep
 ```
 
 #### Docker
-According to your choice
+App of your choice
+

@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Routing.Actions.Basic;
-using SecuredApi.Logic.Subscriptions;
+using SecuredApi.Logic.Auth.Subscriptions;
 using Microsoft.Extensions.Logging;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;

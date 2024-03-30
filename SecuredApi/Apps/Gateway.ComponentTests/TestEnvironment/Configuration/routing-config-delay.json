@@ -1,0 +1,37 @@
+{
+  "preRequestActions": [
+  ],
+  "onRequestErrorActions": [
+  ],
+  "onRequestSuccessActions": [
+  ],
+  "routesGroups": [
+    {
+      "description": "Echo responses",
+      "routes": [
+        {
+          "methods": [ "get" ],
+          "path": "/echo/*",
+          "actions": [
+            {
+              "type": "Delay",
+              "milliseconds": 300
+            },
+            {
+              "type": "SetResponse",
+              "httpCode": 200,
+              "body": "This is Echo!\n V0.0001\n, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\n"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routeNotFoundActions": [
+    {
+      "type": "SetRequestInfoToResponse",
+      "httpCode": 404,
+      "HeadLine": "Route not found"
+    }
+  ]
+}

@@ -1,9 +1,11 @@
 [CmdletBinding()]
 param (
     [switch] $Force = $false
-    , $dockerTag="latest"
-    , $AppPlanSku="S1" #use P0V3 for better performance
-    , $GatewayInstanceNum=1
+    , [ValidateSet("lates", "rc")]
+    [string] $dockerTag = "latest"
+    , [ValidateSet("S1", "P0V3", "P1V3")]
+    [string] $AppPlanSku = "S1"
+    , $GatewayInstanceNum = 1
 )
 
 $infraCommonNameEnding = $env:SECURED_API_NAME_ENDING
@@ -33,12 +35,13 @@ $result = New-AzSubscriptionDeployment `
     -commonNameEnding $infraCommonNameEnding `
     -dockerTag "$($dockerTag)" `
     -appPlanSku $AppPlanSku `
-    -gatewayInstanceNum $GatewayInstanceNum
+    -gatewayInstanceNum $GatewayInstanceNum `
+    -entraAudience $env:SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenAudience 
     #-Whatif
 
 $global:debugDeploymentResult = $result
 
-if ($result.Outputs -ne $null) {
+if ($null -ne $result.Outputs) {
     # convert ugly presentation of outputs to the object
     $output = @{}
     foreach ($h in $result.Outputs.GetEnumerator()) {
@@ -48,5 +51,17 @@ if ($result.Outputs -ne $null) {
     $global:deploymentResults = $output
 
     $global:deploymentResults | ConvertTo-Json -Depth 10
+
+    "
+Copy-paste following to your .bash_profile:
+export SECAPI_IT_GW__Subscriptions__Keys__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.subscriptionKeys.url)`"
+export SECAPI_IT_GW__Subscriptions__Consumers__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.consumers.url)`"
+export SECAPI_IT_GW__RoutingEngineManager__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.configuration.url)`"
+export SECAPI_IT_GW__StaticFilesProvider__FileAccess__Rbac__Uri=`"$($output.gateway.blobs.staticContent.url)`"
+
+export SRV_URL_PATH=`"/api/jwt/basic_features/delay`"
+export SRV_URL=`"$($output.gateway.hostEndpoint)`"
+    "
+
 }
 

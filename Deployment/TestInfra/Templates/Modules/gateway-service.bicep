@@ -16,6 +16,8 @@ param appServiceConfiguration object = {
 param configStorageName string
 param configStorageRG string
 param configContainer string = makeContainerName('config', bundleName)
+param configureStaticContent bool = false
+param staticContentContainer string = makeContainerName('static', bundleName)
 
 param configureSubscriptions bool = false
 param subscriptionsContainer string = makeContainerName('subscriptions', bundleName)
@@ -78,6 +80,11 @@ var _routingSettings = {
   RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
 }
 
+var _staticContentSettings = !configureStaticContent ? _emptySettings : {
+  StaticFilesProvider__FileAccess__Type: 'AzureStorage'
+  StaticFilesProvider__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
+}
+
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
   name: webSiteName
   location: location
@@ -102,6 +109,7 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
       _subscriptionSettings,
       _consumersSettings,
       _routingSettings,
+      _staticContentSettings,
       appServiceConfiguration,
       { // Required settings
         APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
@@ -161,7 +169,7 @@ module storageContent 'storage-content.bicep' = {
   params: {
     storageName: configStorageName
     containers: union(
-      [configContainer],
+      [configContainer, staticContentContainer],
       configureConsumers ? [consumersContainer] : [],
       configureSubscriptions ? [subscriptionKeysContainer, subscriptionsContainer] : []
     )
@@ -181,6 +189,10 @@ output blobs object = {
   configuration: {
     name: configContainer
     url: storageContent.outputs.blobUrls[configContainer]
+  }
+  staticContent: {
+    name: staticContentContainer
+    url: storageContent.outputs.blobUrls[staticContentContainer]
   }
   subscriptions: !configureSubscriptions ? null : {
     name: subscriptionsContainer

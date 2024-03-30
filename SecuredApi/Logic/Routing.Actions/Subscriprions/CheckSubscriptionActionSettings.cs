@@ -18,6 +18,6 @@ public record CheckSubscriptionActionSettings
 (
     string SubscriptionKeyHeaderName,
     bool SuppressHeader = true,
-    string ErrorNotAuthorizedBody = "",
-    string ErrorAccessDeniedBody = ""
+    string ErrorNotAuthorizedBody = "Not Authorized",
+    string ErrorAccessDeniedBody = "Access Denied"
 );

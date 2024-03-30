@@ -12,22 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using SecuredApi.Logic.Routing;
 
-namespace SecuredApi.Apps.Gateway.Engine
-{
-    public class RoutingMiddleware
-    {
-        public RoutingMiddleware(RequestDelegate next)
-        {
-        }
+namespace SecuredApi.Apps.Gateway.Engine;
 
-        public async Task Invoke(HttpContext context, IRouter router)
-        {
-            await router.ProcessAsync(context);
-        }
+public class RoutingMiddleware
+{
+    public RoutingMiddleware(RequestDelegate next)
+    {
+    }
+
+    public async Task Invoke(HttpContext context, IRouter router)
+    {
+        await router.ProcessAsync(context);
     }
 }

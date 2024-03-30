@@ -19,6 +19,6 @@ namespace SecuredApi.Logic.Routing.Actions.Basic;
 public class ReturnStaticFileActionSettings
 {
     public RuntimeExpression Path { get; init; }
-    public string? NotFoundMessage { get; init; }
+    public string? NotFoundMessage { get; init; } = "File Not Found";
     public bool AutoDiscoverMimeType { get; init; } = true;
 }
