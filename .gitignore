@@ -391,5 +391,8 @@ FodyWeavers.xsd
 # JMeter temporary files
 *.jtl
 
-#MacOS system files
+# MacOS system files
 .DS_Store
+
+# DrawIO files
+*.drawio.bkp

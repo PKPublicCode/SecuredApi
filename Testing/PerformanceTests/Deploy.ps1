@@ -4,7 +4,7 @@ param (
     , [ValidateSet("lates", "rc")]
     [string] $dockerTag = "latest"
     , [ValidateSet("S1", "P0V3", "P1V3")]
-    [string] $AppPlanSku = "S1"
+    [string] $AppPlanSku = "P0V3"
     , $GatewayInstanceNum = 1
 )
 
