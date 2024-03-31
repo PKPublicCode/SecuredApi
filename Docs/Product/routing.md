@@ -8,7 +8,7 @@ There are three key elements
 * Route
 * Action
 
-github.com/PKPublicCode/SecuredApi/blob/d2c115f709bf75cc6fc025ae56d7403c5baf1ba1/Testing/CommonContent/Configuration/routing-config-gateway.json#L7
+https://github.com/PKPublicCode/SecuredApi/blob/d2c115f709bf75cc6fc025ae56d7403c5baf1ba1/Testing/CommonContent/Configuration/routing-config-gateway.json#L7
 
 ## Actions
 Actions are executed one by one in order described in each section (see below). Execution order of sections corresponds to the parentheses: 
