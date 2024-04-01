@@ -2,7 +2,7 @@
 
 Simple (in terms of usage), cheap (no hard dependency on expensive services and solutions), PaaS compatible and code-first friendly gateway solution to offload routine web api operation for solutions with low and medium loaded web applications.
 
-__Currently, main focus is compatibility on Azure. Compatibility with other clouds and 3-rd party services will be coming later.__
+__Currently, main focus is compatibility with Azure. Compatibility with other clouds and 3-rd party services will be coming later.__
 
 ![](./Docs/Img/birdseye.png)
 
