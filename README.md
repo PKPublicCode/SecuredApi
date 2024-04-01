@@ -19,7 +19,7 @@ The main scenario for this solution is an API Gateway with a rich configuration 
 
 As a side scenario, solution can be useful to host mock and stub services for integration testing, and hosting static content on the Azure Storage Accounts.
 
-SecuredAPI is available as a docker [images](https://hub.docker.com/repository/docker/pkruglov/securedapi.gateway) and routing configuration is decoupled from the build. This approach makes it easy to use with Azure Application Services and Kubernetes solutions, where configuration can be updated aside of deployment process.
+SecuredAPI is available as a docker [images](https://hub.docker.com/repository/docker/pkruglov/securedapi.gateway) and (./Docs/Product/GlobalVariablesConfiguration.md) [routing configuration](./Docs/Product/RoutingConfiguration.md) decoupled from the build. This approach makes it easy to use with Azure Application Services and Kubernetes solutions, where [configuration](./Docs/Product/Configuration.md) can be updated aside of deployment process.
 
 However, service can be configured to read routing configuration from the filesystem, and application can build as own docker image based on the official SecuredAPI build to make all configuration part of the image. Obviously, own binaries with appropriate configuration can be built from source the code.
 
@@ -37,5 +37,6 @@ License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/maste
 
 ### Documentation
 [Performance](./Docs/Product/Performance.md)
+
 [Configuration](./Docs/Product/Configuration.md)
 
