@@ -31,7 +31,7 @@ The overall config structure can be depicted as following:
 ## Routes Group and root element
 Routes Group allows you to group your routes with commonalities, like common beginning of the url path, that have common auth rules, required to run same actions, etc. JSON object has following structure:
 
-```json
+```JSON5
 {
   "description": "Free text", // Optional. User friendly description for the group, for maintenance and troubleshooting purposes
   "id": "unique_guid", // Optional, used by api key (subscriptions) authorization, or for troubleshooting
@@ -56,7 +56,7 @@ Root element has same format as ```RoutesGroup``` element with few restrictions 
 * It can't have ```routes``` property set. Only ```routesGroups``` property can be used to configure nested routes
 * It has property ```routeNotFoundActions``` to configure actions if request url was not found in routing configuration.
 
-```json
+```JSON5
 {
   "id": "unique_guid", // Optional, used by api key (subscriptions) authorization, or for troubleshooting
   "path": "/api", // Optional, common url path beginning
@@ -81,7 +81,7 @@ Root element has same format as ```RoutesGroup``` element with few restrictions 
 ## Route
 Route defines the list of actions that will be executed for the specific url path and http method.
 
-```JSON
+```JSON5
 {
   "description": "Free text", // Optional. User friendly description for the route, for maintenance and troubleshooting purposes
   "id": "unique guid", // Optional, used for troubleshooting purposes
@@ -98,7 +98,7 @@ Pair of path and http method is a identifier of the route. SecuredAPI allows to 
 
 Consider below example:
 
-```json
+```JSON5
 { 
   "RoutesGroups": [ 
     {
