@@ -9,7 +9,7 @@ There are three key elements in the routing configuration
 * Action
 
 The overall config structure can be depicted as following: 
-```json
+```JSON5
 { // Root RoutesGroup
   "RoutesGroups": [ // Groups routes with commonalities like url path, auth rules, etc
     {
