@@ -10,10 +10,10 @@ The main scenario for this solution is an API Gateway with a rich configuration 
 * Configure authentication and authorization rules using:
     * API Keys and customer subscriptions
     * JWT tokens and and claims (Azure Entra Only)
-* Add and\or remove HTTP headers in request before sending to backend
+* Add and\or remove HTTP headers in request before sending to the downstream services
 * Add and\or remove HTTP headers in response before returning it to client
 * Restrict clients by inbound IP address
-* Return content, stored as blobs or as files on file system
+* Serve content, stored as blobs or as files on file system
 * Return content defined in configuration inline
 * Configuring any of above for individual customers (API Keys authentication only).
 
@@ -37,5 +37,5 @@ License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/maste
 
 ### Documentation
 [Performance](./Docs/Product/Performance.md)
-[Development](./Docs/Development)
+[Configuration](./Docs/Product/Configuration.md)
 

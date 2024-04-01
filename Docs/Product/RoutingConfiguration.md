@@ -148,9 +148,6 @@ However routes for below requests will not be found:
 
 * ```[put] /api/resources/resource_a/``` - because route for Resource A url defined only for get and post methods
 
-
-https://github.com/PKPublicCode/SecuredApi/blob/d2c115f709bf75cc6fc025ae56d7403c5baf1ba1/Testing/CommonContent/Configuration/routing-config-gateway.json#L7
-
 ## Actions
 Actions describe transformation, validation and other procedures that executed for the route or group of routes. They are executed one by one in order described in section. Execution order of sections corresponds to the parentheses: 
 
@@ -212,20 +209,22 @@ This example describes behaviour if gateway receives http call ```[get] /api/res
 * Request received from client is transformed by adding "X-REQUEST-HEADER"
 * Downstream service called with ```[get] https://my-private-server/resource_a```
 * Response headers are stripped and "X-MY-PRIVATE-SERVER-HEADER-1", "X-MY-PRIVATE-SERVER-HEADER-1" are removed
-* "X-RESPONSE-HEADER" is added to response
+* Header with name "X-RESPONSE-HEADER" is added to response
 * Request returned to the client
 
 Find all currently supported actions [here](./actions.md)
 
 ## Variables
-Variables allow to parametrize routing configuration. There are two types of variables: Global and Runtime. All variables are case sensitive. 
+Variables allow to parametrize routing configuration. There are two types of variables: Global and Runtime. All variable names are case sensitive and has to be alpha-numeric string started with letter.
 
 ### Global variables
 Global variables are immutable parameters defined outside of the routing configuration by the gateway owner loaded before parsing and initialization of routing configuration. Main purpose is to use same routing configuration file for different deployment environments.
 
-Format: ```$(variableName)```. variableName has to be alpha-numeric string started with letter.
+Format: ```$(variableName)```. If variable is not found during routing configuration parsing and initialization, error is thrown and whole configuration is ignored.
 
 Global variables can be used as part of any string value of the routing config file and substituted by the appropriate value during configuration initialization process, that makes zero performance impact during the executing request.
+
+How to configure global variables see [here](./GlobalVariablesConfiguration.md)
 
 ### Runtime variables
 Runtime variables are set by the routing engine and actions during request execution. In contrast to global variables, runtime variables scope is request, and values depend on specific request, actions that were executed and their results. Only action properties with type ```RuntimeExpression``` allow using runtime variables. In this case variables substituted by values just before action execution.
@@ -243,7 +242,7 @@ In below example, incoming request will be passed to the service defined by appl
     "Actions": [
       {
         "type": "RemoteCall",
-        "path": "$(protectedEchoPath)/@(requestRemainingPath)", 
+        "path": "$(remoteServerPath)/@(requestRemainingPath)", 
         "method": "@(requestHttpMethod)"
       }
     ]
@@ -251,7 +250,11 @@ In below example, incoming request will be passed to the service defined by appl
 ]
 ```
 
-So, if global variable defined as ```"protectedEchoPath": "http://myserver/api"```json5, and client sends request ```[get] /resource_a/resource_x/resource_y```, then outgoing request according to above configuration will be ```[get] http://myserver/api/resource_x/resource_y```
+So, if global variable defined as ```"remoteServerPath": "http://myserver/api"```json5, and client sends request ```[get] /resource_a/resource_x/resource_y```, then outgoing request according to above configuration will be ```[get] http://myserver/api/resource_x/resource_y```
 
+# Examples
+Gateway [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests. Configuration defines protection of downstream api with Entra Jwt Token validation (/api/jwt/ path), with api key (api/api_key path), and serves static files (/ui/ path).
 
-See routing [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests for more details.
+Echo service [configuration](../../Testing/CommonContent/Configuration/routing-config-echo.json). Simple service that responds inline string in HTTP body after 300ms delay.
+
+Few [configurations](../../SecuredApi/Apps/Gateway.ComponentTests/TestEnvironment/Configuration/) used for component testing
