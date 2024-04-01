@@ -1,5 +1,6 @@
-#Product performance
-Below experiments intendent to proof technology choice and justificate possibility to use application on production environment. Tests on cheapest environments will come later. Experimennts explan latency difference between calling app directly and calling via Gateway, but not real performannce\load of the solution.
+# Product performance
+Below experiments intended to proof technology choice and justify possibility to use application on production environment. Tests on cheapest environments will come later. Experiments explain latency difference between calling app directly and calling via Gateway, but not real performance\load of the solution.
+
 ## Experiment 1
 Measure cheap pre-production and production-grade configuration. Key parts:
 
@@ -17,7 +18,7 @@ Plays role of client. It calls endpoint with ~1kb payload. URL path ending is au
 
 ### Results:
 
-Scenario A: Jmeter calls via HTTPs Echo Service directly. Numbers are used as a performance base line, and overal measure of whole infrastructure overhead. Hosted on 1 instance
+Scenario A: Jmeter calls via HTTPs Echo Service directly. Numbers are used as a performance base line, and overall measure of whole infrastructure overhead. Hosted on 1 instance
 
 #### Api key authentication:
 Scenario B: Jmeter execute HTTPs calls via Gateway. Gateway is hosted on 3 instances

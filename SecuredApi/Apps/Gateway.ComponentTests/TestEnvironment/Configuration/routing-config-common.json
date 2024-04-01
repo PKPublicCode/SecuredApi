@@ -42,21 +42,6 @@
             },
             {
               "methods": [ "get" ],
-              "path": "/delay",
-              "actions": [
-                {
-                  "type": "Delay",
-                  "milliseconds": 300
-                },
-                {
-                  "type": "SetResponse",
-                  "httpCode": 200,
-                  "body": "Public delay route"
-                }
-              ]
-            },
-            {
-              "methods": [ "get" ],
               "path": "/wildcard/*",
               "actions": [
                 {

@@ -1,10 +1,4 @@
 {
-  "preRequestActions": [
-  ],
-  "onRequestErrorActions": [
-  ],
-  "onRequestSuccessActions": [
-  ],
   "routesGroups": [
     {
       "description": "Echo responses",
