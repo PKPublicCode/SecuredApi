@@ -1,12 +1,13 @@
 # Routing configuration
 
-Routing configuration is defined in json format with enabled comments.
+Routing configuration is defined in json format. Comments are allowed. Max depth is 64 (default for .net).
 
 # Main concepts
 There are three key elements in the routing configuration
-* Routes Group
-* Route
-* Action
+* [Routes Group](#routes-group-and-root-element)
+* [Route](#route)
+* [Action](#actions)
+* [Variables](#variables)
 
 The overall config structure can be depicted as following: 
 ```JSON5
@@ -151,18 +152,106 @@ However routes for below requests will not be found:
 https://github.com/PKPublicCode/SecuredApi/blob/d2c115f709bf75cc6fc025ae56d7403c5baf1ba1/Testing/CommonContent/Configuration/routing-config-gateway.json#L7
 
 ## Actions
-Actions are executed one by one in order described in each section (see below). Execution order of sections corresponds to the parentheses: 
+Actions describe transformation, validation and other procedures that executed for the route or group of routes. They are executed one by one in order described in section. Execution order of sections corresponds to the parentheses: 
 
-preRequestActions executed as: parent -> nested level 1 -> nested level 2, etc; 
+[Root preRequestActions]->[Level 1 Routes Group preRequestActions]->[Level 2 Routes Group preRequestActions]->...->[Route's actions].
 
-onRequestErrorActions and onRequestSuccessActions executed in opposite order as: deepest route -> one level up -> two levels up -> ... -> parent
+After that onRequestErrorActions or onRequestSuccessActions are executed in reversed order:
+[Deepest routes group onRequestSuccessActions]->[One level up routes group onRequestSuccessActions]->...->[Root onRequestSuccessActions]
 
-# Variables
-Variable names are case insensitive
+Action has only one common required filed ```type```. This field defines specific action. Other fields can be optional or mandatory depending on the actual action.
 
-## Global variables
-Format ```$(variableName)``` - available globally during config parsing stage. If variable name is unknown - parsing is stopped and configuration considered as invalid
+Full list of available actions are under construction.
 
-## Runtime variables
-in some occasions runtime variables (variables that has scope of the request) can be used.
-Format ```@(variableName)```. Example is ```@(requestHttpMethod)```
+See below example.
+
+```json5
+{
+  /* ... */
+  "routesGroups":[
+    {
+      "path":"/api",
+      "preRequestActions":[
+        {
+          "type": "SetRequestHeader", //adds header into request before calling downstream service
+          "name": "X-REQUEST-HEADER",
+          "value": "Request came from SecuredAPI"
+        }
+      ],
+      "onRequestSuccessActions": [
+        {
+          "type": "SetResponseHeader", //adds header in case of successful call of downstream service
+          "name": "X-RESPONSE-HEADER",
+          "value": "This request processed with SecuredAPI"
+        },
+      ],
+      "routes": [ 
+        {
+          "description": "Requests for Resource A",
+          "path": "/resource_a/",
+          "methods": [ "get" ],
+          "Actions": [
+            {
+              "type": "RemoteCall", // calls protected service
+              "path": "https://my-private-server/resource_a",
+              "method": "get"
+            },
+            {
+              "type": "SuppressResponseHeaders", // removes below headers from the response before returning it to the client
+              "headers": [ "X-MY-PRIVATE-SERVER-HEADER-1", "X-MY-PRIVATE-SERVER-HEADER-1" ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+This example describes behaviour if gateway receives http call ```[get] /api/resource_a```:
+* Request received from client is transformed by adding "X-REQUEST-HEADER"
+* Downstream service called with ```[get] https://my-private-server/resource_a```
+* Response headers are stripped and "X-MY-PRIVATE-SERVER-HEADER-1", "X-MY-PRIVATE-SERVER-HEADER-1" are removed
+* "X-RESPONSE-HEADER" is added to response
+* Request returned to the client
+
+Find all currently supported actions [here](./actions.md)
+
+## Variables
+Variables allow to parametrize routing configuration. There are two types of variables: Global and Runtime. All variables are case sensitive. 
+
+### Global variables
+Global variables are immutable parameters defined outside of the routing configuration by the gateway owner loaded before parsing and initialization of routing configuration. Main purpose is to use same routing configuration file for different deployment environments.
+
+Format: ```$(variableName)```. variableName has to be alpha-numeric string started with letter.
+
+Global variables can be used as part of any string value of the routing config file and substituted by the appropriate value during configuration initialization process, that makes zero performance impact during the executing request.
+
+### Runtime variables
+Runtime variables are set by the routing engine and actions during request execution. In contrast to global variables, runtime variables scope is request, and values depend on specific request, actions that were executed and their results. Only action properties with type ```RuntimeExpression``` allow using runtime variables. In this case variables substituted by values just before action execution.
+
+Format: ```@(variableName)```. Runtime variables are not known and can't be validated during the parsing and initialization of routing configuration.  If variable is not set for this request, error will be thrown during the execution.
+
+In below example, incoming request will be passed to the service defined by application owner as ```protectedEchoPath``` and can be different for different environments. Method of outgoing request is ```httpRequestMethod``` that means the same as request method. ```requestRemainingPath``` is a url path that corresponds to the asterisk and is remaining part after removing ```/resource_a/``` in the beginning.
+
+```json5
+"Routes": [ 
+  {
+    "description": "Requests for Resource A",
+    "path": "/resource_a/*",
+    "methods": [ "get", "post" ],
+    "Actions": [
+      {
+        "type": "RemoteCall",
+        "path": "$(protectedEchoPath)/@(requestRemainingPath)", 
+        "method": "@(requestHttpMethod)"
+      }
+    ]
+  }
+]
+```
+
+So, if global variable defined as ```"protectedEchoPath": "http://myserver/api"```json5, and client sends request ```[get] /resource_a/resource_x/resource_y```, then outgoing request according to above configuration will be ```[get] http://myserver/api/resource_x/resource_y```
+
+
+See routing [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests for more details.
