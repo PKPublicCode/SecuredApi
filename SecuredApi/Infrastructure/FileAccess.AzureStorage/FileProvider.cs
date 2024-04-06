@@ -41,6 +41,7 @@ public class FileProvider<T> : IFileProvider<T>
             return new StreamResult(blob.Value.Content, blob.Value);
         }
         catch(Exception e)
+            when (e is not TaskCanceledException)
         {
             //Cutting corner. Need to differentiate exceptions for FileNotFound, AccessDenied, etc.
             throw new Logic.FileAccess.FileNotFoundException("Unable to access file", e);
