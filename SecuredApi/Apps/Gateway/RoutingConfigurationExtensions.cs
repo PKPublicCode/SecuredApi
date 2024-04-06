@@ -76,11 +76,10 @@ public static class RoutingConfigurationExtensions
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
         return srv.AddSingleton<IRouter, IRouterUpdater, Router>()
-
                 .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
                     srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
                         .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
-                        .ConfigureRequiredOption<RoutingEngineManagerCfg>(config, "Files")
+                        .ConfigureRequiredOption<RoutingConfigurationFilesCfg>(config, "Files")
                         .AddSingleton<IRoutingTableBuilderFactory, RoutingTableBuilderFactory<RoutingTableBuilder>>()
                         .ConfigureRoutingConfigurationJsonParser()
                         .AddActionFactory()

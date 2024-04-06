@@ -28,7 +28,7 @@ public class RoutingEngineManager: IRoutingEngineManager
     private readonly IRoutesParser _routesCfgParser;
     private readonly IGlobalVariablesStreamParser _variablesParser;
     private readonly IDefaultGlobalVariablesProvider _defaultGlobalVariables;
-    private readonly RoutingEngineManagerCfg _config;
+    private readonly RoutingConfigurationFilesCfg _config;
     private readonly IFileProvider _fileProvider;
 
     public RoutingEngineManager(IRouterUpdater routerUpdater,
@@ -38,7 +38,7 @@ public class RoutingEngineManager: IRoutingEngineManager
                                 IFileProvider<IRoutingEngineManager> fileProvider,
                                 ILogger<RoutingEngineManager> logger,
                                 IDefaultGlobalVariablesProvider defVariables,
-                                IOptions<RoutingEngineManagerCfg> config)
+                                IOptions<RoutingConfigurationFilesCfg> config)
     {
         _routerUpdater = routerUpdater;
         _variablesUpdater = variablesUpdater;

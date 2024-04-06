@@ -16,26 +16,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SecuredApi.Apps.Gateway.Engine;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace SecuredApi.Apps.Gateway;
 
 public static class RoutingEngineConfigurationExtensions
 {
-    public static IServiceCollection AddRoutingInitializer(this IServiceCollection services)
-    {
-        return services.AddHostedService<RoutingInitializer>();
-    }
-
-    public static IHostBuilder ConfigureRoutingInitializer(this IHostBuilder builder)
+    public static IHostBuilder UseRoutingConfigurationLoader(this IHostBuilder builder)
     {
         return builder.ConfigureServices(services =>
         {
-            services.AddRoutingInitializer();
+            services.AddRoutingConfigurationLoader();
         });
     }
 
     public static IApplicationBuilder UseRoutingMiddleware(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<RoutingMiddleware>();
+    }
+
+    public static IServiceCollection ConfigureRoutingConfigurationLoader(this IServiceCollection services, IConfiguration config)
+    {
+        return services.Configure<RoutingConfigurationLoaderCfg>(config.GetRequiredSection("RoutingEngineManager"));
+    }
+
+    private static IServiceCollection AddRoutingConfigurationLoader(this IServiceCollection services)
+    {
+        return services.AddHostedService<RoutingConfigurationLoader>();
     }
 }

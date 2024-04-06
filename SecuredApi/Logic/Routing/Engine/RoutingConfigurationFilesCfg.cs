@@ -12,13 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System;
+namespace SecuredApi.Logic.Routing.Engine;
 
-namespace SecuredApi.Logic.Routing.Engine
+public class RoutingConfigurationFilesCfg
 {
-    public class RoutingEngineManagerCfg
-    {
-        public string RoutingCfgFileId { get; init; } = null!;
-        public string? GlobalCfgFileId { get; init; } = null;
-    }
+    public string RoutingCfgFileId { get; init; } = null!;
+    public string? GlobalCfgFileId { get; init; } = null;
 }
