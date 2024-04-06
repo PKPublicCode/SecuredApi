@@ -23,7 +23,6 @@ public class RoutingConfigurationLoader : IHostedService
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private CancellationTokenSource? _stop;
     private Task? _backgroundJob;
-    private readonly int _stoppingTimeout = 20_000;
 
     //IHostedService is singleton, so unable to inject transient services dirrectly
     //That's why scope service factory is injected. Then services registered with any scope can be used
@@ -50,7 +49,7 @@ public class RoutingConfigurationLoader : IHostedService
         _stop?.Cancel();
         try
         {
-            await (_backgroundJob?.WaitAsync(TimeSpan.FromMilliseconds(_stoppingTimeout), ct)
+            await (_backgroundJob?.WaitAsync(TimeSpan.FromMilliseconds(timeout), ct)
             ?? Task.CompletedTask);
         }
         catch(Exception e)
