@@ -30,12 +30,12 @@ public class CheckIPsActionSettings
     /// <summary>
     /// Status code returned in case of failure
     /// </summary>
-    /// <default>403</default>
+    /// <value>403</value>
     public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
 
     /// <summary>
     /// Response body returned in case of failure.
     /// </summary>
-    /// <default>Empty string</default>
+    /// <value>Empty string</value>
     public string NoAccessResponseBody { get; init; } = string.Empty;
 }

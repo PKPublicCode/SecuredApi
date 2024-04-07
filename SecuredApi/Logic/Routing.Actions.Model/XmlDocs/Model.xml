@@ -19,13 +19,13 @@
             <summary>
             Status code returned in case of failure
             </summary>
-            <default>403</default>
+            <value>403</value>
         </member>
         <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.CheckIPsActionSettings.NoAccessResponseBody">
             <summary>
             Response body returned in case of failure.
             </summary>
-            <default>Empty string</default>
+            <value>Empty string</value>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.DelayActionSettings">
             <summary>
@@ -46,6 +46,34 @@
             <summary>
             Time to wait
             </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Subscriptions.CheckSubscriptionActionSettings">
+            <summary>
+            Verify if subscription key is valid and allowed for this route
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Subscriptions.CheckSubscriptionActionSettings.SubscriptionKeyHeaderName">
+            <summary>
+            Header name that bears subscription key
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Subscriptions.CheckSubscriptionActionSettings.SuppressHeader">
+            <summary>
+            Removes this header from the outgoing request
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Subscriptions.CheckSubscriptionActionSettings.ErrorNotAuthorizedBody">
+            <summary>
+            Customized body if key not valid
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Subscriptions.CheckSubscriptionActionSettings.ErrorAccessDeniedBody">
+            <summary>
+            Customized body if key is valid, but not allowed for this routes group
+            </summary>
+            <value>empty string</value>
         </member>
     </members>
 </doc>
