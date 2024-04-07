@@ -12,30 +12,25 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
-
 namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 /// <summary>
-/// Verifies inbound IP address
+/// Pauses processing of request for specified time interval
 /// </summary>
-/// <return>True if IP found in a specified white list. False otherwise</return>
-public class CheckIPsActionSettings
+/// <remarks>
+/// During the request this action waits for a specified time.
+/// Can be used to mimic load of the service(s).
+/// </remarks>
+/// <example>
+/// {
+///     "type":"delay"
+///     "Milliseconds": 300
+/// }
+/// </example>
+public class Delay
 {
     /// <summary>
-    /// Array of the allowed IPs
+    /// Time to wait
     /// </summary>
-    public HashSet<string> WhiteList { get; init; } = null!;
-
-    /// <summary>
-    /// Status code returned in case of failure
-    /// </summary>
-    /// <value>403</value>
-    public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
-
-    /// <summary>
-    /// Response body returned in case of failure.
-    /// </summary>
-    /// <value>Empty string</value>
-    public string NoAccessResponseBody { get; init; } = string.Empty;
+    public int Milliseconds { get; init; }
 }

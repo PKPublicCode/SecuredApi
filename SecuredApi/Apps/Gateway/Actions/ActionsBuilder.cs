@@ -30,10 +30,18 @@ public class ActionsBuilder
         _actions = new();
     }
 
+    //ToDo.0 Delete
     public ActionsBuilder AddAction<TAction, TSettings>(string name)
         where TAction : IAction
     {
         _actions[name] = MakeAction<TAction, TSettings>();
+        return this;
+    }
+
+    public ActionsBuilder AddAction<TAction, TSettings>()
+        where TAction : IAction
+    {
+        _actions[typeof(TSettings).Name] = MakeAction<TAction, TSettings>();
         return this;
     }
 

@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.OAuth;
+using SecuredApi.Logic.Routing.Actions.Model.Basic;
+using SecuredApi.Logic.Routing.Actions.Model.Subscriptions;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Actions;
 
@@ -40,12 +42,12 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
             .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
             .AddAction<SetRequestHeaderAction, SetHeaderActionSettings>("SetRequestHeader")
-            .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions")
-            .AddAction<DelayAction, DelayActionSettings>("Delay")
+            .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions") //ToDo.0 Can we make non-scoped
+            .AddAction<DelayAction, Delay>()
             .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponseActionSettings>("SetRequestInfoToResponse")
             .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
             .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
-            .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
+            .AddAction<CheckIPsAction, CheckIPs>()
             .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
             .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
             .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")

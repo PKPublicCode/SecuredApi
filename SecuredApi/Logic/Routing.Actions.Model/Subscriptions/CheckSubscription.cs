@@ -12,12 +12,12 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
+namespace SecuredApi.Logic.Routing.Actions.Model.Subscriptions;
 
 /// <summary>
 /// Verify if subscription key is valid and allowed for this route
 /// </summary>
-public class CheckSubscriptionActionSettings
+public class CheckSubscription
 {
     /// <summary>
     /// Header name that bears subscription key

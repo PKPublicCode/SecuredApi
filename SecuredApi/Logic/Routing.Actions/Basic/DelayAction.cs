@@ -12,13 +12,15 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+using SecuredApi.Logic.Routing.Actions.Model.Basic;
+
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class DelayAction : IAction
 {
     private readonly int _milliseconds;
 
-    public DelayAction(DelayActionSettings settings)
+    public DelayAction(Delay settings)
     {
         _milliseconds = settings.Milliseconds;
     }
