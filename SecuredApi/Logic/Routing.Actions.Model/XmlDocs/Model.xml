@@ -8,7 +8,12 @@
             <summary>
             Verifies inbound IP address
             </summary>
-            <return>True if IP found in a specified white list. False otherwise</return>
+            <remarks>
+            Inbound ip address is taken from the client HTTP request properties.
+            </remarks>
+            <return>
+            Secceeded if IP found in a specified white list. Fails otherwise otherwise
+            </return>
         </member>
         <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.CheckIPs.WhiteList">
             <summary>
@@ -29,10 +34,10 @@
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.Delay">
             <summary>
-            Pauses processing of request for specified time interval
+            Pauses processing of request for specified time interval.
             </summary>
             <remarks>
-            During the request this action waits for a specified time.
+            During the request this action waits for a specified time. No interaction with the client request or response happens.
             Can be used to mimic load of the service(s).
             </remarks>
             <example>
@@ -46,6 +51,83 @@
             <summary>
             Time to wait
             </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall">
+            <summary>
+            Makes outgoing http(s) call to downstream service and send current state of the client request.
+            Response of the service, including headers, status code and body is saved to the client response
+            </summary>
+            <return>
+            Fails only if timeout occured. Succeeds otherwise.
+            </return>
+            <example>
+            {
+              "type": "RemoteCall",
+              "path": "https://www.google.com/@(requestRemainingPath)",
+              "method": "get"
+              "timeout": 500
+            }
+            </example>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall.Path">
+            <summary>
+            Url of the downstream service. Allows using runtime variables
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall.Method">
+            <summary>
+            HTTP Method used to call downstream service
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall.Timeout">
+            <summary>
+            Timeout in milliseconds that used for outgoing http call.
+            If timeout occurs, gateway chain set as failed and status code set to 504 (Gateway timeout)
+            </summary>
+            <value>-1 (infinite)</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall.EnableRedirect">
+            <summary>
+            If true and remote service replies redirect code, action automatically calls redirected location
+            and write redirected call to the client response.
+            
+            If false, HTTP Redirect code received from remote server is not validated and is written to client response as is.
+            Client will be responsible to handle redirect response himself.
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.ReturnStaticFile">
+            <summary>
+            Returns static content (file) to the client.
+            </summary>
+            <remarks>
+            Files can be stored either on the file system or in the storage account.
+            See StaticFileProvider configuration
+            </remarks>
+            <return>
+            Fails if file not found. Set HTTP Code 404 to client response in this case
+            </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.ReturnStaticFile.Path">
+            <summary>
+            Relative path to the file.
+            </summary>
+            <remarks>
+            Allows using runtime variables
+            </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.ReturnStaticFile.NotFoundMessage">
+            <summary>
+            String that is written to the client response body if file wasn't found
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.ReturnStaticFile.AutoDiscoverMimeType">
+            <summary>
+            If set to true, tries automatically discover mime type depending on the file name and adds appropriate header to client response.
+            For more details read about [IContentTypeProvider](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.staticfiles.icontenttypeprovider?view=aspnetcore-7.0)
+            </summary>
+            <value>true</value>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription">
             <summary>

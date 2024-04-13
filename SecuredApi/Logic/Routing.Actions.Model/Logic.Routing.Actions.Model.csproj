@@ -15,4 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Variables.Abstractions\Logic.Variables.Abstractions.csproj" />
+  </ItemGroup>
 </Project>

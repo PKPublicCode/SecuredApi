@@ -19,7 +19,12 @@ namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
 /// <summary>
 /// Verifies inbound IP address
 /// </summary>
-/// <return>True if IP found in a specified white list. False otherwise</return>
+/// <remarks>
+/// Inbound ip address is taken from the client HTTP request properties.
+/// </remarks>
+/// <return>
+/// Secceeded if IP found in a specified white list. Fails otherwise otherwise
+/// </return>
 public class CheckIPs
 {
     /// <summary>

@@ -15,10 +15,10 @@
 namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 /// <summary>
-/// Pauses processing of request for specified time interval
+/// Pauses processing of request for specified time interval.
 /// </summary>
 /// <remarks>
-/// During the request this action waits for a specified time.
+/// During the request this action waits for a specified time. No interaction with the client request or response happens.
 /// Can be used to mimic load of the service(s).
 /// </remarks>
 /// <example>

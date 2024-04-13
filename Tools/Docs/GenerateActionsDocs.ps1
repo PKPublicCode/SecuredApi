@@ -1,5 +1,5 @@
 $inputFile = "$PSScriptRoot/../../SecuredApi/Logic/Routing.Actions.Model/XmlDocs/Model.xml"
-$outputFile = "$PSScriptRoot/../../Docs/Product/AllActions.md"
+$outputFile = "$PSScriptRoot/../../Docs/Product/Actions.md"
 $sourceBasePath = "../../SecuredApi/Logic/Routing.Actions.Model/"
 
 [xml]$content = Get-Content $inputFile
@@ -119,7 +119,7 @@ foreach ($member in $content.doc.members.member) {
 foreach($group in $groupped.Keys) {
     $docMap = $groupped[$group]
     "### $($group)" | Out-File $outputFile -Append
-    "|Type|Guard|Description|" | Out-File $outputFile -Append
+    "|Type|Fallible|Description|" | Out-File $outputFile -Append
     "|----|------|-----------|" | Out-File $outputFile -Append
     foreach($action in $docMap.Values){
         "|[$($action.shortName)](#$($action.shortName))|$($action.returns ? "Yes" : "No")|$($action.summary)|" | Out-File $outputFile -Append

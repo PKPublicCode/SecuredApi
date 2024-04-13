@@ -37,7 +37,7 @@ public static class ActionFactoryBuilderExtensions
     private static ActionsBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
     {
         return srv.CreateActionFactoryBuilder()
-            .AddAction<RemoteCallAction, RemoteCallActionSettings>("RemoteCall")
+            .AddAction<RemoteCallAction, RemoteCall>("RemoteCall")
             .AddAction<SetResponseAction, SetResponseActionSettings>("SetResponse")
             .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
             .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
@@ -48,7 +48,7 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
             .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
             .AddAction<CheckIPsAction, CheckIPs>()
-            .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
+            .AddAction<ReturnStaticFileAction, ReturnStaticFile>("ReturnStaticFile")
             .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
             .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
             ;

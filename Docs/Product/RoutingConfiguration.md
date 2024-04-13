@@ -1,9 +1,7 @@
-# Routing configuration
-
+# Configuration
 Routing configuration is defined in json format. Comments are allowed. Max depth is 64 (default for .net).
 
-# Main concepts
-There are three key elements in the routing configuration
+# Main configuration concepts
 * [Routes Group](#routes-group-and-root-element)
 * [Route](#route)
 * [Action](#actions)
@@ -30,7 +28,7 @@ The overall config structure can be depicted as following:
 ```
 
 ## Routes Group and root element
-Routes Group allows you to group your routes with commonalities, like common beginning of the url path, that have common auth rules, required to run same actions, etc. JSON object has following structure:
+Routes Group intended to define configuration as tree-like structure and allows to group your routes with commonalities, like common beginning of the url path, that have common auth rules, required to run same actions, etc. JSON object has following structure:
 
 ```JSON5
 {
