@@ -17,7 +17,7 @@ using SecuredApi.Logic.Variables;
 namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 /// <summary>
-/// Makes outgoing http(s) call to downstream service and send current state of the client request.
+/// Makes outgoing http(s) call to remote service using current state of the client request.
 /// Response of the service, including headers, status code and body is saved to the client response
 /// </summary>
 /// <return>

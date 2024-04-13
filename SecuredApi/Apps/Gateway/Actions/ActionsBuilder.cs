@@ -52,6 +52,13 @@ public class ActionsBuilder
         return this;
     }
 
+    public ActionsBuilder AddScopedAction<TAction, TSettings>()
+        where TAction : class, IScopedAction<TSettings>
+    {
+        _actions[typeof(TSettings).Name] = MakeScopedAction<TAction, TSettings>();
+        return this;
+    }
+
     public IServiceCollection ConfigureActionFactory()
     {
         return _services.AddSingleton(_actions);

@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
+using SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
@@ -21,12 +22,12 @@ public class SetResponseAction : IAction
     private readonly int _code;
     private readonly StringResponseStream _body;
 
-    public SetResponseAction(SetResponseActionSettings settings)
+    public SetResponseAction(SetResponse settings)
     {
         _code = settings.HttpCode;
         //Dispite StringResponseStream is IDisposable, for the sake of efficiancy making it a singleton.
         //StringResponseStream.Dispose does nothing
-        _body = settings.Body ?? StringResponseStream.Empty;
+        _body = settings.Body;
     }
 
     public Task<bool> ExecuteAsync(IRequestContext context)

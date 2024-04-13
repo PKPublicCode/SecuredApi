@@ -137,12 +137,17 @@ foreach($group in $groupped.Keys) {
             "#### Remarks" | Out-File $outputFile -Append
             $action.remarks | Out-File $outputFile -Append
         }
-    
+        
         "#### Parameters" | Out-File $outputFile -Append
-        "|Name|Optional|Default Value|Description|" | Out-File $outputFile -Append
-        "|----|--------|-------------|-----------|" | Out-File $outputFile -Append
-        foreach($prop in $action.properties){
-            "|$($prop.shortName)|$($prop.default ? "Yes" : "No")|$($prop.default ? $prop.default : '')|$($prop.summary)|" | Out-File $outputFile -Append
+        if ($action.properties) {
+            "|Name|Optional|Default Value|Description|" | Out-File $outputFile -Append
+            "|----|--------|-------------|-----------|" | Out-File $outputFile -Append
+            foreach($prop in $action.properties){
+                "|$($prop.shortName)|$($prop.default ? "Yes" : "No")|$($prop.default ? $prop.default : '')|$($prop.summary)|" | Out-File $outputFile -Append
+            }
+        }
+        else {
+            "No parameters" | Out-File $outputFile -Append
         }
     
         if ($action.returns) {

@@ -13,11 +13,12 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
+using SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class SuppressRequestHeadersAction : SuppressHeadersActionBase
 {
-    public SuppressRequestHeadersAction(SuppressHeadersActionSettings settings) : base(settings) { }
+    public SuppressRequestHeadersAction(SuppressRequestHeaders settings) : base(settings) { }
     protected override IHeaderDictionary GetContextHeaders(IRequestContext context) => context.Request.Headers;
 }

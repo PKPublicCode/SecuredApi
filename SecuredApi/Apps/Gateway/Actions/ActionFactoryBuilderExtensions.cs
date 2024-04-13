@@ -37,18 +37,18 @@ public static class ActionFactoryBuilderExtensions
     private static ActionsBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
     {
         return srv.CreateActionFactoryBuilder()
-            .AddAction<RemoteCallAction, RemoteCall>("RemoteCall")
-            .AddAction<SetResponseAction, SetResponseActionSettings>("SetResponse")
+            .AddAction<RemoteCallAction, RemoteCall>()
+            .AddAction<SetResponseAction, SetResponse>()
             .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
-            .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
-            .AddAction<SetRequestHeaderAction, SetHeaderActionSettings>("SetRequestHeader")
-            .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions") //ToDo.0 Can we make non-scoped
+            .AddAction<SetResponseHeaderAction, SetResponseHeader>()
+            .AddAction<SetRequestHeaderAction, SetRequestHeader>()
+            .AddScopedAction<RunConsumerActionsAction, RunConsumerActions>() //ToDo.0 Can we make non-scoped
             .AddAction<DelayAction, Delay>()
-            .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponseActionSettings>("SetRequestInfoToResponse")
-            .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
-            .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
+            .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponse>()
+            .AddAction<SuppressResponseHeadersAction, SuppressResponseHeaders>()
+            .AddAction<SuppressRequestHeadersAction, SuppressRequestHeaders>()
             .AddAction<CheckIPsAction, CheckIPs>()
-            .AddAction<ReturnStaticFileAction, ReturnStaticFile>("ReturnStaticFile")
+            .AddAction<ReturnStaticFileAction, ReturnStaticFile>()
             .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
             .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
             ;

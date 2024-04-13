@@ -4,13 +4,20 @@
 |Type|Fallible|Description|
 |----|------|-----------|
 |[Delay](#Delay)|No|Pauses processing of request for specified time interval. |
+|[SetResponseHeader](#SetResponseHeader)|No|Adds new header to the client request. If header already exists, the another key-value pair will be added |
+|[SuppressResponseHeaders](#SuppressResponseHeaders)|No|Removes header from client response |
+|[SetResponse](#SetResponse)|No|Sets client response |
 |[ReturnStaticFile](#ReturnStaticFile)|Yes|Returns static content (file) to the client. |
-|[RemoteCall](#RemoteCall)|Yes|Makes outgoing http(s) call to downstream service and send current state of the client request. Response of the service, including headers, status code and body is saved to the client response |
+|[RemoteCall](#RemoteCall)|Yes|Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response |
+|[SetRequestInfoToResponse](#SetRequestInfoToResponse)|No|Writes client request information to the body of client response. Main usage is debugging and troubleshooting. |
 |[CheckIPs](#CheckIPs)|Yes|Verifies inbound IP address |
+|[SuppressRequestHeaders](#SuppressRequestHeaders)|No|Removes header from client request |
+|[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
 ### Subscriptions
 |Type|Fallible|Description|
 |----|------|-----------|
 |[CheckSubscription](#CheckSubscription)|No|Verify if subscription key is valid and allowed for this route |
+|[RunConsumerActions](#RunConsumerActions)|No|Runs actions configured for the specified consumer. |
 ## Basic
 ### [Delay](../../SecuredApi/Logic/Routing.Actions.Model/Basic/Delay.cs)
 #### Summary
@@ -30,6 +37,29 @@ During the request this action waits for a specified time. No interaction with t
             }
             
 ```
+### [SetResponseHeader](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetResponseHeader.cs)
+#### Summary
+Adds new header to the client request. If header already exists, the another key-value pair will be added 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Name|No||Header name |
+|Value|No||Value |
+### [SuppressResponseHeaders](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SuppressResponseHeaders.cs)
+#### Summary
+Removes header from client response 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Headers|No||List of header names to be removed from the response |
+### [SetResponse](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetResponse.cs)
+#### Summary
+Sets client response 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|HttpCode|No||Http code that is set to client response |
+|Body|No||Body |
 ### [ReturnStaticFile](../../SecuredApi/Logic/Routing.Actions.Model/Basic/ReturnStaticFile.cs)
 #### Summary
 Returns static content (file) to the client. 
@@ -45,7 +75,7 @@ Files can be stored either on the file system or in the storage account. See Sta
 Fails if file not found. Set HTTP Code 404 to client response in this case 
 ### [RemoteCall](../../SecuredApi/Logic/Routing.Actions.Model/Basic/RemoteCall.cs)
 #### Summary
-Makes outgoing http(s) call to downstream service and send current state of the client request. Response of the service, including headers, status code and body is saved to the client response 
+Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
@@ -66,6 +96,16 @@ Fails only if timeout occured. Succeeds otherwise.
             }
             
 ```
+### [SetRequestInfoToResponse](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetRequestInfoToResponse.cs)
+#### Summary
+Writes client request information to the body of client response. Main usage is debugging and troubleshooting. 
+#### Remarks
+Action writes to the client response following:<br>* Host<br>* Request Path<br>* Request Path Base<br>* Method<br>* Headers<br>* Inbound IP<br>
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|HttpCode|Yes|200 |HTTP code set to the client response |
+|HeadLine|Yes|"Debug information:" |Headline added before request information |
 ### [CheckIPs](../../SecuredApi/Logic/Routing.Actions.Model/Basic/CheckIPs.cs)
 #### Summary
 Verifies inbound IP address 
@@ -79,6 +119,21 @@ Inbound ip address is taken from the client HTTP request properties.
 |NoAccessResponseBody|Yes|Empty string|Response body returned in case of failure. |
 #### Return
 Secceeded if IP found in a specified white list. Fails otherwise otherwise 
+### [SuppressRequestHeaders](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SuppressRequestHeaders.cs)
+#### Summary
+Removes header from client request 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Headers|No||List of header names to be removed from the request |
+### [SetRequestHeader](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetRequestHeader.cs)
+#### Summary
+Adds new header to the client response. If header already exists, the another key-value pair will be added 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Name|No||Header name |
+|Value|No||Value |
 ## Subscriptions
 ### [CheckSubscription](../../SecuredApi/Logic/Routing.Actions.Model/Subscriptions/CheckSubscription.cs)
 #### Summary
@@ -90,3 +145,10 @@ Verify if subscription key is valid and allowed for this route
 |SuppressHeader|Yes|true|Removes this header from the outgoing request |
 |ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
 |ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
+### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Subscriptions/RunConsumerActions.cs)
+#### Summary
+Runs actions configured for the specified consumer. 
+#### Remarks
+Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+#### Parameters
+No parameters

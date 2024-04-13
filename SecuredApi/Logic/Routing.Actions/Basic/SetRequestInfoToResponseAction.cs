@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
+using SecuredApi.Logic.Routing.Actions.Model.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
@@ -21,7 +22,7 @@ public class SetRequestInfoToResponseAction : IAction
     private readonly string _headLine;
     private readonly int _httpCode;
 
-    public SetRequestInfoToResponseAction(SetRequestInfoToResponseActionSettings settings)
+    public SetRequestInfoToResponseAction(SetRequestInfoToResponse settings)
     {
         _headLine = settings.HeadLine;
         _httpCode = settings.HttpCode;

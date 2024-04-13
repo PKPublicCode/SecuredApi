@@ -12,27 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
-using SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic;
-
-public abstract class SetHeaderActionBase : IAction
+/// <summary>
+/// Sets client response
+/// </summary>
+public class SetResponse
 {
-    private readonly string _name;
-    private readonly string _value;
-
-    protected SetHeaderActionBase(ISetHeader settings)
-    {
-        _name = settings.Name;
-        _value = settings.Value;
-    }
-
-    protected abstract IHeaderDictionary GetHeaders(IRequestContext context);
-
-    public Task<bool> ExecuteAsync(IRequestContext context)
-    {
-        GetHeaders(context).Append(_name, _value);
-        return Task.FromResult(true);
-    }
+    /// <summary>
+    /// Http code that is set to client response
+    /// </summary>
+    public int HttpCode { get; init; }
+    /// <summary>
+    /// Body
+    /// </summary>
+    public string Body { get; init; } = string.Empty;
 }

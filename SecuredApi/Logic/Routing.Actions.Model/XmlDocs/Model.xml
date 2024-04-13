@@ -54,7 +54,7 @@
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.RemoteCall">
             <summary>
-            Makes outgoing http(s) call to downstream service and send current state of the client request.
+            Makes outgoing http(s) call to remote service using current state of the client request.
             Response of the service, including headers, status code and body is saved to the client response
             </summary>
             <return>
@@ -129,6 +129,108 @@
             </summary>
             <value>true</value>
         </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestHeader">
+            <summary>
+            Adds new header to the client response. If header already exists, the another key-value pair will be added
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestHeader.Name">
+            <summary>
+            Header name
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestHeader.Value">
+            <summary>
+            Value of the header
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestInfoToResponse">
+            <summary>
+            Writes client request information to the body of client response. Main usage is debugging and troubleshooting.
+            </summary>
+            <remarks>
+            Action writes to the client response following:
+            
+            * Host
+            
+            * Request Path
+            
+            * Request Path Base
+            
+            * Method
+            
+            * Headers
+            
+            * Inbound IP
+            
+            </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestInfoToResponse.HttpCode">
+            <summary>
+            HTTP code set to the client response
+            </summary>
+            <value>
+            200
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetRequestInfoToResponse.HeadLine">
+            <summary>
+            Headline added before request information
+            </summary>
+            <value>
+            "Debug information:"
+            </value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponse">
+            <summary>
+            Sets client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponse.HttpCode">
+            <summary>
+            Http code that is set to client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponse.Body">
+            <summary>
+            Body
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponseHeader">
+            <summary>
+            Adds new header to the client request. If header already exists, the another key-value pair will be added
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponseHeader.Name">
+            <summary>
+            Header name
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SetResponseHeader.Value">
+            <summary>
+            Value of the header
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SuppressRequestHeaders">
+            <summary>
+            Removes header from client request
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SuppressRequestHeaders.Headers">
+            <summary>
+            List of header names to be removed from the request
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.SuppressResponseHeaders">
+            <summary>
+            Removes header from client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Basic.SuppressResponseHeaders.Headers">
+            <summary>
+            List of header names to be removed from the response
+            </summary>
+        </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription">
             <summary>
             Verify if subscription key is valid and allowed for this route
@@ -156,6 +258,15 @@
             Customized body if key is valid, but not allowed for this routes group
             </summary>
             <value>empty string</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.RunConsumerActions">
+            <summary>
+            Runs actions configured for the specified consumer.
+            </summary>
+            <remarks>
+            Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
+            loads actions configured for the consumer, and executes them
+            </remarks>
         </member>
     </members>
 </doc>
