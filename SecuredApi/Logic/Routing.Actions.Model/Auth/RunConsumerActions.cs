@@ -26,7 +26,7 @@ namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
 ///
 /// * one of consumer actions fails. HTTP code in client response is set according to the consumer action
 ///
-/// * if consumer id is ivalid or not found. In this case 500 HTTP code is set to client response, indicating that data is corrupted
+/// * if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted
 ///
 /// If consumer actions sucessful (if any), the action succeeded.
 /// </return>
