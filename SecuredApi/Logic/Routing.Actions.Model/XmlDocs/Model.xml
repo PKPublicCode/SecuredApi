@@ -90,6 +90,10 @@
             This action should go only after CheckEntraJwt action. In some cases it's more convenient
             to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
             </remarks>
+            <return>
+            Fails if JWT doesn satisfy one of roles, or one of scopes specified in the parameters.
+            In this case sets http code to 403 (access denied) in the client response.
+            </return>
         </member>
         <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwtClaims.OneOfRoles">
             <summary>
@@ -147,13 +151,22 @@
             <value>empty string</value>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.RunConsumerActions">
-            <summary>
-            Runs actions configured for the specified consumer.
-            </summary>
-            <remarks>
-            Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
-            loads actions configured for the consumer, and executes them
-            </remarks>
+             <summary>
+             Runs actions configured for the specified consumer.
+             </summary>
+             <remarks>
+             Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
+             loads actions configured for the consumer, and executes them
+             </remarks>
+             <return>
+             Fails when:
+            
+             * one of consumer actions fails. HTTP code in client response is set according to the consumer action
+            
+             * if consumer id is ivalid or not found. In this case 500 HTTP code is set to client response, indicating that data is corrupted
+            
+             If consumer actions sucessful (if any), the action succeeded.
+             </return>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.CheckIPs">
             <summary>

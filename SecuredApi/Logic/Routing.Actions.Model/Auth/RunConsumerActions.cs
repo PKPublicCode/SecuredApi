@@ -21,6 +21,15 @@ namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
 /// Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
 /// loads actions configured for the consumer, and executes them
 /// </remarks>
+/// <return>
+/// Fails when:
+///
+/// * one of consumer actions fails. HTTP code in client response is set according to the consumer action
+///
+/// * if consumer id is ivalid or not found. In this case 500 HTTP code is set to client response, indicating that data is corrupted
+///
+/// If consumer actions sucessful (if any), the action succeeded.
+/// </return>
 public class RunConsumerActions
 {
 }

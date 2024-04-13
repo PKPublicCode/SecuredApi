@@ -3,8 +3,8 @@
 ### Auth
 |Type|Fallible|Description|
 |----|------|-----------|
-|[RunConsumerActions](#RunConsumerActions)|No|Runs actions configured for the specified consumer. |
-|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|No|Checks claims of the entra jwt.  |
+|[RunConsumerActions](#RunConsumerActions)|Yes|Runs actions configured for the specified consumer. |
+|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|Yes|Checks claims of the entra jwt.  |
 |[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
 |[CheckSubscription](#CheckSubscription)|Yes|Verify the subscription key (api key) and checks if subscription is allowed for this route |
 ### Basic
@@ -28,6 +28,8 @@ Runs actions configured for the specified consumer.
 Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
 #### Parameters
 No parameters
+#### Return
+Fails when:<br>* one of consumer actions fails. HTTP code in client response is set according to the consumer action<br>* if consumer id is ivalid or not found. In this case 500 HTTP code is set to client response, indicating that data is corrupted<br>If consumer actions sucessful (if any), the action succeeded. 
 ### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwtClaims.cs)
 #### Summary
 Checks claims of the entra jwt.  
@@ -38,6 +40,8 @@ This action should go only after CheckEntraJwt action. In some cases it's more c
 |----|--------|-------------|-----------|
 |OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
 |OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
+#### Return
+Fails if JWT doesn satisfy one of roles, or one of scopes specified in the parameters. In this case sets http code to 403 (access denied) in the client response. 
 ### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwt.cs)
 #### Summary
 Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. 

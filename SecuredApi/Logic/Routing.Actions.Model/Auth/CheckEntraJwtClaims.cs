@@ -21,6 +21,10 @@ namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
 /// This action should go only after CheckEntraJwt action. In some cases it's more convenient
 /// to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
 /// </remarks>
+/// <return>
+/// Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters.
+/// In this case sets http code to 403 (access denied) in the client response.
+/// </return>
 public class CheckEntraJwtClaims
 {
     /// <summary>
