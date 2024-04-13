@@ -1,13 +1,10 @@
 # Actions
 ## Summary
-### OAuth
-|Type|Fallible|Description|
-|----|------|-----------|
-|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|No|Checks claims of the entra jwt.  |
 ### Auth
 |Type|Fallible|Description|
 |----|------|-----------|
 |[RunConsumerActions](#RunConsumerActions)|No|Runs actions configured for the specified consumer. |
+|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|No|Checks claims of the entra jwt.  |
 |[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
 |[CheckSubscription](#CheckSubscription)|Yes|Verify the subscription key (api key) and checks if subscription is allowed for this route |
 ### Basic
@@ -23,8 +20,15 @@
 |[CheckIPs](#CheckIPs)|Yes|Verifies inbound IP address |
 |[SuppressRequestHeaders](#SuppressRequestHeaders)|No|Removes header from client request |
 |[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
-## OAuth
-### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Actions.Model/OAuth/CheckEntraJwtClaims.cs)
+## Auth
+### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Auth/RunConsumerActions.cs)
+#### Summary
+Runs actions configured for the specified consumer. 
+#### Remarks
+Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+#### Parameters
+No parameters
+### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwtClaims.cs)
 #### Summary
 Checks claims of the entra jwt.  
 #### Remarks
@@ -34,14 +38,6 @@ This action should go only after CheckEntraJwt action. In some cases it's more c
 |----|--------|-------------|-----------|
 |OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
 |OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
-## Auth
-### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Auth/RunConsumerActions.cs)
-#### Summary
-Runs actions configured for the specified consumer. 
-#### Remarks
-Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
-#### Parameters
-No parameters
 ### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwt.cs)
 #### Summary
 Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. 

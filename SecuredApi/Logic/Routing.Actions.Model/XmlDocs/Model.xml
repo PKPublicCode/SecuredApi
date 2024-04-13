@@ -82,6 +82,33 @@
             false
             </value>
         </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwtClaims">
+            <summary>
+            Checks claims of the entra jwt. 
+            </summary>
+            <remarks>
+            This action should go only after CheckEntraJwt action. In some cases it's more convenient
+            to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
+            </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwtClaims.OneOfRoles">
+            <summary>
+            Sets one of roles that must be set in the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwtClaims.OneOfScopes">
+            <summary>
+            Sets one of scopes that must be set the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwtClaims.Cleanup">
+            <summary>
+            If true, releases parsed JWT object and frees memory
+            </summary>
+            <value>true</value>
+        </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription">
              <summary>
              Verify the subscription key (api key) and checks if subscription is allowed for this route
@@ -354,33 +381,6 @@
             <summary>
             List of header names to be removed from the response
             </summary>
-        </member>
-        <member name="T:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims">
-            <summary>
-            Checks claims of the entra jwt. 
-            </summary>
-            <remarks>
-            This action should go only after CheckEntraJwt action. In some cases it's more convenient
-            to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
-            </remarks>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.OneOfRoles">
-            <summary>
-            Sets one of roles that must be set in the JWT
-            </summary>
-            <value>null</value>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.OneOfScopes">
-            <summary>
-            Sets one of scopes that must be set the JWT
-            </summary>
-            <value>null</value>
-        </member>
-        <member name="F:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.Cleanup">
-            <summary>
-            If true, releases parsed JWT object and frees memory
-            </summary>
-            <value>true</value>
         </member>
     </members>
 </doc>
