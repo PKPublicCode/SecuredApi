@@ -44,7 +44,7 @@ Adds new header to the client request. If header already exists, the another key
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
 |Name|No||Header name |
-|Value|No||Value |
+|Value|No||Value of the header |
 ### [SuppressResponseHeaders](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SuppressResponseHeaders.cs)
 #### Summary
 Removes header from client response 
@@ -133,7 +133,7 @@ Adds new header to the client response. If header already exists, the another ke
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
 |Name|No||Header name |
-|Value|No||Value |
+|Value|No||Value of the header |
 ## Subscriptions
 ### [CheckSubscription](../../SecuredApi/Logic/Routing.Actions.Model/Subscriptions/CheckSubscription.cs)
 #### Summary
