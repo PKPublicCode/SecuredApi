@@ -4,6 +4,130 @@
         <name>SecuredApi.Logic.Routing.Actions.Model</name>
     </assembly>
     <members>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt">
+             <summary>
+             Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience.
+             </summary>
+             <remarks>
+             Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon
+             </remarks>
+             <return>
+             Fails in following cases:
+             
+             I. Not authorized; Set 401 status code to client response:
+            
+             * JWT token malformed
+            
+             * JWT token doesn't signed by key that correspond to the provided issuer
+            
+             II. Access Denied; Sets 403 status code to client response:
+             
+             * Token issuer is invalid
+            
+             * Audience is invalid
+            
+             * Roles are invalid
+            
+             * Scopes are invalid
+             </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.OneOfIssuers">
+            <summary>
+            One of allowed issuers
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.OneOfAudiences">
+            <summary>
+            One of expected audiences
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.OneOfRoles">
+            <summary>
+            One of roles that must be in the JWT
+            </summary>
+            <value>
+            null
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.OneOfScopes">
+            <summary>
+            One of scopes that must be in the JWT
+            </summary>
+            <value>
+            null
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.HeaderName">
+            <summary>
+            HTTP Header name that bears JWT token
+            </summary>
+            <value>
+            "Authorization"
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.TokenPrefix">
+            <summary>
+            Prefix in the header value, that bears JWT token
+            </summary>
+            <value>
+            "Bearer "
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckEntraJwt.KeepData">
+            <summary>
+            Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released.
+            If CheckEntraJwtClaims action is used later for this route, then value shold be true.
+            </summary>
+            <value>
+            false
+            </value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription">
+             <summary>
+             Verify the subscription key (api key) and checks if subscription is allowed for this route
+             </summary>
+             <return>
+             Action fails if:
+             
+             * Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)
+             
+             * Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)
+            
+             * Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied)
+             </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription.SubscriptionKeyHeaderName">
+            <summary>
+            Header name that bears subscription key
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription.SuppressHeader">
+            <summary>
+            Removes this header from the outgoing request
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription.ErrorNotAuthorizedBody">
+            <summary>
+            Customized body if key not valid
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Auth.CheckSubscription.ErrorAccessDeniedBody">
+            <summary>
+            Customized body if key is valid, but not allowed for this routes group
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Auth.RunConsumerActions">
+            <summary>
+            Runs actions configured for the specified consumer.
+            </summary>
+            <remarks>
+            Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
+            loads actions configured for the consumer, and executes them
+            </remarks>
+        </member>
         <member name="T:SecuredApi.Logic.Routing.Actions.Model.Basic.CheckIPs">
             <summary>
             Verifies inbound IP address
@@ -231,42 +355,32 @@
             List of header names to be removed from the response
             </summary>
         </member>
-        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription">
+        <member name="T:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims">
             <summary>
-            Verify if subscription key is valid and allowed for this route
-            </summary>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription.SubscriptionKeyHeaderName">
-            <summary>
-            Header name that bears subscription key
-            </summary>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription.SuppressHeader">
-            <summary>
-            Removes this header from the outgoing request
-            </summary>
-            <value>true</value>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription.ErrorNotAuthorizedBody">
-            <summary>
-            Customized body if key not valid
-            </summary>
-            <value>empty string</value>
-        </member>
-        <member name="P:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.CheckSubscription.ErrorAccessDeniedBody">
-            <summary>
-            Customized body if key is valid, but not allowed for this routes group
-            </summary>
-            <value>empty string</value>
-        </member>
-        <member name="T:SecuredApi.Logic.Routing.Actions.Model.Subscriptions.RunConsumerActions">
-            <summary>
-            Runs actions configured for the specified consumer.
+            Checks claims of the entra jwt. 
             </summary>
             <remarks>
-            Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
-            loads actions configured for the consumer, and executes them
+            This action should go only after CheckEntraJwt action. In some cases it's more convenient
+            to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
             </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.OneOfRoles">
+            <summary>
+            Sets one of roles that must be set in the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.OneOfScopes">
+            <summary>
+            Sets one of scopes that must be set the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Actions.OAuth.CheckEntraJwtClaims.Cleanup">
+            <summary>
+            If true, releases parsed JWT object and frees memory
+            </summary>
+            <value>true</value>
         </member>
     </members>
 </doc>

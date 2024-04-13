@@ -12,11 +12,20 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Subscriptions;
+namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
 
 /// <summary>
-/// Verify if subscription key is valid and allowed for this route
+/// Verify the subscription key (api key) and checks if subscription is allowed for this route
 /// </summary>
+/// <return>
+/// Action fails if:
+/// 
+/// * Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)
+/// 
+/// * Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)
+///
+/// * Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied)
+/// </return>
 public class CheckSubscription
 {
     /// <summary>

@@ -1,5 +1,15 @@
 # Actions
 ## Summary
+### OAuth
+|Type|Fallible|Description|
+|----|------|-----------|
+|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|No|Checks claims of the entra jwt.  |
+### Auth
+|Type|Fallible|Description|
+|----|------|-----------|
+|[RunConsumerActions](#RunConsumerActions)|No|Runs actions configured for the specified consumer. |
+|[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
+|[CheckSubscription](#CheckSubscription)|Yes|Verify the subscription key (api key) and checks if subscription is allowed for this route |
 ### Basic
 |Type|Fallible|Description|
 |----|------|-----------|
@@ -13,11 +23,54 @@
 |[CheckIPs](#CheckIPs)|Yes|Verifies inbound IP address |
 |[SuppressRequestHeaders](#SuppressRequestHeaders)|No|Removes header from client request |
 |[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
-### Subscriptions
-|Type|Fallible|Description|
-|----|------|-----------|
-|[CheckSubscription](#CheckSubscription)|No|Verify if subscription key is valid and allowed for this route |
-|[RunConsumerActions](#RunConsumerActions)|No|Runs actions configured for the specified consumer. |
+## OAuth
+### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Actions.Model/OAuth/CheckEntraJwtClaims.cs)
+#### Summary
+Checks claims of the entra jwt.  
+#### Remarks
+This action should go only after CheckEntraJwt action. In some cases it's more convenient to CheckEntaJwt for group of routes, but check different claims for different routes in this group. 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
+|OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
+## Auth
+### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Auth/RunConsumerActions.cs)
+#### Summary
+Runs actions configured for the specified consumer. 
+#### Remarks
+Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+#### Parameters
+No parameters
+### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwt.cs)
+#### Summary
+Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. 
+#### Remarks
+Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|OneOfIssuers|No||One of allowed issuers |
+|OneOfAudiences|No||One of expected audiences |
+|OneOfRoles|Yes|null |One of roles that must be in the JWT |
+|OneOfScopes|Yes|null |One of scopes that must be in the JWT |
+|HeaderName|Yes|"Authorization" |HTTP Header name that bears JWT token |
+|TokenPrefix|Yes|"Bearer " |Prefix in the header value, that bears JWT token |
+|KeepData|Yes|false |Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released. If CheckEntraJwtClaims action is used later for this route, then value shold be true. |
+#### Return
+Fails in following cases:<br>I. Not authorized; Set 401 status code to client response:<br>* JWT token malformed<br>* JWT token doesn't signed by key that correspond to the provided issuer<br>II. Access Denied; Sets 403 status code to client response:<br>* Token issuer is invalid<br>* Audience is invalid<br>* Roles are invalid<br>* Scopes are invalid 
+### [CheckSubscription](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckSubscription.cs)
+#### Summary
+Verify the subscription key (api key) and checks if subscription is allowed for this route 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|SubscriptionKeyHeaderName|No||Header name that bears subscription key |
+|SuppressHeader|Yes|true|Removes this header from the outgoing request |
+|ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
+|ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
+#### Return
+Action fails if:<br>* Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied) 
 ## Basic
 ### [Delay](../../SecuredApi/Logic/Routing.Actions.Model/Basic/Delay.cs)
 #### Summary
@@ -134,21 +187,3 @@ Adds new header to the client response. If header already exists, the another ke
 |----|--------|-------------|-----------|
 |Name|No||Header name |
 |Value|No||Value of the header |
-## Subscriptions
-### [CheckSubscription](../../SecuredApi/Logic/Routing.Actions.Model/Subscriptions/CheckSubscription.cs)
-#### Summary
-Verify if subscription key is valid and allowed for this route 
-#### Parameters
-|Name|Optional|Default Value|Description|
-|----|--------|-------------|-----------|
-|SubscriptionKeyHeaderName|No||Header name that bears subscription key |
-|SuppressHeader|Yes|true|Removes this header from the outgoing request |
-|ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
-|ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
-### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Subscriptions/RunConsumerActions.cs)
-#### Summary
-Runs actions configured for the specified consumer. 
-#### Remarks
-Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
-#### Parameters
-No parameters

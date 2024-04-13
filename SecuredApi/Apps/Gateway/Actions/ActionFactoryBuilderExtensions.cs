@@ -17,7 +17,7 @@ using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.OAuth;
 using SecuredApi.Logic.Routing.Actions.Model.Basic;
-using SecuredApi.Logic.Routing.Actions.Model.Subscriptions;
+using SecuredApi.Logic.Routing.Actions.Model.Auth;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Actions;
 
@@ -39,7 +39,7 @@ public static class ActionFactoryBuilderExtensions
         return srv.CreateActionFactoryBuilder()
             .AddAction<RemoteCallAction, RemoteCall>()
             .AddAction<SetResponseAction, SetResponse>()
-            .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
+            .AddAction<CheckSubscriptionAction, CheckSubscription>()
             .AddAction<SetResponseHeaderAction, SetResponseHeader>()
             .AddAction<SetRequestHeaderAction, SetRequestHeader>()
             .AddScopedAction<RunConsumerActionsAction, RunConsumerActions>() //ToDo.0 Can we make non-scoped
@@ -49,8 +49,8 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<SuppressRequestHeadersAction, SuppressRequestHeaders>()
             .AddAction<CheckIPsAction, CheckIPs>()
             .AddAction<ReturnStaticFileAction, ReturnStaticFile>()
-            .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
-            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
+            .AddAction<CheckEntraJwtAction, CheckEntraJwt>()
+            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaims>()
             ;
     } 
 }

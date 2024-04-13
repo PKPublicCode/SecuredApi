@@ -17,15 +17,16 @@ using System.Diagnostics.CodeAnalysis;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
 using Microsoft.Extensions.Logging;
+using SecuredApi.Logic.Routing.Actions.Model.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public class CheckEntraJwtAction : IAction
 {
-    private readonly CheckEntraJwtActionSettings _settings;
+    private readonly CheckEntraJwt _settings;
     private readonly ILogger _logger;
 
-    public CheckEntraJwtAction(CheckEntraJwtActionSettings settings, ILogger<CheckEntraJwtAction> logger)
+    public CheckEntraJwtAction(CheckEntraJwt settings, ILogger<CheckEntraJwtAction> logger)
     {
         _settings = settings;
         _logger = logger;

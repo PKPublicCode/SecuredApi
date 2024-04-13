@@ -42,8 +42,8 @@ public static partial class Constants
     public static class InlineContent
     {
         public const string EchoDelay = "This is Echo!\n V0.0001\n, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\nResponse, blabla blabla\nsome payload required to mimic valuable response from server. need data in the body.\n";
-        public const string NotAuthorized = "Not Authorized";
-        public const string AccessDenied = "Access Denied";
+        public const string NotAuthorized = "";
+        public const string AccessDenied = "";
         public const string StaticFileNotFound = "";
     }
 

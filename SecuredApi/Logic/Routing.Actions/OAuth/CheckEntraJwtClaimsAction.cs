@@ -16,14 +16,15 @@ using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
 using Microsoft.IdentityModel.JsonWebTokens;
+using SecuredApi.Logic.Routing.Actions.Model.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public class CheckEntraJwtClaimsAction: IAction
 {
-    private readonly CheckEntraJwtClaimsActionSettings _settings;
+    private readonly CheckEntraJwtClaims _settings;
 
-    public CheckEntraJwtClaimsAction(CheckEntraJwtClaimsActionSettings settings)
+    public CheckEntraJwtClaimsAction(CheckEntraJwtClaims settings)
     {
         _settings = settings;
     }

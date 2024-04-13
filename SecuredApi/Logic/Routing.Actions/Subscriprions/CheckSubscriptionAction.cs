@@ -15,6 +15,7 @@
 using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
+using SecuredApi.Logic.Routing.Actions.Model.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
 
@@ -25,7 +26,7 @@ public class CheckSubscriptionAction : IAction
     private readonly StringResponseStream _subscriptionKeyNotSetOrInvalid;
     private readonly StringResponseStream _callNotAllowed;
 
-    public CheckSubscriptionAction(CheckSubscriptionActionSettings settings)
+    public CheckSubscriptionAction(CheckSubscription settings)
     {
         _subscriptionKeyHeaderName = settings.SubscriptionKeyHeaderName;
         _suppressHeader = settings.SuppressHeader;

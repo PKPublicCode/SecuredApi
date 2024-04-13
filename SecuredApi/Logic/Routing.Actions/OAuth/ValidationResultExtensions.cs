@@ -19,8 +19,8 @@ namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public static class ValidationResultExtensions
 {
-    public static readonly StringResponseStream NotAuthorized = new("Not Authorized");
-    public static readonly StringResponseStream NotAllowed = new("Access Denied");
+    public static readonly StringResponseStream NotAuthorized = new(string.Empty);
+    public static readonly StringResponseStream NotAllowed = new(string.Empty);
 
     public static async Task<bool> TranslateError(this ValidationStatus status, IRequestContext context)
     {
