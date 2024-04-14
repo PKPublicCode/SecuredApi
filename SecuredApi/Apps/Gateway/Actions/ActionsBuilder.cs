@@ -30,7 +30,6 @@ public class ActionsBuilder
         _actions = new();
     }
 
-    //ToDo.0 Delete
     public ActionsBuilder AddAction<TAction, TSettings>(string name)
         where TAction : IAction
     {
@@ -41,8 +40,7 @@ public class ActionsBuilder
     public ActionsBuilder AddAction<TAction, TSettings>()
         where TAction : IAction
     {
-        _actions[typeof(TSettings).Name] = MakeAction<TAction, TSettings>();
-        return this;
+        return AddAction<TAction, TSettings>(typeof(TSettings).Name);
     }
 
     public ActionsBuilder AddScopedAction<TAction, TSettings>(string name)
@@ -55,8 +53,7 @@ public class ActionsBuilder
     public ActionsBuilder AddScopedAction<TAction, TSettings>()
         where TAction : class, IScopedAction<TSettings>
     {
-        _actions[typeof(TSettings).Name] = MakeScopedAction<TAction, TSettings>();
-        return this;
+        return AddScopedAction<TAction, TSettings>(typeof(TSettings).Name);
     }
 
     public IServiceCollection ConfigureActionFactory()

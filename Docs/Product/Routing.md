@@ -12,5 +12,6 @@ In SecuredAPI actions can be split into two groups: fallible and infallible. Fal
 Routing configuration defines two action execution flows for every route: successful flow and error flow. Successful flow is a flow that SecuredAPI processing starts with. This is the happy path scenario and implements main gateway logic. If all actions are succeeded, once last action in success flow is completed, SecuredAPI returns response object to the client. If during success flow execution fallible actions identify error, successful flow stops and SecuredAPI starts executing error flow. Routing configuration has tree-like structure and so, when SecuredAPI switches to error flow, execution starts on the level where error occurred.
 
 Read more about [Routing configuration](./RoutingConfiguration.md)
+
 See list of [available actions](./Actions.md)
 

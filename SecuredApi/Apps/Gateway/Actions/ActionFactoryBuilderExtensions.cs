@@ -42,7 +42,7 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<CheckSubscriptionAction, CheckSubscription>()
             .AddAction<SetResponseHeaderAction, SetResponseHeader>()
             .AddAction<SetRequestHeaderAction, SetRequestHeader>()
-            .AddScopedAction<RunConsumerActionsAction, RunConsumerActions>() //ToDo.0 Can we make non-scoped
+            .AddAction<RunConsumerActionsAction2, RunConsumerActions>()
             .AddAction<DelayAction, Delay>()
             .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponse>()
             .AddAction<SuppressResponseHeadersAction, SuppressResponseHeaders>()
