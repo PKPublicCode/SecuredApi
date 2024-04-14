@@ -1,5 +1,6 @@
 $inputFile = "$PSScriptRoot/../../SecuredApi/Logic/Routing.Model/Model.xml"
 $actionsOutputFile = "$PSScriptRoot/../../Docs/Product/Actions.md"
+$variablesOutputFile = "$PSScriptRoot/../../Docs/Product/RuntimeVariables.md"
 $actionsSourceBasePath = "../../SecuredApi/Logic/Routing.Model/Actions"
 
 [xml]$content = Get-Content $inputFile
@@ -59,13 +60,13 @@ function GetFullClassNameForProperty([string] $str) {
 function GetGroupForType([string] $str) {
     $namespace = $str.Split(':')[1]
     $tmp = $namespace.Split('.')
-    return $tmp[$tmp.Length - 2]
+    return "$($tmp[$tmp.Length - 3]).$($tmp[$tmp.Length - 2])"
 }
 
 function GetGroupForProperty([string] $str) {
     $namespace = $str.Split(':')[1]
     $tmp = $namespace.Split('.')
-    return $tmp[$tmp.Length - 3]
+    return "$($tmp[$tmp.Length - 4]).$($tmp[$tmp.Length - 3])"
 }
 
 function GetSourcePath([string] $str) {
@@ -81,6 +82,9 @@ function EnsureObjectsCreated([string] $group, [string] $fullActionName) {
     }
     if($null -eq $groupped[$group][$fullActionName].properties) {
         $groupped[$group][$fullActionName].properties = @()
+    }
+    if($null -eq $groupped[$group][$fullActionName].fields) {
+        $groupped[$group][$fullActionName].fields = @()
     }
 }
 
@@ -111,13 +115,32 @@ foreach ($member in $content.doc.members.member) {
         EnsureObjectsCreated $group $fullName
         $groupped[$group][$fullName].properties += $prop
     }
+    elseif ($member.name -clike "F:*") {
+        $field = @{
+            shortName = GetShortName $member.name
+            summary = NormilizeContent $member.summary
+            value = NormilizeContent $member.value
+        }
+        $fullName = GetFullClassNameForProperty $member.name
+        $group = GetGroupForProperty $member.name
+        EnsureObjectsCreated $group $fullName
+        $groupped[$group][$fullName].fields += $field
+    }
+}
+
+$grouppedActions = @{}
+foreach($group in $groupped.Keys) {
+    if($group -like 'Actions.*') {
+        $shortGroup = $group.Split('.')[1]
+        $grouppedActions[$shortGroup] = $groupped[$group]
+    }
 }
 
 
 "# Actions" | Out-File $actionsOutputFile
 "## Summary" | Out-File $actionsOutputFile -Append
-foreach($group in $groupped.Keys) {
-    $docMap = $groupped[$group]
+foreach($group in $grouppedActions.Keys) {
+    $docMap = $grouppedActions[$group]
     "### $($group)" | Out-File $actionsOutputFile -Append
     "|Type|Fallible|Description|" | Out-File $actionsOutputFile -Append
     "|----|------|-----------|" | Out-File $actionsOutputFile -Append
@@ -126,8 +149,8 @@ foreach($group in $groupped.Keys) {
     }
 }
 
-foreach($group in $groupped.Keys) {
-    $docMap = $groupped[$group]
+foreach($group in $grouppedActions.Keys) {
+    $docMap = $grouppedActions[$group]
     "## $($group)" | Out-File $actionsOutputFile -Append
     foreach($action in $docMap.Values){
         "### [$($action.shortName)]($($action.sourcePath))" | Out-File $actionsOutputFile -Append
@@ -162,3 +185,34 @@ foreach($group in $groupped.Keys) {
         }
     }
 }
+
+
+$grouppedVariables = @{}
+foreach($group in $groupped.Keys) {
+    if($group -like 'Model.RuntimeVariables') {
+        foreach($var in $groupped[$group].Keys) { # only one in each group
+            if (-not $groupped[$group][$var].exclude){
+                $tmp = $var.Split('.');
+                $shortGroup = $tmp[$tmp.Length - 1]
+                if ($null -eq $grouppedVariables[$shortGroup]) {
+                    $grouppedVariables[$shortGroup] = @{}
+                }
+                $grouppedVariables[$shortGroup] = $groupped[$group][$var]
+                #$shortGroup
+            }
+        }
+    }
+}
+
+"#Runtime Variables" | Out-File $variablesOutputFile
+foreach($group in $grouppedVariables.Keys) {
+    $docMap = $grouppedVariables[$group]
+    "## $($group)" | Out-File $variablesOutputFile -Append
+    "|Name|Description|" | Out-File $variablesOutputFile -Append
+    "|----|-----------|" | Out-File $variablesOutputFile -Append
+    foreach($var in $docMap.fields){ 
+        "|$($var.value)|$($var.summary)|" | Out-File $variablesOutputFile -Append
+    }
+}
+
+

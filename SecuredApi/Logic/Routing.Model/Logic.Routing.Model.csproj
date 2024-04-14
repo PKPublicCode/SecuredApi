@@ -18,4 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Variables.Abstractions\Logic.Variables.Abstractions.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="RuntimeVariables\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RuntimeVariables\" />
+  </ItemGroup>
 </Project>

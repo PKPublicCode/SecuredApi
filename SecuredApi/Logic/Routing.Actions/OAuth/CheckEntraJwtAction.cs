@@ -18,6 +18,7 @@ using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
 using Microsoft.Extensions.Logging;
 using SecuredApi.Logic.Routing.Model.Actions.Auth;
+using Names = SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
@@ -48,7 +49,7 @@ public class CheckEntraJwtAction : IAction
 
             if (_settings.KeepData)
             {
-                context.Variables.SetVariable(VariableNames.Jwt.Token, result.Jwt!);
+                context.Variables.SetVariable(Names.ParsedJwtToken, result.Jwt!);
             }
             return true;
         }

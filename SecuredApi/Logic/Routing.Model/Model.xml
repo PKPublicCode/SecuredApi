@@ -395,5 +395,45 @@
             List of header names to be removed from the response
             </summary>
         </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth">
+            <summary>
+            Variables used by authentication actions
+            </summary>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth.ConsumerId">
+            <summary>
+            Id of consumer captured if authentication was successful
+            </summary>
+            <value>consumerId</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request">
+            <summary>
+            Variables set by routing engine for this request and route
+            </summary>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.RemainingPath">
+            <summary>
+            Remained path that was captured by * (asterisk) for the rote.
+            For example, if route was defined for ```/api/some_feature/*```,
+            and received request with path ```/api/some_feature/a/b/c/d```
+            then remained path will be ```a/b/c/d```
+            </summary>
+            <value>requestRemainingPath</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.HttpMethod">
+            <summary>
+            Http Method of client request
+            </summary>
+            <value>requestHttpMethod</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.QueryString">
+            <summary>
+            Query string of the request.
+            For example, if route was defined for ```/api/some_feature```,
+            and received request with path ```/api/some_feature?a=1&amp;b=2```
+            then query string will be ```a=1&amp;b=2``
+            </summary>
+            <value>requestQueryString</value>
+        </member>
     </members>
 </doc>

@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Diagnostics.CodeAnalysis;
-using static SecuredApi.Logic.Routing.Utils.VariableNames;
+using SecuredApi.Logic.Routing.Model.RuntimeVariables;
 
 namespace SecuredApi.Logic.Routing.Utils;
 
@@ -37,12 +37,12 @@ public static class RequestContextCommonVariablesExtensions
     public static void SetConsumerId(this IRequestContext ctx, Guid value)
     {
         // Warning. Guid will be boxed!
-        ctx.SetVariable(Subscription.ConsumerId, value);
+        ctx.SetVariable(Auth.ConsumerId, value);
     }
 
     public static bool TryGetConsumerId(this IRequestContext ctx, [MaybeNullWhen(false)] out Guid value)
     {
-        return ctx.TryGetVariable(Subscription.ConsumerId, out value);
+        return ctx.TryGetVariable(Auth.ConsumerId, out value);
     }
 }
 

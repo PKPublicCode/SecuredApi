@@ -12,27 +12,21 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using System.Diagnostics.CodeAnalysis;
+namespace SecuredApi.Logic.Routing.Model.RuntimeVariables;
 
-namespace SecuredApi.Logic.Routing.Utils;
-
-public static class VariableNames
+/// <summary>
+/// Variables used by authentication actions
+/// </summary>
+public static class Auth
 {
-    public static class Request
-    {
-        public const string RemainingPath = "requestRemainingPath";
-        public const string HttpMethod = "requestHttpMethod";
-        public const string QueryString = "requestQueryString";
-    }
+    /// <summary>
+    /// Id of consumer captured if authentication was successful
+    /// </summary>
+    /// <value>consumerId</value>
+    public const string ConsumerId = "consumerId";
 
-    public static class Subscription
-    {
-        public const string ConsumerId = "SubscriptionConsumerId";
-    }
-
-    public static class Jwt
-    {
-        public const string Token = "AuthorizationJwt";
-    }
+#pragma warning disable 1591 //This variable contain internal object and should appear in the doc
+    public const string ParsedJwtToken = "parsedJwtToken";
+#pragma warning restore 1591
 }
 
