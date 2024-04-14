@@ -1,6 +1,3 @@
 google_site_verification: google2eaffe772d305a13.html
 
-markdown: kramdown
-
-kramdown:
-  input: GFM
+markdown: GFM
