@@ -1,11 +1,189 @@
-## WIP
+# Actions
+## Summary
+### Basic
+|Type|Fallible|Description|
+|----|------|-----------|
+|[Delay](#Delay)|No|Pauses processing of request for specified time interval. |
+|[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
+|[SetRequestInfoToResponse](#SetRequestInfoToResponse)|No|Writes client request information to the body of client response. Main usage is debugging and troubleshooting. |
+|[SetResponseHeader](#SetResponseHeader)|No|Adds new header to the client request. If header already exists, the another key-value pair will be added |
+|[ReturnStaticFile](#ReturnStaticFile)|Yes|Returns static content (file) to the client. |
+|[RemoteCall](#RemoteCall)|Yes|Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response |
+|[SuppressResponseHeaders](#SuppressResponseHeaders)|No|Removes header from client response |
+|[CheckIPs](#CheckIPs)|Yes|Verifies inbound IP address |
+|[SuppressRequestHeaders](#SuppressRequestHeaders)|No|Removes header from client request |
+|[SetResponse](#SetResponse)|No|Sets client response |
+### Auth
+|Type|Fallible|Description|
+|----|------|-----------|
+|[CheckSubscription](#CheckSubscription)|Yes|Verify the subscription key (api key) and checks if subscription is allowed for this route |
+|[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
+|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|Yes|Checks claims of the entra jwt.  |
+|[RunConsumerActions](#RunConsumerActions)|Yes|Runs actions configured for the specified consumer. |
+## Basic
+### [Delay](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/Delay.cs)
+#### Summary
+Pauses processing of request for specified time interval. 
+#### Remarks
+During the request this action waits for a specified time. No interaction with the client request or response happens. Can be used to mimic load of the service(s). 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Milliseconds|No||Time to wait |
+#### Example
+```jsonc
 
-### There will be list of all actions
+            {
+                "type":"delay"
+                "Milliseconds": 300
+            }
+            
+```
+### [SetRequestHeader](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SetRequestHeader.cs)
+#### Summary
+Adds new header to the client response. If header already exists, the another key-value pair will be added 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Name|No||Header name |
+|Value|No||Value of the header |
+### [SetRequestInfoToResponse](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SetRequestInfoToResponse.cs)
+#### Summary
+Writes client request information to the body of client response. Main usage is debugging and troubleshooting. 
+#### Remarks
+Action writes to the client response following:<br>* Host<br>* Request Path<br>* Request Path Base<br>* Method<br>* Headers<br>* Inbound IP<br>
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|HttpCode|Yes|200 |HTTP code set to the client response |
+|HeadLine|Yes|"Debug information:" |Headline added before request information |
+### [SetResponseHeader](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SetResponseHeader.cs)
+#### Summary
+Adds new header to the client request. If header already exists, the another key-value pair will be added 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Name|No||Header name |
+|Value|No||Value of the header |
+### [ReturnStaticFile](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/ReturnStaticFile.cs)
+#### Summary
+Returns static content (file) to the client. 
+#### Remarks
+Files can be stored either on the file system or in the storage account. See StaticFileProvider configuration 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Path|No||Relative path to the file. |
+|NotFoundMessage|Yes|empty string|String that is written to the client response body if file wasn't found |
+|AutoDiscoverMimeType|Yes|true|If set to true, tries automatically discover mime type depending on the file name and adds appropriate header to client response. For more details read about [IContentTypeProvider](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.staticfiles.icontenttypeprovider?view=aspnetcore-7.0) |
+#### Return
+Fails if file not found. Set HTTP Code 404 to client response in this case 
+### [RemoteCall](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/RemoteCall.cs)
+#### Summary
+Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Path|No||Url of the downstream service. Allows using runtime variables |
+|Method|No||HTTP Method used to call downstream service |
+|Timeout|Yes|-1 (infinite)|Timeout in milliseconds that used for outgoing http call. If timeout occurs, gateway chain set as failed and status code set to 504 (Gateway timeout) |
+|EnableRedirect|Yes|true|If true and remote service replies redirect code, action automatically calls redirected location and write redirected call to the client response.<br>If false, HTTP Redirect code received from remote server is not validated and is written to client response as is. Client will be responsible to handle redirect response himself. |
+#### Return
+Fails only if timeout occured. Succeeds otherwise. 
+#### Example
+```jsonc
 
-#### ReturnStaticContent
-Important: 
-* if AutoDiscoverMimeType is not set to false (default is true), content type is determined on the fly by [IContentTypeProvider](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.staticfiles.icontenttypeprovider?view=aspnetcore-7.0) and set as appropriate header
-* If route is setup to use wildcard, configured to return static file content, but file is not found, then Action will return 404 (with body if configured), but globalNotFound handler will not be executed. So, you'll receive just 404, without any other decorations that were setup for not-found routes.
-
-
-[Actions registrations](Apps/Gateway/Actions/ActionFactoryBuilderExtensions.cs)
+            {
+              "type": "RemoteCall",
+              "path": "https://www.google.com/@(requestRemainingPath)",
+              "method": "get"
+              "timeout": 500
+            }
+            
+```
+### [SuppressResponseHeaders](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SuppressResponseHeaders.cs)
+#### Summary
+Removes header from client response 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Headers|No||List of header names to be removed from the response |
+### [CheckIPs](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/CheckIPs.cs)
+#### Summary
+Verifies inbound IP address 
+#### Remarks
+Inbound ip address is taken from the client HTTP request properties. 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|WhiteList|No||Array of the allowed IPs |
+|NoAccessStatusCode|Yes|403|Status code returned in case of failure |
+|NoAccessResponseBody|Yes|Empty string|Response body returned in case of failure. |
+#### Return
+Secceeded if IP found in a specified white list. Fails otherwise otherwise 
+### [SuppressRequestHeaders](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SuppressRequestHeaders.cs)
+#### Summary
+Removes header from client request 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Headers|No||List of header names to be removed from the request |
+### [SetResponse](../../SecuredApi/Logic/Routing.Model/ActionsActions.Basic/SetResponse.cs)
+#### Summary
+Sets client response 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|HttpCode|No||Http code that is set to client response |
+|Body|No||Body |
+## Auth
+### [CheckSubscription](../../SecuredApi/Logic/Routing.Model/ActionsActions.Auth/CheckSubscription.cs)
+#### Summary
+Verify the subscription key (api key) and checks if subscription is allowed for this route 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|SubscriptionKeyHeaderName|No||Header name that bears subscription key |
+|SuppressHeader|Yes|true|Removes this header from the outgoing request |
+|ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
+|ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
+#### Return
+Action fails if:<br>* Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied) 
+### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Model/ActionsActions.Auth/CheckEntraJwt.cs)
+#### Summary
+Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. 
+#### Remarks
+Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|OneOfIssuers|No||One of allowed issuers |
+|OneOfAudiences|No||One of expected audiences |
+|OneOfRoles|Yes|null |One of roles that must be in the JWT |
+|OneOfScopes|Yes|null |One of scopes that must be in the JWT |
+|HeaderName|Yes|"Authorization" |HTTP Header name that bears JWT token |
+|TokenPrefix|Yes|"Bearer " |Prefix in the header value, that bears JWT token |
+|KeepData|Yes|false |Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released. If CheckEntraJwtClaims action is used later for this route, then value shold be true. |
+#### Return
+Fails in following cases:<br>I. Not authorized; Set 401 status code to client response:<br>* JWT token malformed<br>* JWT token doesn't signed by key that correspond to the provided issuer<br>II. Access Denied; Sets 403 status code to client response:<br>* Token issuer is invalid<br>* Audience is invalid<br>* Roles are invalid<br>* Scopes are invalid 
+### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Model/ActionsActions.Auth/CheckEntraJwtClaims.cs)
+#### Summary
+Checks claims of the entra jwt.  
+#### Remarks
+This action should go only after CheckEntraJwt action. In some cases it's more convenient to CheckEntaJwt for group of routes, but check different claims for different routes in this group. 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
+|OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
+#### Return
+Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters. In this case sets http code to 403 (access denied) in the client response. 
+### [RunConsumerActions](../../SecuredApi/Logic/Routing.Model/ActionsActions.Auth/RunConsumerActions.cs)
+#### Summary
+Runs actions configured for the specified consumer. 
+#### Remarks
+Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+#### Parameters
+No parameters
+#### Return
+Fails when:<br>* one of consumer actions fails. HTTP code in client response is set according to the consumer action<br>* if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted<br>If consumer actions sucessful (if any), the action succeeded. 

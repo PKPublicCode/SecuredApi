@@ -1,0 +1,439 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SecuredApi.Logic.Routing.Model</name>
+    </assembly>
+    <members>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt">
+             <summary>
+             Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience.
+             </summary>
+             <remarks>
+             Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon
+             </remarks>
+             <return>
+             Fails in following cases:
+             
+             I. Not authorized; Set 401 status code to client response:
+            
+             * JWT token malformed
+            
+             * JWT token doesn't signed by key that correspond to the provided issuer
+            
+             II. Access Denied; Sets 403 status code to client response:
+             
+             * Token issuer is invalid
+            
+             * Audience is invalid
+            
+             * Roles are invalid
+            
+             * Scopes are invalid
+             </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.OneOfIssuers">
+            <summary>
+            One of allowed issuers
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.OneOfAudiences">
+            <summary>
+            One of expected audiences
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.OneOfRoles">
+            <summary>
+            One of roles that must be in the JWT
+            </summary>
+            <value>
+            null
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.OneOfScopes">
+            <summary>
+            One of scopes that must be in the JWT
+            </summary>
+            <value>
+            null
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.HeaderName">
+            <summary>
+            HTTP Header name that bears JWT token
+            </summary>
+            <value>
+            "Authorization"
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.TokenPrefix">
+            <summary>
+            Prefix in the header value, that bears JWT token
+            </summary>
+            <value>
+            "Bearer "
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.KeepData">
+            <summary>
+            Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released.
+            If CheckEntraJwtClaims action is used later for this route, then value shold be true.
+            </summary>
+            <value>
+            false
+            </value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwtClaims">
+            <summary>
+            Checks claims of the entra jwt. 
+            </summary>
+            <remarks>
+            This action should go only after CheckEntraJwt action. In some cases it's more convenient
+            to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
+            </remarks>
+            <return>
+            Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters.
+            In this case sets http code to 403 (access denied) in the client response.
+            </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwtClaims.OneOfRoles">
+            <summary>
+            Sets one of roles that must be set in the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwtClaims.OneOfScopes">
+            <summary>
+            Sets one of scopes that must be set the JWT
+            </summary>
+            <value>null</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwtClaims.Cleanup">
+            <summary>
+            If true, releases parsed JWT object and frees memory
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription">
+             <summary>
+             Verify the subscription key (api key) and checks if subscription is allowed for this route
+             </summary>
+             <return>
+             Action fails if:
+             
+             * Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)
+             
+             * Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)
+            
+             * Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied)
+             </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription.SubscriptionKeyHeaderName">
+            <summary>
+            Header name that bears subscription key
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription.SuppressHeader">
+            <summary>
+            Removes this header from the outgoing request
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription.ErrorNotAuthorizedBody">
+            <summary>
+            Customized body if key not valid
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription.ErrorAccessDeniedBody">
+            <summary>
+            Customized body if key is valid, but not allowed for this routes group
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Auth.RunConsumerActions">
+             <summary>
+             Runs actions configured for the specified consumer.
+             </summary>
+             <remarks>
+             Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
+             loads actions configured for the consumer, and executes them
+             </remarks>
+             <return>
+             Fails when:
+            
+             * one of consumer actions fails. HTTP code in client response is set according to the consumer action
+            
+             * if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted
+            
+             If consumer actions sucessful (if any), the action succeeded.
+             </return>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs">
+            <summary>
+            Verifies inbound IP address
+            </summary>
+            <remarks>
+            Inbound ip address is taken from the client HTTP request properties.
+            </remarks>
+            <return>
+            Secceeded if IP found in a specified white list. Fails otherwise otherwise
+            </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs.WhiteList">
+            <summary>
+            Array of the allowed IPs
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs.NoAccessStatusCode">
+            <summary>
+            Status code returned in case of failure
+            </summary>
+            <value>403</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs.NoAccessResponseBody">
+            <summary>
+            Response body returned in case of failure.
+            </summary>
+            <value>Empty string</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.Delay">
+            <summary>
+            Pauses processing of request for specified time interval.
+            </summary>
+            <remarks>
+            During the request this action waits for a specified time. No interaction with the client request or response happens.
+            Can be used to mimic load of the service(s).
+            </remarks>
+            <example>
+            {
+                "type":"delay"
+                "Milliseconds": 300
+            }
+            </example>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.Delay.Milliseconds">
+            <summary>
+            Time to wait
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.RemoteCall">
+            <summary>
+            Makes outgoing http(s) call to remote service using current state of the client request.
+            Response of the service, including headers, status code and body is saved to the client response
+            </summary>
+            <return>
+            Fails only if timeout occured. Succeeds otherwise.
+            </return>
+            <example>
+            {
+              "type": "RemoteCall",
+              "path": "https://www.google.com/@(requestRemainingPath)",
+              "method": "get"
+              "timeout": 500
+            }
+            </example>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.RemoteCall.Path">
+            <summary>
+            Url of the downstream service. Allows using runtime variables
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.RemoteCall.Method">
+            <summary>
+            HTTP Method used to call downstream service
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.RemoteCall.Timeout">
+            <summary>
+            Timeout in milliseconds that used for outgoing http call.
+            If timeout occurs, gateway chain set as failed and status code set to 504 (Gateway timeout)
+            </summary>
+            <value>-1 (infinite)</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.RemoteCall.EnableRedirect">
+            <summary>
+            If true and remote service replies redirect code, action automatically calls redirected location
+            and write redirected call to the client response.
+            
+            If false, HTTP Redirect code received from remote server is not validated and is written to client response as is.
+            Client will be responsible to handle redirect response himself.
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.ReturnStaticFile">
+            <summary>
+            Returns static content (file) to the client.
+            </summary>
+            <remarks>
+            Files can be stored either on the file system or in the storage account.
+            See StaticFileProvider configuration
+            </remarks>
+            <return>
+            Fails if file not found. Set HTTP Code 404 to client response in this case
+            </return>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.ReturnStaticFile.Path">
+            <summary>
+            Relative path to the file.
+            </summary>
+            <remarks>
+            Allows using runtime variables
+            </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.ReturnStaticFile.NotFoundMessage">
+            <summary>
+            String that is written to the client response body if file wasn't found
+            </summary>
+            <value>empty string</value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.ReturnStaticFile.AutoDiscoverMimeType">
+            <summary>
+            If set to true, tries automatically discover mime type depending on the file name and adds appropriate header to client response.
+            For more details read about [IContentTypeProvider](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.staticfiles.icontenttypeprovider?view=aspnetcore-7.0)
+            </summary>
+            <value>true</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestHeader">
+            <summary>
+            Adds new header to the client response. If header already exists, the another key-value pair will be added
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestHeader.Name">
+            <summary>
+            Header name
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestHeader.Value">
+            <summary>
+            Value of the header
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestInfoToResponse">
+            <summary>
+            Writes client request information to the body of client response. Main usage is debugging and troubleshooting.
+            </summary>
+            <remarks>
+            Action writes to the client response following:
+            
+            * Host
+            
+            * Request Path
+            
+            * Request Path Base
+            
+            * Method
+            
+            * Headers
+            
+            * Inbound IP
+            
+            </remarks>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestInfoToResponse.HttpCode">
+            <summary>
+            HTTP code set to the client response
+            </summary>
+            <value>
+            200
+            </value>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetRequestInfoToResponse.HeadLine">
+            <summary>
+            Headline added before request information
+            </summary>
+            <value>
+            "Debug information:"
+            </value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponse">
+            <summary>
+            Sets client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponse.HttpCode">
+            <summary>
+            Http code that is set to client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponse.Body">
+            <summary>
+            Body
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponseHeader">
+            <summary>
+            Adds new header to the client request. If header already exists, the another key-value pair will be added
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponseHeader.Name">
+            <summary>
+            Header name
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SetResponseHeader.Value">
+            <summary>
+            Value of the header
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SuppressRequestHeaders">
+            <summary>
+            Removes header from client request
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SuppressRequestHeaders.Headers">
+            <summary>
+            List of header names to be removed from the request
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.SuppressResponseHeaders">
+            <summary>
+            Removes header from client response
+            </summary>
+        </member>
+        <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.SuppressResponseHeaders.Headers">
+            <summary>
+            List of header names to be removed from the response
+            </summary>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth">
+            <summary>
+            Variables used by authentication actions
+            </summary>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth.ConsumerId">
+            <summary>
+            Id of consumer captured if authentication was successful
+            </summary>
+            <value>consumerId</value>
+        </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request">
+            <summary>
+            Variables set by routing engine for this request and route
+            </summary>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.RemainingPath">
+            <summary>
+            Remained path that was captured by * (asterisk) for the rote.
+            For example, if route was defined for ```/api/some_feature/*```,
+            and received request with path ```/api/some_feature/a/b/c/d```
+            then remained path will be ```a/b/c/d```
+            </summary>
+            <value>requestRemainingPath</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.HttpMethod">
+            <summary>
+            Http Method of client request
+            </summary>
+            <value>requestHttpMethod</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.QueryString">
+            <summary>
+            Query string of the request.
+            For example, if route was defined for ```/api/some_feature```,
+            and received request with path ```/api/some_feature?a=1&amp;b=2```
+            then query string will be ```a=1&amp;b=2``
+            </summary>
+            <value>requestQueryString</value>
+        </member>
+    </members>
+</doc>

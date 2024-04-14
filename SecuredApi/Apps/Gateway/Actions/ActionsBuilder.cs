@@ -37,11 +37,23 @@ public class ActionsBuilder
         return this;
     }
 
+    public ActionsBuilder AddAction<TAction, TSettings>()
+        where TAction : IAction
+    {
+        return AddAction<TAction, TSettings>(typeof(TSettings).Name);
+    }
+
     public ActionsBuilder AddScopedAction<TAction, TSettings>(string name)
         where TAction : class, IScopedAction<TSettings>
     {
         _actions[name] = MakeScopedAction<TAction, TSettings>();
         return this;
+    }
+
+    public ActionsBuilder AddScopedAction<TAction, TSettings>()
+        where TAction : class, IScopedAction<TSettings>
+    {
+        return AddScopedAction<TAction, TSettings>(typeof(TSettings).Name);
     }
 
     public IServiceCollection ConfigureActionFactory()

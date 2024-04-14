@@ -13,12 +13,13 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.AspNetCore.Http;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
 public class SetResponseHeaderAction : SetHeaderActionBase
 {
-    public SetResponseHeaderAction(SetHeaderActionSettings settings)
+    public SetResponseHeaderAction(SetResponseHeader settings)
         :base(settings)
     {
     }

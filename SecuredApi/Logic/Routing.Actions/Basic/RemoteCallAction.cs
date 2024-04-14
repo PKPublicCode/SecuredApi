@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Variables;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
@@ -29,7 +30,7 @@ public class RemoteCallAction: IAction
     private readonly TimeSpan _timeout;
     private readonly string _clientName;
 
-    public RemoteCallAction(RemoteCallActionSettings config)
+    public RemoteCallAction(RemoteCall config)
     {
         _path = config.Path;
         _method = config.Method;

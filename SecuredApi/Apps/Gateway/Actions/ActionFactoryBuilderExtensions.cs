@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.OAuth;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Actions;
 
@@ -35,20 +37,20 @@ public static class ActionFactoryBuilderExtensions
     private static ActionsBuilder CreateDefaultActionsFactory(this IServiceCollection srv)
     {
         return srv.CreateActionFactoryBuilder()
-            .AddAction<RemoteCallAction, RemoteCallActionSettings>("RemoteCall")
-            .AddAction<SetResponseAction, SetResponseActionSettings>("SetResponse")
-            .AddAction<CheckSubscriptionAction, CheckSubscriptionActionSettings>("CheckSubscription")
-            .AddAction<SetResponseHeaderAction, SetHeaderActionSettings>("SetResponseHeader")
-            .AddAction<SetRequestHeaderAction, SetHeaderActionSettings>("SetRequestHeader")
-            .AddScopedAction<RunConsumerActionsAction, EmptySettings>("RunConsumerActions")
-            .AddAction<DelayAction, DelayActionSettings>("Delay")
-            .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponseActionSettings>("SetRequestInfoToResponse")
-            .AddAction<SuppressResponseHeadersAction, SuppressHeadersActionSettings>("SuppressResponseHeaders")
-            .AddAction<SuppressRequestHeadersAction, SuppressHeadersActionSettings>("SuppressRequestHeaders")
-            .AddAction<CheckIPsAction, CheckIPsActionSettings>("CheckIPs")
-            .AddAction<ReturnStaticFileAction, ReturnStaticFileActionSettings>("ReturnStaticFile")
-            .AddAction<CheckEntraJwtAction, CheckEntraJwtActionSettings>("CheckEntraJwt")
-            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaimsActionSettings>("CheckEntraJwtClaims")
+            .AddAction<RemoteCallAction, RemoteCall>()
+            .AddAction<SetResponseAction, SetResponse>()
+            .AddAction<CheckSubscriptionAction, CheckSubscription>()
+            .AddAction<SetResponseHeaderAction, SetResponseHeader>()
+            .AddAction<SetRequestHeaderAction, SetRequestHeader>()
+            .AddAction<RunConsumerActionsAction2, RunConsumerActions>()
+            .AddAction<DelayAction, Delay>()
+            .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponse>()
+            .AddAction<SuppressResponseHeadersAction, SuppressResponseHeaders>()
+            .AddAction<SuppressRequestHeadersAction, SuppressRequestHeaders>()
+            .AddAction<CheckIPsAction, CheckIPs>()
+            .AddAction<ReturnStaticFileAction, ReturnStaticFile>()
+            .AddAction<CheckEntraJwtAction, CheckEntraJwt>()
+            .AddAction<CheckEntraJwtClaimsAction, CheckEntraJwtClaims>()
             ;
     } 
 }

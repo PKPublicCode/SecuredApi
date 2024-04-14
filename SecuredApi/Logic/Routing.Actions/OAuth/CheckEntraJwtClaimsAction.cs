@@ -15,22 +15,24 @@
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
+using Names = SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth;
 using Microsoft.IdentityModel.JsonWebTokens;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 
 public class CheckEntraJwtClaimsAction: IAction
 {
-    private readonly CheckEntraJwtClaimsActionSettings _settings;
+    private readonly CheckEntraJwtClaims _settings;
 
-    public CheckEntraJwtClaimsAction(CheckEntraJwtClaimsActionSettings settings)
+    public CheckEntraJwtClaimsAction(CheckEntraJwtClaims settings)
     {
         _settings = settings;
     }
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
     {
-        if (context.TryGetVariable<JsonWebToken>(VariableNames.Jwt.Token, out var token))
+        if (context.TryGetVariable<JsonWebToken>(Names.ParsedJwtToken, out var token))
         {
             var result = TokenValidator.ValidateClaims(token, _settings.OneOfRoles, _settings.OneOfScopes);
 
@@ -41,7 +43,7 @@ public class CheckEntraJwtClaimsAction: IAction
 
             if (_settings.Cleanup)
             {
-                context.Variables.RemoveVariable(VariableNames.Jwt.Token);
+                context.Variables.RemoveVariable(Names.ParsedJwtToken);
             }
             return true;
         }

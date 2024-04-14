@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SecuredApi.Logic.Routing.Model</RootNamespace>
+    <AssemblyName>SecuredApi.Logic.Routing.Model</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Model.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Variables.Abstractions\Logic.Variables.Abstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="RuntimeVariables\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RuntimeVariables\" />
+  </ItemGroup>
+</Project>

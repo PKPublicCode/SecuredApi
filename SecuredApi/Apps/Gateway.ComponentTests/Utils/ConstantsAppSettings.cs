@@ -64,8 +64,8 @@ public static partial class Constants
         public const string SubscriptionKeyNotSetOrInvalid = "Subscription key not set or invalid";
         public const string CallNotAllowed = "Call Not Allowed";
         public const string PrivateRedirectWildcard = "Private echo wildcard route, api 1";
-        public const string NotAuthorized = "Not Authorized";
-        public const string AccessDenied = "Access Denied";
+        public const string NotAuthorized = "";
+        public const string AccessDenied = "";
     }
 
     public static class JwtClaims

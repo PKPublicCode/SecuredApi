@@ -38,5 +38,7 @@ License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/maste
 ### Documentation
 [Performance](./Docs/Product/Performance.md)
 
+[Routing](./Docs/Product/Routing.md)
+
 [Configuration](./Docs/Product/Configuration.md)
 

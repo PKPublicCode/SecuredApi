@@ -19,6 +19,7 @@ using SecuredApi.Logic.Routing.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using SecuredApi.Logic.Variables;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
@@ -28,7 +29,7 @@ public class ReturnStaticFileAction : IAction
     private readonly bool _autoMimeType;
     public RuntimeExpression _path { get; init; }
 
-    public ReturnStaticFileAction(ReturnStaticFileActionSettings settings)
+    public ReturnStaticFileAction(ReturnStaticFile settings)
     {
         _notFoundBody = settings.NotFoundMessage ?? StringResponseStream.Empty;
         _autoMimeType = settings.AutoDiscoverMimeType;

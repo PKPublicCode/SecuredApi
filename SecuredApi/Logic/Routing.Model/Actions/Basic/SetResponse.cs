@@ -12,13 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic;
-
-public class CheckIPsActionSettings
+/// <summary>
+/// Sets client response
+/// </summary>
+public class SetResponse
 {
-    public HashSet<string> WhiteList { get; init; } = null!;
-    public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
-    public string NoAccessResponseBody { get; init; } = string.Empty;
+    /// <summary>
+    /// Http code that is set to client response
+    /// </summary>
+    public int HttpCode { get; init; }
+    /// <summary>
+    /// Body
+    /// </summary>
+    public string Body { get; init; } = string.Empty;
 }

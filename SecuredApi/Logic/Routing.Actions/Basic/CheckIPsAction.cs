@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
@@ -22,7 +23,7 @@ public class CheckIPsAction : IAction
     private readonly int _noAccessStatusCode;
     private readonly string _noAccessResponseBody;
 
-    public CheckIPsAction(CheckIPsActionSettings settings)
+    public CheckIPsAction(CheckIPs settings)
     {
         _whiteList = settings.WhiteList;
         _noAccessStatusCode = settings.NoAccessStatusCode;

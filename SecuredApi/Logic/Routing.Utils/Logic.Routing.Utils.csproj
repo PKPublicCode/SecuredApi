@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Logic.Common.csproj" />
     <ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
+    <ProjectReference Include="..\Routing.Model\Logic.Routing.Model.csproj" />
   </ItemGroup>
 
 </Project>
