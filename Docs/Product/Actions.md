@@ -3,46 +3,37 @@
 ### Auth
 |Type|Fallible|Description|
 |----|------|-----------|
-|[RunConsumerActions](#RunConsumerActions)|Yes|Runs actions configured for the specified consumer. |
-|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|Yes|Checks claims of the entra jwt.  |
-|[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
 |[CheckSubscription](#CheckSubscription)|Yes|Verify the subscription key (api key) and checks if subscription is allowed for this route |
+|[CheckEntraJwt](#CheckEntraJwt)|Yes|Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. |
+|[CheckEntraJwtClaims](#CheckEntraJwtClaims)|Yes|Checks claims of the entra jwt.  |
+|[RunConsumerActions](#RunConsumerActions)|Yes|Runs actions configured for the specified consumer. |
 ### Basic
 |Type|Fallible|Description|
 |----|------|-----------|
 |[Delay](#Delay)|No|Pauses processing of request for specified time interval. |
+|[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
+|[SetRequestInfoToResponse](#SetRequestInfoToResponse)|No|Writes client request information to the body of client response. Main usage is debugging and troubleshooting. |
 |[SetResponseHeader](#SetResponseHeader)|No|Adds new header to the client request. If header already exists, the another key-value pair will be added |
-|[SuppressResponseHeaders](#SuppressResponseHeaders)|No|Removes header from client response |
-|[SetResponse](#SetResponse)|No|Sets client response |
 |[ReturnStaticFile](#ReturnStaticFile)|Yes|Returns static content (file) to the client. |
 |[RemoteCall](#RemoteCall)|Yes|Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response |
-|[SetRequestInfoToResponse](#SetRequestInfoToResponse)|No|Writes client request information to the body of client response. Main usage is debugging and troubleshooting. |
+|[SuppressResponseHeaders](#SuppressResponseHeaders)|No|Removes header from client response |
 |[CheckIPs](#CheckIPs)|Yes|Verifies inbound IP address |
 |[SuppressRequestHeaders](#SuppressRequestHeaders)|No|Removes header from client request |
-|[SetRequestHeader](#SetRequestHeader)|No|Adds new header to the client response. If header already exists, the another key-value pair will be added |
+|[SetResponse](#SetResponse)|No|Sets client response |
 ## Auth
-### [RunConsumerActions](../../SecuredApi/Logic/Routing.Actions.Model/Auth/RunConsumerActions.cs)
+### [CheckSubscription](../../SecuredApi/Logic/Routing.Model/ActionsAuth/CheckSubscription.cs)
 #### Summary
-Runs actions configured for the specified consumer. 
-#### Remarks
-Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
-#### Parameters
-No parameters
-#### Return
-Fails when:<br>* one of consumer actions fails. HTTP code in client response is set according to the consumer action<br>* if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted<br>If consumer actions sucessful (if any), the action succeeded. 
-### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwtClaims.cs)
-#### Summary
-Checks claims of the entra jwt.  
-#### Remarks
-This action should go only after CheckEntraJwt action. In some cases it's more convenient to CheckEntaJwt for group of routes, but check different claims for different routes in this group. 
+Verify the subscription key (api key) and checks if subscription is allowed for this route 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
-|OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
-|OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
+|SubscriptionKeyHeaderName|No||Header name that bears subscription key |
+|SuppressHeader|Yes|true|Removes this header from the outgoing request |
+|ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
+|ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
 #### Return
-Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters. In this case sets http code to 403 (access denied) in the client response. 
-### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckEntraJwt.cs)
+Action fails if:<br>* Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied) 
+### [CheckEntraJwt](../../SecuredApi/Logic/Routing.Model/ActionsAuth/CheckEntraJwt.cs)
 #### Summary
 Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience. 
 #### Remarks
@@ -59,20 +50,29 @@ Validation is designed for and tested with Entra (Azure AD) json web tokens. Oth
 |KeepData|Yes|false |Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released. If CheckEntraJwtClaims action is used later for this route, then value shold be true. |
 #### Return
 Fails in following cases:<br>I. Not authorized; Set 401 status code to client response:<br>* JWT token malformed<br>* JWT token doesn't signed by key that correspond to the provided issuer<br>II. Access Denied; Sets 403 status code to client response:<br>* Token issuer is invalid<br>* Audience is invalid<br>* Roles are invalid<br>* Scopes are invalid 
-### [CheckSubscription](../../SecuredApi/Logic/Routing.Actions.Model/Auth/CheckSubscription.cs)
+### [CheckEntraJwtClaims](../../SecuredApi/Logic/Routing.Model/ActionsAuth/CheckEntraJwtClaims.cs)
 #### Summary
-Verify the subscription key (api key) and checks if subscription is allowed for this route 
+Checks claims of the entra jwt.  
+#### Remarks
+This action should go only after CheckEntraJwt action. In some cases it's more convenient to CheckEntaJwt for group of routes, but check different claims for different routes in this group. 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
-|SubscriptionKeyHeaderName|No||Header name that bears subscription key |
-|SuppressHeader|Yes|true|Removes this header from the outgoing request |
-|ErrorNotAuthorizedBody|Yes|empty string|Customized body if key not valid |
-|ErrorAccessDeniedBody|Yes|empty string|Customized body if key is valid, but not allowed for this routes group |
+|OneOfRoles|Yes|null|Sets one of roles that must be set in the JWT |
+|OneOfScopes|Yes|null|Sets one of scopes that must be set the JWT |
 #### Return
-Action fails if:<br>* Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)<br>* Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied) 
+Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters. In this case sets http code to 403 (access denied) in the client response. 
+### [RunConsumerActions](../../SecuredApi/Logic/Routing.Model/ActionsAuth/RunConsumerActions.cs)
+#### Summary
+Runs actions configured for the specified consumer. 
+#### Remarks
+Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+#### Parameters
+No parameters
+#### Return
+Fails when:<br>* one of consumer actions fails. HTTP code in client response is set according to the consumer action<br>* if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted<br>If consumer actions sucessful (if any), the action succeeded. 
 ## Basic
-### [Delay](../../SecuredApi/Logic/Routing.Actions.Model/Basic/Delay.cs)
+### [Delay](../../SecuredApi/Logic/Routing.Model/ActionsBasic/Delay.cs)
 #### Summary
 Pauses processing of request for specified time interval. 
 #### Remarks
@@ -90,7 +90,25 @@ During the request this action waits for a specified time. No interaction with t
             }
             
 ```
-### [SetResponseHeader](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetResponseHeader.cs)
+### [SetRequestHeader](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SetRequestHeader.cs)
+#### Summary
+Adds new header to the client response. If header already exists, the another key-value pair will be added 
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|Name|No||Header name |
+|Value|No||Value of the header |
+### [SetRequestInfoToResponse](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SetRequestInfoToResponse.cs)
+#### Summary
+Writes client request information to the body of client response. Main usage is debugging and troubleshooting. 
+#### Remarks
+Action writes to the client response following:<br>* Host<br>* Request Path<br>* Request Path Base<br>* Method<br>* Headers<br>* Inbound IP<br>
+#### Parameters
+|Name|Optional|Default Value|Description|
+|----|--------|-------------|-----------|
+|HttpCode|Yes|200 |HTTP code set to the client response |
+|HeadLine|Yes|"Debug information:" |Headline added before request information |
+### [SetResponseHeader](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SetResponseHeader.cs)
 #### Summary
 Adds new header to the client request. If header already exists, the another key-value pair will be added 
 #### Parameters
@@ -98,22 +116,7 @@ Adds new header to the client request. If header already exists, the another key
 |----|--------|-------------|-----------|
 |Name|No||Header name |
 |Value|No||Value of the header |
-### [SuppressResponseHeaders](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SuppressResponseHeaders.cs)
-#### Summary
-Removes header from client response 
-#### Parameters
-|Name|Optional|Default Value|Description|
-|----|--------|-------------|-----------|
-|Headers|No||List of header names to be removed from the response |
-### [SetResponse](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetResponse.cs)
-#### Summary
-Sets client response 
-#### Parameters
-|Name|Optional|Default Value|Description|
-|----|--------|-------------|-----------|
-|HttpCode|No||Http code that is set to client response |
-|Body|No||Body |
-### [ReturnStaticFile](../../SecuredApi/Logic/Routing.Actions.Model/Basic/ReturnStaticFile.cs)
+### [ReturnStaticFile](../../SecuredApi/Logic/Routing.Model/ActionsBasic/ReturnStaticFile.cs)
 #### Summary
 Returns static content (file) to the client. 
 #### Remarks
@@ -126,7 +129,7 @@ Files can be stored either on the file system or in the storage account. See Sta
 |AutoDiscoverMimeType|Yes|true|If set to true, tries automatically discover mime type depending on the file name and adds appropriate header to client response. For more details read about [IContentTypeProvider](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.staticfiles.icontenttypeprovider?view=aspnetcore-7.0) |
 #### Return
 Fails if file not found. Set HTTP Code 404 to client response in this case 
-### [RemoteCall](../../SecuredApi/Logic/Routing.Actions.Model/Basic/RemoteCall.cs)
+### [RemoteCall](../../SecuredApi/Logic/Routing.Model/ActionsBasic/RemoteCall.cs)
 #### Summary
 Makes outgoing http(s) call to remote service using current state of the client request. Response of the service, including headers, status code and body is saved to the client response 
 #### Parameters
@@ -149,17 +152,14 @@ Fails only if timeout occured. Succeeds otherwise.
             }
             
 ```
-### [SetRequestInfoToResponse](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetRequestInfoToResponse.cs)
+### [SuppressResponseHeaders](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SuppressResponseHeaders.cs)
 #### Summary
-Writes client request information to the body of client response. Main usage is debugging and troubleshooting. 
-#### Remarks
-Action writes to the client response following:<br>* Host<br>* Request Path<br>* Request Path Base<br>* Method<br>* Headers<br>* Inbound IP<br>
+Removes header from client response 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
-|HttpCode|Yes|200 |HTTP code set to the client response |
-|HeadLine|Yes|"Debug information:" |Headline added before request information |
-### [CheckIPs](../../SecuredApi/Logic/Routing.Actions.Model/Basic/CheckIPs.cs)
+|Headers|No||List of header names to be removed from the response |
+### [CheckIPs](../../SecuredApi/Logic/Routing.Model/ActionsBasic/CheckIPs.cs)
 #### Summary
 Verifies inbound IP address 
 #### Remarks
@@ -172,18 +172,18 @@ Inbound ip address is taken from the client HTTP request properties.
 |NoAccessResponseBody|Yes|Empty string|Response body returned in case of failure. |
 #### Return
 Secceeded if IP found in a specified white list. Fails otherwise otherwise 
-### [SuppressRequestHeaders](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SuppressRequestHeaders.cs)
+### [SuppressRequestHeaders](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SuppressRequestHeaders.cs)
 #### Summary
 Removes header from client request 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
 |Headers|No||List of header names to be removed from the request |
-### [SetRequestHeader](../../SecuredApi/Logic/Routing.Actions.Model/Basic/SetRequestHeader.cs)
+### [SetResponse](../../SecuredApi/Logic/Routing.Model/ActionsBasic/SetResponse.cs)
 #### Summary
-Adds new header to the client response. If header already exists, the another key-value pair will be added 
+Sets client response 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|
-|Name|No||Header name |
-|Value|No||Value of the header |
+|HttpCode|No||Http code that is set to client response |
+|Body|No||Body |

@@ -12,7 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
+namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 /// <summary>
 /// Runs actions configured for the specified consumer.

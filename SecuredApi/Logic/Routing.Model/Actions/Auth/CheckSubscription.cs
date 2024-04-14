@@ -12,7 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Auth;
+namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 /// <summary>
 /// Verify the subscription key (api key) and checks if subscription is allowed for this route

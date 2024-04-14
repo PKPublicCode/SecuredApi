@@ -1,6 +1,6 @@
-$inputFile = "$PSScriptRoot/../../SecuredApi/Logic/Routing.Actions.Model/XmlDocs/Model.xml"
-$outputFile = "$PSScriptRoot/../../Docs/Product/Actions.md"
-$sourceBasePath = "../../SecuredApi/Logic/Routing.Actions.Model/"
+$inputFile = "$PSScriptRoot/../../SecuredApi/Logic/Routing.Model/Model.xml"
+$actionsOutputFile = "$PSScriptRoot/../../Docs/Product/Actions.md"
+$actionsSourceBasePath = "../../SecuredApi/Logic/Routing.Model/Actions"
 
 [xml]$content = Get-Content $inputFile
 
@@ -69,7 +69,7 @@ function GetGroupForProperty([string] $str) {
 }
 
 function GetSourcePath([string] $str) {
-    return "$sourceBasePath$(GetGroupForType $str)/$(GetShortName $str).cs"
+    return "$actionsSourceBasePath$(GetGroupForType $str)/$(GetShortName $str).cs"
 }
 
 function EnsureObjectsCreated([string] $group, [string] $fullActionName) {
@@ -114,51 +114,51 @@ foreach ($member in $content.doc.members.member) {
 }
 
 
-"# Actions" | Out-File $outputFile
-"## Summary" | Out-File $outputFile -Append
+"# Actions" | Out-File $actionsOutputFile
+"## Summary" | Out-File $actionsOutputFile -Append
 foreach($group in $groupped.Keys) {
     $docMap = $groupped[$group]
-    "### $($group)" | Out-File $outputFile -Append
-    "|Type|Fallible|Description|" | Out-File $outputFile -Append
-    "|----|------|-----------|" | Out-File $outputFile -Append
+    "### $($group)" | Out-File $actionsOutputFile -Append
+    "|Type|Fallible|Description|" | Out-File $actionsOutputFile -Append
+    "|----|------|-----------|" | Out-File $actionsOutputFile -Append
     foreach($action in $docMap.Values){
-        "|[$($action.shortName)](#$($action.shortName))|$($action.returns ? "Yes" : "No")|$($action.summary)|" | Out-File $outputFile -Append
+        "|[$($action.shortName)](#$($action.shortName))|$($action.returns ? "Yes" : "No")|$($action.summary)|" | Out-File $actionsOutputFile -Append
     }
 }
 
 foreach($group in $groupped.Keys) {
     $docMap = $groupped[$group]
-    "## $($group)" | Out-File $outputFile -Append
+    "## $($group)" | Out-File $actionsOutputFile -Append
     foreach($action in $docMap.Values){
-        "### [$($action.shortName)]($($action.sourcePath))" | Out-File $outputFile -Append
-        "#### Summary" | Out-File $outputFile -Append
-        $action.summary | Out-File $outputFile -Append
+        "### [$($action.shortName)]($($action.sourcePath))" | Out-File $actionsOutputFile -Append
+        "#### Summary" | Out-File $actionsOutputFile -Append
+        $action.summary | Out-File $actionsOutputFile -Append
         if ($action.remarks) {
-            "#### Remarks" | Out-File $outputFile -Append
-            $action.remarks | Out-File $outputFile -Append
+            "#### Remarks" | Out-File $actionsOutputFile -Append
+            $action.remarks | Out-File $actionsOutputFile -Append
         }
         
-        "#### Parameters" | Out-File $outputFile -Append
+        "#### Parameters" | Out-File $actionsOutputFile -Append
         if ($action.properties) {
-            "|Name|Optional|Default Value|Description|" | Out-File $outputFile -Append
-            "|----|--------|-------------|-----------|" | Out-File $outputFile -Append
+            "|Name|Optional|Default Value|Description|" | Out-File $actionsOutputFile -Append
+            "|----|--------|-------------|-----------|" | Out-File $actionsOutputFile -Append
             foreach($prop in $action.properties){
-                "|$($prop.shortName)|$($prop.default ? "Yes" : "No")|$($prop.default ? $prop.default : '')|$($prop.summary)|" | Out-File $outputFile -Append
+                "|$($prop.shortName)|$($prop.default ? "Yes" : "No")|$($prop.default ? $prop.default : '')|$($prop.summary)|" | Out-File $actionsOutputFile -Append
             }
         }
         else {
-            "No parameters" | Out-File $outputFile -Append
+            "No parameters" | Out-File $actionsOutputFile -Append
         }
     
         if ($action.returns) {
-            "#### Return" | Out-File $outputFile -Append
-            $action.returns | Out-File $outputFile -Append
+            "#### Return" | Out-File $actionsOutputFile -Append
+            $action.returns | Out-File $actionsOutputFile -Append
         }
         if ($action.example) {
-            "#### Example" | Out-File $outputFile -Append
-            "``````jsonc" | Out-File $outputFile -Append
-            $action.example | Out-File $outputFile -Append
-            "``````" | Out-File $outputFile -Append
+            "#### Example" | Out-File $actionsOutputFile -Append
+            "``````jsonc" | Out-File $actionsOutputFile -Append
+            $action.example | Out-File $actionsOutputFile -Append
+            "``````" | Out-File $actionsOutputFile -Append
         }
     }
 }

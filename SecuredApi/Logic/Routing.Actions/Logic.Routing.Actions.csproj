@@ -19,7 +19,7 @@
 	<ProjectReference Include="..\Routing.Abstractions\Logic.Routing.Abstractions.csproj" />
 	<ProjectReference Include="..\Auth\Logic.Auth.csproj" />
 	<ProjectReference Include="..\Routing.Utils\Logic.Routing.Utils.csproj" />
-	<ProjectReference Include="..\Routing.Actions.Model\Logic.Routing.Actions.Model.csproj" />
+	<ProjectReference Include="..\Routing.Model\Logic.Routing.Model.csproj" />
   </ItemGroup>
 
 </Project>

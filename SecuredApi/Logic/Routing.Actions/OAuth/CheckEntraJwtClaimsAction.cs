@@ -16,7 +16,7 @@ using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
 using Microsoft.IdentityModel.JsonWebTokens;
-using SecuredApi.Logic.Routing.Actions.Model.Auth;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 

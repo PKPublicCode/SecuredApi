@@ -17,7 +17,7 @@ using System.Diagnostics.CodeAnalysis;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Auth.Jwt;
 using Microsoft.Extensions.Logging;
-using SecuredApi.Logic.Routing.Actions.Model.Auth;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.OAuth;
 

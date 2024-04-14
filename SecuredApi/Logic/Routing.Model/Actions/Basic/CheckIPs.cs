@@ -12,41 +12,35 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+using Microsoft.AspNetCore.Http;
+
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 /// <summary>
-/// Writes client request information to the body of client response. Main usage is debugging and troubleshooting.
+/// Verifies inbound IP address
 /// </summary>
 /// <remarks>
-/// Action writes to the client response following:
-/// 
-/// * Host
-/// 
-/// * Request Path
-/// 
-/// * Request Path Base
-/// 
-/// * Method
-/// 
-/// * Headers
-/// 
-/// * Inbound IP
-/// 
+/// Inbound ip address is taken from the client HTTP request properties.
 /// </remarks>
-public class SetRequestInfoToResponse
+/// <return>
+/// Secceeded if IP found in a specified white list. Fails otherwise otherwise
+/// </return>
+public class CheckIPs
 {
     /// <summary>
-    /// HTTP code set to the client response
+    /// Array of the allowed IPs
     /// </summary>
-    /// <value>
-    /// 200
-    /// </value>
-    public int HttpCode { get; init; } = 200;
+    public HashSet<string> WhiteList { get; init; } = null!;
+
     /// <summary>
-    /// Headline added before request information
+    /// Status code returned in case of failure
     /// </summary>
-    /// <value>
-    /// "Debug information:"
-    /// </value>
-    public string HeadLine { get; init; } = "Debug information:";
+    /// <value>403</value>
+    public int NoAccessStatusCode { get; init; } = StatusCodes.Status403Forbidden;
+
+    /// <summary>
+    /// Response body returned in case of failure.
+    /// </summary>
+    /// <value>Empty string</value>
+    public string NoAccessResponseBody { get; init; } = string.Empty;
 }

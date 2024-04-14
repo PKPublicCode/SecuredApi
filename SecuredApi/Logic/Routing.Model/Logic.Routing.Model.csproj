@@ -4,13 +4,13 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>SecuredApi.Logic.Routing.Actions.Model</RootNamespace>
-    <AssemblyName>SecuredApi.Logic.Routing.Actions.Model</AssemblyName>
+    <RootNamespace>SecuredApi.Logic.Routing.Model</RootNamespace>
+    <AssemblyName>SecuredApi.Logic.Routing.Model</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>XmlDocs\Model.xml</DocumentationFile>
+    <DocumentationFile>Model.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />

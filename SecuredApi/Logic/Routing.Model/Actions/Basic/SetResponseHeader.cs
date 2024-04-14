@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
+// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,13 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
-#pragma warning disable 1591 //not supposed to appear in the docs
-public interface ISetHeader
+/// <summary>
+/// Adds new header to the client request. If header already exists, the another key-value pair will be added
+/// </summary>
+public class SetResponseHeader: ISetHeader
 {
-    string Name { get; }
-    string Value { get; }
+    /// <summary>
+    /// Header name
+    /// </summary>
+    public string Name { get; init; } = null!;
+    /// <summary>
+    /// Value of the header
+    /// </summary>
+    public string Value { get; init; } = null!;
 }
-#pragma warning restore 1591
-

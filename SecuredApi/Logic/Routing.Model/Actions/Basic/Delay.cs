@@ -12,19 +12,25 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 /// <summary>
-/// Adds new header to the client response. If header already exists, the another key-value pair will be added
+/// Pauses processing of request for specified time interval.
 /// </summary>
-public class SetRequestHeader: ISetHeader
+/// <remarks>
+/// During the request this action waits for a specified time. No interaction with the client request or response happens.
+/// Can be used to mimic load of the service(s).
+/// </remarks>
+/// <example>
+/// {
+///     "type":"delay"
+///     "Milliseconds": 300
+/// }
+/// </example>
+public class Delay
 {
     /// <summary>
-    /// Header name
+    /// Time to wait
     /// </summary>
-    public string Name { get; init; } = null!;
-    /// <summary>
-    /// Value of the header
-    /// </summary>
-    public string Value { get; init; } = null!;
+    public int Milliseconds { get; init; }
 }

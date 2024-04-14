@@ -12,16 +12,13 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
-/// <summary>
-/// Removes header from client response
-/// </summary>
-public class SuppressResponseHeaders : ISuppressHeader
+#pragma warning disable 1591 //not supposed to appear in the docs
+public interface ISetHeader
 {
-    /// <summary>
-    /// List of header names to be removed from the response
-    /// </summary>
-    public List<string> Headers { get; init; } = null!;
+    string Name { get; }
+    string Value { get; }
 }
+#pragma warning restore 1591
 

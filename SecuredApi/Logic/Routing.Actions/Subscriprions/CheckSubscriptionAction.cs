@@ -15,7 +15,7 @@
 using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
-using SecuredApi.Logic.Routing.Actions.Model.Auth;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
 

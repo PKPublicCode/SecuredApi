@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
+// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,12 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
-#pragma warning disable 1591 //not supposed to appear in the docs
-public interface ISuppressHeader
+/// <summary>
+/// Sets client response
+/// </summary>
+public class SetResponse
 {
-    List<string> Headers { get; }
+    /// <summary>
+    /// Http code that is set to client response
+    /// </summary>
+    public int HttpCode { get; init; }
+    /// <summary>
+    /// Body
+    /// </summary>
+    public string Body { get; init; } = string.Empty;
 }
-#pragma warning restore 1591
-

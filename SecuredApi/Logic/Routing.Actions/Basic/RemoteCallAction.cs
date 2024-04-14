@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Variables;
-using SecuredApi.Logic.Routing.Actions.Model.Basic;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 

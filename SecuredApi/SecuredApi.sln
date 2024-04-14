@@ -56,7 +56,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApps.Gateway.Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps.Gateway.ComponentTests", "Apps\Gateway.ComponentTests\Apps.Gateway.ComponentTests.csproj", "{DCA24377-DA86-4A23-AABB-E50D23045881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing.Actions.Model", "Logic\Routing.Actions.Model\Logic.Routing.Actions.Model.csproj", "{24B4D1E6-84BA-47FC-8D12-EFE19420541A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Routing.Model", "Logic\Routing.Model\Logic.Routing.Model.csproj", "{24B4D1E6-84BA-47FC-8D12-EFE19420541A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

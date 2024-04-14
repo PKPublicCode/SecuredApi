@@ -12,19 +12,41 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 /// <summary>
-/// Sets client response
+/// Writes client request information to the body of client response. Main usage is debugging and troubleshooting.
 /// </summary>
-public class SetResponse
+/// <remarks>
+/// Action writes to the client response following:
+/// 
+/// * Host
+/// 
+/// * Request Path
+/// 
+/// * Request Path Base
+/// 
+/// * Method
+/// 
+/// * Headers
+/// 
+/// * Inbound IP
+/// 
+/// </remarks>
+public class SetRequestInfoToResponse
 {
     /// <summary>
-    /// Http code that is set to client response
+    /// HTTP code set to the client response
     /// </summary>
-    public int HttpCode { get; init; }
+    /// <value>
+    /// 200
+    /// </value>
+    public int HttpCode { get; init; } = 200;
     /// <summary>
-    /// Body
+    /// Headline added before request information
     /// </summary>
-    public string Body { get; init; } = string.Empty;
+    /// <value>
+    /// "Debug information:"
+    /// </value>
+    public string HeadLine { get; init; } = "Debug information:";
 }

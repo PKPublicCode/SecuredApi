@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -12,25 +12,16 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 /// <summary>
-/// Pauses processing of request for specified time interval.
+/// Removes header from client response
 /// </summary>
-/// <remarks>
-/// During the request this action waits for a specified time. No interaction with the client request or response happens.
-/// Can be used to mimic load of the service(s).
-/// </remarks>
-/// <example>
-/// {
-///     "type":"delay"
-///     "Milliseconds": 300
-/// }
-/// </example>
-public class Delay
+public class SuppressResponseHeaders : ISuppressHeader
 {
     /// <summary>
-    /// Time to wait
+    /// List of header names to be removed from the response
     /// </summary>
-    public int Milliseconds { get; init; }
+    public List<string> Headers { get; init; } = null!;
 }
+

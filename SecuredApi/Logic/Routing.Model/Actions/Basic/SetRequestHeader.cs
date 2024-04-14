@@ -12,13 +12,19 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-using Microsoft.AspNetCore.Http;
-using SecuredApi.Logic.Routing.Model.Actions.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
-namespace SecuredApi.Logic.Routing.Actions.Basic;
-
-public class SuppressRequestHeadersAction : SuppressHeadersActionBase
+/// <summary>
+/// Adds new header to the client response. If header already exists, the another key-value pair will be added
+/// </summary>
+public class SetRequestHeader: ISetHeader
 {
-    public SuppressRequestHeadersAction(SuppressRequestHeaders settings) : base(settings) { }
-    protected override IHeaderDictionary GetContextHeaders(IRequestContext context) => context.Request.Headers;
+    /// <summary>
+    /// Header name
+    /// </summary>
+    public string Name { get; init; } = null!;
+    /// <summary>
+    /// Value of the header
+    /// </summary>
+    public string Value { get; init; } = null!;
 }

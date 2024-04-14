@@ -14,7 +14,7 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Variables;
 
-namespace SecuredApi.Logic.Routing.Actions.Model.Basic;
+namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 /// <summary>
 /// Makes outgoing http(s) call to remote service using current state of the client request.

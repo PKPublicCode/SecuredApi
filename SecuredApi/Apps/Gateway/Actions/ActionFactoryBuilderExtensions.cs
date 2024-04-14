@@ -16,8 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SecuredApi.Logic.Routing.Actions.Basic;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.OAuth;
-using SecuredApi.Logic.Routing.Actions.Model.Basic;
-using SecuredApi.Logic.Routing.Actions.Model.Auth;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
+using SecuredApi.Logic.Routing.Model.Actions.Auth;
 using SecuredApi.Logic.Routing;
 using SecuredApi.Logic.Routing.Actions;
 

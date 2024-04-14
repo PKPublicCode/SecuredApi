@@ -13,7 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
-using SecuredApi.Logic.Routing.Actions.Model.Basic;
+using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
 
