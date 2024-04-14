@@ -231,6 +231,8 @@ Format: ```@(variableName)```. Runtime variables are not known and can't be vali
 
 In below example, incoming request will be passed to the service defined by application owner as ```protectedEchoPath``` and can be different for different environments. Method of outgoing request is ```httpRequestMethod``` that means the same as request method. ```requestRemainingPath``` is a url path that corresponds to the asterisk and is remaining part after removing ```/resource_a/``` in the beginning.
 
+[List of available variables](./RuntimeVariables.md)
+
 ```json5
 "Routes": [ 
   {
