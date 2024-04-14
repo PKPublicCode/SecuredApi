@@ -1,14 +1,16 @@
+Check out [github repository](https://github.com/PKPublicCode/SecuredApi) for [docs](https://github.com/PKPublicCode/SecuredApi/blob/main/README.md) and sources.
+
 # SecuredApi
 
-Simple (in terms of usage), cheap (no hard dependency on expensive services and solutions), PaaS compatible and code-first friendly gateway solution to offload routine web api operation for solutions with low and medium loaded web applications.
+Simple (in terms of usage), cheap (no hard dependency on expensive services and solutions), PaaS compatible and code-first friendly API Gateway solution to offload routine web api operation for solutions with low and medium loaded web applications.
 
-__Currently, main focus is compatibility with Azure. Compatibility with other clouds and 3-rd party services will be coming later.__
+__Current focus is compatibility with Azure stack. Compatibility with other clouds and 3-rd party services will be coming later.__
 
 ![](./Docs/Img/birdseye.png)
 
 The main scenario for this solution is an API Gateway with a rich configuration that defines routing to downstream backend services for incoming HTTP(s) requests and allows to:
 * Configure authentication and authorization rules using:
-    * API Keys and customer subscriptions
+    * API Key and customer subscriptions
     * JWT tokens and and claims (Azure Entra Only)
 * Add and\or remove HTTP headers in request before sending to the downstream services
 * Add and\or remove HTTP headers in response before returning it to client
@@ -39,6 +41,8 @@ License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/maste
 [Performance](./Docs/Product/Performance.md)
 
 [Routing](./Docs/Product/Routing.md)
+
+[Actions](./Docs/Product/Actions.md)
 
 [Configuration](./Docs/Product/Configuration.md)
 
