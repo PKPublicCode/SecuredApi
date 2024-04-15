@@ -174,7 +174,7 @@ foreach($group in $grouppedActions.Keys) {
         }
     
         if ($action.returns) {
-            "#### Return" | Out-File $actionsOutputFile -Append
+            "#### Fallibility" | Out-File $actionsOutputFile -Append
             $action.returns | Out-File $actionsOutputFile -Append
         }
         if ($action.example) {

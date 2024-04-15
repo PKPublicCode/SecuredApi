@@ -15,11 +15,11 @@
 namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 
 /// <summary>
-/// Checks claims of the entra jwt. 
+/// Checks claims of the Entra jwt. 
 /// </summary>
 /// <remarks>
 /// This action should go only after CheckEntraJwt action. In some cases it's more convenient
-/// to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
+/// to CheckEntraJwt for group of routes, but check different claims for different routes in this group.
 /// </remarks>
 /// <return>
 /// Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters.
