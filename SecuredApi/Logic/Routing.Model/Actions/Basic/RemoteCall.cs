@@ -21,13 +21,13 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 /// Response of the service, including headers, status code and body is saved to the client response
 /// </summary>
 /// <return>
-/// Fails only if timeout occured. Succeeds otherwise.
+/// Fails only if timeout occurred. Succeeds otherwise.
 /// </return>
 /// <example>
 /// {
 ///   "type": "RemoteCall",
 ///   "path": "https://www.google.com/@(requestRemainingPath)",
-///   "method": "get"
+///   "method": "get",
 ///   "timeout": 500
 /// }
 /// </example>

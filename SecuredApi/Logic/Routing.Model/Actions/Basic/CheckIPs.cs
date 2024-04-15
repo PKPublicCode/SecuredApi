@@ -23,7 +23,7 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 /// Inbound ip address is taken from the client HTTP request properties.
 /// </remarks>
 /// <return>
-/// Secceeded if IP found in a specified white list. Fails otherwise otherwise
+/// Succeeds if IP is found in a specified white list. Fails otherwise otherwise
 /// </return>
 public class CheckIPs
 {

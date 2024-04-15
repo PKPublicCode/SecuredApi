@@ -20,11 +20,11 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 /// <return>
 /// Action fails if:
 /// 
-/// * Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)
+/// * Subscription key header doesn't exist, or empty. Response's HTTP status code is set to 401 (Not Authorized)
 /// 
-/// * Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)
+/// * Subscription key (api key) is invalid (or doesn't exists). Response's HTTP status code is set to 401 (Not Authorized)
 ///
-/// * Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied)
+/// * Subscription key (api key) is valid, but route is not allowed to run. Response's HTTP status code is set to 403 (Access denied)
 /// </return>
 public class CheckSubscription
 {

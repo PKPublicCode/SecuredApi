@@ -9,7 +9,7 @@
              Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience.
              </summary>
              <remarks>
-             Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon
+             Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're coming.
              </remarks>
              <return>
              Fails in following cases:
@@ -75,8 +75,8 @@
         </member>
         <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwt.KeepData">
             <summary>
-            Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released.
-            If CheckEntraJwtClaims action is used later for this route, then value shold be true.
+            Whether parsed JWT token object should remain in the memory and used by further actions, or can be released.
+            If CheckEntraJwtClaims action is used later for this route, then value should be set to true.
             </summary>
             <value>
             false
@@ -84,11 +84,11 @@
         </member>
         <member name="T:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckEntraJwtClaims">
             <summary>
-            Checks claims of the entra jwt. 
+            Checks claims of the Entra jwt. 
             </summary>
             <remarks>
             This action should go only after CheckEntraJwt action. In some cases it's more convenient
-            to CheckEntaJwt for group of routes, but check different claims for different routes in this group.
+            to CheckEntraJwt for group of routes, but check different claims for different routes in this group.
             </remarks>
             <return>
             Fails if JWT doesn't satisfy one of roles, or one of scopes specified in the parameters.
@@ -120,11 +120,11 @@
              <return>
              Action fails if:
              
-             * Subscription key header doesn't exist, or empty. In this case it sets response code 401 (Not Authorized)
+             * Subscription key header doesn't exist, or empty. Response's HTTP status code is set to 401 (Not Authorized)
              
-             * Subscription key (api key) is invalid (or doesn't exists). In this case it sets response code 401 (Not Authorized)
+             * Subscription key (api key) is invalid (or doesn't exists). Response's HTTP status code is set to 401 (Not Authorized)
             
-             * Subscription key (api key) is valid, but route is not allowed to run. In this case response code set to 401 (Access denied)
+             * Subscription key (api key) is valid, but route is not allowed to run. Response's HTTP status code is set to 403 (Access denied)
              </return>
         </member>
         <member name="P:SecuredApi.Logic.Routing.Model.Actions.Auth.CheckSubscription.SubscriptionKeyHeaderName">
@@ -163,9 +163,9 @@
             
              * one of consumer actions fails. HTTP code in client response is set according to the consumer action
             
-             * if consumer id is ivalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted
+             * if consumer id is invalid, not found, or CheckSubscription action wasn't executed for this rote. In this case 500 HTTP code is set to client response, indicating that data is corrupted
             
-             If consumer actions sucessful (if any), the action succeeded.
+             If consumer actions are successful (if any), the action succeeds .
              </return>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs">
@@ -176,7 +176,7 @@
             Inbound ip address is taken from the client HTTP request properties.
             </remarks>
             <return>
-            Secceeded if IP found in a specified white list. Fails otherwise otherwise
+            Succeeds if IP is found in a specified white list. Fails otherwise otherwise
             </return>
         </member>
         <member name="P:SecuredApi.Logic.Routing.Model.Actions.Basic.CheckIPs.WhiteList">
@@ -222,13 +222,13 @@
             Response of the service, including headers, status code and body is saved to the client response
             </summary>
             <return>
-            Fails only if timeout occured. Succeeds otherwise.
+            Fails only if timeout occurred. Succeeds otherwise.
             </return>
             <example>
             {
               "type": "RemoteCall",
               "path": "https://www.google.com/@(requestRemainingPath)",
-              "method": "get"
+              "method": "get",
               "timeout": 500
             }
             </example>

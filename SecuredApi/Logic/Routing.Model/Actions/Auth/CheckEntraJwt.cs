@@ -18,7 +18,7 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 /// Verifies that JWT is signed by proper keys, has valid issuer and issued for valid audience.
 /// </summary>
 /// <remarks>
-/// Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're comming soon
+/// Validation is designed for and tested with Entra (Azure AD) json web tokens. Other auth servers're coming.
 /// </remarks>
 /// <return>
 /// Fails in following cases:
@@ -78,8 +78,8 @@ public class CheckEntraJwt
     /// </value>
     public string TokenPrefix { get; init; } = "Bearer ";
     /// <summary>
-    /// Whether parsed JWT token object shold remain in the memory and used by further actions, or can be released.
-    /// If CheckEntraJwtClaims action is used later for this route, then value shold be true.
+    /// Whether parsed JWT token object should remain in the memory and used by further actions, or can be released.
+    /// If CheckEntraJwtClaims action is used later for this route, then value should be set to true.
     /// </summary>
     /// <value>
     /// false
