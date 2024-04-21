@@ -1,9 +1,9 @@
 # Application configuration
 
 ## Basics
-Configures SecuredAPI components and access to the infrastructure using conventional asp.net approaches. SecuredAPI uses jsonfile (appsettings.json) and environment variables configuration providers. The main scenario supposes deploying SecuredAPI as docker image from docker hub, and everything is configured with environment variables. However, for the sake of simplification, configuration will be described in json format.
+Application configuration is loaded during Secured API startup and configures global service behavior and crucial service components and access to the infrastructure. SecuredAPI implemented on asp.net and uses conventional .net configuration approach with json file and environment variables configuration configuration provider. That means that application uses json configuration (appsettings.json) as primary configuration that can be overridden by environment variables.
 
-Detailed description how to configure asp.net apps is [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables). Frankly speaking, to mimic nested configuration, __ separator is used in the variable name. Following json and environment variables defines equivalent configuration.
+The main scenario supposes deploying SecuredAPI as docker image from docker hub that contains 'default' json configuration file, and everything is configured with environment variables. However, for the sake of simplification, configuration settings mostly will be described in json format. To define json attributes as a variable, just need to use __ as a separator in a variable name to mimic json hierarchy. For example: below json and environment vars define equivalent structure:
 
 ```json5
 "Position": {
@@ -17,4 +17,121 @@ set Position__Title=Environment_Editor
 set Position__Name=Environment_Rick
 ```
 
-# TBD
+Detailed description how to configure asp.net apps is [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables). 
+
+See more meaningful example in [RoutingEngineManager section](#routingenginemanager)
+
+## Access to persistent storage
+Most of dependencies (components) require access to the objects on the persistent storage, that's why this configuration element is widely used across configuration. These dependencies have ```FileAccess``` section in the appropriate configuration section. It responsible to define connection details. Mandatory attribute of the section is ```Type``` attribute that sets type of the storage that will be used. At the moment SecuredAPI supports to types of persistent storage:  ```FileSystem``` and ```AzureStorage```.
+
+Overall format of the section looks like:
+
+```json5
+{
+  "Component_Name": { //Section that configures some specific component
+    "FileAccess": { // Mandatory section for the components
+      "Type": "Type_Of_Persistent_Storage" // FileSystem or AzureStorage
+      // FileAccess type specific configuration settings.
+    }
+    // Component specific attributes.
+  }
+}
+```
+
+#### FileSystem
+Configures component to read and write objects into the specific location in the files system (local or mounted).
+
+```json5
+{
+  "Component_Name": { //Section that configures some specific component
+    "FileAccess": { // Section that will define access to the objects
+      "Type": "FileSystem",
+      "BasePath": "/home/user/disk2" // Optional parameter. defines path to the content where component will lookup for the objects. 
+    }
+    // Component specific attributes.
+  }
+}
+```
+
+*Important*: ```BasePath``` could be either absolute path or relative path to the application directory. Default is empty string, that means that component will use relative path to the application directory.
+
+#### AzureStorage
+Allows to setup service to read\write objects directly from\to specific blob in Azure Storage Account. At the moment, only RBAC access mode is supported, that takes default azure credentials, so following format is only allowed for this type of connection:
+
+```json5
+{
+  "Component_Name": { //Section that configures some specific component
+    "FileAccess": {
+      "Type": "AzureStorage", //Forces app use Azure Storage Account
+      "Rbac": { // Means that RBAC will be used
+        "Uri": "https://teststorage.blob.core.windows.net/your_container" // Configures URI that contains storage account name and container.
+      }
+    },
+    // Component specific attributes.
+  }
+}
+```
+
+See more meaningful example in [RoutingEngineManager section](#routingenginemanager)
+
+## RoutingEngineManager
+This is core component and only mandatory section of the config. Configures where Routing Configuration files are stored and how often they are reloaded.
+
+```json5
+{
+  "RoutingEngineManager": { // section that defines routing configuration loading
+    "FileAccess": {}, // Type of storage where configuration is deployed
+    "Files": { 
+      "RoutingCfgFileId": "routing-config.json", // Path to routing configuration file
+      "GlobalCfgFileId": "global-configuration.json" //Optional. Path to global configuration file
+    },
+    "ReloadFrequency": 360000 // Optional. Defines how often routing configuration is reloaded in milliseconds. Default value is 300 000 ms (5 minutes)
+  }
+}
+```
+
+For, example, below snipped configures to load routing configuration file ```routing-config.json``` and global configuration file ```global-configuration.json``` from the azure blob storage ```teststorage``` in the container with name ```configuration``` :
+
+```json5
+{
+  "RoutingEngineManager": { // section that defines routing configuration loading
+    "FileAccess": {
+      "Type": "AzureStorage",
+      "Rbac": {
+        "Uri": "https://teststorage.blob.core.windows.net/configuration"
+      }
+    },
+    "Files": { 
+      "RoutingCfgFileId": "routing-config.json", // Path to routing configuration file (in this case it's blob name)
+      "GlobalCfgFileId": "global-configuration.json" // Path to global configuration file (in this case it's blob name)
+    }
+  }
+}
+```
+
+To set this configuration using environment variables, you need following (linux notation)
+```
+export RoutingEngineManager__FileAccess__Type="FileSystem"
+export RoutingEngineManager__FileAccess__Rbac__Uri="https://stcfgptstweeu.blob.core.windows.net/apigateway-config"
+export RoutingEngineManager__Files__RoutingCfgFileId="routing-config.json"
+export RoutingEngineManager__Files__RoutingCfgFileId="global-configuration.json"
+```
+
+Alternatively, below json snipped configures to load routing configuration file from the location ```%AppPath%/Configurations/default-routing-config.json``` and don't load any global configuration: 
+
+```json5
+{
+  "RoutingEngineManager": {
+    "Files": {
+      "RoutingCfgFileId": "Configurations/default-routing-config.json"
+    },
+    "FileAccess": {
+      "Type": "FileSystem"
+    } 
+  }
+}
+```
+
+### Optional components
+**WIP**
+See [configuration](../../SecuredApi/WebApps/Gateway.IntegrationTests/appsettings-gateway.json) that used for the integration tests:

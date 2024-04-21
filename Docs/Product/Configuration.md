@@ -4,7 +4,7 @@ To properly understand configuration, it's important to understand main applicat
 
 ![](./../Img/dependencies.png)
 
-Gateway service obviously is a central part of the gateway solution. At the startup Gateway applies (application configuration)(./ApplicationConfiguration.md), that includes configuration of connection to the dependencies. Once application is started, it loads [routing configuration file](./RoutingConfiguration.md) together with parameters ([global variables](./GlobalVariablesConfiguration.md)). Once routing configuration is loaded and applied, service can process [incoming requests](./Routing.md).
+Gateway service obviously is a central part of the gateway solution. At the startup Gateway applies (application configuration)(./ApplicationConfiguration.md), that includes configuration of connection to the dependencies. Once application is started, it loads [routing configuration file](./RoutingConfiguration.md) together with parameters (called [global variables](./GlobalVariablesConfiguration.md)). Once routing configuration is loaded and applied, service can process [incoming requests](./Routing.md).
 
 1. Configuration is the only mandatory dependency of the Gateways service. Configuration consists of the path to routing configuration file (required) and path to the global variables configuration file (optional). Service load and apply this configuration right after startup and reloads it according configured time interval.
 

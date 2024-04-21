@@ -5,7 +5,8 @@ To understand logic behind the routing configuration purpose of the each action 
 SecuredAPI logic can be explained as following steps:
 * As a first step gateway receives http(s) request from client (client request object).
 * As a last step gateway sends back response to the client (client response object).
-Between these two steps SecuredAPI executes operations that interact with request object, populate response object, modify both of these objects, etc. Operations provided by SecuredAPI are called *actions*. Sequence of actions and their parameters depends on the path of the client's request URL and its method and defined by the SecuredAPI routing configuration. Path, method and sequence of the actions and their settings are called *route configuration*. Once last action executed, Secured api sends final state of the response object to the client.
+
+Between these two steps SecuredAPI executes operations that modify request object, populate and alter response object. Operations provided by SecuredAPI are called _actions_. Sequence of actions and their parameters depends on the path of the client's request URL and its method. Url path and method is called _route_. Sequence of actions for each route is called _route configuration_. Once last action is executed, SecuredAPI sends final state of the response object to the client.
 
 In SecuredAPI actions can be split into two groups: fallible and infallible. Fallible actions implement conditions and in some circumstances 'fails' and stop the success execution sequence. Infallible doesn't have any conditions and has no effect to the further execution.
 
