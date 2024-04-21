@@ -1,4 +1,6 @@
 # Configuration
+Before this article check out [How SecuredAPI works](./Details.md)
+
 Routing configuration is defined in json format. Comments are allowed. Max depth is 64 (default for .net).
 
 # Main configuration concepts

@@ -40,9 +40,5 @@ License explanation can be found [here](https://www.mongodb.com/licensing/server
 License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/master/LICENSE-Community.txt)
 
 ### Documentation
-[Configuration](./Docs/Product/Configuration.md)
-
-[Routing](./Docs/Product/Routing.md)
-
-[Actions](./Docs/Product/Actions.md)
+[How SecuredAPI works](./Details.md)
 

@@ -1,5 +1,7 @@
 # Application configuration
 
+Before this article check out [How SecuredAPI works](./Details.md)
+
 ## Basics
 Application configuration is loaded during Secured API startup and configures global service behavior and crucial service components and access to the infrastructure. SecuredAPI implemented on asp.net and uses conventional .net configuration approach with json file and environment variables configuration configuration provider. That means that application uses json configuration (appsettings.json) as primary configuration that can be overridden by environment variables.
 
