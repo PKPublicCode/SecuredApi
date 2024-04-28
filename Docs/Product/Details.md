@@ -1,6 +1,6 @@
 # Product details
 
-To make decision if SecuredAPI suits for your application and properly setup and maintain it, it's important to learn how SecuredAPI works. 
+To make decision if SecuredAPI suits for your application and properly setup and maintain it, it's important to understand how SecuredAPI works. 
 
 # Routing
 
@@ -8,9 +8,13 @@ Whole SecuredAPI is build around very simple flow:
 * First step: SecuredAPI receives http(s) request from client (client request object).
 * Last step: SecuredAPI sends back response to the client (client response object).
 
-Between these two steps SecuredAPI executes operations that validates, reads and transform client request and populates the client response. The sequences of these operations are defined by the application owner according to the application needs. Application owner can define common operation that are executed for all requests, can define operations for group of requests matching specific pattern, or define logic specific to just one specific client call. To match client requests to the appropriate logic SecuredAPI uses URL path and HTTP method.
+Between these two steps SecuredAPI executes chain of operations that validates, reads and transform client request object and populates the client response object. The sequences of these operations and their parameters are configured by the application owner according to the application logic. To match the client request and the chain of operations, SecuredAPI uses HTTP method and request url path.
 
-The operations provided by SecuredAPI are called **actions**. The sequence of the actions and their parameters defined for the client requests is called **routing configuration**. HTTP Method and URL path pattern that match to the client http request is called **route**.
+So, *the corner stone function of the SecureAPI*: for every incoming http request find configured chain of operations, execute them and send response back to client.
+
+In the documentation the operations provided by SecuredAPI are called **actions**. The sequence of the actions and their parameters defined for the client requests is called **routing configuration**. HTTP Method and URL path pattern that match to the client http request is called **route**.
+
+Configuration structure allows to define common operation that are executed for all requests, can define operations for group of requests matching specific pattern, or define logic for just one specific client call. To match client requests to the appropriate logic SecuredAPI uses URL path and HTTP method.
 
 In SecuredAPI actions can be split into two groups: fallible and infallible. Fallible actions implement conditions and in some circumstances 'fails' and stops the success execution sequence. Infallible doesn't have any conditions and has no effect to the further execution.
 
@@ -20,13 +24,13 @@ See also:
 [Routing Configuration](./RoutingConfiguration.md)
 [Actions](./Actions.md)
 
-# Configuration and dependencies
+# Components and Dependencies
 
-To better understand configuration, it's important to understand main application building blocks and dependencies
+SecuredAPI is designed as simple and straightforward as possible, however has a different components that depends on the communication with the infrastructure. For example SecuredAPI service has to know where\how to load routing configuration. In addition several actions work on top of the components that uses external infrastructure and services, that obviously require configuration too. To configure SecuredAPI in efficient and cost effective way it's important to understand main application building blocks and dependencies.
 
 ![](./../Img/dependencies.png)
 
-Gateway service obviously is a central part of the gateway solution. At the startup Gateway applies (application configuration)(./ApplicationConfiguration.md), that includes configuration of connection to the dependencies. Once application is started, it loads [routing configuration file](./RoutingConfiguration.md) together with parameters (called [global configuration](./GlobalVariablesConfiguration.md)). Once routing configuration is loaded and applied, service can process [incoming requests](./Routing.md).
+Gateway service obviously is a central part of the SecuredAPI solution. At the startup Gateway applies (application configuration)(./ApplicationConfiguration.md), that includes configuration of connection to the dependencies. Once application is started, it loads [routing configuration file](./RoutingConfiguration.md) together with parameters (called [global configuration](./GlobalVariablesConfiguration.md)). Once routing configuration is loaded and applied, service can process [incoming requests](./Routing.md).
 
 1. Routing Configuration is the only mandatory dependency of the Gateways service. Configuration consists of the path to routing configuration file (required) and path to the global variables configuration file (optional). Service load and apply this configuration right after startup and reloads it according configured time interval.
 

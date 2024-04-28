@@ -21,11 +21,11 @@ Having SecuredAPI in front of HTTP services allows to:
 
 As a side scenario, SecuredAPI can be used to host mock\stub service(s) for integration testing.
 
-Gateway routing rules are decoupled from infrastructure and deployment setup and can be changed without solution redeployment. Ability to parametrize routing configuration allows to reuse them for different environments and deployment stamps.
+Gateway routing rules are stored in a separate file(s), and can be updated and uploaded without SecuredAPI redeployment. All rules are defined using json format, supposed to be manually edited, stored in the source control and uploaded either by deployment pipelines or manually. Ability to parametrize routing configuration allows to reuse them for different environments and deployment stamps. Learn [here](./Docs/Product/Details.md#routing) how SecuredAPI works.
 
-The only infrastructure requirement for SecuredAPI is just any hosting infra and persistent storage. The main scenario considered is an Azure App Service or Kubernetes and Azure Storage Account. Also, persistent storage can be mounted as a disk volume.
+The only infrastructure requirement for SecuredAPI is just any hosting infra and persistent storage. The main scenario considered is an Azure App Service or Kubernetes and Azure Storage Account. Also, persistent storage can be mounted as a disk volume. Find more details about components and dependencies [here](./Docs/Product/Details.md#components-and-dependencies)
 
-SecuredAPI builds are available as a docker [images](https://hub.docker.com/repository/docker/pkruglov/securedapi.gateway) that can be easily deployed and configured by environment variables. Obviously, own docker images can be build and deployed, if official builds don't suit for solution.
+SecuredAPI is available as a docker [images](https://hub.docker.com/repository/docker/pkruglov/securedapi.gateway) that can be easily deployed and configured by environment variables. Obviously, own docker images can be build and deployed, if official builds don't suit for solution.
 
 Integration with Application Insights available out of the box can be leveraged for monitoring and further analysis of service metrics.
 
