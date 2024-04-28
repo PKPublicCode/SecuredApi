@@ -19,7 +19,7 @@ Having SecuredAPI in front of HTTP services allows to:
 * Return content defined in the configuration inline
 * Configuring any of above for individual customers (API Keys authentication only).
 
-As a side scenario, SecuredAPI can be used to host mock\stub service(s) for integration testing.
+As a side effect of above, SecuredAPI can be used to host mock\stub service(s) for different integration testing scenarios.
 
 Gateway routing rules are stored in a separate file(s), and can be updated and uploaded without SecuredAPI redeployment. All rules are defined using json format, supposed to be manually edited, stored in the source control and uploaded either by deployment pipelines or manually. Ability to parametrize routing configuration allows to reuse them for different environments and deployment stamps. Learn [here](./Docs/Product/Details.md#routing) how SecuredAPI works.
 
