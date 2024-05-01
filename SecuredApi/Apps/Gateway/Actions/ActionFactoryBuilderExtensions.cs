@@ -42,7 +42,7 @@ public static class ActionFactoryBuilderExtensions
             .AddAction<CheckSubscriptionAction, CheckSubscription>()
             .AddAction<SetResponseHeaderAction, SetResponseHeader>()
             .AddAction<SetRequestHeaderAction, SetRequestHeader>()
-            .AddAction<RunConsumerActionsAction2, RunConsumerActions>()
+            .AddAction<RunConsumerActionsAction, RunConsumerActions>()
             .AddAction<DelayAction, Delay>()
             .AddAction<SetRequestInfoToResponseAction, SetRequestInfoToResponse>()
             .AddAction<SuppressResponseHeadersAction, SuppressResponseHeaders>()

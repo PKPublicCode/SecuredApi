@@ -95,7 +95,6 @@ public static class RoutingConfigurationExtensions
                     srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
                         .AddSingleton<IConsumersRepository, ConsumersRepository>()
                         .ConfigureOnTheFlyJsonParser()
-                        .AddSingleton<RunConsumerActionsAction>()
                 )
                ;
     }
