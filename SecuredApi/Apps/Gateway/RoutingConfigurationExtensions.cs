@@ -38,7 +38,8 @@ public static class RoutingConfigurationExtensions
         return srv.ConfigureRouter<FileAccessConfigurator>(config)
             .ConfigureVariables()
             .ConfigureStaticFilesAction<FileAccessConfigurator>(config)
-            .ConfigureSubscriptions<FileAccessConfigurator>(config);
+            .ConfigureSubscriptions<FileAccessConfigurator>(config)
+            .ConfigureConsumers<FileAccessConfigurator>(config);
     }
 
     public static IServiceCollection ConfigureRoutingHttpClients(this IServiceCollection srv)
@@ -86,6 +87,19 @@ public static class RoutingConfigurationExtensions
                     );
     }
 
+    private static IServiceCollection ConfigureConsumers<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration rootConfig)
+        where FileAccessConfigurator : IInfrastructureConfigurator, new()
+    {
+        return srv
+            .ConfigureOptionalFeature(rootConfig, "Consumers", (srv, config) =>
+                    srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
+                        .AddSingleton<IConsumersRepository, ConsumersRepository>()
+                        .ConfigureOnTheFlyJsonParser()
+                        .AddSingleton<RunConsumerActionsAction>()
+                )
+               ;
+    }
+
     private static IServiceCollection ConfigureSubscriptions<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration rootConfig)
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
@@ -95,12 +109,6 @@ public static class RoutingConfigurationExtensions
                         .AddSingleton<ISubscriptionKeysRepository, SubscriptionKeysRepository>()
                         .AddSingleton<IHashCalculator, Sha256HashCalculator>()
                         .ConfigureRequiredOption<SubscriptionsSecurityCfg>(config, "Security")
-                )
-            .ConfigureOptionalFeature(rootConfig, "Subscriptions:Consumers", (srv, config) =>
-                    srv.ConfigureInfrastructure<IConsumersRepository, FileAccessConfigurator>(config)
-                        .AddSingleton<IConsumersRepository, ConsumersRepository>()
-                        .ConfigureOnTheFlyJsonParser()
-                        .AddSingleton<RunConsumerActionsAction>()
                 )
                ;
     }

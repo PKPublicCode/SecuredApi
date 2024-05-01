@@ -19,7 +19,7 @@ export SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenIssuer=""
 export SECAPI_IT_GW__Globals__Variables__AllowedEntraTokenAudience=""
 
 export SECAPI_IT_GW__Subscriptions__Keys__FileAccess__Rbac__Uri=""
-export SECAPI_IT_GW__Subscriptions__Consumers__FileAccess__Rbac__Uri=""
+export SECAPI_IT_GW__Consumers__FileAccess__Rbac__Uri=""
 export SECAPI_IT_GW__RoutingEngineManager__FileAccess__Rbac__Uri=""
 export SECAPI_IT_GW__StaticFilesProvider__FileAccess__Rbac__Uri=""
 
