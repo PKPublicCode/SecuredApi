@@ -70,8 +70,8 @@ var _subscriptionSettings = !configureSubscriptions ? _emptySettings : {
 }
 
 var _consumersSettings = !configureConsumers ? _emptySettings : {
-  Subscriptions__Consumers__FileAccess__Type: 'AzureStorage'
-  Subscriptions__Consumers__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[consumersContainer]
+  Consumers__FileAccess__Type: 'AzureStorage'
+  Consumers__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[consumersContainer]
 }
 
 var _routingSettings = {
