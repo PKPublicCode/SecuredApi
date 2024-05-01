@@ -70,6 +70,9 @@ az ad app owner add --id $clientApp.appId --owner-object-id $currentUserId
 
 $clientAppCredentials = az ad app credential reset --id $clientApp.appId | ConvertFrom-Json
 
+# add redirect url to use with Get-MsalToken
+az ad app update --id $clientApp.appId  --public-client-redirect-uris http://localhost
+
 #Grant permissions
 
 #Wait for 10 secs to make sure all SPIs properly populated.
