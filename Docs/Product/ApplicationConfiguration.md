@@ -21,7 +21,7 @@ set Position__Name=Environment_Rick
 
 Detailed description how to configure asp.net apps is [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables). 
 
-See more meaningful example in [RoutingEngineManager section](#routingenginemanager)
+See more meaningful example in [RoutingEngin section](#routingengine)
 
 ## Access to persistent storage
 Most of dependencies (components) require access to the objects on the persistent storage, that's why this configuration element is widely used across configuration. These dependencies have ```FileAccess``` section in the appropriate configuration section. It responsible to define connection details. Mandatory attribute of the section is ```Type``` attribute that sets type of the storage that will be used. At the moment SecuredAPI supports to types of persistent storage:  ```FileSystem``` and ```AzureStorage```.
@@ -74,7 +74,7 @@ Allows to setup service to read\write objects directly from\to specific blob in 
 }
 ```
 
-See more meaningful example in [RoutingEngineManager section](#routingenginemanager)
+See more meaningful example in [RoutingEngine section](#routingengine)
 
 ## Components configuration
 
@@ -85,7 +85,7 @@ This is core component and only mandatory section of the config. Configures wher
 
 ```json5
 {
-  "RoutingEngineManager": { // section that defines routing configuration loading
+  "RoutingEngine": { // section that defines routing configuration loading
     "FileAccess": {}, // Type of storage where configuration is deployed
     "Files": { 
       "RoutingCfgFileId": "routing-config.json", // Path to routing configuration file
@@ -100,7 +100,7 @@ For, example, below snipped configures to load routing configuration file ```rou
 
 ```json5
 {
-  "RoutingEngineManager": { // section that defines routing configuration loading
+  "RoutingEngine": { // section that defines routing configuration loading
     "FileAccess": {
       "Type": "AzureStorage",
       "Rbac": {
@@ -117,17 +117,17 @@ For, example, below snipped configures to load routing configuration file ```rou
 
 To set this configuration using environment variables, you need following (linux notation)
 ```
-export RoutingEngineManager__FileAccess__Type="FileSystem"
-export RoutingEngineManager__FileAccess__Rbac__Uri="https://stcfgptstweeu.blob.core.windows.net/apigateway-config"
-export RoutingEngineManager__Files__RoutingCfgFileId="routing-config.json"
-export RoutingEngineManager__Files__RoutingCfgFileId="global-configuration.json"
+export RoutingEngine__FileAccess__Type="FileSystem"
+export RoutingEngine__FileAccess__Rbac__Uri="https://stcfgptstweeu.blob.core.windows.net/apigateway-config"
+export RoutingEngine__Files__RoutingCfgFileId="routing-config.json"
+export RoutingEngine__Files__RoutingCfgFileId="global-configuration.json"
 ```
 
 Alternatively, below json snipped configures to load routing configuration file from the location ```%AppPath%/Configurations/default-routing-config.json``` and don't load any global configuration: 
 
 ```json5
 {
-  "RoutingEngineManager": {
+  "RoutingEngine": {
     "Files": {
       "RoutingCfgFileId": "Configurations/default-routing-config.json"
     },

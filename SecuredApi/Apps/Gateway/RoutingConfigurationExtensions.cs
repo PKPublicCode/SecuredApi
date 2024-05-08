@@ -1,4 +1,4 @@
-// Copyright (c) 2021 - present, Pavlo Kruglov.
+﻿// Copyright (c) 2021 - present, Pavlo Kruglov.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the Server Side Public License, version 1,
@@ -27,6 +27,7 @@ using SecuredApi.Apps.Gateway.Routing;
 using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Logic.Routing.Actions.Subscriptions;
+using SecuredApi.Apps.Gateway.Engine;
 
 namespace SecuredApi.Apps.Gateway;
 
@@ -77,9 +78,10 @@ public static class RoutingConfigurationExtensions
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
         return srv.AddSingleton<IRouter, IRouterUpdater, Router>()
-                .ConfigureRequiredFeature(config, "RoutingEngineManager", (srv, config) =>
+                .ConfigureRequiredFeature(config, "RoutingEngine", (srv, config) =>
                     srv.ConfigureInfrastructure<IRoutingEngineManager, FileAccessConfigurator>(config)
                         .AddTransient<IRoutingEngineManager, RoutingEngineManager>()
+                        .Configure<RoutingConfigurationLoaderCfg>(config)
                         .ConfigureRequiredOption<RoutingConfigurationFilesCfg>(config, "Files")
                         .AddSingleton<IRoutingTableBuilderFactory, RoutingTableBuilderFactory<RoutingTableBuilder>>()
                         .ConfigureRoutingConfigurationJsonParser()

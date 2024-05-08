@@ -36,11 +36,6 @@ public static class RoutingEngineConfigurationExtensions
         return builder.UseMiddleware<RoutingMiddleware>();
     }
 
-    public static IServiceCollection ConfigureRoutingConfigurationLoader(this IServiceCollection services, IConfiguration config)
-    {
-        return services.Configure<RoutingConfigurationLoaderCfg>(config.GetRequiredSection("RoutingEngineManager"));
-    }
-
     private static IServiceCollection AddRoutingConfigurationLoader(this IServiceCollection services)
     {
         return services.AddHostedService<RoutingConfigurationLoader>();
