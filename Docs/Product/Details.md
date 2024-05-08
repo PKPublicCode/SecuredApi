@@ -32,13 +32,13 @@ SecuredAPI is designed as simple and straightforward as possible, however has a 
 
 Gateway service obviously is a central part of the SecuredAPI solution. At the startup Gateway applies (application configuration)(./ApplicationConfiguration.md), that includes configuration of connection to the dependencies. Once application is started, it loads [routing configuration file](./RoutingConfiguration.md) together with parameters (called [global configuration](./GlobalVariablesConfiguration.md)). Once routing configuration is loaded and applied, service can process [incoming requests](./Routing.md).
 
-1. Routing Configuration is the only mandatory dependency of the Gateways service. Configuration consists of the path to routing configuration file (required) and path to the global variables configuration file (optional). Service load and apply this configuration right after startup and reloads it according configured time interval.
+1. Routing Configuration is the only mandatory dependency of the Gateways service used by Routing Engine component. Configuration consists of the path to routing configuration file (required) and path to the global variables configuration file (optional). Service load and apply this configuration right after startup and reloads it according configured time interval.
 
-2. API Keys is optional dependency needed only if you use API Key authentication mechanism. It's designed as a file storage, where name of the file is hash of api key, and content is a json with subscription metadata that defines access rights to your api, consumer id, etc.
+2. API Keys is optional dependency needed only if you use API Key authentication mechanism and used by Subscriptions component. It's designed as a file storage, where name of the file is hash of api key, and content is a json with subscription metadata that defines access rights to your api, consumer id, etc.
 
-3. Consumers. Optional, only if authentication is used and if gateway requires consumer specific behavior. Implemented as file storage with files, where file name is consumer id, and content is json with consumer metadata, including list of actions executed for this specific consumer.
+3. Consumers. Optional, makes sense only if authentication is configured and used to run client specific behavior (actions). Implemented as file storage with files, where file name is consumer id, and content is json with consumer metadata, including list of actions executed for this specific consumer.
 
-4. Static files. Optional, only if gateway is used to serve static content (e.g. html, files, etc.). It is designed as file storage and allows subfolders. 
+4. Static files. Optional, only if gateway is used to serve static content (e.g. html, files, etc.). Used by Static Content component. It is designed as file storage and allows subfolders. 
 
 Dependencies (1) - (4) need to be configured on service startup by the application configuration and can't be changed without service restart. Each of these dependencies can be configured either as a path to separate folder on file system (in (1) it's a path to individual files), or as a separate container on the azure blob storage (or paths to the blobs in the same container in (1)). Dependencies (2) - (4) can configure only one location, i.e. static files can be spreed across different containers, and has to be stored in one containers, but in different subfolders.
 

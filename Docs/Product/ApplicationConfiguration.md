@@ -76,7 +76,11 @@ Allows to setup service to read\write objects directly from\to specific blob in 
 
 See more meaningful example in [RoutingEngineManager section](#routingenginemanager)
 
-## RoutingEngineManager
+## Components configuration
+
+![](./../Img/dependencies.png)
+
+#### RoutingEngine 
 This is core component and only mandatory section of the config. Configures where Routing Configuration files are stored and how often they are reloaded.
 
 ```json5
@@ -135,5 +139,67 @@ Alternatively, below json snipped configures to load routing configuration file 
 ```
 
 ### Optional components
-**WIP**
+
+#### Subscriptions
+Component handles API key authentication and required for [CheckSubscription](Actions.md#checksubscription) action. From technical standpoint, API Keys stored as json files with names equal to salted and hashed secrets. Files contain ids of allowed routes, id of consumer and other metadata associated with this API Key (secret). When SecuredAPI receives http call (and appropriate action is configured), CheckSubscription takes secret from the header, hashes it and loads appropriate file. If file doesn't exist, or requested route is not allowed then authorization or authentication are failed.
+
+Component requires configuring of access to the API Key files and Salt that is used for hashing
+
+```json5
+{
+  "Subscriptions": { //Section that configures component
+    "Keys": { // Section that configures API Key access
+      "FileAccess": { // See above options to configure file access
+        "Type": "AzureStorage",
+        "Rbac": {
+          "Uri": "your url"
+        }
+      },
+      "Security": {
+        "Salt": "5b951d0869cc4d2da993b6d188197c71" // Salt that used to calculate hash
+      }
+    }
+  }
+}
+```
+
+#### Consumers
+Component runs actions configured for this specific consumer and required (used) by [RunConsumerActions](Actions.md#runconsumeractions) action. From technical standpoint implemented consumers stored as json files, that contain list of actions that are executed by appropriate action. Filename is consumer id (guid) that is set by previous authorization action (for example [CheckSubscription](Actions.md#checksubscription))
+
+Component requires configuring of access to consumer files.
+
+```json5
+{
+  "Consumers": { // Section that configures component
+    "FileAccess": { //Configures access to file storage; See FileAccess configuration options above
+      "Type": "AzureStorage",
+      "Rbac": {
+        "Uri": "our uri"
+      }
+    }
+  },
+}
+```
+
+#### StaticContent
+Component is used to serve static files and used by the [ReturnStaticFile](Actions.md#returnstaticfile) action.
+
+Component requires configuring of access to the file storage, where static files are stored. Only one storage can be configured for the SecuredAPI instance
+
+```json5
+{
+  "StaticFilesProvider": {
+    "FileAccess": { // Configures access to file storage; See FileAccess configuration options above
+      "Type": "AzureStorage",
+      "Rbac": {
+        "Uri": "your uri"
+      }
+    }
+  }
+}
+```
+
+#### Logging
+TBD.
+
 See [configuration](../../SecuredApi/WebApps/Gateway.IntegrationTests/appsettings-gateway.json) that used for the integration tests:

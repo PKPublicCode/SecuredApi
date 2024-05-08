@@ -10,7 +10,7 @@ __Current focus is compatibility with Azure stack. Compatibility with other clou
 
 Having SecuredAPI in front of HTTP services allows to:
 * Offload authentication and authorization using:
-    * API Key and customer subscriptions
+    * API Key and subscriptions
     * JWT tokens and claims (Azure Entra Only)
 * Add and\or remove HTTP headers in request before sending to api services
 * Add and\or remove HTTP headers in response before returning it to client
