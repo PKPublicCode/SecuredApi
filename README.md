@@ -29,6 +29,9 @@ SecuredAPI is available as a docker [images](https://hub.docker.com/repository/d
 
 Integration with Application Insights available out of the box can be leveraged for monitoring and further analysis of service metrics.
 
+### Documentation
+[How SecuredAPI works](./Docs/Product/Details.md)
+
 ## Performance
 Check out load testing [results](./Docs/Product/Performance.md). 
 
@@ -38,7 +41,4 @@ This program is free software: you can redistribute it and/or modify it under th
 License explanation can be found [here](https://www.mongodb.com/licensing/server-side-public-license/faq)
 
 License copied from [MongoDB github](https://github.com/mongodb/mongo/blob/master/LICENSE-Community.txt)
-
-### Documentation
-[How SecuredAPI works](./Details.md)
 
