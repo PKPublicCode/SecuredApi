@@ -81,8 +81,8 @@ var _routingSettings = {
 }
 
 var _staticContentSettings = !configureStaticContent ? _emptySettings : {
-  StaticFilesProvider__FileAccess__Type: 'AzureStorage'
-  StaticFilesProvider__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
+  StaticContent__FileAccess__Type: 'AzureStorage'
+  StaticContent__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
 }
 
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
