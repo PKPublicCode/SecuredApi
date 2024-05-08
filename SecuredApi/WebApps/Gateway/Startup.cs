@@ -36,7 +36,6 @@ public class Startup
         // Code-less instrumentation is not available for .net5 for linux. Will be available for .net6.
         // Don't forget remove Microsoft.ApplicationInsights.Profiler.AspNetCore package.
         services.AddApplicationInsightsTelemetry()
-            .ConfigureRoutingConfigurationLoader(_configuration)
             .ConfigureRoutingServices<AzureFileAccessConfigurator>(_configuration)
             .ConfigureRoutingHttpClients()
             .ConfigureEntraAuthentication();

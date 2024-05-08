@@ -75,14 +75,14 @@ var _consumersSettings = !configureConsumers ? _emptySettings : {
 }
 
 var _routingSettings = {
-  RoutingEngineManager__Files__RoutingCfgFileId: 'routing-config.json'
-  RoutingEngineManager__FileAccess__Type: 'AzureStorage'
-  RoutingEngineManager__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
+  RoutingEngine__Files__RoutingCfgFileId: 'routing-config.json'
+  RoutingEngine__FileAccess__Type: 'AzureStorage'
+  RoutingEngine__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[configContainer]
 }
 
 var _staticContentSettings = !configureStaticContent ? _emptySettings : {
-  StaticFilesProvider__FileAccess__Type: 'AzureStorage'
-  StaticFilesProvider__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
+  StaticContent__FileAccess__Type: 'AzureStorage'
+  StaticContent__FileAccess__Rbac__Uri: storageContent.outputs.blobUrls[staticContentContainer]
 }
 
 resource appService 'Microsoft.Web/sites@2022-09-01' = {
