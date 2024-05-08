@@ -55,7 +55,7 @@ public static class RoutingConfigurationExtensions
     private static IServiceCollection ConfigureStaticFilesAction<FileAccessConfigurator>(this IServiceCollection srv, IConfiguration config)
         where FileAccessConfigurator : IInfrastructureConfigurator, new()
     {
-        return srv.ConfigureOptionalFeature(config, "StaticFilesProvider", (srv, config) =>
+        return srv.ConfigureOptionalFeature(config, "StaticContent", (srv, config) =>
                     srv.ConfigureInfrastructure<ReturnStaticFileAction, FileAccessConfigurator>(config)
                         .AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>()
         );

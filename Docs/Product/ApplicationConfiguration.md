@@ -188,7 +188,7 @@ Component requires configuring of access to the file storage, where static files
 
 ```json5
 {
-  "StaticFilesProvider": {
+  "StaticContent": {
     "FileAccess": { // Configures access to file storage; See FileAccess configuration options above
       "Type": "AzureStorage",
       "Rbac": {
