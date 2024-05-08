@@ -57,6 +57,7 @@ The last possible scenario is build and configure your own container from the sc
 Documentation is focused on the approach 1.
 
 Further read:
+
 [Routing Configuration](./RoutingConfiguration.md)
 
 [Application Configuration](./ApplicationConfiguration.md)
