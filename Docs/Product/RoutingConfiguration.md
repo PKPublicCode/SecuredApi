@@ -255,7 +255,19 @@ In below example, incoming request will be passed to the service defined by appl
 So, if global variable defined as ```"remoteServerPath": "http://myserver/api"```json5, and client sends request ```[get] /resource_a/resource_x/resource_y```, then outgoing request according to above configuration will be ```[get] http://myserver/api/resource_x/resource_y```
 
 # Examples
-Gateway [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests. Configuration defines protection of downstream api with Entra Jwt Token validation (/api/jwt/ path), with api key (api/api_key path), and serves static files (/ui/ path).
+Gateway [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests. There are 3 routing groups in the config root that configures behavior as:
+1) protects calls to ```/api/jwt/``` using Entra JWT Access token.
+* First, the routing group verifies jwt's signature, allowed issuer and audience. Issuer and audience are parametrized using global variables
+* For route ```/api/api_key/basic_features/*```, JWT is verified for role ```EchoSrv.API.Basic"```
+* For route ```/api/api_key/privileged_features/*```, JWT is verified for role ```EchoSrv.API.Privileged"```
+Both above routes execute call to remote service. Remote service url is defined using global variable.
+2) protects calls to ```/api/api_key/``` using API Key and run actions set specific for the consumer
+* First, the routing group verifies that current path is allowed for API Key that sent by client in header ```X-SUBSCRIPTION-KEY```
+* Second, it runs actions defined for the specific consumer. Id of consumer is determined on previous step 
+* Two routing groups ```/api/api_key/basic_features/*``` and ```/api/api_key/privileged_features/*``` specify unique and different ```Id``` that are used to allow appropriate URL path in API Key (subscription)
+Both protected routes execute call to remote service. Remote service url is defined using global variable.
+3) Url ```/ui/*``` is not protected, and used to serve static content from the preconfigured storage.
+
 
 Echo service [configuration](../../Testing/CommonContent/Configuration/routing-config-echo.json). Simple service that responds inline string in HTTP body after 300ms delay.
 

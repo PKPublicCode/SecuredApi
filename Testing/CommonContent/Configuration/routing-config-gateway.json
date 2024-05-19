@@ -5,17 +5,12 @@
   "preRequestActions": [
   ],
   "onRequestErrorActions": [
-    {
-      "type": "SetResponseHeader",
-      "name": "X-COMMON-ON-ERROR-HEADER",
-      "value": "Gateway Rejected Your Call"
-    }
   ],
   "onRequestSuccessActions": [
   ],
   "routesGroups": [
     {
-      "description": "API protected by App Registration roles",
+      "description": "Protects API with jwt and App Registration roles",
       "path": "/api/jwt",
       "preRequestActions": [
         {
@@ -59,7 +54,7 @@
       ]
     },
     {
-      "description": "API protected by API Key",
+      "description": "Protects API with API key",
       "path": "/api/api_key",
       "preRequestActions": [
         {
@@ -108,7 +103,7 @@
       ]
     },
     {
-      "description": "Returns static content from blob or disk",
+      "description": "Serves static content from the storage",
       "routes": [
         {
           "methods": [ "get" ],

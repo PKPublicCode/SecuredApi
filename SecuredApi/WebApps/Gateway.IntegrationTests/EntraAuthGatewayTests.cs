@@ -58,7 +58,6 @@ public class EntraAuthGatewayTests : TestsBase
         AddAuthorizationHeader(await _entra.GetTokenAsync(default));
 
         ExpectedResult.StatusCode = HttpStatusCode.Forbidden;
-        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
         ExpectedResult.Body = InlineContent.AccessDenied;
 
         await ActAsync();
@@ -83,7 +82,6 @@ public class EntraAuthGatewayTests : TestsBase
         AddAuthorizationHeader(token);
 
         ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
-        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
         ExpectedResult.Body = InlineContent.NotAuthorized;
 
         await ActAsync();

@@ -40,11 +40,11 @@ Gateway service obviously is a central part of the SecuredAPI solution. At the s
 
 4. Static files. Optional, only if gateway is used to serve static content (e.g. html, files, etc.). Used by Static Content component. It is designed as file storage and allows subfolders. 
 
-Dependencies (1) - (4) need to be configured on service startup by the application configuration and can't be changed without service restart. Each of these dependencies can be configured either as a path to separate folder on file system (in (1) it's a path to individual files), or as a separate container on the azure blob storage (or paths to the blobs in the same container in (1)). Dependencies (2) - (4) can configure only one location, i.e. static files can be spreed across different containers, and has to be stored in one containers, but in different subfolders.
+5. Logs is optional but recommended dependency. It can be configured to write logs into file system and optionally to the App Insights.
+
+All dependencies are configured during service startup by the application configuration and can't be changed without service restart. Each of these dependencies can be configured either as a path to separate folder on file system (in (1) it's a path to individual files), or as a separate container on the azure blob storage (or paths to the blobs in the same container in (1)). Dependencies (2) - (4) can configure only one location, i.e. static files can be spreed across different containers, and has to be stored in one containers, but in different subfolders.
 
 Access to storage accounts can be configured only with Azure [System Assigned Managed Identity](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview)
-
-5. Logs is optional but recommended dependency. It can be configured to write logs into file system and optionally to the App Insights.
 
 # How to use
 
