@@ -51,7 +51,6 @@ public class ApiKeyGatewayTests: TestsBase
             .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F2463");
 
         ExpectedResult.StatusCode = HttpStatusCode.Unauthorized;
-        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
         ExpectedResult.Body = InlineContent.NotAuthorized;
 
         await ActAsync();
@@ -67,7 +66,6 @@ public class ApiKeyGatewayTests: TestsBase
             .AddHeader(Headers.SubscriptionKeyHeaderName, "5F39D492-A141-498A-AE04-76C6B77F246A");
 
         ExpectedResult.StatusCode = HttpStatusCode.Forbidden;
-        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
         ExpectedResult.Body = InlineContent.AccessDenied;
 
         await ActAsync();

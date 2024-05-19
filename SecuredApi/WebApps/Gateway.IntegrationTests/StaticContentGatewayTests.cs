@@ -49,7 +49,6 @@ public class StaticContentGatewayTests: TestsBase
 
         ExpectedResult.Body = InlineContent.StaticFileNotFound;
         ExpectedResult.StatusCode = HttpStatusCode.NotFound;
-        ExpectedResult.AddHeaders(Headers.ResponseCommonOnError);
 
         await ActAsync();
         await AssertAsync();

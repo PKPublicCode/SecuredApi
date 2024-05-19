@@ -1,8 +1,8 @@
-Check out [github repository](https://github.com/PKPublicCode/SecuredApi) for the [documentation](https://github.com/PKPublicCode/SecuredApi/blob/main/README.md) and sources.
+Check [github repository](https://github.com/PKPublicCode/SecuredApi) for the [documentation](https://github.com/PKPublicCode/SecuredApi/blob/main/README.md) and source code.
 
 # SecuredApi
 
-Simple (in terms of usage), cheap (no hard dependency on expensive services and solutions), PaaS compatible and code-first friendly API Gateway solution to offload routine operation for medium loaded HTTP(s) services.
+Simple (in terms of usage), cheap (no hard dependency on expensive services), PaaS compatible and code-first friendly API Gateway solution to offload routine operation for medium loaded HTTP(s) services.
 
 __Current focus is compatibility with Azure stack. Compatibility with other clouds and 3-rd party services will be coming later.__
 
@@ -19,7 +19,7 @@ Having SecuredAPI in front of HTTP services allows to:
 * Return content defined in the configuration inline
 * Configuring any of above for individual customers (API Keys authentication only).
 
-As a side effect of above, SecuredAPI can be used to host mock\stub service(s) for different integration testing scenarios.
+As a side effect of above, SecuredAPI can be used to host mock\stub service(s) for integration testing scenarios.
 
 Gateway routing rules are stored in a separate file(s), and can be updated and uploaded without SecuredAPI redeployment. All rules are defined using json format, supposed to be manually edited, stored in the source control and uploaded either by deployment pipelines or manually. Ability to parametrize routing configuration allows to reuse them for different environments and deployment stamps. Learn [here](./Docs/Product/Details.md#routing) how SecuredAPI works.
 
