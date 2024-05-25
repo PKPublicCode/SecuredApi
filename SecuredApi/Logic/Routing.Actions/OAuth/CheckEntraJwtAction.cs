@@ -51,6 +51,20 @@ public class CheckEntraJwtAction : IAction
             {
                 context.Variables.SetVariable(Names.ParsedJwtToken, result.Jwt!);
             }
+
+            if (_settings.ConsumerIdClaim != null)
+            {
+                if (Guid.TryParse(result.Jwt!.GetClaim(_settings.ConsumerIdClaim).Value, out var id))
+                {
+                    context.Variables.SetVariable(Names.ConsumerId, id);
+                }
+                else
+                {
+                    _logger.LogError("ConsumerIdClame can't be parsed to GUID");
+                    return await context.ReturnDataInconsistencyError();
+                }
+            }
+
             return true;
         }
 

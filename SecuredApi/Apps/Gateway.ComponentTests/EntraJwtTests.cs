@@ -17,7 +17,7 @@ using RichardSzalay.MockHttp;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
-using static SecuredApi.Testing.Common.Jwt.TokenHelper;
+using SecuredApi.Testing.Common.Jwt;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SecuredApi.Apps.Gateway.ComponentTests;
@@ -30,7 +30,7 @@ public class EntraJwtTests: GatewayTestsBase
             var keyProvider = Substitute.For<ISigningKeysProvider>();
 
             keyProvider.GetKeysAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                   .Returns(MakePublicKeysList(TestKey1, TestKey2)
+                   .Returns(TokenHelper.MakePublicKeysList(TestKey1, TestKey2)
                );
 
             srv.AddSingleton(keyProvider);
@@ -59,7 +59,7 @@ public class EntraJwtTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status200OK;
         ExpectedResult.Body = InlineContent.PrivateRedirectWildcard;
-        ExpectedResult.AddHeaders(Headers.TextPlainUtf8ContentType);
+        ExpectedResult.AddHeaders(Headers.ResponseConsumerSpecificActions, Headers.TextPlainUtf8ContentType);
 
         await ExecuteAsync();
     }
@@ -85,6 +85,7 @@ public class EntraJwtTests: GatewayTestsBase
 
         ExpectedResult.StatusCode = StatusCodes.Status403Forbidden;
         ExpectedResult.Body = InlineContent.AccessDenied;
+        ExpectedResult.AddHeaders(Headers.ResponseConsumerSpecificActions);
 
         await ExecuteAsync();
     }
@@ -115,7 +116,7 @@ public class EntraJwtTests: GatewayTestsBase
     }
 
     [Fact]
-    public async Task RouteProtectedWithReadRole_CallWithMalformedToken_Unauthorized()
+    public async Task RouteProtectedWithReadRole_CallWithMalformedToken_NotAuthorized()
     {
         SetToken("my token blablabla");
         Request.SetupGet(RoutePaths.PrivateJwtRedirectWildcard);
@@ -136,6 +137,17 @@ public class EntraJwtTests: GatewayTestsBase
     private void SetToken(string token)
     {
         Request.Headers.Add(new(Headers.AuthorizationHeaderName, JwtHeaderPrefix + token));
+    }
+
+    private static string CreateJwtToken(string issuer,
+                                        string audience,
+                                        RsaKeyInfo? key,
+                                        IEnumerable<string> roles,
+                                        DateTime start,
+                                        TimeSpan duration,
+                                        string? scope = null)
+    {
+        return TokenHelper.CreateJwtToken(JwtAppId, issuer, audience, key, roles, start, duration, scope);
     }
 }
 

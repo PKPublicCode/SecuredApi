@@ -73,7 +73,8 @@ public class EntraAuthGatewayTests : TestsBase
 
         // Loading GW config to get proper (expected) issuer and audience
         var config = Configuration.Build("appsettings-gateway", "SECAPI_IT_GW__");
-        var token = CreateJwtToken(config.GetRequiredSection("Globals:Variables:AllowedEntraTokenIssuer").GetRequired<string>(),
+        var token = CreateJwtToken("FakeAppId",
+                                    config.GetRequiredSection("Globals:Variables:AllowedEntraTokenIssuer").GetRequired<string>(),
                                     config.GetRequiredSection("Globals:Variables:AllowedEntraTokenAudience").GetRequired<string>(),
                                     TestKey2,
                                     new [] { "EchoSrv.API.Basic", "EchoSrv.API.Privileged" },

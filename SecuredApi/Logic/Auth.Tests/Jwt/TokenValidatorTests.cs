@@ -13,6 +13,7 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using Microsoft.IdentityModel.Tokens;
+using SecuredApi.Testing.Common.Jwt;
 using static SecuredApi.Testing.Common.Jwt.SigningKeys;
 using static SecuredApi.Testing.Common.Jwt.TokenHelper;
 
@@ -20,7 +21,8 @@ namespace SecuredApi.Logic.Auth.Jwt;
 
 public class TokenValidatorTests
 {
-    ISigningKeysProvider _keysProvider = Substitute.For<ISigningKeysProvider>();
+    private ISigningKeysProvider _keysProvider = Substitute.For<ISigningKeysProvider>();
+    private const string _appId = "FakeAppId";
     
     static TokenValidatorTests()
     {
@@ -185,5 +187,15 @@ public class TokenValidatorTests
         => _keysProvider.GetKeysAsync(issuer, Arg.Any<CancellationToken>()).Returns(keys);
 
     private static string[] EmptyStrings => Array.Empty<string>();
-}
 
+    private static string CreateJwtToken(string issuer,
+                                        string audience,
+                                        RsaKeyInfo? key,
+                                        IEnumerable<string> roles,
+                                        DateTime start,
+                                        TimeSpan duration,
+                                        string? scope = null)
+    {
+        return TokenHelper.CreateJwtToken(_appId, issuer, audience, key, roles, start, duration, scope);
+    }
+}
