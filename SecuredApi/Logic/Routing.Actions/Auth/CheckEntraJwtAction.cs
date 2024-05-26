@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 using SecuredApi.Logic.Routing.Model.Actions.Auth;
 using Names = SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth;
 
-namespace SecuredApi.Logic.Routing.Actions.OAuth;
+namespace SecuredApi.Logic.Routing.Actions.Auth;
 
 public class CheckEntraJwtAction : IAction
 {

@@ -141,7 +141,7 @@ Succeeds if IP is found in a specified white list. Fails otherwise otherwise
 #### Summary
 Runs actions configured for the specified consumer. 
 #### Remarks
-Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action, loads actions configured for the consumer, and executes them 
+Executes actions configured for the current consumer (client). RunConsumerActions has to be exectuted after one of authentication actions, that saves current consumer id. 
 #### Parameters
 |Name|Optional|Default Value|Description|
 |----|--------|-------------|-----------|

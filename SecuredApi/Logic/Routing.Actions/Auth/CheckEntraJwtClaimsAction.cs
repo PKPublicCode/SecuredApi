@@ -19,7 +19,7 @@ using Names = SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth;
 using Microsoft.IdentityModel.JsonWebTokens;
 using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
-namespace SecuredApi.Logic.Routing.Actions.OAuth;
+namespace SecuredApi.Logic.Routing.Actions.Auth;
 
 public class CheckEntraJwtClaimsAction: IAction
 {

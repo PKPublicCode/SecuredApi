@@ -18,8 +18,9 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 /// Runs actions configured for the specified consumer.
 /// </summary>
 /// <remarks>
-/// Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
-/// loads actions configured for the consumer, and executes them
+/// Executes actions configured for the current consumer (client).
+/// RunConsumerActions has to be exectuted after one of authentication actions,
+/// that saves current consumer id.
 /// </remarks>
 /// <return>
 /// Fails when:

@@ -18,7 +18,7 @@ using SecuredApi.Logic.Routing.Utils;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 using SecuredApi.Logic.Routing.Model.Actions.Auth;
 
-namespace SecuredApi.Logic.Routing.Actions.Subscriptions;
+namespace SecuredApi.Logic.Routing.Actions.Auth;
 
 public class RunConsumerActionsAction : IAction
 {

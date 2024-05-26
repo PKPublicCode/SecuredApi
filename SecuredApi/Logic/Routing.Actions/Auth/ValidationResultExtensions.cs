@@ -15,7 +15,7 @@
 using SecuredApi.Logic.Auth.Jwt;
 using SecuredApi.Logic.Routing.Utils.ResponseStreaming;
 
-namespace SecuredApi.Logic.Routing.Actions.OAuth;
+namespace SecuredApi.Logic.Routing.Actions.Auth;
 
 public static class ValidationResultExtensions
 {
