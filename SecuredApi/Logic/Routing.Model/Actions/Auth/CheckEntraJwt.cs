@@ -85,5 +85,14 @@ public class CheckEntraJwt
     /// false
     /// </value>
     public bool KeepData { get; init; } = false;
+
+    /// <summary>
+    /// If not null, sets value of the specified claim to ConsumerId,
+    /// that can be used later for ```RunConsumerActions``` action
+    /// </summary>
+    /// <value>
+    /// null
+    /// </value>
+    public string? ConsumerIdClaim { get; init; }
 }
 

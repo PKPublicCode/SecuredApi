@@ -18,8 +18,9 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 /// Runs actions configured for the specified consumer.
 /// </summary>
 /// <remarks>
-/// Action has no parameters. Action just takes Consumer Id preserved by the CheckSubscription action,
-/// loads actions configured for the consumer, and executes them
+/// Executes actions configured for the current consumer (client).
+/// RunConsumerActions has to be exectuted after one of authentication actions,
+/// that saves current consumer id.
 /// </remarks>
 /// <return>
 /// Fails when:
@@ -32,5 +33,12 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Auth;
 /// </return>
 public class RunConsumerActions
 {
+    /// <summary>
+    /// Configures behavior when record for customer is not found:
+    /// If false and there are no record, then call will fail with 500 Http Error.
+    /// If true and there are no record, error will be ignored and execution pass to the next route action.
+    /// </summary>
+    /// <value>false</value>
+    public bool IgnoreIfAbsent { get; init; } = false;
 }
 

@@ -80,6 +80,7 @@ public static partial class Constants
     public static IPAddress EchoWildcardAllowedIp { get; } = IPAddress.Parse("20.20.20.21");
     public const int PublicEchoDelayMilliseconds = 300;
     public const string JwtHeaderPrefix = "Bearer ";
+    public const string JwtAppId = "99b86644-aae0-4873-98fd-923a9c6be31c";
 
     public static class PublicContent
     {

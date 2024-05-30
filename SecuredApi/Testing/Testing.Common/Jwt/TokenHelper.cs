@@ -21,7 +21,14 @@ namespace SecuredApi.Testing.Common.Jwt;
 
 public static class TokenHelper
 {
-    public static string CreateJwtToken(string issuer, string audience, RsaKeyInfo? key, IEnumerable<string> roles, DateTime start, TimeSpan duration, string? scope = null)
+    public static string CreateJwtToken(string appId,
+                                        string issuer,
+                                        string audience,
+                                        RsaKeyInfo? key,
+                                        IEnumerable<string> roles,
+                                        DateTime start,
+                                        TimeSpan duration,
+                                        string? scope = null)
     {
         using var privateKey = RSA.Create(); //will need it not disposable till the end
         SigningCredentials? signingCredentials = null;
@@ -39,10 +46,13 @@ public static class TokenHelper
         var claims = new ClaimsIdentity(
                 roles.Select(r => new Claim("roles", r))
             );
+
         if (scope != null)
         {
             claims.AddClaim(new Claim("scp", scope));
         }
+
+        claims.AddClaim(new Claim("appId", appId));
 
         var descriptor = new SecurityTokenDescriptor
         {

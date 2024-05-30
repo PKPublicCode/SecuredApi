@@ -14,7 +14,11 @@
           "type": "CheckEntraJwt",
           "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
           "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
-          "keepData":  true
+          "keepData": true,
+          "ConsumerIdClaim": "appId"
+        },
+        {
+          "type": "RunConsumerActions"
         }
       ],
       "routesGroups": [

@@ -26,7 +26,7 @@ using SecuredApi.Apps.Gateway.Actions;
 using SecuredApi.Apps.Gateway.Routing;
 using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Logic.Auth.Subscriptions;
-using SecuredApi.Logic.Routing.Actions.Subscriptions;
+using SecuredApi.Logic.Routing.Actions.Auth;
 using SecuredApi.Apps.Gateway.Engine;
 
 namespace SecuredApi.Apps.Gateway;
