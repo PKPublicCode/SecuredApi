@@ -9,7 +9,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SecuredApi' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.Profiler.AspNetCore" Version="2.5.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Profiler.AspNetCore" Version="2.7.1" />
   </ItemGroup>
 
   <ItemGroup>
