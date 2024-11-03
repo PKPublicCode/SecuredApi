@@ -26,7 +26,7 @@ namespace SecuredApi.Logic.Routing.Model.Actions.Basic;
 /// <example>
 /// {
 ///   "type": "RemoteCall",
-///   "path": "https://www.google.com/@(requestRemainingPath)",
+///   "path": "https://www.google.com/@{requestRemainingPath}",
 ///   "method": "get",
 ///   "timeout": 500
 /// }

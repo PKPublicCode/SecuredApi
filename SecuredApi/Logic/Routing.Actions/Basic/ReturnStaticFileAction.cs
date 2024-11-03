@@ -27,7 +27,7 @@ public class ReturnStaticFileAction : IAction
 {
     private readonly StringResponseStream _notFoundBody;
     private readonly bool _autoMimeType;
-    public RuntimeExpression _path { get; init; }
+    private readonly RuntimeExpression _path;
 
     public ReturnStaticFileAction(ReturnStaticFile settings)
     {

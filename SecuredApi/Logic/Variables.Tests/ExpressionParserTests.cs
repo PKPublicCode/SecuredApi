@@ -26,11 +26,11 @@ public class ExpressionParserTests
     [Theory()]
     [InlineData("", "")]
     [InlineData("Hello", "Hello")]
-    [InlineData("Hello$(value)", "Hello_value_")]
-    [InlineData("$(value)", "_value_")]
-    [InlineData("$(value)Hello", "_value_Hello")]
-    [InlineData("Hello$(value)BlaBla", "Hello_value_BlaBla")]
-    [InlineData("Hello$(value)BlaBla$(value1)blu$(value3)ble", "Hello_value_BlaBla_value1_blu_value3_ble")]
+    [InlineData("Hello${value}", "Hello_value_")]
+    [InlineData("${value}", "_value_")]
+    [InlineData("${value}Hello", "_value_Hello")]
+    [InlineData("Hello${value}BlaBla", "Hello_value_BlaBla")]
+    [InlineData("Hello${value}BlaBla${value1}blu${value3}ble", "Hello_value_BlaBla_value1_blu_value3_ble")]
     public void Parse_ProperlyFormedExpression_Success(string expression, string expected)
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
@@ -45,7 +45,7 @@ public class ExpressionParserTests
     {
         var sut = new GlobalExpressionProcessor(new SimplePositiveGlobalVariables());
 
-        Assert.Throws<InvalidExpressionException>(() => sut.Parse("blabla$(asfasdf"));
+        Assert.Throws<InvalidExpressionException>(() => sut.Parse("blabla${asfasdf"));
     }
 
     [Fact()]
@@ -53,7 +53,7 @@ public class ExpressionParserTests
     {
         var sut = new GlobalExpressionProcessor(new NotFoundeGlobalVariables());
 
-        Assert.Throws<InvalidExpressionException>(() => sut.Parse("Hello$(value)"));
+        Assert.Throws<InvalidExpressionException>(() => sut.Parse("Hello${value)"));
     }
 
     //Unable to mock methods with ReadOnlySpan with NSubstitute. Need more research

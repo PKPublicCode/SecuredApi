@@ -18,14 +18,14 @@ public static class Constants
 {
     public static class Global
     {
-        public const string _variableStart = "$(";
-        public const char _variableEnd = ')';
+        public const string _variableStart = "${";
+        public const char _variableEnd = '}';
     }
 
     public static class Runtime
     {
-        public const string _variableStart = "@(";
-        public const char _variableEnd = ')';
+        public const string _variableStart = "@{";
+        public const char _variableEnd = '}';
     }
 }
 

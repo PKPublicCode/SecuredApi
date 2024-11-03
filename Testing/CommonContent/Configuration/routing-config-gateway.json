@@ -15,8 +15,8 @@
       "preRequestActions": [
         {
           "type": "CheckEntraJwt",
-          "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
-          "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
+          "oneOfIssuers": [ "${AllowedEntraTokenIssuer}" ],
+          "oneOfAudiences": [ "${AllowedEntraTokenAudience}" ],
           "keepData": true
         }
       ],
@@ -31,8 +31,8 @@
             },
             {
               "type": "RemoteCall",
-              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-              "method": "@(requestHttpMethod)"
+              "path": "${protectedEchoPath}/@{requestRemainingPath}",
+              "method": "@{requestHttpMethod}"
             }
           ]
         },
@@ -46,7 +46,7 @@
             },
             {
               "type": "RemoteCall",
-              "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+              "path": "${protectedEchoPath}/@{requestRemainingPath}",
               "method": "post"
             }
           ]
@@ -77,8 +77,8 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
-                  "method": "@(requestHttpMethod)"
+                  "path": "${protectedEchoPath}/@{requestRemainingPath}",
+                  "method": "@{requestHttpMethod}"
                 }
               ]
             }
@@ -93,7 +93,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "path": "${protectedEchoPath}/@{requestRemainingPath}",
                   "method": "post"
                 }
               ]
@@ -111,7 +111,7 @@
           "actions": [
             {
               "type": "ReturnStaticFile",
-              "path": "@(requestRemainingPath)"
+              "path": "@{requestRemainingPath}"
             }
           ]
         }
