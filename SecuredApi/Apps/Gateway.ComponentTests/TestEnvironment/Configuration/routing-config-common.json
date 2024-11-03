@@ -71,7 +71,7 @@
               "actions": [
                 {
                   "type": "ReturnStaticFile",
-                  "path": "StaticFiles/Content/@{requestRemainingPath}",
+                  "path": "StaticFiles/Content/@{getRemainingPath()}",
                   "notFoundMessage": "This is wrong file url"
                 }
               ]
@@ -109,8 +109,8 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "${echoPath}/new_remote_path/@{requestRemainingPath}@{requestQueryString}",
-                  "method": "@{requestHttpMethod}"
+                  "path": "${echoPath}/new_remote_path/@{getRemainingPath()}@{getQueryString()}",
+                  "method": "@{getRequestMethod()}"
                 },
                 {
                   "type": "SetResponseHeader",
