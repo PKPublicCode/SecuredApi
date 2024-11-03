@@ -122,6 +122,18 @@
                   "headers": [ "X-PUBLIC-REDIRECT-SUPPRESS-HEADER" ]
                 }
               ]
+            },
+            {
+              "description": "Call to remote endpoint with changed parameters",
+              "methods": [ "get", "post" ],
+              "path": "/remote/wildcard_query_parameters/*",
+              "actions": [
+                {
+                  "type": "RemoteCall",
+                  "path": "${echoPath}/new_remote_path/@{getRemainingPath()}?NewParam1=@{getQueryParam(param1)}&NewParam2=@{getQueryParam(param2)}",
+                  "method": "@{getRequestMethod()}"
+                }
+              ]
             }
           ]
         }

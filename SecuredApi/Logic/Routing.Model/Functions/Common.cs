@@ -35,7 +35,7 @@ public static class Common
     /// <summary>
     /// Returns query string of the client request.
     /// For example, if route was defined for ```/api/some_feature```,
-    /// and received request with path ```/api/some_feature?a=1&amp;b=2```
+    /// and receives request with path ```/api/some_feature?a=1&amp;b=2```
     /// then query string will be ```a=1&amp;b=2``
     /// </summary>
     /// <value>getQueryString</value>
@@ -43,8 +43,8 @@ public static class Common
     /// <summary>
     /// Returns parameter of query string. If parameter is not set, returns empty string.
     /// For example, if route was defined for ```/api/some_feature```,
-    /// and received request with path ```/api/some_feature?a=1&amp;b=2```
-    /// then query string will be ```a=1&amp;b=2``
+    /// and receives request with path ```/api/some_feature?someParam=1&amp;anotherParam=2```
+    /// then query ```getQueryParam(someParam)``` will return ```1```
     /// </summary>
     /// <value>getQueryParam</value>
     public const string GetQueryParam = "getQueryParam";
@@ -53,7 +53,7 @@ public static class Common
     /// For example ```getVariable(requestRemainingPath)``` will return the same
     /// string as function ```getRemainingPath()```
     /// </summary>
-    /// <value>getQueryParam</value>
+    /// <value>getVariable</value>
     public const string GetVariable = "getVariable";
 }
 

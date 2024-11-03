@@ -54,7 +54,7 @@ public class RuntimeExpressionPartFactory: IRuntimeExpressionPartFactory
         if (start > 0
             && expr.Length > 0 && expr[^1] == ')')
         {
-            result = (expr[..start], expr[(start + 1)..^2]);
+            result = (expr[..start], expr[(start + 1)..^1]);
             return true;
         }
         result = default;

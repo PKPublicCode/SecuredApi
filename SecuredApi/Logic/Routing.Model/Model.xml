@@ -437,7 +437,7 @@
             <summary>
             Returns query string of the client request.
             For example, if route was defined for ```/api/some_feature```,
-            and received request with path ```/api/some_feature?a=1&amp;b=2```
+            and receives request with path ```/api/some_feature?a=1&amp;b=2```
             then query string will be ```a=1&amp;b=2``
             </summary>
             <value>getQueryString</value>
@@ -446,8 +446,8 @@
             <summary>
             Returns parameter of query string. If parameter is not set, returns empty string.
             For example, if route was defined for ```/api/some_feature```,
-            and received request with path ```/api/some_feature?a=1&amp;b=2```
-            then query string will be ```a=1&amp;b=2``
+            and receives request with path ```/api/some_feature?someParam=1&amp;anotherParam=2```
+            then query ```getQueryParam(someParam)``` will return ```1```
             </summary>
             <value>getQueryParam</value>
         </member>
@@ -457,7 +457,7 @@
             For example ```getVariable(requestRemainingPath)``` will return the same
             string as function ```getRemainingPath()```
             </summary>
-            <value>getQueryParam</value>
+            <value>getVariable</value>
         </member>
         <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth">
             <summary>
