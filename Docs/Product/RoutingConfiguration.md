@@ -214,26 +214,30 @@ This example describes behaviour if gateway receives http call ```[get] /api/res
 
 Find all currently supported actions [here](./actions.md)
 
-## Variables
+## Variables and runtime expressions
 Variables allow to parametrize routing configuration. There are two types of variables: Global and Runtime. All variable names are case sensitive and has to be alpha-numeric string started with letter.
 
 ### Global variables
 Global variables are immutable parameters defined outside of the routing configuration by the gateway owner loaded before parsing and initialization of routing configuration. Main purpose is to use same routing configuration file for different deployment environments.
 
-Format: ```$(variableName)```. If variable is not found during routing configuration parsing and initialization, error is thrown and whole configuration is ignored.
+Format: ```${variableName}```. If variable is not found during routing configuration parsing and initialization, error is thrown and whole configuration is ignored.
 
 Global variables can be used as part of any string value of the routing config file and substituted by the appropriate value during configuration initialization process, that makes zero performance impact during the executing request.
 
 How to configure global variables see [here](./GlobalVariablesConfiguration.md)
 
-### Runtime variables
-Runtime variables are set by the routing engine and actions during request execution. In contrast to global variables, runtime variables scope is request, and values depend on specific request, actions that were executed and their results. Only action properties with type ```RuntimeExpression``` allow using runtime variables. In this case variables substituted by values just before action execution.
+### Runtime expressions and variables
+In contrast to global variables, runtime expression are evaluated during request execution. It allows to use properties and values of the specific request.
 
-Format: ```@(variableName)```. Runtime variables are not known and can't be validated during the parsing and initialization of routing configuration.  If variable is not set for this request, error will be thrown during the execution.
+Runtime expressions implemented as functions with zero or one parameter. Format: ```@{function(parameter)}```. For example ```@{getRequestMethod()}``` returns http method of currently executing incoming client request. While functions names are hardcoded and are known during configuration parsing, parameters could be dynamic. For example ```@{getQueryParam(param)}``` retrieves value of the specific parameter of the current request. This is why, validation of the runtime exceptions is partially happens in runtime. If routing configuration file uses unknown function, configuration parsing is stopped, however if parameter is not applicable, error (exception) happens during the request execution.
 
-In below example, incoming request will be passed to the service defined by application owner as ```protectedEchoPath``` and can be different for different environments. Method of outgoing request is ```httpRequestMethod``` that means the same as request method. ```requestRemainingPath``` is a url path that corresponds to the asterisk and is remaining part after removing ```/resource_a/``` in the beginning.
+Some actions could cache values for further usage during request execution. For example ```CheckSubscription``` action stores ```ConsumerId``` value as runtime variable. This variable can be retrieved as ```@{getVariable(ConsumerId)}```
 
-[List of available variables](./RuntimeVariables.md)
+
+See list [of available function](./RuntimeFunctions.md).
+See list [of available variables](./RuntimeVariables.md).
+
+In below example, incoming request will be passed to the service defined by application owner as ```protectedEchoPath``` and can be different for different environments. Method of outgoing request is ```getRequestMethod()``` that means the same as request method. ```getRemainingPath()``` is a url path that corresponds to the asterisk and is remaining part after removing ```/resource_a/``` in the beginning.
 
 ```json5
 "Routes": [ 
@@ -244,8 +248,8 @@ In below example, incoming request will be passed to the service defined by appl
     "Actions": [
       {
         "type": "RemoteCall",
-        "path": "$(remoteServerPath)/@(requestRemainingPath)", 
-        "method": "@(requestHttpMethod)"
+        "path": "$(remoteServerPath)/@{getRemainingPath()}", 
+        "method": "@{getRequestMethod()}"
       }
     ]
   }
@@ -253,6 +257,8 @@ In below example, incoming request will be passed to the service defined by appl
 ```
 
 So, if global variable defined as ```"remoteServerPath": "http://myserver/api"```json5, and client sends request ```[get] /resource_a/resource_x/resource_y```, then outgoing request according to above configuration will be ```[get] http://myserver/api/resource_x/resource_y```
+
+Only action properties with type ```RuntimeExpression``` can use runtime expressions.
 
 # Examples
 Gateway [configuration](../../Testing/CommonContent/Configuration/routing-config-gateway.json) used for integration tests. There are 3 routing groups in the config root that configures behavior as:
