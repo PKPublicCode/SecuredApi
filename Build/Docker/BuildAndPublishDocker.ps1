@@ -5,7 +5,7 @@ param (
     [switch]$Prod = $false
 )
 
-$majorVer = "0.1"
+$majorVer = "0.2"
 $verFile = "$($PSScriptRoot)/ver.txt"
 $strVer = Get-Content $verfile 
 $build = [System.Decimal]::Parse($strVer)
