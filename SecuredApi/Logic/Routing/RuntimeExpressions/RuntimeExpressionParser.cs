@@ -13,15 +13,17 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using static SecuredApi.Logic.Variables.Constants.Runtime;
-namespace SecuredApi.Logic.Variables;
+using SecuredApi.Logic.Variables;
+
+namespace SecuredApi.Logic.Routing.RuntimeExpressions;
 
 public class RuntimeExpressionParser: IRuntimeExpressionParser
 {
     private readonly ExpressionParser<ExpressionBuilder> _expressionParser;
 
-    public RuntimeExpressionParser()
+    public RuntimeExpressionParser(IRuntimeExpressionPartFactory partFactory)
     {
-        _expressionParser = new (_variableStart, _variableEnd, new BuilderFactory());
+        _expressionParser = new (_variableStart, _variableEnd, new BuilderFactory(partFactory));
     }
 
     public RuntimeExpression Parse(string expression)
@@ -35,24 +37,35 @@ public class RuntimeExpressionParser: IRuntimeExpressionParser
 
     private class BuilderFactory : IExpressionBuilderFactory<ExpressionBuilder>
     {
-        public ExpressionBuilder Create(int capacity) => new ExpressionBuilder(capacity);
+        IRuntimeExpressionPartFactory _partFactory;
+        public BuilderFactory(IRuntimeExpressionPartFactory partFactory)
+        {
+            _partFactory = partFactory;
+        }
+
+        public ExpressionBuilder Create(int capacity) => new ExpressionBuilder(capacity, _partFactory);
     }
 
     private class ExpressionBuilder : IExpressionBuilder
     {
-        private readonly List<ExpressionPart> _parts;
+        private readonly List<IRuntimeExpression> _parts;
+        IRuntimeExpressionPartFactory _partFactory;
 
         public static RuntimeExpression MakeShortExpression(string expression)
         {
             return new RuntimeExpression(expression);
         }
 
-        public ExpressionBuilder(int capacity)
+        public ExpressionBuilder(int capacity, IRuntimeExpressionPartFactory partFactory)
         {
             _parts = new(capacity);
+            _partFactory = partFactory;
         }
 
-        public RuntimeExpression BuildExpression() => new RuntimeExpression(_parts);
+        public RuntimeExpression BuildExpression()
+        {
+            return new RuntimeExpression(new ComplexRuntimeExpression(_parts));
+        }
 
         public void AddPart(ReadOnlySpan<char> part, string _)
             => AddPart(part, false);
@@ -62,11 +75,7 @@ public class RuntimeExpressionParser: IRuntimeExpressionParser
 
         private void AddPart(ReadOnlySpan<char> part, bool isVariable)
         {
-            _parts.Add(new ExpressionPart()
-            {
-                Value = part.ToString(),
-                IsVariable = isVariable
-            });
+            _parts.Add(_partFactory.CreatePart(part, isVariable));
         }
     }
 }

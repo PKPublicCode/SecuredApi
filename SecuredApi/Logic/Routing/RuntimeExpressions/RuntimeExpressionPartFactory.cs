@@ -52,9 +52,9 @@ public class RuntimeExpressionPartFactory: IRuntimeExpressionPartFactory
     {
         int start = expr.IndexOf('(');
         if (start > 0
-            && expr.Length > 0 && expr[expr.Length - 1] == ')')
+            && expr.Length > 0 && expr[^1] == ')')
         {
-            result = (expr.Substring(0, start), expr.Substring(start + 1, expr.Length - start - 2));
+            result = (expr[..start], expr[(start + 1)..^2]);
             return true;
         }
         result = default;

@@ -16,11 +16,11 @@ using System.Text;
 
 namespace SecuredApi.Logic.Routing.RuntimeExpressions;
 
-public class RuntimeExpression: IRuntimeExpression
+public class ComplexRuntimeExpression: IRuntimeExpression
 {
     private readonly List<IRuntimeExpression> _parts;
 
-    public RuntimeExpression(List<IRuntimeExpression> parts)
+    public ComplexRuntimeExpression(List<IRuntimeExpression> parts)
     {
         _parts = parts;
     }

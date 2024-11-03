@@ -38,7 +38,7 @@ public class ReturnStaticFileAction : IAction
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
     {
-        string path = _path.BuildString(context.Variables);
+        string path = _path.BuildString(context);
         var fileProvider = context.GetRequiredService<FileAccess.IFileProvider<ReturnStaticFileAction>>();
         StreamResult result;
         try

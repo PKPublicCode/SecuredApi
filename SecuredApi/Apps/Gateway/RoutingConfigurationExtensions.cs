@@ -27,6 +27,7 @@ using SecuredApi.Apps.Gateway.Routing;
 using SecuredApi.Apps.Gateway.Configuration;
 using SecuredApi.Logic.Auth.Subscriptions;
 using SecuredApi.Apps.Gateway.Engine;
+using SecuredApi.Logic.Routing.RuntimeExpressions;
 
 namespace SecuredApi.Apps.Gateway;
 
@@ -65,6 +66,7 @@ public static class RoutingConfigurationExtensions
         return srv.AddSingleton<IGlobalVariables, IGlobalVariablesUpdater, GlobalVariables>()
             .AddSingleton<IGlobalExpressionProcessor, GlobalExpressionProcessor>()
             .AddSingleton<IRuntimeExpressionParser, RuntimeExpressionParser>()
+            .AddSingleton<IRuntimeExpressionPartFactory, RuntimeExpressionPartFactory>()
             .AddSingleton<IGlobalVariablesStreamParser, GlobalVariablesJsonParser>()
             .AddScoped<IRuntimeVariables, RuntimeVariables>()
             .AddTransient<IDefaultGlobalVariablesProvider>(srvs =>

@@ -124,9 +124,9 @@ public class RemoteCallAction: IAction
         message.Headers.Remove("Host");
 
         message.RequestUri = _constPath
-            ?? new Uri(_path.BuildString(context.Variables));
+            ?? new Uri(_path.BuildString(context));
         message.Method = _constMethod
-            ?? new HttpMethod(_method.BuildString(context.Variables));
+            ?? new HttpMethod(_method.BuildString(context));
 
         return message;
     }

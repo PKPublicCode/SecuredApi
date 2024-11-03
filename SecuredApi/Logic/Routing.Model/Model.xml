@@ -484,20 +484,5 @@
             </summary>
             <value>requestRemainingPath</value>
         </member>
-        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.HttpMethod">
-            <summary>
-            Http Method of client request
-            </summary>
-            <value>requestHttpMethod</value>
-        </member>
-        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.QueryString">
-            <summary>
-            Query string of the request.
-            For example, if route was defined for ```/api/some_feature```,
-            and received request with path ```/api/some_feature?a=1&amp;b=2```
-            then query string will be ```a=1&amp;b=2``
-            </summary>
-            <value>requestQueryString</value>
-        </member>
     </members>
 </doc>

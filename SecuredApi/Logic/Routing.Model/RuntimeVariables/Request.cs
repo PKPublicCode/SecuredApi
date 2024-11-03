@@ -27,18 +27,5 @@ public static class Request
     /// </summary>
     /// <value>requestRemainingPath</value>
     public const string RemainingPath = "requestRemainingPath";
-    /// <summary>
-    /// Http Method of client request
-    /// </summary>
-    /// <value>requestHttpMethod</value>
-    public const string HttpMethod = "requestHttpMethod";
-    /// <summary>
-    /// Query string of the request.
-    /// For example, if route was defined for ```/api/some_feature```,
-    /// and received request with path ```/api/some_feature?a=1&amp;b=2```
-    /// then query string will be ```a=1&amp;b=2``
-    /// </summary>
-    /// <value>requestQueryString</value>
-    public const string QueryString = "requestQueryString";
 }
 
