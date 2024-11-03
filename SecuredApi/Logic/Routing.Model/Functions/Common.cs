@@ -17,7 +17,7 @@ namespace SecuredApi.Logic.Routing.Model.Functions;
 /// <summary>
 /// Functions to access runtime data
 /// </summary>
-public static class Request
+public static class Common
 {
     /// <summary>
     /// Returns remained path that was captured by * (asterisk) for the rote.
