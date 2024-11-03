@@ -44,6 +44,7 @@ public static partial class Constants
     {
         public const string PublicRemoteWildcardGet = "/public/remote/wildcard_get_method";
         public const string PublicRemoteWildcardOriginal = "/public/remote/wildcard_original_method";
+        public const string PublicRemoteWildcardChangeQueryParameters = "/public/remote/wildcard_query_parameters";
         public const string PublicEchoWildcard = "/public/echo/wildcard";
         public const string PublicEchoExact = "/public/echo/exact";
         public const string PublicEchoDelay = "/echo/delay";

@@ -28,8 +28,6 @@ public class Router : IRouter, IRouterUpdater
         using var processingContext = new RequestContext(routingRecord, httpContext);
 
         processingContext.SetRequestRemainingPath(routeInfo.RemainingPath);
-        processingContext.SetRequestHttpMethod(httpContext.Request.Method);
-        processingContext.SetRequestQueryString(httpContext.Request.QueryString.ToString());
 
         if (await ProcessGroupsActionsAsync(routingRecord.Groups, processingContext, _executePreRequest)
             && await routingRecord.RequestProcessor.ProcessRequestAsync(processingContext))

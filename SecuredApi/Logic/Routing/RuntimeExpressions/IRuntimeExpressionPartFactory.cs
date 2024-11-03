@@ -12,10 +12,10 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
-namespace SecuredApi.Logic.Variables;
+namespace SecuredApi.Logic.Routing.RuntimeExpressions;
 
-public interface IRuntimeExpressionParser
+public interface IRuntimeExpressionPartFactory
 {
-    RuntimeExpression Parse(string expression);
+    IRuntimeExpression CreatePart(ReadOnlySpan<char> part, bool isVariable);
 }
 

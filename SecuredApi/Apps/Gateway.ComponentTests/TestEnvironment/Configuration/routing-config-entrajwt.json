@@ -12,8 +12,8 @@
       "preRequestActions": [
         {
           "type": "CheckEntraJwt",
-          "oneOfIssuers": [ "$(AllowedEntraTokenIssuer)" ],
-          "oneOfAudiences": [ "$(AllowedEntraTokenAudience)" ],
+          "oneOfIssuers": [ "${AllowedEntraTokenIssuer}" ],
+          "oneOfAudiences": [ "${AllowedEntraTokenAudience}" ],
           "keepData": true,
           "ConsumerIdClaim": "appId"
         },
@@ -40,7 +40,7 @@
                 {
                   "type": "RemoteCall",
                   // In ComponentTests protectedEchoPath is set by appsettings json
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "path": "${protectedEchoPath}/@{getRemainingPath()}",
                   "method": "get"
                 }
               ]
@@ -61,7 +61,7 @@
                 },
                 {
                   "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "path": "${protectedEchoPath}/@{getRemainingPath()}",
                   "method": "get"
                 }
               ]

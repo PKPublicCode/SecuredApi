@@ -1,6 +1,7 @@
 $inputFile = "$PSScriptRoot/../../SecuredApi/Logic/Routing.Model/Model.xml"
 $actionsOutputFile = "$PSScriptRoot/../../Docs/Product/Actions.md"
 $variablesOutputFile = "$PSScriptRoot/../../Docs/Product/RuntimeVariables.md"
+$functionsOutputFile = "$PSScriptRoot/../../Docs/Product/RuntimeFunctions.md"
 $actionsSourceBasePath = "../../SecuredApi/Logic/Routing.Model/Actions"
 
 [xml]$content = Get-Content $inputFile
@@ -186,33 +187,37 @@ foreach($group in $grouppedActions.Keys) {
     }
 }
 
-
-$grouppedVariables = @{}
-foreach($group in $groupped.Keys) {
-    if($group -like 'Model.RuntimeVariables') {
-        foreach($var in $groupped[$group].Keys) { # only one in each group
-            if (-not $groupped[$group][$var].exclude){
-                $tmp = $var.Split('.');
-                $shortGroup = $tmp[$tmp.Length - 1]
-                if ($null -eq $grouppedVariables[$shortGroup]) {
-                    $grouppedVariables[$shortGroup] = @{}
+function WriteDocsForStringConstants([string] $header, [string] $pattern, [string] $outputFile) {
+    $grouppedFunctions = @{}
+    foreach($group in $groupped.Keys) {
+        if($group -like $pattern) {
+            foreach($var in $groupped[$group].Keys) { # only one in each group
+                if (-not $groupped[$group][$var].exclude){
+                    $tmp = $var.Split('.');
+                    $shortGroup = $tmp[$tmp.Length - 1]
+                    if ($null -eq $grouppedFunctions[$shortGroup]) {
+                        $grouppedFunctions[$shortGroup] = @{}
+                    }
+                    $grouppedFunctions[$shortGroup] = $groupped[$group][$var]
                 }
-                $grouppedVariables[$shortGroup] = $groupped[$group][$var]
-                #$shortGroup
             }
+        }
+    }
+
+    "# " + $header | Out-File $outputFile
+    foreach($group in $grouppedFunctions.Keys) {
+        $docMap = $grouppedFunctions[$group]
+        "## $($group)" | Out-File $outputFile -Append
+        "|Name|Description|" | Out-File $outputFile -Append
+        "|----|-----------|" | Out-File $outputFile -Append
+        foreach($var in $docMap.fields){ 
+            "|$($var.value)|$($var.summary)|" | Out-File $outputFile -Append
         }
     }
 }
 
-"#Runtime Variables" | Out-File $variablesOutputFile
-foreach($group in $grouppedVariables.Keys) {
-    $docMap = $grouppedVariables[$group]
-    "## $($group)" | Out-File $variablesOutputFile -Append
-    "|Name|Description|" | Out-File $variablesOutputFile -Append
-    "|----|-----------|" | Out-File $variablesOutputFile -Append
-    foreach($var in $docMap.fields){ 
-        "|$($var.value)|$($var.summary)|" | Out-File $variablesOutputFile -Append
-    }
-}
+WriteDocsForStringConstants "Runtime Functions" 'Model.Functions' $functionsOutputFile
+
+WriteDocsForStringConstants "Runtime Variables" 'Model.RuntimeVariables' $variablesOutputFile
 
 

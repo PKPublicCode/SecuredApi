@@ -24,16 +24,6 @@ public static class RequestContextCommonVariablesExtensions
         ctx.Variables.SetVariable(Request.RemainingPath, value);
     }
 
-    public static void SetRequestHttpMethod(this IRequestContext ctx, string value)
-    {
-        ctx.Variables.SetVariable(Request.HttpMethod, value);
-    }
-
-    public static void SetRequestQueryString(this IRequestContext ctx, string value)
-    {
-        ctx.Variables.SetVariable(Request.QueryString, value);
-    }
-
     public static void SetConsumerId(this IRequestContext ctx, Guid value)
     {
         // Warning. Guid will be boxed!

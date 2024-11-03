@@ -13,16 +13,16 @@
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 using System.Text;
-namespace SecuredApi.Logic.Variables;
+namespace SecuredApi.Logic.Routing;
 
 public readonly struct RuntimeExpression
 {
-    private readonly List<ExpressionPart>? _parts;
+    private readonly IRuntimeExpression? expression;
     private readonly string? _immutableValue;
 
-    public RuntimeExpression(List<ExpressionPart> parts)
+    public RuntimeExpression(IRuntimeExpression parts)
     {
-        _parts = parts;
+        expression = parts;
     }
 
     public RuntimeExpression(string value)
@@ -30,12 +30,12 @@ public readonly struct RuntimeExpression
         _immutableValue = value;
     }
 
-    public bool Immutable => _parts == null;
+    public bool Immutable => _immutableValue != null;
 
     public string ImmutableValue => _immutableValue
         ?? throw new InvalidOperationException("Trying to access null value of expression. Use BuildString instead");
 
-    public string BuildString(IVariables<object> variables)
+    public string BuildString(IRequestContext ctx)
     {
         // Optimization. Value is constant
         if (_immutableValue != null)
@@ -43,31 +43,7 @@ public readonly struct RuntimeExpression
             return _immutableValue;
         }
 
-        if (_parts == null)
-        {
-            throw new InvalidOperationException("RuntimeExpression object is not properly initialized.");
-        }
-
-        // Optimization. If only one element, that we don't need to create extra objects
-        if (_parts.Count == 1)
-        {
-            return variables.GetVariable(_parts[0].Value).ToString()
-                ?? throw new InvalidOperationException($"Variable {_parts[0].Value} is null");
-        }
-
-        var sb = new StringBuilder();
-        foreach(var p in _parts)
-        {
-            if(p.IsVariable)
-            {
-                sb.Append(variables.GetVariable(p.Value));
-            }
-            else
-            {
-                sb.Append(p.Value);
-            }
-        }
-        return sb.ToString();
+        return expression!.Evaluate(ctx); 
     }
 }
 

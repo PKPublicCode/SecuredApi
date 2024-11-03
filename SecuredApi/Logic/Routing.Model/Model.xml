@@ -245,7 +245,7 @@
             <example>
             {
               "type": "RemoteCall",
-              "path": "https://www.google.com/@(requestRemainingPath)",
+              "path": "https://www.google.com/@{getRemainingPath()}",
               "method": "get",
               "timeout": 500
             }
@@ -413,6 +413,52 @@
             List of header names to be removed from the response
             </summary>
         </member>
+        <member name="T:SecuredApi.Logic.Routing.Model.Functions.Common">
+            <summary>
+            Functions to access runtime data
+            </summary>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Functions.Common.GetRemainingPath">
+            <summary>
+            Returns remained path that was captured by * (asterisk) for the rote.
+            For example, if route was defined for ```/api/some_feature/*```,
+            and received request with path ```/api/some_feature/a/b/c/d```
+            then remained path will be ```a/b/c/d```
+            </summary>
+            <value>getRemainingPath</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Functions.Common.GetHttpMethod">
+            <summary>
+            Returns Http Method of client request
+            </summary>
+            <value>getRequestMethod</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Functions.Common.GetQueryString">
+            <summary>
+            Returns query string of the client request.
+            For example, if route was defined for ```/api/some_feature```,
+            and receives request with path ```/api/some_feature?a=1&amp;b=2```
+            then query string will be ```a=1&amp;b=2``
+            </summary>
+            <value>getQueryString</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Functions.Common.GetQueryParam">
+            <summary>
+            Returns parameter of query string. If parameter is not set, returns empty string.
+            For example, if route was defined for ```/api/some_feature```,
+            and receives request with path ```/api/some_feature?someParam=1&amp;anotherParam=2```
+            then query ```getQueryParam(someParam)``` will return ```1```
+            </summary>
+            <value>getQueryParam</value>
+        </member>
+        <member name="F:SecuredApi.Logic.Routing.Model.Functions.Common.GetVariable">
+            <summary>
+            Returns runtime variable.
+            For example ```getVariable(requestRemainingPath)``` will return the same
+            string as function ```getRemainingPath()```
+            </summary>
+            <value>getVariable</value>
+        </member>
         <member name="T:SecuredApi.Logic.Routing.Model.RuntimeVariables.Auth">
             <summary>
             Variables used by authentication actions
@@ -437,21 +483,6 @@
             then remained path will be ```a/b/c/d```
             </summary>
             <value>requestRemainingPath</value>
-        </member>
-        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.HttpMethod">
-            <summary>
-            Http Method of client request
-            </summary>
-            <value>requestHttpMethod</value>
-        </member>
-        <member name="F:SecuredApi.Logic.Routing.Model.RuntimeVariables.Request.QueryString">
-            <summary>
-            Query string of the request.
-            For example, if route was defined for ```/api/some_feature```,
-            and received request with path ```/api/some_feature?a=1&amp;b=2```
-            then query string will be ```a=1&amp;b=2``
-            </summary>
-            <value>requestQueryString</value>
         </member>
     </members>
 </doc>

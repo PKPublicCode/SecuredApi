@@ -40,7 +40,7 @@
                 {
                   "type": "RemoteCall",
                   // In ComponentTests protectedEchoPath is set by appsettings json
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "path": "${protectedEchoPath}/@{getRemainingPath()}",
                   "method": "get"
                 }
               ]
@@ -57,7 +57,7 @@
               "actions": [
                 {
                   "type": "RemoteCall",
-                  "path": "$(protectedEchoPath)/@(requestRemainingPath)",
+                  "path": "${protectedEchoPath}/@{getRemainingPath()}",
                   "method": "get"
                 }
               ]

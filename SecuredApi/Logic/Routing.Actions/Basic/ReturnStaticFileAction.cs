@@ -27,7 +27,7 @@ public class ReturnStaticFileAction : IAction
 {
     private readonly StringResponseStream _notFoundBody;
     private readonly bool _autoMimeType;
-    public RuntimeExpression _path { get; init; }
+    private readonly RuntimeExpression _path;
 
     public ReturnStaticFileAction(ReturnStaticFile settings)
     {
@@ -38,7 +38,7 @@ public class ReturnStaticFileAction : IAction
 
     public async Task<bool> ExecuteAsync(IRequestContext context)
     {
-        string path = _path.BuildString(context.Variables);
+        string path = _path.BuildString(context);
         var fileProvider = context.GetRequiredService<FileAccess.IFileProvider<ReturnStaticFileAction>>();
         StreamResult result;
         try

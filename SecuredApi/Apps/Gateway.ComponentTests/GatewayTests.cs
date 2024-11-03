@@ -80,6 +80,34 @@ public class GatewayTests: GatewayTestsBase
         await ExecuteAsync();
     }
 
+    [Fact]
+    public async Task RemoteCallRouteWithWildcard_CallWithSpecificParameters_RemoteCalledWithChangedParameters()
+    {
+        const string body = "TestBody";
+
+        // Simulate received http call by gateway
+        Request.SetupMethod($"{PublicRemoteWildcardChangeQueryParameters}", _methodGet);
+        Request.QueryString = new QueryString("?param3=30&param2=20&param1=10");
+
+        // setup RemouteCall response
+        MainHttpHandler.When(new HttpMethod(_methodGet), $"{GlobalsPublicRemoteEndpointWithExtra}")
+            .WithHeaders(new[] { Headers.RequestCommon.AsMock() })
+            .WithQueryString("?NewParam1=10&NewParam2=20")
+            .Respond(
+                        HttpStatusCode.Accepted,
+                        new KeyValuePair<string, string>[] { },
+                        MediaTypeNames.Text.Plain,
+                        body
+                    );
+
+        // Expected result
+        ExpectedResult.StatusCode = StatusCodes.Status202Accepted;
+        ExpectedResult.AddHeaders(Headers.ResponseCommon, Headers.TextPlainUtf8ContentType );
+        ExpectedResult.Body = body;
+
+        await ExecuteAsync();
+    }
+
     //Can't find existing methods defined as const string that is required to be used in attributes
     private const string _methodGet = "get";
     private const string _methodPost = "post";
