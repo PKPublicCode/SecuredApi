@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
     [switch] $Force = $false
-    , [ValidateSet("lates", "rc")]
+    , [ValidateSet("latest", "rc")]
     [string] $dockerTag = "latest"
     , [ValidateSet("S1", "P0V3", "P1V3")]
     [string] $AppPlanSku = "P0V3"
