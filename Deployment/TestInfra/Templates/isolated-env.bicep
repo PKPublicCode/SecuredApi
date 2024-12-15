@@ -18,8 +18,9 @@ module sharedResources './Modules/shared-resources.bicep' = {
   name: 'shared-resources'
   scope: envRG
   params: {
+    baseName: productName
     nameEnding: commonNameEnding
-    storageShortName: 'cfg'
+    storageShortName: 'cfg${productName}'
   }
 }
 

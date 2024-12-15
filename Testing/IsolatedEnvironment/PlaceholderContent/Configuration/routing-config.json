@@ -1,0 +1,43 @@
+{
+  "preRequestActions": [
+  ],
+  "onRequestErrorActions": [
+  ],
+  "onRequestSuccessActions": [
+  ],
+  "routesGroups": [
+    {
+      "description": "All responses",
+      "routes": [
+        {
+          "methods": [ "get", "post" ],
+          "path": "/echo/*",
+          "actions": [
+            {
+              "type": "SetResponse",
+              "httpCode": 200,
+              "body": "This is placeholder"
+            }
+          ]
+        },
+        {
+          "methods": [ "get", "post" ],
+          "path": "/content/*",
+          "actions": [
+            {
+              "type": "ReturnStaticFile",
+              "path": "@{getRemainingPath()}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routeNotFoundActions": [
+    {
+      "type": "SetRequestInfoToResponse",
+      "httpCode": 404,
+      "HeadLine": "Echo route not found"
+    }
+  ]
+}
