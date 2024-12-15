@@ -19,6 +19,7 @@ module sharedResources './Modules/shared-resources.bicep' = {
   name: 'shared-resources'
   scope: sharedRG
   params: {
+    baseName: 'secureapi-shared'
     nameEnding: commonNameEnding
     storageShortName: 'cfg'
   }

@@ -1,10 +1,10 @@
-param baseName string = 'secureapi-shared'
+param baseName string
 param nameEnding string
 param location string = resourceGroup().location
 param logAnalyticsSku string = 'PerGB2018'
 param logAnalyticsRetentionInDays int = 30
 @minLength(3)
-@maxLength(6)
+@maxLength(9)
 param storageShortName string = 'cfg'
 param storageSkuName string = 'Standard_LRS'
 

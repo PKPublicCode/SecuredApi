@@ -18,7 +18,6 @@ using SecuredApi.Logic.Common;
 using SecuredApi.Logic.Routing.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
-using SecuredApi.Logic.Variables;
 using SecuredApi.Logic.Routing.Model.Actions.Basic;
 
 namespace SecuredApi.Logic.Routing.Actions.Basic;
