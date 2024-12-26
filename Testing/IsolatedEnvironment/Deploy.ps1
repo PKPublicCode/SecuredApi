@@ -1,13 +1,13 @@
 [CmdletBinding()]
 param (
-    [string] $productName
-    ,[string] $commonNameEnding
-    ,[string] $rgName
-    ,[string] $location
+    [string] $ProductName
+    ,[string] $CommonNameEnding
+    ,[string] $RgName
+    ,[string] $Location
     ,[ValidateSet("latest", "rc")] [string] $dockerTag = "latest"
     ,[ValidateSet("S1", "P0V3", "P1V3")] [string] $AppPlanSku = "P0V3"
     ,$GatewayInstanceNum = 1
-    ,[switch] $createResourceGroup = $false
+    ,[switch] $CreateResourceGroup = $false
 )
 
 $infraCommonNameEnding = $commonNameEnding
