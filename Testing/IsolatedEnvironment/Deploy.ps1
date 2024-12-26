@@ -1,28 +1,16 @@
 [CmdletBinding()]
 param (
-    [string] $productName,
-    [string] $commonNameEnding,
-    [string] $rgName,
-    [string] $location,
-    [switch] $Force = $false
-    , [ValidateSet("latest", "rc")]
-    [string] $dockerTag = "latest"
-    , [ValidateSet("S1", "P0V3", "P1V3")]
-    [string] $AppPlanSku = "P0V3"
-    , $GatewayInstanceNum = 1
+    [string] $productName
+    ,[string] $commonNameEnding
+    ,[string] $rgName
+    ,[string] $location
+    ,[ValidateSet("latest", "rc")] [string] $dockerTag = "latest"
+    ,[ValidateSet("S1", "P0V3", "P1V3")] [string] $AppPlanSku = "P0V3"
+    ,$GatewayInstanceNum = 1
+    ,[switch] $createResourceGroup = $false
 )
 
 $infraCommonNameEnding = $commonNameEnding
-# if (-not $infraCommonNameEnding) { 
-#     if (-not $Force) {
-#         Write-Host("Environment variable SECURED_API_NAME_ENDING is not set. To set existing, execute: `$env:SECURED_API_NAME_ENDING=<your ending>")
-#         Write-Host("Alternatively execute script with -force option, to generate new one: ./Deploy.ps1 -Force")
-#         exit
-#     }
-#     $infraCommonNameEnding = $(-join (((48..57)+(65..90)+(97..122)) * 80 |Get-Random -Count 6 |%{[char]$_}))
-#     Write-Host("New ending is generated")
-#     $env:SECURED_API_NAME_ENDING = $infraCommonNameEnding
-# }
 
 if (!(Get-AzContext)) {
     Connect-AzAccount | Out-Null
@@ -32,8 +20,12 @@ if (!(Get-AzContext)) {
 
 Write-Host("Creating environment with ending $infraCommonNameEnding")
 
-$result = New-AzDeployment `
-    -location $location `
+if ($createResourceGroup) {
+    New-AzResourceGroup -Name $rgName -Location $location
+}
+
+$result = New-AzResourceGroupDeployment `
+    -ResourceGroupName $rgName `
     -TemplateFile "./../../Deployment/TestInfra/Templates/isolated-env.bicep" `
     -resourcesLocation $location `
     -productName $productName `
