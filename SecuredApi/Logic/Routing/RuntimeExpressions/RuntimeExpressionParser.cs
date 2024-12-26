@@ -37,7 +37,7 @@ public class RuntimeExpressionParser: IRuntimeExpressionParser
 
     private class BuilderFactory : IExpressionBuilderFactory<ExpressionBuilder>
     {
-        IRuntimeExpressionPartFactory _partFactory;
+        private readonly IRuntimeExpressionPartFactory _partFactory;
         public BuilderFactory(IRuntimeExpressionPartFactory partFactory)
         {
             _partFactory = partFactory;

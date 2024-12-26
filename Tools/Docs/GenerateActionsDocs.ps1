@@ -145,7 +145,7 @@ foreach($group in $grouppedActions.Keys) {
     "### $($group)" | Out-File $actionsOutputFile -Append
     "|Type|Fallible|Description|" | Out-File $actionsOutputFile -Append
     "|----|------|-----------|" | Out-File $actionsOutputFile -Append
-    foreach($action in $docMap.Values){
+    foreach($action in ($docMap.Values | Sort-Object shortName)){
         "|[$($action.shortName)](#$($action.shortName))|$($action.returns ? "Yes" : "No")|$($action.summary)|" | Out-File $actionsOutputFile -Append
     }
 }
@@ -153,7 +153,7 @@ foreach($group in $grouppedActions.Keys) {
 foreach($group in $grouppedActions.Keys) {
     $docMap = $grouppedActions[$group]
     "## $($group)" | Out-File $actionsOutputFile -Append
-    foreach($action in $docMap.Values){
+    foreach($action in ($docMap.Values | Sort-Object shortName)){
         "### [$($action.shortName)]($($action.sourcePath))" | Out-File $actionsOutputFile -Append
         "#### Summary" | Out-File $actionsOutputFile -Append
         $action.summary | Out-File $actionsOutputFile -Append

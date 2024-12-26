@@ -5,6 +5,7 @@ param (
 )
 
 $StorageScope = (Get-AzStorageAccount -ResourceGroupName $rgName -Name $AccountName).Id
+# $objId = (Get-AzADUser -Mail (Get-AzContext).Account.Id).Id #doesnt work in some setup
 $objId = (Get-AzADUser).Id 
 
 #Assign rights to upload blobs
