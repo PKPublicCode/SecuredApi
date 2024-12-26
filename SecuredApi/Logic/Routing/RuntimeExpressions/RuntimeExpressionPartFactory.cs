@@ -29,7 +29,7 @@ public class RuntimeExpressionPartFactory: IRuntimeExpressionPartFactory
         }
 
         // Try to find singleton expressions
-        if(_simpleExpressions.TryGetValue(expressionStr, out var singleton))
+        if (_simpleExpressions.TryGetValue(expressionStr, out var singleton))
         {
             return singleton;
         }
@@ -42,6 +42,8 @@ public class RuntimeExpressionPartFactory: IRuntimeExpressionPartFactory
                     return new GetRequestQueryParamPart(pair.Param);
                 case Functions.GetVariable:
                     return new GetRuntimeVariablePart(pair.Param);
+                case Functions.TransformQueryString:
+                    return new TransformQueryStringPart(pair.Param);
             }    
         }
 

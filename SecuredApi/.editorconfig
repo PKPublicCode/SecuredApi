@@ -216,6 +216,3 @@ dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix = 
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
-
-# Copyright header
-file_header_template = ﻿************************************************************************\nCopyright (c) 2021 Pavlo Kruglov. All Rights Reserved.\n\nThis code is posted "as-is". The author makes no assertions as to its \nperformance or possible effects, provides no warranties of any kind,\nand disclaims any implied warranties.\n************************************************************************

@@ -55,5 +55,33 @@ public static class Common
     /// </summary>
     /// <value>getVariable</value>
     public const string GetVariable = "getVariable";
+    /// <summary>
+    /// Rebuilds query string into the new string using new parameter names, beginning,
+    /// equality and split characters (strings).
+    ///
+    /// 
+    ///
+    /// Signature:
+    ///
+    /// ``` rebuildQueryString('beginningString', 'splitString', 'equalityString', 'oldParameterName:newParameterName', ...)```
+    ///
+    /// Number of parameters is limited by 256. Parameters that doesn't have specified name mapping
+    /// will be ignored and omitted from output string. Order of the parameters in the result string
+    /// satisfies the alphanumerical order of the new parameter names. If query has no parameters with
+    /// specified mapping, then resulted string will be empty string
+    ///
+    ///
+    /// 
+    /// Example:
+    ///
+    /// Request's query string: ```?param3=30&amp;param2=20&amp;param1=10```
+    ///
+    /// Function: ```transformQueryString('_b_', '_s_', '_e_', 'param1:newParam1', 'param2:newParam2'```)
+    ///
+    /// Result: ```_b_newParam1_e_10_s_newParam2_20```
+    /// 
+    /// </summary>
+    /// <value>transformQueryString</value>
+    public const string TransformQueryString = "transformQueryString";
 }
 
