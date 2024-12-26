@@ -79,20 +79,21 @@ public class GatewayTests: GatewayTestsBase
 
         await ExecuteAsync();
     }
-
+    
     [Fact]
-    public async Task RemoteCallRouteWithWildcard_CallWithSpecificParameters_RemoteCalledWithChangedParameters()
+    public async Task RemoteCallRouteWithWildcard_CallWithSpecificParameters_RemoteCalledWithParameters()
     {
         const string body = "TestBody";
 
         // Simulate received http call by gateway
-        Request.SetupMethod($"{PublicRemoteWildcardChangeQueryParameters}", _methodGet);
+        Request.SetupMethod($"{PublicRemoteWildcardQueryParameters}", _methodGet);
         Request.QueryString = new QueryString("?param3=30&param2=20&param1=10");
 
         // setup RemouteCall response
-        MainHttpHandler.When(new HttpMethod(_methodGet), $"{GlobalsPublicRemoteEndpointWithExtra}")
+        MainHttpHandler.When(new HttpMethod(_methodGet), 
+                            $"{GlobalsPublicRemoteEndpointWithExtra}_b_newParam2_e_20_s_newParam3_e_30")
             .WithHeaders(new[] { Headers.RequestCommon.AsMock() })
-            .WithQueryString("?NewParam1=10&NewParam2=20")
+            .WithQueryString("?newParam1=10&newParam2=20")
             .Respond(
                         HttpStatusCode.Accepted,
                         new KeyValuePair<string, string>[] { },

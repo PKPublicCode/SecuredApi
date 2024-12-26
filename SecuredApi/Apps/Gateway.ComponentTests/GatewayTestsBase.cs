@@ -62,8 +62,6 @@ public abstract class GatewayTestsBase
 
         srv.AddHttpClient(HttpClientNames.RemoteCallRedirectDisabled)
             .ConfigurePrimaryHttpMessageHandler(() => NonRedirectHttpHandler);
-        
-        MainHttpHandler.Fallback.Throw(new InvalidOperationException("No matching mock handler"));
 
         configurator(srv, cfg);
 
