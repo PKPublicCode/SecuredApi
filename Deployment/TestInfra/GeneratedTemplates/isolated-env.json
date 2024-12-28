@@ -1,0 +1,664 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.29.47.4906",
+      "templateHash": "7111798168520663788"
+    }
+  },
+  "parameters": {
+    "resourcesLocation": {
+      "type": "string"
+    },
+    "productName": {
+      "type": "string"
+    },
+    "commonNameEnding": {
+      "type": "string"
+    },
+    "rgName": {
+      "type": "string",
+      "defaultValue": "[toLower(format('rg-{0}-{1}', parameters('productName'), parameters('commonNameEnding')))]"
+    },
+    "appPlanSku": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "gatewayInstanceNum": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "dockerTag": {
+      "type": "string",
+      "defaultValue": "latest"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "shared-resources",
+      "resourceGroup": "[parameters('rgName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "baseName": {
+            "value": "[parameters('productName')]"
+          },
+          "nameEnding": {
+            "value": "[parameters('commonNameEnding')]"
+          },
+          "storageShortName": {
+            "value": "[format('cfg{0}', parameters('productName'))]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.29.47.4906",
+              "templateHash": "7939879639049898964"
+            }
+          },
+          "parameters": {
+            "baseName": {
+              "type": "string"
+            },
+            "nameEnding": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "logAnalyticsSku": {
+              "type": "string",
+              "defaultValue": "PerGB2018"
+            },
+            "logAnalyticsRetentionInDays": {
+              "type": "int",
+              "defaultValue": 30
+            },
+            "storageShortName": {
+              "type": "string",
+              "defaultValue": "cfg",
+              "minLength": 3,
+              "maxLength": 9
+            },
+            "storageSkuName": {
+              "type": "string",
+              "defaultValue": "Standard_LRS"
+            }
+          },
+          "variables": {
+            "logAnaliticsName": "[toLower(format('law-{0}-{1}', parameters('baseName'), parameters('nameEnding')))]",
+            "storageName": "[toLower(format('st{0}{1}', parameters('storageShortName'), replace(parameters('nameEnding'), '-', '')))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2021-12-01-preview",
+              "name": "[variables('logAnaliticsName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "[parameters('logAnalyticsSku')]"
+                },
+                "retentionInDays": "[parameters('logAnalyticsRetentionInDays')]"
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2021-09-01",
+              "name": "[variables('storageName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('storageSkuName')]"
+              },
+              "kind": "StorageV2",
+              "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": false,
+                "allowCrossTenantReplication": false,
+                "allowSharedKeyAccess": false,
+                "encryption": {
+                  "keySource": "Microsoft.Storage",
+                  "services": {
+                    "blob": {
+                      "enabled": true,
+                      "keyType": "Account"
+                    },
+                    "file": {
+                      "enabled": true,
+                      "keyType": "Account"
+                    },
+                    "queue": {
+                      "enabled": true,
+                      "keyType": "Service"
+                    },
+                    "table": {
+                      "enabled": true,
+                      "keyType": "Service"
+                    }
+                  }
+                },
+                "minimumTlsVersion": "TLS1_2",
+                "supportsHttpsTrafficOnly": true
+              }
+            }
+          ],
+          "outputs": {
+            "logAnalyticsWorkspaceId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnaliticsName'))]"
+            },
+            "configStorageName": {
+              "type": "string",
+              "value": "[variables('storageName')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "main-service",
+      "resourceGroup": "[parameters('rgName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('resourcesLocation')]"
+          },
+          "bundleName": {
+            "value": "[parameters('productName')]"
+          },
+          "nameEnding": {
+            "value": "[parameters('commonNameEnding')]"
+          },
+          "skuName": {
+            "value": "[parameters('appPlanSku')]"
+          },
+          "logAnalyticsResourceId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'shared-resources'), '2022-09-01').outputs.logAnalyticsWorkspaceId.value]"
+          },
+          "configStorageName": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'shared-resources'), '2022-09-01').outputs.configStorageName.value]"
+          },
+          "configStorageRG": {
+            "value": "[parameters('rgName')]"
+          },
+          "dockerTag": {
+            "value": "[parameters('dockerTag')]"
+          },
+          "configureStaticContent": {
+            "value": true
+          },
+          "instanceNum": {
+            "value": "[parameters('gatewayInstanceNum')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.29.47.4906",
+              "templateHash": "13223326220449804306"
+            }
+          },
+          "functions": [
+            {
+              "namespace": "__bicep",
+              "members": {
+                "makeContainerName": {
+                  "parameters": [
+                    {
+                      "type": "string",
+                      "name": "suffix"
+                    },
+                    {
+                      "type": "string",
+                      "name": "bundleName"
+                    }
+                  ],
+                  "output": {
+                    "type": "string",
+                    "value": "[toLower(format('{0}-{1}', parameters('bundleName'), parameters('suffix')))]"
+                  }
+                },
+                "makeResourceName": {
+                  "parameters": [
+                    {
+                      "type": "string",
+                      "name": "prefix"
+                    },
+                    {
+                      "type": "string",
+                      "name": "bundleName"
+                    },
+                    {
+                      "type": "string",
+                      "name": "nameEnding"
+                    }
+                  ],
+                  "output": {
+                    "type": "string",
+                    "value": "[toLower(format('{0}-{1}-{2}', parameters('prefix'), parameters('bundleName'), parameters('nameEnding')))]"
+                  }
+                }
+              }
+            }
+          ],
+          "parameters": {
+            "bundleName": {
+              "type": "string"
+            },
+            "nameEnding": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "appServicePlanName": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeResourceName('plan', parameters('bundleName'), parameters('nameEnding'))]"
+            },
+            "webSiteName": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeResourceName('app', parameters('bundleName'), parameters('nameEnding'))]"
+            },
+            "appInsightName": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeResourceName('appi', parameters('bundleName'), parameters('nameEnding'))]"
+            },
+            "logAnalyticsResourceId": {
+              "type": "string"
+            },
+            "skuName": {
+              "type": "string"
+            },
+            "instanceNum": {
+              "type": "int",
+              "defaultValue": 1
+            },
+            "httpsOnly": {
+              "type": "bool",
+              "defaultValue": true
+            },
+            "dockerTag": {
+              "type": "string",
+              "defaultValue": "latest"
+            },
+            "dockerRegistyUrl": {
+              "type": "string",
+              "defaultValue": "https://index.docker.io/v1/"
+            },
+            "appServiceConfiguration": {
+              "type": "object",
+              "defaultValue": {}
+            },
+            "configStorageName": {
+              "type": "string"
+            },
+            "configStorageRG": {
+              "type": "string"
+            },
+            "configContainer": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeContainerName('config', parameters('bundleName'))]"
+            },
+            "configureStaticContent": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "staticContentContainer": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeContainerName('static', parameters('bundleName'))]"
+            },
+            "configureSubscriptions": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "subscriptionsContainer": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeContainerName('subscriptions', parameters('bundleName'))]"
+            },
+            "subscriptionKeysContainer": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeContainerName('keys', parameters('bundleName'))]"
+            },
+            "subscriptionKeysSalt": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "configureConsumers": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "consumersContainer": {
+              "type": "string",
+              "defaultValue": "[__bicep.makeContainerName('consumers', parameters('bundleName'))]"
+            }
+          },
+          "variables": {
+            "_deployFromDocker": "[not(empty(parameters('dockerTag')))]",
+            "_linuxFxVersion": "[if(variables('_deployFromDocker'), format('DOCKER|pkruglov/securedapi.gateway:{0}', parameters('dockerTag')), 'DOTNETCORE|7.0')]",
+            "_emptySettings": {},
+            "_dockerRegistrySettings": "[if(not(variables('_deployFromDocker')), variables('_emptySettings'), createObject('DOCKER_REGISTRY_SERVER_URL', parameters('dockerRegistyUrl')))]"
+          },
+          "resources": {
+            "appService::appServiceConfig": {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2022-09-01",
+              "name": "[format('{0}/{1}', parameters('webSiteName'), 'appsettings')]",
+              "properties": "[union(variables('_dockerRegistrySettings'), if(not(parameters('configureSubscriptions')), variables('_emptySettings'), createObject('Subscriptions__Keys__FileAccess__Type', 'AzureStorage', 'Subscriptions__Keys__FileAccess__Rbac__Uri', reference('storageContent').outputs.blobUrls.value[parameters('subscriptionKeysContainer')], 'Subscriptions__Keys__Security__Salt', parameters('subscriptionKeysSalt'), 'Subscriptions__Subscriptions__FileAccess__Type', 'AzureStorage', 'Subscriptions__Subscriptions__FileAccess__Rbac__Uri', reference('storageContent').outputs.blobUrls.value[parameters('subscriptionsContainer')])), if(not(parameters('configureConsumers')), variables('_emptySettings'), createObject('Consumers__FileAccess__Type', 'AzureStorage', 'Consumers__FileAccess__Rbac__Uri', reference('storageContent').outputs.blobUrls.value[parameters('consumersContainer')])), createObject('RoutingEngine__Files__RoutingCfgFileId', 'routing-config.json', 'RoutingEngine__FileAccess__Type', 'AzureStorage', 'RoutingEngine__FileAccess__Rbac__Uri', reference('storageContent').outputs.blobUrls.value[parameters('configContainer')]), if(not(parameters('configureStaticContent')), variables('_emptySettings'), createObject('StaticContent__FileAccess__Type', 'AzureStorage', 'StaticContent__FileAccess__Rbac__Uri', reference('storageContent').outputs.blobUrls.value[parameters('staticContentContainer')])), parameters('appServiceConfiguration'), createObject('APPINSIGHTS_INSTRUMENTATIONKEY', reference('appInsights').InstrumentationKey, 'APPINSIGHTS_PROFILERFEATURE_VERSION', '1.0.0', 'APPINSIGHTS_SNAPSHOTFEATURE_VERSION', 'disabled', 'APPLICATIONINSIGHTS_CONNECTION_STRING', reference('appInsights').ConnectionString, 'ApplicationInsightsAgent_EXTENSION_VERSION', '~2', 'DiagnosticServices_EXTENSION_VERSION', '~3', 'InstrumentationEngine_EXTENSION_VERSION', 'disabled', 'SnapshotDebugger_EXTENSION_VERSION', 'disabled', 'XDT_MicrosoftApplicationInsights_BaseExtensions', 'disabled', 'XDT_MicrosoftApplicationInsights_Mode', 'recommended', 'XDT_MicrosoftApplicationInsights_PreemptSdk', '1'))]",
+              "dependsOn": [
+                "appInsights",
+                "appService",
+                "storageContent"
+              ]
+            },
+            "appService::appServiceAppSettings": {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2022-09-01",
+              "name": "[format('{0}/{1}', parameters('webSiteName'), 'logs')]",
+              "properties": {
+                "applicationLogs": {
+                  "fileSystem": {
+                    "level": "Warning"
+                  }
+                },
+                "httpLogs": {
+                  "fileSystem": {
+                    "retentionInMb": 40,
+                    "enabled": true
+                  }
+                },
+                "failedRequestsTracing": {
+                  "enabled": true
+                },
+                "detailedErrorMessages": {
+                  "enabled": true
+                }
+              },
+              "dependsOn": [
+                "appService"
+              ]
+            },
+            "appInsights": {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[parameters('appInsightName')]",
+              "location": "[parameters('location')]",
+              "kind": "string",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[parameters('logAnalyticsResourceId')]"
+              }
+            },
+            "appServicePlan": {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2020-06-01",
+              "name": "[parameters('appServicePlanName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('skuName')]",
+                "capacity": "[parameters('instanceNum')]"
+              },
+              "properties": {
+                "reserved": true
+              }
+            },
+            "appService": {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2022-09-01",
+              "name": "[parameters('webSiteName')]",
+              "location": "[parameters('location')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "httpsOnly": "[parameters('httpsOnly')]",
+                "clientAffinityEnabled": false,
+                "siteConfig": {
+                  "minTlsVersion": "1.2",
+                  "linuxFxVersion": "[variables('_linuxFxVersion')]",
+                  "alwaysOn": true
+                }
+              },
+              "dependsOn": [
+                "appServicePlan"
+              ]
+            },
+            "storageAccess": {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2022-09-01",
+              "name": "[format('{0}-config-container-access', parameters('bundleName'))]",
+              "resourceGroup": "[parameters('configStorageRG')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "storageName": {
+                    "value": "[parameters('configStorageName')]"
+                  },
+                  "roles": {
+                    "value": [
+                      "blobReader"
+                    ]
+                  },
+                  "principalId": {
+                    "value": "[reference('appService', '2022-09-01', 'full').identity.principalId]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.29.47.4906",
+                      "templateHash": "16618381189361960111"
+                    }
+                  },
+                  "parameters": {
+                    "storageName": {
+                      "type": "string"
+                    },
+                    "roles": {
+                      "type": "array",
+                      "allowedValues": [
+                        "blobReader",
+                        "blobContributor",
+                        "tableReader",
+                        "tableContributor"
+                      ]
+                    },
+                    "principalId": {
+                      "type": "string"
+                    }
+                  },
+                  "variables": {
+                    "_roleDefinitions": {
+                      "blobReader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1')]",
+                      "blobContributor": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                      "tableReader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '76199698-9eea-4c19-bc75-cec21354c6b6')]",
+                      "tableContributor": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3')]"
+                    },
+                    "_resultingRoles": "[if(empty(parameters('principalId')), createArray(), parameters('roles'))]"
+                  },
+                  "resources": [
+                    {
+                      "copy": {
+                        "name": "roleReaderAuthorization",
+                        "count": "[length(variables('_resultingRoles'))]"
+                      },
+                      "type": "Microsoft.Authorization/roleAssignments",
+                      "apiVersion": "2020-10-01-preview",
+                      "scope": "[format('Microsoft.Storage/storageAccounts/{0}', parameters('storageName'))]",
+                      "name": "[guid('storage-rbac', resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), resourceGroup().id, parameters('principalId'), variables('_roleDefinitions')[variables('_resultingRoles')[copyIndex()]])]",
+                      "properties": {
+                        "principalId": "[parameters('principalId')]",
+                        "roleDefinitionId": "[variables('_roleDefinitions')[variables('_resultingRoles')[copyIndex()]]]",
+                        "principalType": "ServicePrincipal"
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "appService"
+              ]
+            },
+            "storageContent": {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2022-09-01",
+              "name": "[format('{0}-config-container-content', parameters('bundleName'))]",
+              "resourceGroup": "[parameters('configStorageRG')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "storageName": {
+                    "value": "[parameters('configStorageName')]"
+                  },
+                  "containers": {
+                    "value": "[union(createArray(parameters('configContainer'), parameters('staticContentContainer')), if(parameters('configureConsumers'), createArray(parameters('consumersContainer')), createArray()), if(parameters('configureSubscriptions'), createArray(parameters('subscriptionKeysContainer'), parameters('subscriptionsContainer')), createArray()))]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.29.47.4906",
+                      "templateHash": "7216616777723146736"
+                    }
+                  },
+                  "parameters": {
+                    "storageName": {
+                      "type": "string"
+                    },
+                    "containers": {
+                      "type": "array",
+                      "defaultValue": []
+                    },
+                    "tables": {
+                      "type": "array",
+                      "defaultValue": []
+                    }
+                  },
+                  "variables": {
+                    "storagePrefix": "[toLower(format('{0}/default/', parameters('storageName')))]"
+                  },
+                  "resources": [
+                    {
+                      "copy": {
+                        "name": "container",
+                        "count": "[length(parameters('containers'))]"
+                      },
+                      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                      "apiVersion": "2022-05-01",
+                      "name": "[toLower(format('{0}{1}', variables('storagePrefix'), parameters('containers')[copyIndex()]))]",
+                      "properties": {
+                        "publicAccess": "None",
+                        "metadata": {}
+                      }
+                    },
+                    {
+                      "copy": {
+                        "name": "table",
+                        "count": "[length(parameters('tables'))]"
+                      },
+                      "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', variables('storagePrefix'), parameters('tables')[copyIndex()])]"
+                    }
+                  ],
+                  "outputs": {
+                    "blobUrls": {
+                      "type": "object",
+                      "value": "[reduce(parameters('containers'), createObject(), lambda('res', 'curr', union(lambdaVariables('res'), createObject(format('{0}', lambdaVariables('curr')), format('{0}{1}', reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2021-02-01').primaryEndpoints.blob, lambdaVariables('curr'))))))]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outputs": {
+            "appServiceName": {
+              "type": "string",
+              "value": "[parameters('webSiteName')]"
+            },
+            "hostEndpoint": {
+              "type": "string",
+              "value": "[reference('appService').hostNames[0]]"
+            },
+            "blobs": {
+              "type": "object",
+              "value": {
+                "configuration": {
+                  "name": "[parameters('configContainer')]",
+                  "url": "[reference('storageContent').outputs.blobUrls.value[parameters('configContainer')]]"
+                },
+                "staticContent": {
+                  "name": "[parameters('staticContentContainer')]",
+                  "url": "[reference('storageContent').outputs.blobUrls.value[parameters('staticContentContainer')]]"
+                },
+                "subscriptions": "[if(not(parameters('configureSubscriptions')), null(), createObject('name', parameters('subscriptionsContainer'), 'url', reference('storageContent').outputs.blobUrls.value[parameters('subscriptionsContainer')]))]",
+                "subscriptionKeys": "[if(not(parameters('configureSubscriptions')), null(), createObject('name', parameters('subscriptionKeysContainer'), 'url', reference('storageContent').outputs.blobUrls.value[parameters('subscriptionKeysContainer')]))]",
+                "consumers": "[if(not(parameters('configureConsumers')), null(), createObject('name', parameters('consumersContainer'), 'url', reference('storageContent').outputs.blobUrls.value[parameters('consumersContainer')]))]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'shared-resources')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "gateway": {
+      "type": "object",
+      "value": {
+        "appServiceName": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'main-service'), '2022-09-01').outputs.appServiceName.value]",
+        "hostEndpoint": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'main-service'), '2022-09-01').outputs.hostEndpoint.value]",
+        "blobs": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'main-service'), '2022-09-01').outputs.blobs.value]"
+      }
+    },
+    "sharedRgName": {
+      "type": "string",
+      "value": "[parameters('rgName')]"
+    },
+    "configStorageName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'shared-resources'), '2022-09-01').outputs.configStorageName.value]"
+    },
+    "performanceTestRgName": {
+      "type": "string",
+      "value": "[parameters('rgName')]"
+    }
+  }
+}
