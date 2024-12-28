@@ -23,7 +23,7 @@ public class SigningKeysProvider: ISigningKeysProvider
 {
     private readonly ConcurrentDictionary<string, ConfigurationManager<OpenIdConnectConfiguration>> _configs = new(StringComparer.OrdinalIgnoreCase);
     private readonly SemaphoreSlim _lock = new(1);
-    private const string _wellknownSuffix = "/v2.0/.well-known/openid-configuration";
+    private const string _wellknownSuffix = "/.well-known/openid-configuration";
 
     public SigningKeysProvider()
     {

@@ -76,7 +76,7 @@ public class CheckEntraJwtAction : IAction
         if (context.Request.Headers.TryGetValue(_settings.HeaderName, out var header)
             && header.Count > 0)
         {
-            var token = header.Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
+            var token = header.FirstOrDefault(x => !string.IsNullOrEmpty(x));
             if (token != null && token.StartsWith(_settings.TokenPrefix))
             {
                 value = token[_settings.TokenPrefix.Length..];
