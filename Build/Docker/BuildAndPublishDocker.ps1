@@ -9,10 +9,10 @@ $majorVer = "0.2"
 $verFile = "$($PSScriptRoot)/ver.txt"
 $strVer = Get-Content $verfile 
 $build = [System.Decimal]::Parse($strVer)
+#bump new ver
+$build++
 
 if ($Prod) {
-    #bump new ver
-    $build++
     Set-Content $verFile $build
 
     $latestTag = "latest"
@@ -22,7 +22,6 @@ if ($Prod) {
     Write-Host("Building Prod")
 }
 else {
-    $build = $build + 1
     $latestTag = "rc"
     $majorVerTag = "$($majorVer).rc"
     $minorVerTag = "$($majorVer).$($build).rc"
@@ -41,11 +40,13 @@ docker build `
 
 docker push pkruglov/securedapi.gateway --all-tags 
 
-
-# Generate ARM Template
-Set-Location "$($PSScriptRoot)/../../Deployment/TestInfra/Templates"
-$armOutput = "../GeneratedTemplates"
-New-Item -ItemType Directory -Force -Path $armOutput
-az bicep build --file isolated-env.bicep --outdir $armOutput
+if ($Prod) {
+    # Generate ARM Template
+    Write-Host("Building ARM Templates")
+    Set-Location "$($PSScriptRoot)/../../Deployment/TestInfra/Templates"
+    $armOutput = "../GeneratedTemplates"
+    New-Item -ItemType Directory -Force -Path $armOutput | Out-Null
+    az bicep build --file isolated-env.bicep --outdir $armOutput
+}
 
 Pop-Location
