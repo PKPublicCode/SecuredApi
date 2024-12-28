@@ -15,8 +15,8 @@
       "preRequestActions": [
         {
           "type": "CheckEntraJwt",
-          "oneOfIssuers": [ "${AllowedEntraTokenIssuer}" ],
-          "oneOfAudiences": [ "${AllowedEntraTokenAudience}" ],
+          "oneOfIssuers": [ "${AllowedEntraTokenIssuer}", "" ],
+          "oneOfAudiences": [ "${AllowedEntraTokenAudience}", "" ],
           "keepData": true
         }
       ],
