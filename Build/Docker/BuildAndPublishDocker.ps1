@@ -11,13 +11,13 @@ $strVer = Get-Content $verfile
 $build = [System.Decimal]::Parse($strVer)
 
 if ($Prod) {
+    #bump new ver
+    $build++
+    Set-Content $verFile $build
+
     $latestTag = "latest"
     $majorVerTag = "$($majorVer)"
     $minorVerTag = "$($majorVer).$($build)"
-
-    #bump new ver
-    # $build++
-    # Set-Content $verFile $ver
 
     Write-Host("Building Prod")
 }
@@ -40,5 +40,12 @@ docker build `
     .
 
 docker push pkruglov/securedapi.gateway --all-tags 
+
+
+# Generate ARM Template
+Set-Location "$($PSScriptRoot)/../../Deployment/TestInfra/Templates"
+$armOutput = "../GeneratedTemplates"
+New-Item -ItemType Directory -Force -Path $armOutput
+az bicep build --file isolated-env.bicep --outdir $armOutput
 
 Pop-Location
