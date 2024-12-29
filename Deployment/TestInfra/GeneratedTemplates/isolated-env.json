@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.29.47.4906",
-      "templateHash": "7111798168520663788"
+      "templateHash": "5026400979035815226"
     }
   },
   "parameters": {
@@ -648,17 +648,13 @@
         "blobs": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'main-service'), '2022-09-01').outputs.blobs.value]"
       }
     },
-    "sharedRgName": {
+    "rgName": {
       "type": "string",
       "value": "[parameters('rgName')]"
     },
     "configStorageName": {
       "type": "string",
       "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('rgName')), 'Microsoft.Resources/deployments', 'shared-resources'), '2022-09-01').outputs.configStorageName.value]"
-    },
-    "performanceTestRgName": {
-      "type": "string",
-      "value": "[parameters('rgName')]"
     }
   }
 }
