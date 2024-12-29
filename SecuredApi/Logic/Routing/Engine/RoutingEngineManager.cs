@@ -81,7 +81,7 @@ public class RoutingEngineManager: IRoutingEngineManager
         _routerUpdater.UpdateRouter(table);
     }
 
-    private async Task<StreamResult> LoadFileConfigurationAsync(string fileId, CancellationToken cancellationToken)
+    private async Task<FileStreamResult> LoadFileConfigurationAsync(string fileId, CancellationToken cancellationToken)
     {
         try
         {

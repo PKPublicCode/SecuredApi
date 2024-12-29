@@ -70,6 +70,13 @@ public static partial class Constants
             public const string Path = "/Content/Hello.txt";
             public const string Content = "This is content of hello.txt";
         }
+        
+        public static class NoExtensionStaticContent
+        {
+            public const string Path = "/Content/NoExtension";
+            public const string Content = "";
+            public const string ContentType = "application/octet-stream";
+        }
     }
 }
 

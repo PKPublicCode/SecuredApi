@@ -31,7 +31,7 @@ public abstract class RepositoryTestsBase<T>
         // Return not found for any id except configured by SetupReturn()
         _fileProvider
             .LoadFileAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns<StreamResult>((x) => throw new FileAccess.FileNotFoundException("Not Found"));
+            .Returns<FileStreamResult>((x) => throw new FileAccess.FileNotFoundException("Not Found"));
 
         _sut = MakeSut();
     }
@@ -42,7 +42,7 @@ public abstract class RepositoryTestsBase<T>
     {
         _fileProvider
             .LoadFileAsync(fileId, Arg.Any<CancellationToken>())
-            .Returns(new StreamResult(new MemoryStream(Encoding.UTF8.GetBytes(content))));
+            .Returns(new FileStreamResult(new MemoryStream(Encoding.UTF8.GetBytes(content))));
     }
 }
 

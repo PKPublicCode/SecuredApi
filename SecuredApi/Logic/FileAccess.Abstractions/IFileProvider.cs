@@ -21,7 +21,10 @@ namespace SecuredApi.Logic.FileAccess
 {
     public interface IFileProvider
     {
-        Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken);
+        Task<FileStreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+            => LoadFileAsync(fileId, false, cancellationToken);
+        
+        Task<FileStreamResult> LoadFileAsync(string fileId, bool includeProps, CancellationToken cancellationToken);
     }
 
     public interface IFileProvider<T>: IFileProvider

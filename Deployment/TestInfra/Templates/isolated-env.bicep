@@ -43,6 +43,5 @@ output gateway object = {
   blobs: gatewayService.outputs.blobs
 }
 
-output sharedRgName string = rgName
+output rgName string = rgName
 output configStorageName string = sharedResources.outputs.configStorageName
-output performanceTestRgName string = rgName
