@@ -15,6 +15,7 @@
 using SecuredApi.Logic.FileAccess;
 using SecuredApi.Logic.Common;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 
 namespace SecuredApi.Infrastructure.FileAccess.FileSystem;
 
@@ -27,12 +28,20 @@ public class FileProvider<T> : IFileProvider<T>
         _config = config.Value;
     }
 
-    public Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+    public Task<FileStreamResult> LoadFileAsync(string fileId, bool includeProps, CancellationToken cancellationToken)
     {
         try
         {
             fileId = Path.Combine(_config.BasePath, fileId);
-            return Task.FromResult(new StreamResult(File.OpenRead(fileId)));
+            var stream = File.OpenRead(fileId);
+            
+            if (!includeProps)
+            {
+                return Task.FromResult(new FileStreamResult(stream));
+            }
+
+            var props = new FileProps(File.GetLastWriteTimeUtc(fileId).ToString(CultureInfo.InvariantCulture));
+            return Task.FromResult(new FileStreamResult(stream, props));
         }
         catch(Exception e) 
             when (e is DirectoryNotFoundException 

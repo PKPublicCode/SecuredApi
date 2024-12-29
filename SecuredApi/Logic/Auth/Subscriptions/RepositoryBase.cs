@@ -29,7 +29,7 @@ public abstract class RepositoryBase
     protected async Task<T?> GetEntityAsync<T>(string fileId, CancellationToken ct)
         where T: class
     {
-        StreamResult content;
+        FileStreamResult content;
         try
         {
             content = await _fileProvider.LoadFileAsync(fileId, ct);

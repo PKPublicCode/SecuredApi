@@ -12,6 +12,7 @@
 // You should have received a copy of the Server Side Public License
 // along with this program. If not, see
 // <http://www.mongodb.com/licensing/server-side-public-license>.
+
 using SecuredApi.WebApps.Gateway.Fixtures;
 using System.Net;
 using static SecuredApi.WebApps.Gateway.Utils.Constants.RoutePaths;
@@ -39,6 +40,23 @@ public class StaticContentGatewayTests: TestsBase
 
         await ActAsync();
         await AssertAsync();
+    }
+
+    [Fact]
+    public async Task UiPath_ExistingContent_ContentTypeFromBlob()
+    {
+        // Warning: This test will not work with FileSystem file provider
+        Request.SetGet()
+            .SetRelativePath($"{PublicStaticContent}{PublicContent.NoExtensionStaticContent.Path}");
+
+        ExpectedResult.Body = PublicContent.NoExtensionStaticContent.Content;
+        ExpectedResult.StatusCode = HttpStatusCode.OK;
+
+        await ActAsync();
+        
+        await AssertAsync();
+        Response?.Content.Headers.GetValues("Content-Type")
+            .Should().ContainSingle(PublicContent.NoExtensionStaticContent.ContentType);
     }
 
     [Fact]

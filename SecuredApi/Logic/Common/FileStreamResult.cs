@@ -14,14 +14,17 @@
 // <http://www.mongodb.com/licensing/server-side-public-license>.
 namespace SecuredApi.Logic.Common;
 
-public struct StreamResult: IDisposable, IStreamResult
+public struct FileStreamResult: IDisposable, IStreamResult
 {
-    public Stream  Content { get; init; }
+    public Stream  Content { get; }
+    public FileProps Props { get; }
+        
     private readonly IDisposable? _parent;
 
-    public StreamResult(Stream content, IDisposable? parent = null)
+    public FileStreamResult(Stream content, FileProps props = default, IDisposable? parent = null)
     {
         Content = content;
+        Props = props;
         _parent = parent;
     }
 

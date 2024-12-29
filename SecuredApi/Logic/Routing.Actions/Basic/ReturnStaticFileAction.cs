@@ -39,10 +39,18 @@ public class ReturnStaticFileAction : IAction
     {
         string path = _path.BuildString(context);
         var fileProvider = context.GetRequiredService<FileAccess.IFileProvider<ReturnStaticFileAction>>();
-        StreamResult result;
+        bool requestFileParams = _autoMimeType;
+        string? contentType = null;
+
+        if (requestFileParams)
+        {
+            requestFileParams = !context.GetRequiredService<IContentTypeProvider>().TryGetContentType(path, out contentType);
+        }
+        
+        FileStreamResult result;
         try
         {
-            result = await fileProvider.LoadFileAsync(path, context.CancellationToken);
+            result = await fileProvider.LoadFileAsync(path, requestFileParams, context.CancellationToken);
         }
         catch(FileAccess.FileNotFoundException)
         {
@@ -56,13 +64,17 @@ public class ReturnStaticFileAction : IAction
             throw;
         }
 
-        if (_autoMimeType 
-            && context.GetRequiredService<IContentTypeProvider>().TryGetContentType(path, out var type))
+        if (requestFileParams)
         {
-            context.Response.ContentType = type;
+            contentType = result.Props.ContentType;
         }
 
-        context.Response.Body = new StreamResultResponseStream<StreamResult>(result);
+        if (!contentType.IsNullOrEmpty())
+        {
+            context.Response.ContentType = contentType;
+        }
+
+        context.Response.Body = new StreamResultResponseStream<FileStreamResult>(result);
         context.Response.StatusCode = StatusCodes.Status200OK;
 
         return true;

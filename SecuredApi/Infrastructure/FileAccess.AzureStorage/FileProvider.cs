@@ -31,14 +31,23 @@ public class FileProvider<T> : IFileProvider<T>
         _client = new BlobContainerClient(new Uri(rbac.Uri), new DefaultAzureCredential());
     }
 
-    public async Task<StreamResult> LoadFileAsync(string fileId, CancellationToken cancellationToken)
+    public async Task<FileStreamResult> LoadFileAsync(string fileId, bool includeProps, CancellationToken cancellationToken)
     {
         try
         {
-            var blob = await _client.GetBlobClient(fileId).DownloadStreamingAsync(cancellationToken: cancellationToken);
+            var client = _client.GetBlobClient(fileId);
+            var blob = await client.DownloadStreamingAsync(cancellationToken: cancellationToken);
+
+            FileProps props = default;
+            if (includeProps)
+            {
+                var blobProps = await client.GetPropertiesAsync(null, cancellationToken);
+                props = new(blobProps.Value.ETag.ToString(), blobProps.Value.ContentType);
+            }
+            
             //Need to dispose blob.Value (BlobDownloadStreamingResult: IDisposable), however it will dispose Content (Stream)
             //As a workaround return StreamResult, that keep reference to 'parent disposable'
-            return new StreamResult(blob.Value.Content, blob.Value);
+            return new FileStreamResult(blob.Value.Content, props, blob.Value);
         }
         catch(Exception e)
             when (e is not TaskCanceledException)
